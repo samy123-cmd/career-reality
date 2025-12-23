@@ -317,24 +317,45 @@ footer {
 /* Mobile */
 @media (max-width: 768px) {
     :root {
-        --space-xl: 120px;
+        --space-xl: 64px;
+        /* Reduced from 120px */
+        --space-lg: 48px;
+        /* Reduced from 96px */
+        --space-md: 24px;
+        /* Reduced from 48px */
     }
 
     h1 {
-        font-size: 42px;
+        font-size: 36px;
+        /* Reduced from 42px */
     }
 
     .hero-subtitle {
         font-size: 18px;
+        margin-top: 16px;
     }
 
     .audience-grid {
-        gap: 40px;
+        gap: 24px;
     }
 
-    /* Responsive Tables */
+    /* Mobile Nav Tweak */
+    nav a {
+        margin-left: 16px;
+        font-size: 11px;
+    }
+
+    /* Responsive Tables: Scroller Utility */
+    .table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 24px;
+    }
+
     table.editorial-table {
         font-size: 13px;
+        min-width: 600px;
+        /* Force scroll */
     }
 
     .salary-bar-container {
