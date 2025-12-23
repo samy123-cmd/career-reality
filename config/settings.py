@@ -29,7 +29,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*'] if not DEBUG else []
 if os.environ.get('VERCEL_URL'):
-    ALLOWED_HOSTS += ['.vercel.app', os.environ.get('VERCEL_URL')]
+    ALLOWED_HOSTS += ['.vercel.app', '.careerreality.in', os.environ.get('VERCEL_URL')]
 
 
 # Application definition
