@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include "partials/meta.html" %}
+</head>
+
+<body>
+    {% include "partials/header.html" %}
+
+    <!-- Removed global main.container constraint. 
+       Templates must define their own containers (wide/med/reading) -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "partials/footer.html" %}
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{% for article in articles %}
+<div class="article-list-item">
+    <div class="article-list-meta">
+        {{ article.category.name }} · {{ article.updated_at|date:"F Y" }}
+    </div>
+
+    <h3 class="article-list-title">
+        <a href="{% url 'article_detail' article.slug %}">
+            {{ article.title }}
+        </a>
+    </h3>
+
+    <p class="article-list-desc">
+        {{ article.meta_description }}
+    </p>
+</div>
+{% endfor %}

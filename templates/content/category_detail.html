@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header style="margin-bottom: 4rem;">
+    <h1>{{ category.name }}</h1>
+    {% if category.description %}
+    <p style="font-size: 20px; color: var(--c-grey-dark);">{{ category.description }}</p>
+    {% endif %}
+</header>
+
+{% include "content/article_list_partial.html" %}
+
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Salary Reality (India) - Career Reality{% endblock %}
+{% block meta_description %}Real, uninflated salary data for Indian tech roles. No '1 Crore' outliers. Just the median
+reality.{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">
+    <h1 style="margin-bottom: 24px;">The Salary "Reality Check"</h1>
+    <p class="article-list-summary">
+        We track the <strong>median</strong> salaries, not the "top 1%" outliers.
+        Most "Average Salary" reports are inflated by unicorns and US-remote roles.
+        This is what the actual Indian market pays.
+    </p>
+    <p class="meta-info" style="font-size: 13px; color: var(--c-grey-light); display: inline-block;">
+        Last Updated: {% now "F Y" %}
+    </p>
+</section>
+
+<!-- SECTION 1: ENGINEERING -->
+<section class="container-medium" style="margin-bottom: var(--space-xl);">
+    <span class="section-label">01 // ENGINEERING</span>
+
+    <table class="editorial-table">
+        <thead>
+            <tr>
+                <th style="width: 40%;">Role & Context</th>
+                <th style="width: 15%;">Exp</th>
+                <th style="width: 25%;">Real Range (LPA)</th>
+                <th style="width: 20%;">The "Hype"</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>Junior Dev (Service Co.)</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">TCS, Wipro, Infy, etc.</span>
+                </td>
+                <td>0-2y</td>
+                <td>3.2 - 4.5</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">10.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Junior Dev (Startups)</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Series A/B funded</span>
+                </td>
+                <td>0-2y</td>
+                <td>6.0 - 12.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">20.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Senior Backend Dev</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Java/Spring/Node</span>
+                </td>
+                <td>5-8y</td>
+                <td>18.0 - 28.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">60.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>QA / Automation Engineer</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Selenium/Python</span>
+                </td>
+                <td>3-5y</td>
+                <td>6.0 - 10.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">20.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Data Scientist (Junior)</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Mostly SQL/Cleaning</span>
+                </td>
+                <td>0-2y</td>
+                <td>5.0 - 9.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">18.0</span></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- SECTION 2: DESIGN & PRODUCT -->
+<section class="container-medium" style="margin-bottom: var(--space-xl);">
+    <span class="section-label">02 // DESIGN & PRODUCT</span>
+
+    <table class="editorial-table">
+        <thead>
+            <tr>
+                <th style="width: 40%;">Role & Context</th>
+                <th style="width: 15%;">Exp</th>
+                <th style="width: 25%;">Real Range (LPA)</th>
+                <th style="width: 20%;">The "Hype"</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>UX Designer (Agency)</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">High volume, low strategy</span>
+                </td>
+                <td>1-3y</td>
+                <td>3.6 - 6.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">15.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Product Designer (Tech)</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Product-led companies</span>
+                </td>
+                <td>2-4y</td>
+                <td>9.0 - 16.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">30.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Graphic Designer</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Social Media/Marketing</span>
+                </td>
+                <td>1-3y</td>
+                <td>2.4 - 4.5</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">10.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Product Manager</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Generalist / Feature Owner</span>
+                </td>
+                <td>3-5y</td>
+                <td>15.0 - 25.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">50.0</span></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- SECTION 3: BUSINESS & MARKETING -->
+<section class="container-medium" style="margin-bottom: var(--space-xl);">
+    <span class="section-label">03 // MARKETING & SALES</span>
+
+    <table class="editorial-table">
+        <thead>
+            <tr>
+                <th style="width: 40%;">Role & Context</th>
+                <th style="width: 15%;">Exp</th>
+                <th style="width: 25%;">Real Range (LPA)</th>
+                <th style="width: 20%;">The "Hype"</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>Digital Marketer</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">PPC/SEO Execution</span>
+                </td>
+                <td>1-3y</td>
+                <td>3.0 - 5.5</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">12.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Content Writer</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Blogs/Social Copy</span>
+                </td>
+                <td>1-3y</td>
+                <td>2.4 - 4.8</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">10.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>B2B Sales (SaaS)</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Base Salary (Excl. Comm)</span>
+                </td>
+                <td>2-4y</td>
+                <td>6.0 - 10.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">25.0</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>HR Recruiter</strong><br>
+                    <span style="font-size: 12px; color: var(--c-grey-light);">Agency or Corporate</span>
+                </td>
+                <td>2-4y</td>
+                <td>3.5 - 6.0</td>
+                <td><span style="color: #d93025; text-decoration: line-through;">12.0</span></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- EXPLANATION -->
+<section class="container-reading"
+    style="margin-bottom: var(--space-xl); background-color: #f9f9f9; padding: var(--space-md); border-left: 2px solid var(--c-black);">
+    <h3 style="margin-top: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;">⚠️ How to read this
+    </h3>
+    <p style="font-size: 15px; margin-bottom: 0;">
+        The <strong>"Hype"</strong> number is what influencers, bootcamps, and viral LinkedIn posts tell you to expect.
+        <br><br>
+        The <strong>"Real Range"</strong> is what 80% of companies actually offer. This includes Service-based giants
+        (TCS, Infosys) and mid-sized agencies, which make up 90% of the hiring volume in India.
+        <br><br>
+        <strong>Verdict:</strong> Plan your life based on the reality, not the lottery.
+    </p>
+</section>
+
+{% endblock %}

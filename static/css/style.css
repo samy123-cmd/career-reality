@@ -1,0 +1,343 @@
+/* 
+   CAREER REALITY - MASTER LAYOUT SYSTEM
+   Principles: Intentional Whitespace, Asymmetry, Multi-Width Rhythm.
+*/
+
+:root {
+    /* Color System */
+    --c-white: #ffffff;
+    --c-black: #000000;
+    --c-grey-dark: #222222;
+    --c-grey-mid: #666666;
+    --c-grey-light: #999999;
+    --c-divider: #e6e6e6;
+    --c-bg-footer: #f9f9f9;
+
+    /* WIDTH SYSTEM (THE CORE FIX) */
+    --w-wide: 1100px;
+    /* Masthead, Hero (Authority) */
+    --w-medium: 840px;
+    /* Lists, Audience (Structure) */
+    --w-narrow: 640px;
+    /* Reading (Intimacy) */
+
+    /* Spacing */
+    --space-sm: 16px;
+    --space-md: 48px;
+    --space-lg: 96px;
+    --space-xl: 180px;
+    /* Massive Silence */
+}
+
+/* Base Reset */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--c-white);
+    color: var(--c-grey-mid);
+    font-family: var(--font-stack);
+    font-size: 17px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* CONTAINER UTILITIES */
+.container-wide {
+    max-width: var(--w-wide);
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+}
+
+.container-medium {
+    max-width: var(--w-medium);
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+}
+
+.container-reading {
+    max-width: var(--w-narrow);
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+    color: var(--c-black);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 64px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--space-sm);
+    color: var(--c-black);
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+p {
+    margin-bottom: 24px;
+    max-width: 100%;
+}
+
+a {
+    color: var(--c-black);
+    text-decoration: underline;
+    text-decoration-color: var(--c-divider);
+    text-underline-offset: 4px;
+    transition: opacity 0.2s;
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+/* Navigation (Wide) */
+header {
+    padding: var(--space-md) 0;
+    margin-bottom: var(--space-lg);
+}
+
+.nav-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.site-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-black);
+    text-decoration: none;
+}
+
+.site-title span {
+    font-weight: 400;
+    color: var(--c-grey-light);
+    margin-left: 5px;
+}
+
+nav a {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-grey-mid);
+    margin-left: var(--space-md);
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--c-black);
+}
+
+/* Hero */
+.hero-statement {
+    text-align: left;
+    max-width: 800px;
+}
+
+.hero-subtitle {
+    font-size: 22px;
+    color: var(--c-grey-dark);
+    font-weight: 400;
+    max-width: 520px;
+    margin-top: 24px;
+}
+
+/* Silence */
+.silence-gap {
+    height: var(--space-xl);
+    width: 100%;
+}
+
+.editorial-divider {
+    border: none;
+    border-top: 1px solid var(--c-divider);
+    margin: 0;
+    width: 100%;
+}
+
+/* Audience Grid */
+.audience-grid {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.audience-col {
+    flex: 1;
+    min-width: 280px;
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--c-grey-light);
+    margin-bottom: 24px;
+    display: block;
+    border-top: 2px solid var(--c-black);
+    padding-top: 16px;
+    width: 80px;
+}
+
+.audience-text {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--c-black);
+}
+
+/* Article List */
+.article-list-item {
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--c-divider);
+}
+
+.article-list-meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-grey-light);
+    margin-bottom: text-bottom;
+}
+
+.article-list-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 8px 0 12px 0;
+    line-height: 1.15;
+}
+
+.article-list-title a {
+    text-decoration: none;
+    color: var(--c-black);
+}
+
+.article-list-summary {
+    font-size: 17px;
+    color: var(--c-grey-mid);
+    max-width: 600px;
+}
+
+/* EDITORIAL DATA TABLES (New) */
+table.editorial-table {
+    width: 100%;
+    margin: 0;
+    /* Container handles margin */
+    border-collapse: collapse;
+    font-size: 15px;
+    table-layout: fixed;
+}
+
+table.editorial-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--c-black);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 11px;
+    padding: 12px 0;
+    border-bottom: 2px solid var(--c-black);
+}
+
+table.editorial-table td {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--c-divider);
+    color: var(--c-grey-dark);
+    vertical-align: middle;
+}
+
+/* MICRO CHARTS (New - CSS Only) */
+.salary-bar-container {
+    height: 6px;
+    width: 100px;
+    /* Fixed match */
+    background: #f0f0f0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.salary-bar-fill {
+    height: 100%;
+    background: var(--c-grey-dark);
+}
+
+.chart-label {
+    font-size: 10px;
+    color: var(--c-grey-light);
+    margin-top: 4px;
+    display: block;
+}
+
+/* Article Detail */
+.article-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.article-header h1 {
+    font-size: 48px;
+    margin-bottom: 24px;
+}
+
+/* Footer */
+footer {
+    background-color: var(--c-bg-footer);
+    padding: var(--space-lg) 0;
+    margin-top: var(--space-xl);
+    font-size: 13px;
+    color: var(--c-grey-mid);
+    text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    :root {
+        --space-xl: 120px;
+    }
+
+    h1 {
+        font-size: 42px;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+    }
+
+    .audience-grid {
+        gap: 40px;
+    }
+
+    /* Responsive Tables */
+    table.editorial-table {
+        font-size: 13px;
+    }
+
+    .salary-bar-container {
+        width: 60px;
+    }
+}

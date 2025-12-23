@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Editorial Standards - Career Reality (India){% endblock %}
+
+{% block content %}
+
+<!-- HEADER: WIDE (AUTHORITY) -->
+<section class="container-wide">
+    <div class="hero-statement">
+        <h1>Editorial Standards</h1>
+        <p class="hero-subtitle">
+            Career Reality operates on a small set of strict editorial principles. These principles exist to protect
+            trust — not scale.
+        </p>
+    </div>
+</section>
+
+<!-- SILENCE GAP -->
+<div class="silence-gap"></div>
+
+<!-- BODY: READING WIDTH (INTIMACY) -->
+<div class="container-reading">
+
+    <h2>1. Experience Over Aspiration</h2>
+    <p>Articles are written from the standpoint of:</p>
+    <ul>
+        <li>lived experience</li>
+        <li>long-term observation</li>
+        <li>repeated industry patterns</li>
+    </ul>
+    <p>We do not optimize for aspiration, virality, or motivation. If a truth conflicts with popular narratives, the
+        truth takes priority.</p>
+
+    <h2>2. No Universal Advice</h2>
+    <p>Career outcomes are context-dependent. We avoid:</p>
+    <ul>
+        <li>“You should” statements</li>
+        <li>guaranteed paths</li>
+        <li>one-size-fits-all frameworks</li>
+    </ul>
+    <p>Instead, articles describe conditions, trade-offs, and likely consequences. Readers are expected to make their
+        own decisions.</p>
+
+    <h2>3. Original Framing</h2>
+    <p>Career Reality does not:</p>
+    <ul>
+        <li>rewrite trending posts</li>
+        <li>summarize social media discourse</li>
+        <li>aggregate content from other sites</li>
+    </ul>
+    <p>Each article is framed independently, even when addressing familiar topics. The goal is not novelty — it is
+        clarity.</p>
+
+    <h2>4. Updates & Corrections</h2>
+    <p>All articles display a Last Reality Check date. When conditions change (salary structures, hiring patterns,
+        industry norms), articles are updated accordingly.</p>
+    <p>If a factual error is identified, it is corrected transparently.</p>
+
+    <h2>5. No Sponsored Influence</h2>
+    <p>Career Reality does not accept:</p>
+    <ul>
+        <li>sponsored posts</li>
+        <li>paid mentions</li>
+        <li>affiliate-driven editorial decisions</li>
+    </ul>
+    <p>Any future advertising (including display ads) will not influence topic selection, conclusions, or tone.
+        Editorial separation is non-negotiable.</p>
+
+    <h2>6. Responsible Tone</h2>
+    <p>While articles may discuss burnout, stagnation, and dissatisfaction, they avoid sensationalism, romanticizing
+        distress, or presenting hardship as inevitable.</p>
+    <p>The aim is realism, not despair.</p>
+
+    <h2>7. Use of AI</h2>
+    <p>AI tools are used only in a supporting role: editing assistance, language clarity, and research validation.</p>
+    <p>AI does not generate core arguments or editorial judgment. All responsibility for published content remains
+        human.</p>
+
+    <h2>8. Reader Relationship</h2>
+    <p>Career Reality treats readers as intelligent, experienced, and capable of nuance.</p>
+    <p>We do not optimize for engagement tricks, emotional hooks, or retention mechanics. If a reader disagrees with an
+        article, that disagreement is valid.</p>
+
+    <div style="margin-top: 4rem; padding: 2rem; background: #fafafa; border-top: 2px solid var(--c-black);">
+        <h3
+            style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">
+            Closing Statement</h3>
+        <p style="margin-bottom: 0;">
+            Career Reality exists to document how careers actually unfold, not how they are marketed.<br><br>
+            Accuracy matters more than comfort.<br>
+            Trust matters more than traffic.
+        </p>
+    </div>
+
+    <p
+        style="text-align: center; margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">
+        Last Updated: {% now "Y" %}
+    </p>
+
+</div>
+
+{% endblock %}

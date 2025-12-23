@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- HERO: WIDE CONTAINER (AUTHORITY) -->
+<section class="container-wide">
+    <div class="hero-statement">
+        <h1>Career Reality.</h1>
+        <p class="hero-subtitle">
+            Uncomfortable truths about work, money,
+            and stagnation in India.
+        </p>
+    </div>
+</section>
+
+<!-- SILENCE GAP -->
+<div class="silence-gap"></div>
+
+<!-- AUDIENCE: MEDIUM CONTAINER (STRUCTURE) -->
+<section class="container-medium">
+    <div class="audience-grid">
+        <div class="audience-col">
+            <span class="section-label">FOR</span>
+            <p class="audience-text">
+                Professionals who are done with the lies. If you want truth over comfort, you are home.
+            </p>
+        </div>
+
+        <div class="audience-col">
+            <span class="section-label">NOT FOR</span>
+            <p class="audience-text" style="color: var(--c-grey-mid);">
+                Tourists. Students. And anyone who thinks a "Can-Do Attitude" solves structural problems.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- SILENCE + DIVIDER (MEDIUM) -->
+<div class="silence-gap"></div>
+<div class="container-medium">
+    <hr class="editorial-divider">
+</div>
+<div style="height: 80px;"></div>
+
+<!-- LATEST: MEDIUM CONTAINER (RHYTHM) -->
+<section class="container-medium">
+    <span class="section-label">LATEST</span>
+
+    <div class="article-list">
+        {% for article in articles %}
+        <div class="article-list-item">
+            <div class="article-list-meta">
+                {{ article.category.name }} · {{ article.last_reality_check|date:"F Y" }}
+            </div>
+
+            <h3 class="article-list-title">
+                <a href="{% url 'article_detail' article.slug %}">
+                    {{ article.title }}
+                </a>
+            </h3>
+
+            <p class="article-list-summary">
+                {{ article.common_expectation|striptags|truncatewords:20 }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
