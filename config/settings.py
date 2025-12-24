@@ -31,6 +31,14 @@ ALLOWED_HOSTS = ['*'] if not DEBUG else []
 if os.environ.get('VERCEL_URL'):
     ALLOWED_HOSTS += ['.vercel.app', '.careerreality.in', os.environ.get('VERCEL_URL')]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://careerreality.in',
+    'https://www.careerreality.in',
+]
+
+# Use signed cookies for sessions to avoid writing to read-only DB on Vercel
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
 
 # Application definition
 
