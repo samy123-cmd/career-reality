@@ -23,3 +23,6 @@ def editorial_standards(request):
 
 def salary_reality(request):
     return render(request, 'core/salary.html')
+
+def privacy_policy(request):
+    return render(request, 'core/privacy_policy.html')
