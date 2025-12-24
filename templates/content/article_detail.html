@@ -15,7 +15,14 @@
         </div>
 
         <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;">
-            {{ article.author.display_name }} — {{ article.updated_at|date:"F Y" }}
+            {% if article.author.linkedin_url %}
+            <a href="{{ article.author.linkedin_url }}" target="_blank" rel="noopener noreferrer"
+                style="color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;">{{
+                article.author.display_name }}</a>
+            {% else %}
+            {{ article.author.display_name }}
+            {% endif %}
+            — {{ article.updated_at|date:"F Y" }}
         </div>
     </header>
 
