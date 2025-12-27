@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Analysis Result{% endblock %}
+
+{% block content %}
+<style>
+    .result-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 20px;
+    }
+
+    .risk-banner {
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #fff;
+    }
+
+    .risk-label {
+        font-size: 1rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .risk-h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin: 0.5rem 0;
+    }
+
+    .risk-summary {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        line-height: 1.5;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    /* Dynamic Colors */
+    .bg-red {
+        background: #e53e3e;
+    }
+
+    .bg-yellow {
+        background: #d69e2e;
+        color: #000;
+    }
+
+    .bg-green {
+        background: #38a169;
+    }
+
+    .section-box {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .box-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    ul.risk-list {
+        padding-left: 1.2rem;
+    }
+
+    ul.risk-list li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+    }
+
+    .trust-block {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #666;
+        border-left: 4px solid #333;
+    }
+
+    .action-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background: #000;
+        color: #fff;
+        padding: 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 1rem;
+    }
+
+    /* Expansion Styles */
+    .expansion-details {
+        font-size: 0.95rem;
+        color: #444;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+        padding: 8px 12px;
+    }
+
+    .expansion-summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: #222;
+        outline: none;
+    }
+
+    .expansion-content {
+        margin-top: 8px;
+        line-height: 1.5;
+        padding-top: 5px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="result-container">
+
+    <!-- 1. RISK RESULT -->
+    <div class="risk-banner bg-{{ result.color }}">
+        <div class="risk-label">YOUR RESIGNATION RISK LEVEL:</div>
+        <div class="risk-h1">{{ result.label }}</div>
+        <div class="risk-summary">
+            {{ result.risk_reason }}
+        </div>
+
+        <!-- Layer 2: Optional Contextual Expansion -->
+        {% if result.expansion_text %}
+        <div style="margin-top: 1.5rem; text-align: left;">
+            <details class="expansion-details">
+                <summary class="expansion-summary">Why situations like this often escalate</summary>
+                <div class="expansion-content">
+                    {{ result.expansion_text }}
+                </div>
+            </details>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 2. WHAT CAN GO WRONG -->
+    {% if result.warnings %}
+    <div class="section-box">
+        <h2 class="box-title">⚠️ What Can Go Wrong</h2>
+        <ul class="risk-list">
+            {% for warning in result.warnings %}
+            <li>{{ warning }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- 3. NEXT 7 DAYS -->
+    <div class="section-box" style="border-left: 4px solid #000;">
+        <h2 class="box-title">📅 What matters in the next 7 days</h2>
+        <p>{{ result.next_steps_intro }}</p>
+        <ul class="risk-list" style="margin-top: 1rem;">
+            <li><strong>Documentation is leverage.</strong> Keep personal copies of all communication.</li>
+            <li><strong>Silence is a tactic.</strong> If HR goes silent, do not assume they are approving.</li>
+            <li><strong>Notice periods are contracts, not feelings.</strong> Re-read your appointment letter today.</li>
+        </ul>
+    </div>
+
+    <!-- 4. MONETIZATION / PDF REPORT -->
+    <div
+        style="margin-top: 2rem; margin-bottom: 2rem; padding: 1.5rem; border: 2px dashed #ccc; border-radius: 12px; text-align: center; background: #fafafa;">
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; font-weight: 700;">Need a detailed breakdown?</h3>
+        <p style="font-size: 0.95rem; color: #666; margin-bottom: 1rem;">
+            Get a 5-page PDF report with scenario-specific escalation scripts and detailed legal context.
+        </p>
+        <button
+            style="background: #ccc; color: #666; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: not-allowed;"
+            title="Coming Soon">
+            Download Detailed Risk Report (₹199)
+        </button>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.5rem;">Processing currently paused.</div>
+    </div>
+
+    <!-- 5. DISCLAIMER -->
+    <div class="trust-block">
+        <strong>What this tool is NOT telling you</strong><br>
+        {{ result.disclaimer|linebreaksbr }}
+    </div>
+
+    <div style="margin-top: 3rem; text-align: center;">
+        <p style="margin-bottom: 1rem;">Based on patterns from <a href="/"
+                style="color: #000; text-decoration: underline;">Career Reality</a>.</p>
+        <a href="{% url 'wizard_start' %}" style="color: #999; font-size: 0.9rem;">Start New Assessment</a>
+    </div>
+
+</div>
+{% endblock %}

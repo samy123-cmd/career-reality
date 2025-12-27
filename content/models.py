@@ -39,7 +39,7 @@ class Article(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     
     # Strict Content Structure
-    target_persona = models.CharField(max_length=255, help_text="Who is this specific article for?")
+    target_persona = models.TextField(help_text="Who is this specific article for?")
     who_should_avoid = models.TextField(help_text="Trust Signal: Who should NOT pursue this?")
     common_expectation = models.TextField(help_text="The Myth / What people think")
     actual_reality = models.TextField(help_text="The Truth / What it's actually like")

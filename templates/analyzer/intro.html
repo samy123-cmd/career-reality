@@ -1,0 +1,261 @@
+{% extends "analyzer/step_base.html" %}
+
+{% block title %}Resignation Risk Analyzer India | Notice Period & Bond Calculator{% endblock %}
+
+{% block meta_description %}Assess your resignation risk in India. Free tool analyzes notice periods, service bonds, and
+manager pressure to predict exit outcomes.{% endblock %}
+
+{% block content %}
+<!-- Open Graph & Canonical -->
+
+<head>
+  <link rel="canonical" href="https://careerreality.in/resignation-risk/" />
+  <meta property="og:title" content="Resignation Risk Analyzer India" />
+  <meta property="og:description"
+    content="Facing a tough resignation? Check your risk level instantly. No signup required." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://careerreality.in/resignation-risk/" />
+</head>
+
+<style>
+  .intro-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .intro-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .intro-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #111;
+    letter-spacing: -0.5px;
+  }
+
+  .intro-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 400;
+  }
+
+  .intro-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 0.75rem;
+    margin-top: 0;
+  }
+
+  .info-text {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .feature-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+    font-size: 0.95rem;
+  }
+
+  .feature-list li::before {
+    content: "•";
+    color: #000;
+    font-weight: bold;
+    position: absolute;
+    left: 0.5rem;
+  }
+
+  .privacy-box {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid #000;
+  }
+
+  .btn-intro {
+    display: block;
+    width: 100%;
+    background: #000;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-intro:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    background: #222;
+  }
+
+  .faq-section {
+    margin-top: 2rem;
+  }
+
+  .faq-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+  }
+
+  details {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+
+  summary {
+    padding: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.95rem;
+    list-style: none;
+    /* Hide default triangle */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  details[open] summary {
+    border-bottom: 1px solid #eee;
+    background: #fcfcfc;
+  }
+
+  details p {
+    padding: 1rem;
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+</style>
+
+<div class="intro-container">
+
+  <header class="intro-header">
+    <h1 class="intro-title">Resignation Risk Analyzer</h1>
+    <p class="intro-subtitle">Neutral, privacy-first guidance for Indian professionals.</p>
+  </header>
+
+  <div class="intro-card">
+    <h2 class="section-title">Who This Is For</h2>
+    <p class="info-text">
+      This tool is designed for private-sector employees in India (IT, Product, Services) facing uncertainty during
+      their resignation.
+      Whether you are dealing with unreasonable managers, confusing bond policies, or silent HR departments, this
+      calculator helps you gauge where you stand.
+    </p>
+
+    <h2 class="section-title">What It Does</h2>
+    <ul class="feature-list">
+      <li>Assess risk based on notice period, bond status, and company culture.</li>
+      <li>Predict potential escalation tactics used by Indian employers.</li>
+      <li>Clarify your position for the next 7 days.</li>
+    </ul>
+
+    <div class="privacy-box">
+      <strong>Privacy Note:</strong> This tool runs anonymously. We do not store your bond details, company name, or
+      personal signals. No email required.
+    </div>
+
+    <form action="{% url 'wizard_start' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn-intro">
+        Start Risk Assessment &rarr;
+      </button>
+    </form>
+  </div>
+
+  <!-- FAQ Semantic Schema for SEO -->
+  <div class="faq-section">
+    <h3 class="faq-title">Frequently Asked Questions</h3>
+
+    <details>
+      <summary>Is this legal advice?</summary>
+      <p>No. This tool provides situational analysis based on common Indian employment patterns. It is for informational
+        purposes only. Consult a lawyer for legal interpretations.</p>
+    </details>
+
+    <details>
+      <summary>Do you store my data?</summary>
+      <p>No. We prioritize privacy. Your specific inputs (company type, bond details) are processed in your session and
+        discarded. We do not build user profiles.</p>
+    </details>
+
+    <details>
+      <summary>Is this specific to India?</summary>
+      <p>Yes. The logic is tuned specifically for the Indian job market, including norms around relieving letters,
+        notice periods (30-90 days), and service bonds.</p>
+    </details>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Is this resignation risk analyzer legal advice?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. This tool provides situational analysis based on common Indian employment patterns. It is for informational purposes only and does not constitute legal counsel."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Does the risk analyzer store my data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The tool is designed to be privacy-first. Inputs are processed within your temporary session and are not permanently stored linked to any identity."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Is this tool for Indian professionals?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The risk logic is specifically calibrated for the Indian private sector, accounting for notice periods, bonds, and relieving letter practices."
+        }
+      }]
+    }
+    </script>
+</div>
+{% endblock %}

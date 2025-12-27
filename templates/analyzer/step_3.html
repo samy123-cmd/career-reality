@@ -1,0 +1,29 @@
+{% extends "analyzer/step_base.html" %}
+
+{% block wizard_content %}
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Field 1: Situation -->
+    <div class="form-group">
+        <label class="form-label">{{ form.current_situation.label }}</label>
+        {% for radio in form.current_situation %}
+        <label class="option-card">
+            {{ radio.tag }} {{ radio.choice_label }}
+        </label>
+        {% endfor %}
+    </div>
+
+    <!-- Field 2: Offer -->
+    <div class="form-group">
+        <label class="form-label">{{ form.has_offer.label }}</label>
+        {% for radio in form.has_offer %}
+        <label class="option-card">
+            {{ radio.tag }} {{ radio.choice_label }}
+        </label>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn-analyzer">See Analysis</button>
+</form>
+{% endblock %}

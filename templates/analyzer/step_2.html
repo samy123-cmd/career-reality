@@ -1,0 +1,29 @@
+{% extends "analyzer/step_base.html" %}
+
+{% block wizard_content %}
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Field 1: Bond -->
+    <div class="form-group">
+        <label class="form-label">{{ form.bond_status.label }}</label>
+        {% for radio in form.bond_status %}
+        <label class="option-card">
+            {{ radio.tag }} {{ radio.choice_label }}
+        </label>
+        {% endfor %}
+    </div>
+
+    <!-- Field 2: Notice -->
+    <div class="form-group">
+        <label class="form-label">{{ form.notice_period.label }}</label>
+        {% for radio in form.notice_period %}
+        <label class="option-card">
+            {{ radio.tag }} {{ radio.choice_label }}
+        </label>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn-analyzer">Next &rarr;</button>
+</form>
+{% endblock %}
