@@ -5,6 +5,60 @@
 
 {% block content %}
 
+<style>
+    /* CRITICAL: Inlined Styles for Share Buttons to ensure Vercel renders them correctly even if static build fails */
+    .share-section {
+        margin-top: var(--space-xl);
+        padding-top: var(--space-md);
+        border-top: 1px solid var(--c-black);
+    }
+
+    .share-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--c-black);
+        margin-bottom: 32px;
+        display: block;
+        font-weight: 700;
+    }
+
+    .share-buttons {
+        display: flex;
+        gap: 0;
+        flex-wrap: wrap;
+    }
+
+    .btn-share {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 56px;
+        padding: 0 48px;
+        border: 1px solid var(--c-black);
+        background: transparent;
+        color: var(--c-black);
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        min-width: 180px;
+        margin-right: -1px;
+    }
+
+    .btn-share:hover {
+        background: var(--c-black);
+        color: var(--c-white);
+        z-index: 1;
+    }
+
+    .btn-share span {
+        margin-left: 0;
+    }
+</style>
+
 <article class="article-body">
 
     <!-- HEADER: MEDIUM (Allows header to be slightly wider than text if needed, but keeping it focused for now) -->
