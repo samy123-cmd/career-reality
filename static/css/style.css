@@ -378,26 +378,29 @@ footer {
     }
 }
 
-/* SHARE BUTTONS (PREMIUM) */
+/* SHARE BUTTONS (PREMIUM - ZARA AESTHETIC) */
 .share-section {
-    margin-top: var(--space-lg);
+    margin-top: var(--space-xl);
     padding-top: var(--space-md);
-    border-top: 1px solid var(--c-divider);
+    border-top: 1px solid var(--c-black);
+    /* Stronger delimiter */
 }
 
 .share-label {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--c-grey-light);
-    margin-bottom: 24px;
+    letter-spacing: 0.2em;
+    /* Wide tracking */
+    color: var(--c-black);
+    margin-bottom: 32px;
     display: block;
     font-weight: 700;
 }
 
 .share-buttons {
     display: flex;
-    gap: 16px;
+    gap: 0;
+    /* Connected buttons */
     flex-wrap: wrap;
 }
 
@@ -405,42 +408,34 @@ footer {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
-    padding: 0 24px;
-    border: 1px solid var(--c-divider);
+    height: 56px;
+    padding: 0 48px;
+    /* Wide buttons */
+    border: 1px solid var(--c-black);
     background: transparent;
     color: var(--c-black);
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 600;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.2s ease;
-    min-width: 140px;
+    letter-spacing: 0.15em;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    min-width: 180px;
+    margin-right: -1px;
+    /* Overlap borders for shared edge look */
 }
 
 .btn-share:hover {
-    border-color: var(--c-black);
     background: var(--c-black);
     color: var(--c-white);
-    transform: translateY(-2px);
-    opacity: 1;
-    /* Override global a:hover */
+    /* No transform, keep it planted and solid */
+    z-index: 1;
+    /* Bring engaged button to front */
 }
 
 .btn-share span {
-    margin-left: 8px;
+    margin-left: 0;
+    /* Text only, strict alignment */
 }
 
-/* Specific Brands */
-.btn-whatsapp:hover {
-    border-color: #25D366;
-    background: #25D366;
-    color: white;
-}
-
-.btn-linkedin:hover {
-    border-color: #0077B5;
-    background: #0077B5;
-    color: white;
-}
+/* Remove Brand Colors - Strictly Black & White */

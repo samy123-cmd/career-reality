@@ -16,11 +16,13 @@
 
         <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;">
             {% if article.author.linkedin_url %}
-            <a href="{{ article.author.linkedin_url }}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;">{{ article.author.display_name }}</a>
+            <a href="{{ article.author.linkedin_url }}" target="_blank" rel="noopener noreferrer"
+                style="color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;">{{
+                article.author.display_name }}</a>
             {% else %}
             {{ article.author.display_name }}
             {% endif %}
-             — {{ article.updated_at|date:"F Y" }}
+            — {{ article.updated_at|date:"F Y" }}
         </div>
     </header>
 
@@ -61,6 +63,21 @@
 
             <div style="font-size: 20px; line-height: 1.5; color: var(--c-black);">
                 {{ article.verdict|safe }}
+            </div>
+
+            <!-- SHARE SECTION (PREMIUM) -->
+            <div class="share-section">
+                <span class="share-label">Share Reality Check</span>
+                <div class="share-buttons">
+                    <a href="https://api.whatsapp.com/send?text={{ article.title|urlencode }}%20-%20Read%20the%20reality%20check%20here:%20{{ request.build_absolute_uri|urlencode }}"
+                        target="_blank" class="btn-share btn-whatsapp">
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}"
+                        target="_blank" class="btn-share btn-linkedin">
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
             </div>
 
             <div style="margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">
