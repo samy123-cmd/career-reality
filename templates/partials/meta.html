@@ -1,3 +1,4 @@
+{% load static %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}Career Reality (India){% endblock %}</title>
@@ -6,6 +7,26 @@
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="{{ article.meta_title|default:'Career Reality (India)' }}">
+<meta property="og:description"
+    content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
+<meta property="og:image" content="{% static 'img/og-default.png' %}">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+<meta property="twitter:title" content="{{ article.meta_title|default:'Career Reality (India)' }}">
+<meta property="twitter:description"
+    content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">

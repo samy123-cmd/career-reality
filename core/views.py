@@ -1,5 +1,18 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from content.models import Article, Category
+
+def robots_txt(request):
+    """
+    Serves the robots.txt file dynamically.
+    """
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "",
+        f"Sitemap: {request.scheme}://{request.get_host()}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 def home(request):
     """

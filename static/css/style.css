@@ -37,7 +37,8 @@
 body {
     background-color: var(--c-white);
     color: var(--c-grey-mid);
-    font-family: var(--font-stack);
+    color: var(--c-grey-mid);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 17px;
     line-height: 1.65;
     margin: 0;
@@ -339,10 +340,24 @@ footer {
         gap: 24px;
     }
 
-    /* Mobile Nav Tweak */
+    /* Mobile Header & Nav Fixes */
+    .nav-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
     nav a {
-        margin-left: 16px;
-        font-size: 11px;
+        margin: 0 10px 10px 10px;
+        font-size: 12px;
+        white-space: nowrap;
     }
 
     /* Responsive Tables: Scroller Utility */
@@ -361,4 +376,71 @@ footer {
     .salary-bar-container {
         width: 60px;
     }
+}
+
+/* SHARE BUTTONS (PREMIUM) */
+.share-section {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--c-divider);
+}
+
+.share-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--c-grey-light);
+    margin-bottom: 24px;
+    display: block;
+    font-weight: 700;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.btn-share {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 24px;
+    border: 1px solid var(--c-divider);
+    background: transparent;
+    color: var(--c-black);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    min-width: 140px;
+}
+
+.btn-share:hover {
+    border-color: var(--c-black);
+    background: var(--c-black);
+    color: var(--c-white);
+    transform: translateY(-2px);
+    opacity: 1;
+    /* Override global a:hover */
+}
+
+.btn-share span {
+    margin-left: 8px;
+}
+
+/* Specific Brands */
+.btn-whatsapp:hover {
+    border-color: #25D366;
+    background: #25D366;
+    color: white;
+}
+
+.btn-linkedin:hover {
+    border-color: #0077B5;
+    background: #0077B5;
+    color: white;
 }
