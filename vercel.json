@@ -2,8 +2,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/config/wsgi.py"
+            "destination": "/api/index.py"
         }
-    ],
-    "outputDirectory": "staticfiles"
+    ]
 }
