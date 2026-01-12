@@ -100,12 +100,8 @@
     }
 </style>
 
-<!-- Main CSS - Non-blocking load -->
-<link rel="preload" href="{% static 'css/style.css' %}?v=perf_fix" as="style"
-    onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf_fix">
-</noscript>
+<!-- Main CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf_fix2">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
