@@ -36,12 +36,10 @@
 <article class="article-body">
     <header class="container-reading article-header">
         <h1>{{ article.title }}</h1>
-        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{
-            article.target_persona|safe }}</div>
+        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{ article.target_persona|safe }}</div>
         <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;"><a
                 href="{% url 'author_detail' article.author.id %}"
-                style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> - {{
-            article.updated_at|date:"F Y" }} · <a href="{% url 'category_detail' article.category.slug %}"
+                style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> - {{ article.updated_at|date:"F Y" }} · <a href="{% url 'category_detail' article.category.slug %}"
                 style="color: inherit;">{{ article.category.name }}</a></div>
     </header>
 
@@ -107,12 +105,10 @@
             {% for related in related_articles %}
             <div style="border: 1px solid var(--c-divider); padding: 1.5rem;">
                 <span
-                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">{{
-                    related.category.name }}</span>
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">{{ related.category.name }}</span>
                 <h3 style="font-size: 18px; margin: 0.5rem 0;"><a href="{% url 'article_detail' related.slug %}"
                         style="text-decoration: none;">{{ related.title }}</a></h3>
-                <p style="font-size: 14px; color: var(--c-grey-mid); margin: 0;">{{
-                    related.common_expectation|striptags|truncatewords:12 }}</p>
+                <p style="font-size: 14px; color: var(--c-grey-mid); margin: 0;">{{ related.common_expectation|striptags|truncatewords:12 }}</p>
             </div>
             {% endfor %}
         </div>
@@ -127,8 +123,7 @@
         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
             {% for cat in categories %}
             <a href="{% url 'category_detail' cat.slug %}"
-                style="display: inline-block; padding: 0.5rem 1rem; background: {% if cat.id == article.category.id %}var(--c-black){% else %}transparent{% endif %}; color: {% if cat.id == article.category.id %}white{% else %}var(--c-black){% endif %}; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{{
-                cat.name }}</a>
+                style="display: inline-block; padding: 0.5rem 1rem; background: {% if cat.id == article.category.id %}var(--c-black){% else %}transparent{% endif %}; color: {% if cat.id == article.category.id %}white{% else %}var(--c-black){% endif %}; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{{ cat.name }}</a>
             {% endfor %}
         </div>
     </div>
