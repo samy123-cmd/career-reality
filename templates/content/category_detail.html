@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{{ category.name }} — Career Reality (India){% endblock %}
-{% block meta_description %}{{ category.description|default:"Reality checks and insights about"|truncatewords:20 }} {{
-category.name|lower }} careers in India.{% endblock %}
+{% block meta_description %}Reality checks and insights about {{ category.name|lower }} careers in India.{% endblock %}
 
 {% block content %}
 
