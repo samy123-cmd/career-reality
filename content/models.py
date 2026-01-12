@@ -26,6 +26,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('category_detail', kwargs={'slug': self.slug})
+
 class Article(models.Model):
     STATUS_CHOICES = [
         ('draft', 'Draft'),

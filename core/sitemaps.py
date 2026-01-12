@@ -12,12 +12,29 @@ class ArticleSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.last_reality_check
 
+class CategorySitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.6
+
+    def items(self):
+        return Category.objects.all()
+
 class StaticViewSitemap(Sitemap):
     priority = 0.5
     changefreq = "monthly"
 
     def items(self):
-        return ['home', 'about', 'editorial', 'salary_reality', 'privacy_policy', 'analyzer_home']
+        return [
+            'home', 
+            'about', 
+            'editorial', 
+            'salary_reality', 
+            'salary_calculator', 
+            'privacy_policy', 
+            'contact',
+            'terms',
+            'analyzer_home'
+        ]
 
     def location(self, item):
         return reverse(item)

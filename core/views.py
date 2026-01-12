@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
 from content.models import Article, Category
 
 def robots_txt(request):
@@ -37,5 +38,36 @@ def editorial_standards(request):
 def salary_reality(request):
     return render(request, 'core/salary.html')
 
+def salary_calculator(request):
+    """In-hand salary calculator for Indian professionals."""
+    categories = Category.objects.all()
+    return render(request, 'core/salary_calculator.html', {'categories': categories})
+
 def privacy_policy(request):
     return render(request, 'core/privacy_policy.html')
+
+def contact(request):
+    return render(request, 'core/contact.html')
+
+def terms(request):
+    return render(request, 'core/terms.html')
+
+def newsletter_signup(request):
+    """Handle newsletter signup form submission."""
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        if email:
+            # For now, just show a success message
+            # In production, integrate with Mailchimp/Buttondown/database
+            from core.models import NewsletterSubscriber
+            try:
+                NewsletterSubscriber.objects.get_or_create(email=email)
+                messages.success(request, 'Thanks for subscribing! You\'ll get our weekly reality checks.')
+            except Exception:
+                messages.info(request, 'Thanks for your interest!')
+        else:
+            messages.error(request, 'Please enter a valid email address.')
+    
+    # Redirect back to the previous page
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+

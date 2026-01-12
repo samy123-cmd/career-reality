@@ -1,14 +1,55 @@
 {% extends "base.html" %}
 
+{% block title %}{{ category.name }} — Career Reality (India){% endblock %}
+{% block meta_description %}{{ category.description|default:"Reality checks and insights about"|truncatewords:20 }} {{
+category.name|lower }} careers in India.{% endblock %}
+
 {% block content %}
 
-<header style="margin-bottom: 4rem;">
-    <h1>{{ category.name }}</h1>
-    {% if category.description %}
-    <p style="font-size: 20px; color: var(--c-grey-dark);">{{ category.description }}</p>
-    {% endif %}
-</header>
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <h1 style="margin-bottom: var(--space-sm);">{{ category.name }}</h1>
 
-{% include "content/article_list_partial.html" %}
+    {% if category.description %}
+    <p style="font-size: 18px; color: var(--c-grey-dark); margin-bottom: var(--space-lg); line-height: 1.6;">
+        {{ category.description }}
+    </p>
+    {% else %}
+    <p style="font-size: 18px; color: var(--c-grey-dark); margin-bottom: var(--space-lg); line-height: 1.6;">
+        Reality checks and uncomfortable truths about {{ category.name|lower }} careers in India.
+    </p>
+    {% endif %}
+
+    <hr class="editorial-divider" style="margin-bottom: var(--space-lg);">
+
+    {% if articles %}
+    <span class="section-label">{{ articles.count }} ARTICLE{% if articles.count != 1 %}S{% endif %}</span>
+
+    <div class="article-list" style="margin-top: var(--space-md);">
+        {% for article in articles %}
+        <div class="article-list-item">
+            <div class="article-list-meta">
+                <a href="{% url 'author_detail' article.author.id %}"
+                    style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> · {{
+                article.last_reality_check|date:"F Y" }}
+            </div>
+
+            <h3 class="article-list-title">
+                <a href="{% url 'article_detail' article.slug %}">
+                    {{ article.title }}
+                </a>
+            </h3>
+
+            <p class="article-list-summary">
+                {{ article.common_expectation|striptags|truncatewords:25 }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: var(--c-grey-mid);">
+        No published articles in this category yet.
+    </p>
+    {% endif %}
+</section>
 
 {% endblock %}

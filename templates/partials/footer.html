@@ -1,13 +1,32 @@
 <footer class="site-footer">
     <div class="container-medium">
+
+        <!-- Newsletter Signup -->
+        <div class="newsletter-section">
+            <h3 class="newsletter-title">Get Career Reality in Your Inbox</h3>
+            <p class="newsletter-desc">Weekly reality checks. No spam. Unsubscribe anytime.</p>
+            <form class="newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="your@email.com" required class="newsletter-input">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;">
+
         <p>
             Independently written. No sponsors. No courses.
             AI used only for assistive editing.
         </p>
 
-        <p style="opacity: 0.6; margin-top: 2rem;">
-            &copy; {% now "Y" %} Career Reality (India) · <a href="{% url 'privacy_policy' %}"
-                style="text-decoration: none; color: inherit;">Privacy Policy</a>
+        <p style="opacity: 0.8; margin-top: 1.5rem; font-size: 14px;">
+            <a href="{% url 'contact' %}" style="text-decoration: none; color: inherit;">Contact</a> ·
+            <a href="{% url 'terms' %}" style="text-decoration: none; color: inherit;">Terms</a> ·
+            <a href="{% url 'privacy_policy' %}" style="text-decoration: none; color: inherit;">Privacy</a>
+        </p>
+
+        <p style="opacity: 0.6; margin-top: 1.5rem;">
+            &copy; {% now "Y" %} CareerReality
         </p>
     </div>
 </footer>

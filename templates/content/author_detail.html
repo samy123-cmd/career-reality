@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ author.display_name }} — Career Reality (India){% endblock %}
+{% block meta_description %}{{ author.experience_summary }} — Editorial contributor at Career Reality.{% endblock %}
+
+{% block content %}
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+
+    <!-- Author Header -->
+    <div class="author-header">
+        <h1 class="author-name">{{ author.display_name }}</h1>
+
+        {% if author.experience_summary %}
+        <p class="author-title">{{ author.experience_summary }}</p>
+        {% endif %}
+
+        <!-- Author Stats -->
+        <div class="author-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ articles.count }}</span>
+                <span class="stat-label">Articles</span>
+            </div>
+            {% if author.linkedin_url %}
+            <div class="stat-item">
+                <a href="{{ author.linkedin_url }}" target="_blank" rel="noopener noreferrer"
+                    style="text-decoration: none;">
+                    <span class="stat-number" style="font-size: 16px;">LinkedIn</span>
+                    <span class="stat-label">→ View Profile</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bio Section -->
+    {% if author.bio %}
+    <div
+        style="margin-bottom: var(--space-lg); text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <div style="font-size: 17px; line-height: 1.8; color: var(--c-grey-dark);">
+            {{ author.bio|linebreaks }}
+        </div>
+    </div>
+    {% endif %}
+
+    <hr class="editorial-divider" style="margin-bottom: var(--space-lg);">
+
+    <!-- Articles Section -->
+    <div>
+        <span class="section-label">PUBLISHED ARTICLES</span>
+
+        {% if articles %}
+        <div class="article-list" style="margin-top: var(--space-md);">
+            {% for article in articles %}
+            <div class="article-list-item">
+                <div class="article-list-meta">
+                    <span class="category-badge">{{ article.category.name }}</span>
+                    <span class="reading-time">{{ article.last_reality_check|date:"F Y" }}</span>
+                </div>
+
+                <h3 class="article-list-title">
+                    <a href="{% url 'article_detail' article.slug %}">
+                        {{ article.title }}
+                    </a>
+                </h3>
+
+                <p class="article-list-summary">
+                    {{ article.common_expectation|striptags|truncatewords:20 }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color: var(--c-grey-mid); margin-top: var(--space-md);">
+            No published articles yet.
+        </p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

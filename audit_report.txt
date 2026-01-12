@@ -1,0 +1,35 @@
+ID   | Word Count | Status     | Title
+----------------------------------------------------------------------------------------------------
+4    | 613        | THIN       | Digital Marketing in India: The 'Creative' Trap Th
+7    | 457        | CRITICAL   | What ₹20 LPA Actually Feels Like in India
+13   | 1516       | OK         | The 7-Year Career Plateau Nobody Warns You About
+14   | 921        | THIN       | The UX Design Reality: You Are Not a Researcher, Y
+15   | 850        | THIN       | What ₹20 LPA Actually Feels Like in India
+16   | 667        | THIN       | Why 'Upskilling' Stops Working After a Point
+17   | 784        | THIN       | The Hidden Cost of Staying in IT Services Too Long
+18   | 713        | THIN       | Career Switching After 30: The Trade-Offs Nobody P
+19   | 734        | THIN       | The Junior Data Science Reality: You Are a SQL Jan
+20   | 767        | THIN       | The Frontend Reality: React is Not a Career
+21   | 764        | THIN       | The Product Manager Reality: You Are a Jira Janito
+22   | 656        | THIN       | The Digital Marketing Reality: Agency Slavery vs B
+23   | 691        | THIN       | The American Dream Indian Engineers Are Still Chas
+24   | 743        | THIN       | The MBA Reality in India: Is It Still Worth the ₹2
+25   | 721        | THIN       | The Remote Work Salary Trap: When Geographic Arbit
+26   | 775        | THIN       | Why Side Hustles Don't Scale for Most People
+27   | 769        | THIN       | The Equity Trap: When Your Stock Options Are Worth
+28   | 726        | THIN       | The Manager vs IC Reality: Which Path Actually Pay
+29   | 567        | CRITICAL   | The Layoff Recovery Timeline Nobody Talks About
+30   | 494        | CRITICAL   | Why 'Networking' Doesn't Work the Way You're Told
+31   | 528        | CRITICAL   | The Freelancing Reality: Freedom vs Financial Inst
+32   | 546        | CRITICAL   | The Senior Developer Ceiling: Why Salaries Plateau
+33   | 533        | CRITICAL   | The DevOps Reality: You're On-Call, Not In-Demand
+34   | 551        | CRITICAL   | The Tech Lead Trap: Responsibility Without Authori
+35   | 533        | CRITICAL   | The Performance Review Reality: How Ratings Actual
+36   | 548        | CRITICAL   | Why Job Hopping Stops Working After 35
+37   | 571        | CRITICAL   | The 'Culture Fit' Trap: What Interviewers Actually
+38   | 552        | CRITICAL   | HR Conversations That Actually Matter (And Ones Th
+39   | 568        | CRITICAL   | Why 'Follow Your Passion' Is Advice for the Privil
+40   | 593        | CRITICAL   | The Work-Life Balance Lie: What High Performers Do
+----------------------------------------------------------------------------------------------------
+Total Articles: 30
+Thin Content (< 1000 words): 29

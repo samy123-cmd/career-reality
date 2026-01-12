@@ -1,7 +1,7 @@
 {% load static %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}Career Reality (India){% endblock %}</title>
+<title>{% block title %}CareerReality — Uncomfortable Career Truths{% endblock %}</title>
 
 
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
@@ -28,5 +28,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=zara">
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=sticky_fix">
+
+<!-- JSON-LD Organization & WebSite Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Career Reality (India)",
+    "alternateName": "CareerReality.in",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "description": "The brutal truth about engineering careers in India. No-BS salary data, career reality checks, and honest career advice.",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Reality (India)",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "sameAs": []
+    }
+}
+</script>

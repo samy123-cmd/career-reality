@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact — Career Reality (India){% endblock %}
+{% block meta_description %}Get in touch with Career Reality. For editorial inquiries, corrections, or feedback about
+our career insights content.{% endblock %}
+
+{% block content %}
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <h1>Contact</h1>
+
+    <p class="hero-subtitle" style="margin-bottom: var(--space-lg);">
+        For editorial inquiries, corrections, or feedback.
+    </p>
+
+    <!-- Primary Email Card -->
+    <div class="contact-card" style="border-left: 3px solid var(--c-black);">
+        <h3>Editorial Inquiries</h3>
+        <p>
+            Questions about an article, corrections, or topic suggestions.
+        </p>
+        <span class="contact-email">editorial@careerreality.in</span>
+    </div>
+
+    <!-- Collapsible FAQ Section -->
+    <div style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
+        <span class="section-label">FAQ</span>
+
+        <details class="collapsible" open>
+            <summary>Response Policy</summary>
+            <div class="content">
+                <p>We read every email but cannot respond to all inquiries individually. If your message requires a
+                    response, please allow 3–5 business days.</p>
+                <p>Priority is given to factual corrections and editorial clarifications.</p>
+            </div>
+        </details>
+
+        <details class="collapsible">
+            <summary>What We Don't Do</summary>
+            <div class="content">
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>Career counseling or personal advice</li>
+                    <li>Resume reviews or job referrals</li>
+                    <li>Sponsored content or paid mentions</li>
+                    <li>Guest posts or link exchanges</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="collapsible">
+            <summary>Share Your Story</summary>
+            <div class="content">
+                <p>Have a career story that challenges conventional wisdom? We occasionally feature reader experiences
+                    (anonymously, if preferred).</p>
+                <p>Email with "Story Submission" in the subject line.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- Corrections Policy -->
+    <div class="key-takeaway">
+        <h4>Corrections Policy</h4>
+        <p>
+            If you believe an article contains a factual error, please email with the article URL,
+            the specific claim in question, and your source. Verified corrections are published transparently.
+        </p>
+    </div>
+
+    <!-- Response Times -->
+    <div style="margin-top: var(--space-lg); font-size: 13px; color: var(--c-grey-light); text-align: center;">
+        <p style="margin: 0;">Average response time: 3–5 business days</p>
+    </div>
+</section>
+{% endblock %}

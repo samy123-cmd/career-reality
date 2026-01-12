@@ -1,14 +1,84 @@
 <header class="site-header">
     <div class="container-wide nav-flex">
-        <div>
-            <a href="/" class="site-title">CAREER REALITY <span>(India)</span></a>
-        </div>
+        <!-- Premium Logo/Brand -->
+        <a href="/" class="site-brand">
+            <span class="brand-icon">◆</span>
+            <span class="brand-text">CAREER<span class="brand-highlight">REALITY</span></span>
+        </a>
 
+        <!-- Primary Navigation -->
         <nav class="site-nav">
-            <a href="{% url 'salary_reality' %}">Reality Checks</a>
-            <a href="{% url 'wizard_start' %}">Risk Analyzer</a>
-            <a href="{% url 'editorial' %}">Editorial</a>
-            <a href="{% url 'about' %}">About</a>
+            <!-- Topics Dropdown with enhanced styling -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Topics
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content">
+                    <div class="dropdown-header">Browse by Category</div>
+                    {% for category in categories %}
+                    <a href="{% url 'category_detail' category.slug %}">
+                        <span class="dropdown-icon">→</span>
+                        {{ category.name }}
+                    </a>
+                    {% empty %}
+                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">→</span>Career Strategy</a>
+                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">→</span>Software Engineering</a>
+                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">→</span>Money Reality</a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <a href="{% url 'salary_reality' %}" class="nav-link">Salaries</a>
+            <a href="{% url 'salary_calculator' %}" class="nav-link nav-highlight">
+                <span class="nav-badge">NEW</span>
+                Calculator
+            </a>
+            <a href="{% url 'wizard_start' %}" class="nav-link">Analyzer</a>
+            <a href="{% url 'about' %}" class="nav-link">About</a>
+        </nav>
+
+        <!-- Mobile Menu Toggle (hidden on desktop) -->
+        <button class="mobile-menu-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay"></div>
+
+        <!-- Mobile Slide-out Navigation -->
+        <nav class="mobile-nav">
+            <div class="mobile-nav-header">MENU</div>
+
+            <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
+                In-Hand Calculator
+                <span class="nav-badge">NEW</span>
+            </a>
+            <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Salary Data</a>
+            <a href="{% url 'wizard_start' %}" class="mobile-nav-link">Risk Analyzer</a>
+            <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
+
+            <div class="mobile-nav-categories">
+                <div class="mobile-nav-header">BROWSE TOPICS</div>
+                {% for category in categories %}
+                <a href="{% url 'category_detail' category.slug %}" class="mobile-category-link">
+                    {{ category.name }}
+                </a>
+                {% empty %}
+                <a href="{% url 'salary_reality' %}" class="mobile-category-link">Career Strategy</a>
+                <a href="{% url 'salary_reality' %}" class="mobile-category-link">Software Engineering</a>
+                <a href="{% url 'salary_reality' %}" class="mobile-category-link">Money Reality</a>
+                {% endfor %}
+            </div>
+
+            <div class="mobile-nav-footer">
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'terms' %}">Terms</a>
+            </div>
         </nav>
     </div>
 </header>
