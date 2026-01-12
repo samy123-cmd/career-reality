@@ -36,8 +36,13 @@
 <article class="article-body">
     <header class="container-reading article-header">
         <h1>{{ article.title }}</h1>
-        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{ article.target_persona|safe }}</div>
-        <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;"><a href="{% url 'author_detail' article.author.id %}" style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> - {{ article.updated_at|date:"F Y" }} · <a href="{% url 'category_detail' article.category.slug %}" style="color: inherit;">{{ article.category.name }}</a></div>
+        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{
+            article.target_persona|safe }}</div>
+        <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;"><a
+                href="{% url 'author_detail' article.author.id %}"
+                style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> - {{
+            article.updated_at|date:"F Y" }} · <a href="{% url 'category_detail' article.category.slug %}"
+                style="color: inherit;">{{ article.category.name }}</a></div>
     </header>
 
     <div class="container-reading">
@@ -67,31 +72,47 @@
         </section>
 
         <div style="margin-top: 5rem;">
-            <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; border-top: 2px solid var(--c-black); padding-top: 1rem; margin-bottom: 2rem; display: inline-block;">Final Verdict</h3>
+            <h3
+                style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; border-top: 2px solid var(--c-black); padding-top: 1rem; margin-bottom: 2rem; display: inline-block;">
+                Final Verdict</h3>
             <div style="font-size: 20px; line-height: 1.5; color: var(--c-black);">{{ article.verdict|safe }}</div>
-            
-            <div class="share-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--c-black);">
-                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--c-black); display: block; font-weight: 700; margin-bottom: 2rem;">Share Reality Check</span>
+
+            <div class="share-section"
+                style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--c-black);">
+                <span
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--c-black); display: block; font-weight: 700; margin-bottom: 2rem;">Share
+                    Reality Check</span>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="https://api.whatsapp.com/send?text={{ article.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}" target="_blank" style="display: inline-block; padding: 1rem 2rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-black);">WhatsApp</a>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}" target="_blank" style="display: inline-block; padding: 1rem 2rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-black);">LinkedIn</a>
+                    <a href="https://api.whatsapp.com/send?text={{ article.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}"
+                        target="_blank"
+                        style="display: inline-block; padding: 1rem 2rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-black);">WhatsApp</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}"
+                        target="_blank"
+                        style="display: inline-block; padding: 1rem 2rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-black);">LinkedIn</a>
                 </div>
             </div>
-            
-            <div style="margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">Last Updated: {{ article.updated_at|date:"F Y" }}</div>
+
+            <div style="margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">Last
+                Updated: {{ article.updated_at|date:"F Y" }}</div>
         </div>
     </div>
 
     <!-- Related Articles (Internal Links) -->
     {% if related_articles %}
-    <div class="container-medium" style="margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid #e5e5e5;">
+    <div class="container-medium"
+        style="margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid #e5e5e5;">
         <span class="section-label">RELATED REALITY CHECKS</span>
-        <div class="related-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem;">
+        <div class="related-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem;">
             {% for related in related_articles %}
             <div style="border: 1px solid var(--c-divider); padding: 1.5rem;">
-                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">{{ related.category.name }}</span>
-                <h3 style="font-size: 18px; margin: 0.5rem 0;"><a href="{% url 'article_detail' related.slug %}" style="text-decoration: none;">{{ related.title }}</a></h3>
-                <p style="font-size: 14px; color: var(--c-grey-mid); margin: 0;">{{ related.common_expectation|striptags|truncatewords:12 }}</p>
+                <span
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">{{
+                    related.category.name }}</span>
+                <h3 style="font-size: 18px; margin: 0.5rem 0;"><a href="{% url 'article_detail' related.slug %}"
+                        style="text-decoration: none;">{{ related.title }}</a></h3>
+                <p style="font-size: 14px; color: var(--c-grey-mid); margin: 0;">{{
+                    related.common_expectation|striptags|truncatewords:12 }}</p>
             </div>
             {% endfor %}
         </div>
@@ -100,29 +121,54 @@
 
     <!-- Browse More Topics (Internal Links for SEO) -->
     {% if categories %}
-    <div class="container-medium" style="margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid #e5e5e5;">
+    <div class="container-medium"
+        style="margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid #e5e5e5;">
         <span class="section-label">EXPLORE MORE TOPICS</span>
         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
             {% for cat in categories %}
-            <a href="{% url 'category_detail' cat.slug %}" style="display: inline-block; padding: 0.5rem 1rem; background: {% if cat.id == article.category.id %}var(--c-black){% else %}transparent{% endif %}; color: {% if cat.id == article.category.id %}white{% else %}var(--c-black){% endif %}; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{{ cat.name }}</a>
+            <a href="{% url 'category_detail' cat.slug %}"
+                style="display: inline-block; padding: 0.5rem 1rem; background: {% if cat.id == article.category.id %}var(--c-black){% else %}transparent{% endif %}; color: {% if cat.id == article.category.id %}white{% else %}var(--c-black){% endif %}; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{{
+                cat.name }}</a>
             {% endfor %}
         </div>
     </div>
     {% endif %}
 </article>
 
-<div class="progress-bar" id="reading-progress" style="position: fixed; top: 0; left: 0; height: 3px; background: var(--c-black); width: 0; z-index: 1000;"></div>
+<div class="progress-bar" id="reading-progress"
+    style="position: fixed; top: 0; left: 0; height: 3px; background: var(--c-black); width: 0; z-index: 1000;"></div>
 <script>
-document.addEventListener('scroll', function() {
-    var article = document.querySelector('.article-body');
-    if (!article) return;
-    var articleRect = article.getBoundingClientRect();
-    var articleTop = window.scrollY + articleRect.top;
-    var articleHeight = article.offsetHeight;
-    var windowHeight = window.innerHeight;
-    var scrolled = window.scrollY - articleTop + windowHeight;
-    var progress = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100));
-    document.getElementById('reading-progress').style.width = progress + '%';
-});
+    (function () {
+        var article = document.querySelector('.article-body');
+        if (!article) return;
+        var progressBar = document.getElementById('reading-progress');
+        var articleHeight = 0;
+        var articleTop = 0;
+        var windowHeight = window.innerHeight;
+        var ticking = false;
+
+        function cacheLayout() {
+            var rect = article.getBoundingClientRect();
+            articleTop = window.scrollY + rect.top;
+            articleHeight = article.offsetHeight;
+            windowHeight = window.innerHeight;
+        }
+        cacheLayout();
+        window.addEventListener('resize', cacheLayout, { passive: true });
+
+        function updateProgress() {
+            var scrolled = window.scrollY - articleTop + windowHeight;
+            var progress = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100));
+            progressBar.style.width = progress + '%';
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                requestAnimationFrame(updateProgress);
+                ticking = true;
+            }
+        }, { passive: true });
+    })();
 </script>
 {% endblock %}

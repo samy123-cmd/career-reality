@@ -3,6 +3,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}CareerReality — Uncomfortable Career Truths{% endblock %}</title>
 
+<!-- Preconnect for fonts - MUST be early in head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
 <meta name="robots" content="index, follow">
@@ -23,14 +26,12 @@
 <meta property="twitter:description"
     content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
 
-<!-- Fonts - Non-blocking load -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts - Non-blocking async load -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print"
     onload="this.media='all'">
 
-<!-- Critical CSS for LCP (H1) - Inlined to avoid render blocking -->
+<!-- Critical CSS for LCP - Minified inline -->
 <style>
     * {
         box-sizing: border-box;
@@ -78,7 +79,7 @@
     }
 </style>
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=lcp1">
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf2">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
