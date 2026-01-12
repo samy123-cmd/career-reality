@@ -30,7 +30,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print"
     onload="this.media='all'">
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf1">
+<!-- Critical CSS for LCP (H1) - Inlined to avoid render blocking -->
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0
+    }
+
+    body {
+        font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #fff;
+        color: #666;
+        font-size: 17px;
+        line-height: 1.65
+    }
+
+    h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #000;
+        line-height: 1.1;
+        letter-spacing: -.02em;
+        margin-bottom: 16px
+    }
+
+    .container-reading {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 0 16px
+    }
+
+    .container-medium {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 0 16px
+    }
+
+    .article-header {
+        text-align: center
+    }
+
+    @media(max-width:768px) {
+        h1 {
+            font-size: 32px
+        }
+    }
+</style>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=lcp1">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
