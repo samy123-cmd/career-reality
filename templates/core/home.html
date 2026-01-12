@@ -55,7 +55,8 @@ industry. Data-backed and brutally honest.{% endblock %}
         {% for article in articles %}
         <div class="article-list-item">
             <div class="article-list-meta">
-                {{ article.category.name }} · {{ article.last_reality_check|date:"F Y" }}
+                {{ article.category.name }} · {% if article.last_reality_check %}{{ article.last_reality_check|date:"F
+                Y" }}{% else %}{{ article.updated_at|date:"F Y" }}{% endif %}
             </div>
 
             <h3 class="article-list-title">
