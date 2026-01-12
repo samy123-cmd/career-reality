@@ -99,6 +99,17 @@ DATABASES = {
     }
 }
 
+# Vercel specific: Avoid sqlite3 dependency in runtime where it's missing
+if os.environ.get('VERCEL'):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'vercel_build_db',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+
 import dj_database_url
 # Check for POSTGRES_URL first (Neon/Vercel default), then DATABASE_URL
 DATABASE_URL = os.environ.get('POSTGRES_URL') or os.environ.get('DATABASE_URL')

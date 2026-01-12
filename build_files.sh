@@ -1,4 +1,5 @@
 # Build script
+set -e
 echo "Building the project..."
 pip install -r requirements.txt
 
