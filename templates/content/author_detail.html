@@ -52,11 +52,8 @@
         <div class="article-list" style="margin-top: var(--space-md);">
             {% for article in articles %}
             <div class="article-list-item">
-                <div class="article-list-meta">
-                    <span class="category-badge">{{ article.category.name }}</span>
-                    <span class="reading-time">{% if article.last_reality_check %}{{ article.last_reality_check|date:"F
-                        Y" }}{% else %}{{ article.updated_at|date:"F Y" }}{% endif %}</span>
-                </div>
+                <div class="article-list-meta"><span class="category-badge">{{ article.category.name }}</span><span
+                        class="reading-time">{{ article.updated_at|date:"F Y" }}</span></div>
 
                 <h3 class="article-list-title">
                     <a href="{% url 'article_detail' article.slug %}">
