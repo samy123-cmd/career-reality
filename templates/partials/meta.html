@@ -23,12 +23,14 @@
 <meta property="twitter:description"
     content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
 
-<!-- Fonts -->
+<!-- Fonts - Non-blocking load -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print"
+    onload="this.media='all'">
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=table_fix">
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf1">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
