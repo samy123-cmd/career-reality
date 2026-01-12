@@ -23,12 +23,89 @@
 <meta property="twitter:description"
     content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
 
-<!-- Fonts -->
+<!-- Fonts - Preconnect and Preload for faster LCP -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"
+    media="print" onload="this.media='all'">
+<noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</noscript>
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=sticky_fix">
+<!-- Critical CSS inline for LCP -->
+<style>
+    :root {
+        --c-white: #fff;
+        --c-black: #000;
+        --c-grey-dark: #222;
+        --c-grey-mid: #666;
+        --c-grey-light: #999;
+        --c-divider: #e6e6e6
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        background: #fff;
+        color: #666;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: #000;
+        line-height: 1.1;
+        letter-spacing: -.02em
+    }
+
+    h1 {
+        font-size: 64px;
+        font-weight: 700;
+        margin: 0 0 16px
+    }
+
+    .container-reading {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 0 16px
+    }
+
+    .article-header {
+        text-align: center;
+        margin-bottom: 180px
+    }
+
+    .article-header h1 {
+        font-size: 48px;
+        margin-bottom: 24px
+    }
+
+    @media(max-width:768px) {
+        h1 {
+            font-size: 36px
+        }
+
+        .article-header h1 {
+            font-size: 32px
+        }
+    }
+</style>
+
+<!-- Main CSS - Non-blocking load -->
+<link rel="preload" href="{% static 'css/style.css' %}?v=perf_fix" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf_fix">
+</noscript>
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
