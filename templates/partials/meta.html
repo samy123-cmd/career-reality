@@ -3,11 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}CareerReality — Uncomfortable Career Truths{% endblock %}</title>
 
-<!-- DNS Prefetch & Preconnect for fonts -->
-<link rel="dns-prefetch" href="https://fonts.googleapis.com">
-<link rel="dns-prefetch" href="https://fonts.gstatic.com">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
 
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
 <meta name="robots" content="index, follow">
@@ -211,13 +207,38 @@
             display: flex
         }
     }
+
+    /* Self-Hosted Fonts - Eliminates 750ms render-blocking delay */
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src:url('{% static "fonts/Inter-Regular.woff2" %}') format('woff2')
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src:url('{% static "fonts/Inter-SemiBold.woff2" %}') format('woff2')
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src:url('{% static "fonts/Inter-Bold.woff2" %}') format('woff2')
+    }
 </style>
 
-<!-- Fonts - Optimized with display=swap -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- Preload critical font weight only - LCP (Headline) is 700 bold -->
+<link rel="preload" href="{% static 'fonts/Inter-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
 
-<!-- Main CSS - Deferred for non-critical styles -->
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=speedindex2">
+<!-- Main CSS - Using raw file for dev/fix (Minify for prod later) -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=newsletter-mobile-fix">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
