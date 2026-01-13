@@ -3,7 +3,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}CareerReality — Uncomfortable Career Truths{% endblock %}</title>
 
-<!-- Preconnect for fonts -->
+<!-- DNS Prefetch & Preconnect for fonts -->
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -26,11 +28,196 @@
 <meta property="twitter:description"
     content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
 
-<!-- Fonts - SYNCHRONOUS with font-display swap to prevent FOIT -->
+<!-- Critical CSS - Inlined for instant FCP -->
+<style>
+    /* Critical Above-the-Fold CSS */
+    :root {
+        --c-white: #ffffff;
+        --c-black: #000000;
+        --c-grey-dark: #222222;
+        --c-grey-mid: #666666;
+        --c-grey-light: #999999;
+        --c-divider: #e6e6e6;
+        --c-bg-footer: #f9f9f9;
+        --w-wide: 1100px;
+        --w-medium: 840px;
+        --w-narrow: 640px;
+        --space-sm: 16px;
+        --space-md: 48px;
+        --space-lg: 96px;
+        --space-xl: 180px
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        background-color: var(--c-white);
+        color: var(--c-grey-mid);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased
+    }
+
+    .container-wide {
+        max-width: var(--w-wide);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    .container-medium {
+        max-width: var(--w-medium);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    .container-reading {
+        max-width: var(--w-narrow);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: var(--c-black);
+        line-height: 1.1;
+        letter-spacing: -0.02em
+    }
+
+    h1 {
+        font-size: 64px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: var(--space-sm);
+        color: var(--c-black)
+    }
+
+    .site-header {
+        padding: var(--space-md) 0;
+        margin-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--c-divider);
+        position: sticky;
+        top: 0;
+        background: var(--c-white);
+        z-index: 900
+    }
+
+    .nav-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center
+    }
+
+    .site-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        transition: transform 0.2s ease
+    }
+
+    .brand-text {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        color: var(--c-black)
+    }
+
+    .brand-highlight {
+        font-weight: 400;
+        color: var(--c-grey-mid);
+        margin-left: 2px
+    }
+
+    .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 0
+    }
+
+    .nav-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-grey-mid);
+        text-decoration: none;
+        padding: 8px 16px;
+        transition: color 0.2s ease, background 0.2s ease
+    }
+
+    .nav-dropdown {
+        position: relative;
+        display: inline-block
+    }
+
+    .nav-dropdown-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-black);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        transition: all 0.2s ease
+    }
+
+    .nav-dropdown-content {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        background: var(--c-white);
+        border: 1px solid var(--c-black);
+        min-width: 220px;
+        z-index: 1000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        transform: translateY(-4px);
+        animation: dropIn 0.15s ease forwards
+    }
+
+    @keyframes dropIn {
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .mobile-menu-toggle {
+        display: none
+    }
+
+    @media (max-width:768px) {
+        .site-nav {
+            display: none !important
+        }
+
+        .mobile-menu-toggle {
+            display: flex
+        }
+    }
+</style>
+
+<!-- Fonts - Optimized with display=swap -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- Main CSS - SYNCHRONOUS for better Speed Index -->
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=speedindex1">
+<!-- Main CSS - Deferred for non-critical styles -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=speedindex2">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">

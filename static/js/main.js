@@ -46,4 +46,66 @@ document.addEventListener('DOMContentLoaded', () => {
             closeMenu();
         }
     });
+
+    // Topics Dropdown Handler (Desktop)
+    const topicsDropdown = document.querySelector('.nav-dropdown');
+    const topicsButton = document.querySelector('.nav-dropdown-trigger');
+    const topicsContent = document.querySelector('.nav-dropdown-content');
+
+    if (topicsButton && topicsContent) {
+        let isOpen = false;
+
+        topicsButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                topicsContent.style.display = 'block';
+                topicsButton.setAttribute('aria-expanded', 'true');
+            } else {
+                topicsContent.style.display = 'none';
+                topicsButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (topicsDropdown && !topicsDropdown.contains(e.target) && isOpen) {
+                topicsContent.style.display = 'none';
+                topicsButton.setAttribute('aria-expanded', 'false');
+                isOpen = false;
+            }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                topicsContent.style.display = 'none';
+                topicsButton.setAttribute('aria-expanded', 'false');
+                isOpen = false;
+                topicsButton.focus(); // Return focus to button
+            }
+        });
+
+        // Optional: Keep hover behavior for desktop as enhancement
+        if (topicsDropdown) {
+            let hoverTimeout;
+
+            topicsDropdown.addEventListener('mouseenter', () => {
+                clearTimeout(hoverTimeout);
+                if (!isOpen) {
+                    topicsContent.style.display = 'block';
+                }
+            });
+
+            topicsDropdown.addEventListener('mouseleave', () => {
+                hoverTimeout = setTimeout(() => {
+                    if (!isOpen) {
+                        topicsContent.style.display = 'none';
+                    }
+                }, 200);
+            });
+        }
+    }
 });
