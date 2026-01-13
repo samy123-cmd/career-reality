@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}CareerReality — Uncomfortable Career Truths{% endblock %}</title>
 
-<!-- Preconnect for fonts - MUST be early in head -->
+<!-- Preconnect for fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -26,65 +26,11 @@
 <meta property="twitter:description"
     content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
 
-<!-- Fonts - Non-blocking async load -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print"
-    onload="this.media='all'">
+<!-- Fonts - SYNCHRONOUS with font-display swap to prevent FOIT -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- Critical CSS for LCP - Minified inline -->
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0
-    }
-
-    body {
-        font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #fff;
-        color: #666;
-        font-size: 17px;
-        line-height: 1.65
-    }
-
-    h1 {
-        font-size: 48px;
-        font-weight: 700;
-        color: #000;
-        line-height: 1.1;
-        letter-spacing: -.02em;
-        margin-bottom: 16px
-    }
-
-    .container-reading {
-        max-width: 640px;
-        margin: 0 auto;
-        padding: 0 16px
-    }
-
-    .container-medium {
-        max-width: 840px;
-        margin: 0 auto;
-        padding: 0 16px
-    }
-
-    .article-header {
-        text-align: center
-    }
-
-    @media(max-width:768px) {
-        h1 {
-            font-size: 32px
-        }
-    }
-</style>
-
-<!-- Main CSS - Non-blocking async load -->
-<link rel="preload" href="{% static 'css/style.css' %}?v=perf3" as="style"
-    onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=perf3">
-</noscript>
+<!-- Main CSS - SYNCHRONOUS for better Speed Index -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=speedindex1">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
