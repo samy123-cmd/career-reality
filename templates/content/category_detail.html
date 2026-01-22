@@ -26,9 +26,10 @@
     <div class="article-list" style="margin-top: var(--space-md);">
         {% for article in articles %}
         <div class="article-list-item">
-            <div class="article-list-meta"><a href="{% url 'author_detail' article.author.id %}"
-                    style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> · {{
-                article.updated_at|date:"F Y" }}</div>
+            <div class="article-list-meta">
+                <a href="{% url 'author_detail' article.author.id %}"
+                    style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> · {{ article.updated_at|date:"F Y" }}
+            </div>
 
             <h3 class="article-list-title">
                 <a href="{% url 'article_detail' article.slug %}">

@@ -14,38 +14,86 @@ industry. Data-backed and brutally honest.{% endblock %}
         <p class="hero-subtitle">
             Uncomfortable truths about work, money,
             and stagnation in India.
+    </div>
+</section>
+
+<!-- AUDIENCE: ILLUSTRATED CARD DESIGN -->
+{% load static %}
+<section class="container-medium" style="margin-top: 2.5rem;">
+    <div class="audience-cards-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+        <!-- FOR Card -->
+        <div class="audience-card"
+            style="background: #f8f8f8; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #111; border-radius: 50%; color: #fff; font-size: 12px;">✓</span>
+                    <span
+                        style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; color: #333;">For</span>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: #111; margin: 0 0 14px 0; line-height: 1.3;">
+                    Professionals tired of sugarcoated lies</h3>
+                <ul style="margin: 0; padding: 0; list-style: none; font-size: 14px; color: #444; line-height: 1.8;">
+                    <li style="display: flex; align-items: flex-start; gap: 8px;"><span style="color: #111;">✓</span>
+                        Done with false promises</li>
+                    <li style="display: flex; align-items: flex-start; gap: 8px;"><span style="color: #111;">✓</span>
+                        Fed up with stagnation</li>
+                    <li style="display: flex; align-items: flex-start; gap: 8px;"><span style="color: #111;">✓</span>
+                        Seeking hard truths, not comfort</li>
+                </ul>
+            </div>
+            <div class="audience-card-illustration" style="width: 140px; flex-shrink: 0;">
+                <img src="{% static 'images/professional_frustrated.png' %}" alt="Frustrated professional"
+                    style="width: 100%; height: auto; border-radius: 8px; opacity: 0.9;">
+            </div>
+        </div>
+
+        <!-- NOT FOR Card -->
+        <div class="audience-card"
+            style="background: #f8f8f8; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #999; border-radius: 50%; color: #fff; font-size: 12px;">✕</span>
+                    <span
+                        style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; color: #666;">Not
+                        For</span>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: #555; margin: 0 0 14px 0; line-height: 1.3;">
+                    Tourists & Naive Optimists</h3>
+                <ul style="margin: 0; padding: 0; list-style: none; font-size: 14px; color: #777; line-height: 1.8;">
+                    <li style="display: flex; align-items: flex-start; gap: 8px;"><span style="color: #999;">✕</span>
+                        Students chasing dreams without plans</li>
+                    <li style="display: flex; align-items: flex-start; gap: 8px;"><span style="color: #999;">✕</span>
+                        Tourists who can "manifest" success</li>
+                    <li style="display: flex; align-items: flex-start; gap: 8px;"><span style="color: #999;">✕</span>
+                        Blind believers in "Can-Do Attitude"</li>
+                </ul>
+            </div>
+            <div class="audience-card-illustration" style="width: 140px; flex-shrink: 0;">
+                <img src="{% static 'images/tourists_optimists.png' %}" alt="Tourists and optimists"
+                    style="width: 100%; height: auto; border-radius: 8px; opacity: 0.85;">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tagline -->
+    <div style="text-align: center; margin-top: 28px; padding: 16px 0;">
+        <p style="display: inline-flex; align-items: center; gap: 10px; font-size: 17px; color: #222; margin: 0;">
+            <span
+                style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: #111; border-radius: 50%; color: #fff; font-size: 14px;">✓</span>
+            <span>If you want <strong>harsh realities</strong> over comfortable lies, you're in the right place.</span>
         </p>
     </div>
 </section>
 
-<!-- SILENCE GAP -->
-<div class="silence-gap"></div>
-
-<!-- AUDIENCE: MEDIUM CONTAINER (STRUCTURE) -->
-<section class="container-medium">
-    <div class="audience-grid">
-        <div class="audience-col">
-            <span class="section-label">FOR</span>
-            <p class="audience-text">
-                Professionals who are done with the lies. If you want truth over comfort, you are home.
-            </p>
-        </div>
-
-        <div class="audience-col">
-            <span class="section-label">NOT FOR</span>
-            <p class="audience-text" style="color: var(--c-grey-mid);">
-                Tourists. Students. And anyone who thinks a "Can-Do Attitude" solves structural problems.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- SILENCE + DIVIDER (MEDIUM) -->
-<div class="silence-gap"></div>
-<div class="container-medium">
+<!-- DIVIDER -->
+<div class="container-medium" style="margin-top: 2.5rem;">
     <hr class="editorial-divider">
 </div>
-<div style="height: 80px;"></div>
+<div style="height: 40px;"></div>
 
 <!-- LATEST: MEDIUM CONTAINER (RHYTHM) -->
 <section class="container-medium">

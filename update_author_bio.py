@@ -12,7 +12,7 @@ try:
     print(f"Found Author: {author.display_name}")
     print(f"Old Bio: {author.bio}")
     
-    new_bio = "Not a 'Thought Leader'. Just an observer with a low tolerance for corporate lies. I don't have a content calendar; I write here when I feel like it. Follow me on LinkedIn."
+    new_bio = "Not a 'thought leader'. Not a LinkedIn influencer. Just someone who's been in tech long enough to have opinions and low enough patience to share them. No content calendar here—I write when I'm bored, frustrated, or when someone's bullshit finally crosses my threshold. If that sounds useful, stick around."
     
     author.bio = new_bio
     author.save()

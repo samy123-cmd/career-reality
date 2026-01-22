@@ -1324,3 +1324,83 @@ blockquote.pullquote {
         padding: 1rem 1.25rem;
     }
 }
+
+/* ============================================
+   AUDIENCE CARDS - MOBILE RESPONSIVE
+   ============================================ */
+
+/* Audience cards grid - stack on mobile */
+@media (max-width: 800px) {
+    .audience-cards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    /* Hide illustrations on small screens for cleaner layout */
+    .audience-card-illustration {
+        display: none !important;
+    }
+
+    /* Adjust card padding on mobile */
+    .audience-card {
+        padding: 20px !important;
+    }
+
+    /* Smaller heading on mobile */
+    .audience-card h3 {
+        font-size: 16px !important;
+    }
+
+    /* Smaller text on mobile */
+    .audience-card ul {
+        font-size: 13px !important;
+    }
+
+    /* Tagline responsive */
+    .audience-tagline {
+        font-size: 15px !important;
+        padding: 12px 16px !important;
+    }
+
+    .audience-tagline span:first-child {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 12px !important;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .audience-card {
+        padding: 16px !important;
+    }
+
+    .audience-card h3 {
+        font-size: 15px !important;
+    }
+
+    .audience-card ul li {
+        font-size: 12px !important;
+    }
+
+    .audience-tagline {
+        font-size: 14px !important;
+        flex-direction: column;
+        text-align: center;
+        gap: 8px !important;
+    }
+}
+
+/* Footer partner card responsive */
+@media (max-width: 480px) {
+    .partner-card {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 8px !important;
+    }
+
+    .partner-card span:last-child {
+        display: none;
+        /* Hide arrow on mobile */
+    }
+}
