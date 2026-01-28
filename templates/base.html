@@ -5,6 +5,7 @@
 <head>
     <meta name="description" content="{% block meta_description %}{% endblock %}">
     {% include "partials/meta.html" %}
+    {% block extra_head %}{% endblock %}
 </head>
 
 <body>
@@ -16,9 +17,12 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% include "partials/utility_dock.html" %}
+
     {% include "partials/footer.html" %}
 
     <script defer src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>

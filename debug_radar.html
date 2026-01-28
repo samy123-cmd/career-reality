@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta name="description" content="Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is
+safe. Anonymous reporting for TCS, Byjus, Unacademy, and more.">
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerReality — Uncomfortable Career Truths</title>
+
+<!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
+
+<meta name="google-adsense-account" content="ca-pub-3766621537317806">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="http://127.0.0.1:8000/layoff-radar/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://127.0.0.1:8000/layoff-radar/">
+<meta property="og:title"
+    content="Career Reality (India) - The Brutal Truth">
+<meta property="og:description"
+    content="Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.">
+<meta property="og:image" content="/static/img/og-default.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="http://127.0.0.1:8000/layoff-radar/">
+<meta property="twitter:title"
+    content="Career Reality (India) - The Brutal Truth">
+<meta property="twitter:description"
+    content="Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.">
+<meta property="twitter:image" content="/static/img/og-default.png">
+
+<!-- Critical CSS - Inlined for instant FCP -->
+<style>
+    /* Critical Above-the-Fold CSS */
+    :root {
+        --c-white: #ffffff;
+        --c-black: #000000;
+        --c-grey-dark: #222222;
+        --c-grey-mid: #666666;
+        --c-grey-light: #999999;
+        --c-divider: #e6e6e6;
+        --c-bg-footer: #f9f9f9;
+        --w-wide: 1100px;
+        --w-medium: 840px;
+        --w-narrow: 640px;
+        --space-sm: 16px;
+        --space-md: 48px;
+        --space-lg: 96px;
+        --space-xl: 180px
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        background-color: var(--c-white);
+        color: var(--c-grey-mid);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased
+    }
+
+    .container-wide {
+        max-width: var(--w-wide);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    .container-medium {
+        max-width: var(--w-medium);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    .container-reading {
+        max-width: var(--w-narrow);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: var(--c-black);
+        line-height: 1.1;
+        letter-spacing: -0.02em
+    }
+
+    h1 {
+        font-size: 64px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: var(--space-sm);
+        color: var(--c-black)
+    }
+
+    .site-header {
+        padding: var(--space-md) 0;
+        margin-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--c-divider);
+        position: sticky;
+        top: 0;
+        background: var(--c-white);
+        z-index: 900
+    }
+
+    .nav-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center
+    }
+
+    .site-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        transition: transform 0.2s ease
+    }
+
+    .brand-text {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        color: var(--c-black)
+    }
+
+    .brand-highlight {
+        font-weight: 400;
+        color: var(--c-grey-mid);
+        margin-left: 2px
+    }
+
+    .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 0
+    }
+
+    .nav-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-grey-mid);
+        text-decoration: none;
+        padding: 8px 16px;
+        transition: color 0.2s ease, background 0.2s ease
+    }
+
+    .nav-dropdown {
+        position: relative;
+        display: inline-block
+    }
+
+    .nav-dropdown-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-black);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        transition: all 0.2s ease
+    }
+
+    .nav-dropdown-content {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        background: var(--c-white);
+        border: 1px solid var(--c-black);
+        min-width: 220px;
+        z-index: 1000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        transform: translateY(-4px);
+        animation: dropIn 0.15s ease forwards
+    }
+
+    @keyframes dropIn {
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .mobile-menu-toggle {
+        display: none
+    }
+
+    @media (max-width:768px) {
+        .site-nav {
+            display: none !important
+        }
+
+        .mobile-menu-toggle {
+            display: flex
+        }
+    }
+
+    /* Self-Hosted Fonts - Eliminates 750ms render-blocking delay */
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src:url('/static/fonts/Inter-Regular.woff2') format('woff2')
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src:url('/static/fonts/Inter-SemiBold.woff2') format('woff2')
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src:url('/static/fonts/Inter-Bold.woff2') format('woff2')
+    }
+</style>
+
+<!-- Preload critical font weight only - LCP (Headline) is 700 bold -->
+<link rel="preload" href="/static/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Main CSS - Using raw file for dev/fix (Minify for prod later) -->
+<link rel="stylesheet" href="/static/css/style.css?v=newsletter-mobile-fix">
+
+<!-- JSON-LD Organization & WebSite Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Career Reality (India)",
+    "alternateName": "CareerReality.in",
+    "url": "http://127.0.0.1:8000",
+    "description": "The brutal truth about engineering careers in India. No-BS salary data, career reality checks, and honest career advice.",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Reality (India)",
+        "url": "http://127.0.0.1:8000",
+        "sameAs": []
+    }
+}
+</script>
+</head>
+
+<body>
+    <header class="site-header">
+    <div class="container-wide nav-flex">
+        <!-- Premium Logo/Brand -->
+        <a href="/" class="site-brand">
+            <span class="brand-icon">◆</span>
+            <span class="brand-text">CAREER<span class="brand-highlight">REALITY</span></span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav class="site-nav">
+            <!-- Topics Dropdown with enhanced styling -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Topics
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content" style="display:none;">
+                    <div class="dropdown-header">Browse by Category</div>
+                    
+                    <a href="/salary-reality/"><span class="dropdown-icon">→</span>Career Strategy</a>
+                    <a href="/salary-reality/"><span class="dropdown-icon">→</span>Software Engineering</a>
+                    <a href="/salary-reality/"><span class="dropdown-icon">→</span>Money Reality</a>
+                    
+                </div>
+            </div>
+
+            <!-- Salaries Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Salaries
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content" style="display:none;">
+                    <div class="dropdown-header">Tools & Data</div>
+                    <a href="/salary-reality/">
+                        <span class="dropdown-icon">→</span> Reality Check
+                    </a>
+                    <a href="/salary-calculator/">
+                        <span class="dropdown-icon">→</span> CTC Decoder <span class="nav-badge"
+                            style="margin-left:5px;">NEW</span>
+                    </a>
+                    <a href="/layoff-radar/">
+                        <span class="dropdown-icon">⚠</span> Layoff Radar <span class="nav-badge"
+                            style="background:#d93025; margin-left:5px; color:white;">BETA</span>
+                    </a>
+                    <a href="/salary-drop/" style="color: #d93025; font-weight: 700;">
+                        <span class="dropdown-icon" style="color: #d93025;">+</span> Drop a Salary
+                    </a>
+
+                    <div class="dropdown-header" style="margin-top: 10px; border-top: 1px dashed #eee;">Strategy</div>
+                    <a href="/escape-plan/">
+                        <span class="dropdown-icon">→</span> Service Co. Escape
+                    </a>
+                </div>
+            </div>
+
+            <a href="/resignation-risk/start/" class="nav-link">Analyzer</a>
+            <a href="/about/" class="nav-link">About</a>
+        </nav>
+
+        <!-- Mobile Menu Toggle (hidden on desktop) -->
+        <button class="mobile-menu-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay"></div>
+
+        <!-- Mobile Slide-out Navigation -->
+        <nav class="mobile-nav">
+            <div class="mobile-nav-header">MENU</div>
+
+            <div class="mobile-nav-group" style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+                <div class="mobile-nav-header" style="opacity: 0.5; font-size: 10px; margin-bottom: 0.5rem;">SALARIES
+                </div>
+                <a href="/salary-reality/" class="mobile-nav-link">Reality Check</a>
+                <a href="/salary-calculator/" class="mobile-nav-link">
+                    CTC Decoder <span class="nav-badge">NEW</span>
+                </a>
+                <a href="/layoff-radar/" class="mobile-nav-link">
+                    Layoff Radar <span class="nav-badge" style="background:#d93025;">BETA</span>
+                </a>
+                <a href="/salary-drop/" class="mobile-nav-link" style="color: #d93025; font-weight: 700;">
+                    + Drop a Salary
+                </a>
+                <a href="/escape-plan/" class="mobile-nav-link" style="font-size: 14px; opacity: 0.8;">
+                    → Escape Plan
+                </a>
+            </div>
+            <a href="/salary-reality/" class="mobile-nav-link">Salary Data</a>
+            <a href="/resignation-risk/start/" class="mobile-nav-link">Risk Analyzer</a>
+            <a href="/about/" class="mobile-nav-link">About</a>
+
+            <div class="mobile-nav-categories">
+                <div class="mobile-nav-header">BROWSE TOPICS</div>
+                
+                <a href="/salary-reality/" class="mobile-category-link">Career Strategy</a>
+                <a href="/salary-reality/" class="mobile-category-link">Software Engineering</a>
+                <a href="/salary-reality/" class="mobile-category-link">Money Reality</a>
+                
+            </div>
+
+            <div class="mobile-nav-footer">
+                <a href="/contact/">Contact</a>
+                <a href="/terms/">Terms</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <!-- Removed global main.container constraint. 
+       Templates must define their own containers (wide/med/reading) -->
+    <main>
+        
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Indian Tech Layoffs 2026",
+  "description": "Crowdsourced data on hiring freezes and layoffs in Indian technology companies.",
+  "creator": {
+    "@type": "Organization",
+    "name": "Career Reality India"
+  },
+  "keywords": ["Layoffs", "Hiring Freeze", "Indian IT", "Tech Jobs"]
+}
+</script>
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-size: 36px; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Layoff
+            <span style="color: #d93025;">Radar</span>
+        </h1>
+        <p class="hero-subtitle" style="max-width: 500px; margin: 0 auto;">
+            Real-time market weather. Is your company safe?
+            <br>Crowdsourced from insiders.
+        </p>
+
+        <a href="/layoff-radar/report/" class="btn"
+            style="margin-top: 2rem; display: inline-block; background: #d93025; color: white; border: none; font-weight: 700; padding: 12px 24px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px;">
+            ⚠ Report a Company
+        </a>
+    </div>
+
+    <!-- STATS BAR -->
+    <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap;">
+        <div class="stat-card">
+            <span class="stat-value">VAR</span>
+            <span class="stat-label">Market Volatility</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Reports Today</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value" style="color: #d93025;">HIGH</span>
+            <span class="stat-label">Risk Level</span>
+        </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div style="max-width: 500px; margin: 0 auto 3rem;">
+        <input type="text" id="companySearch" placeholder="Search Company (e.g. Infosys)..." onkeyup="filterCompanies()"
+            style="width: 100%; padding: 16px; font-size: 16px; border: 2px solid var(--c-black); border-radius: 4px;">
+    </div>
+
+    <!-- RADAR FEED -->
+    <div class="radar-feed" id="radarList" style="max-width: 800px; margin: 0 auto;">
+
+        
+        <div style="text-align: center; padding: 3rem; color: #999;">
+            <p>No data yet. Be the first source.</p>
+        </div>
+        
+    </div>
+
+    <style>
+        .stat-card {
+            text-align: center;
+            min-width: 100px;
+            padding: 1rem;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 0.1em;
+        }
+
+        .radar-card {
+            position: relative;
+            background: #fff;
+            border: 1px solid #eee;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .radar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .radar-status-bar {
+            width: 4px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .status-danger {
+            background: #d93025;
+        }
+
+        .status-warn {
+            background: #f57f17;
+        }
+
+        .status-safe {
+            background: #2e7d32;
+        }
+
+        .radar-content {
+            padding: 1.5rem 1.5rem 1.5rem 2rem;
+        }
+
+        .company-name {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .meta-info {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-danger {
+            background: #ffebee;
+            color: #d93025;
+        }
+
+        .badge-warn {
+            background: #fff3e0;
+            color: #f57f17;
+        }
+
+        .badge-safe {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .role-tag {
+            margin-top: 1rem;
+            font-size: 12px;
+            background: #f5f5f5;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 2px;
+        }
+
+        .report-details {
+            margin: 1rem 0 0 0;
+            font-size: 14px;
+            color: #444;
+            font-style: italic;
+            line-height: 1.5;
+        }
+    </style>
+
+    <script>
+        function filterCompanies() {
+            const input = document.getElementById('companySearch');
+            const filter = input.value.toLowerCase();
+            const cards = document.getElementsByClassName('radar-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const companyName = cards[i].getAttribute('data-company');
+                if (companyName.indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</section>
+
+    </main>
+
+    <footer class="site-footer">
+    <div class="container-medium">
+
+        <!-- Newsletter Signup -->
+        <div class="newsletter-section">
+            <h3 class="newsletter-title">Get Career Reality in Your Inbox</h3>
+            <p class="newsletter-desc">Weekly reality checks. No spam. Unsubscribe anytime.</p>
+            <form class="newsletter-form" action="/newsletter/signup/" method="POST">
+                <input type="hidden" name="csrfmiddlewaretoken" value="ISaM9zTzZMtSXZdpjzJ5cFNcEpqQZoKirBQ38cEk81tQX7EiXwQznrrXR9SQSALW">
+                <input type="email" name="email" placeholder="your@email.com" required class="newsletter-input">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;">
+
+        <p>
+            Independently written. No sponsors. No courses.
+            AI used only for assistive editing.
+        </p>
+
+        <p style="opacity: 0.8; margin-top: 1.5rem; font-size: 14px;">
+            <a href="/contact/" style="text-decoration: none; color: inherit;">Contact</a> ·
+            <a href="/terms/" style="text-decoration: none; color: inherit;">Terms</a> ·
+            <a href="/privacy-policy/" style="text-decoration: none; color: inherit;">Privacy</a>
+        </p>
+
+        <!-- Partner Site Card -->
+        <a href="https://www.globalainews.in/" target="_blank" rel="noopener" class="partner-card"
+            style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; margin-top: 1rem; background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 6px; text-decoration: none; color: inherit; transition: background 0.2s, border-color 0.2s;">
+            <span style="font-size: 24px; line-height: 1;">🌐</span>
+            <span style="flex: 1;">
+                <strong style="display: block; font-size: 14px; color: #111;">Global AI News</strong>
+                <span style="font-size: 12px; color: #666;">World news · Business · Tech · Updates</span>
+            </span>
+            <span style="font-size: 18px; color: #999;">→</span>
+        </a>
+
+        <p style="opacity: 0.6; margin-top: 1.5rem;">
+            &copy; 2026 CareerReality
+        </p>
+    </div>
+</footer>
+
+    <script defer src="/static/js/main.js"></script>
+    
+</body>
+
+</html>

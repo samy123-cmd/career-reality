@@ -31,11 +31,38 @@
                 </div>
             </div>
 
-            <a href="{% url 'salary_reality' %}" class="nav-link">Salaries</a>
-            <a href="{% url 'salary_calculator' %}" class="nav-link nav-highlight">
-                <span class="nav-badge">NEW</span>
-                Calculator
-            </a>
+            <!-- Salaries Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Salaries
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content" style="display:none;">
+                    <div class="dropdown-header">Tools & Data</div>
+                    <a href="{% url 'salary_reality' %}">
+                        <span class="dropdown-icon">→</span> Reality Check
+                    </a>
+                    <a href="{% url 'salary_calculator' %}">
+                        <span class="dropdown-icon">→</span> CTC Decoder <span class="nav-badge"
+                            style="margin-left:5px;">NEW</span>
+                    </a>
+                    <a href="{% url 'layoff_radar' %}">
+                        <span class="dropdown-icon">⚠</span> Layoff Radar <span class="nav-badge"
+                            style="background:#d93025; margin-left:5px; color:white;">BETA</span>
+                    </a>
+                    <a href="{% url 'submit_salary' %}" style="color: #d93025; font-weight: 700;">
+                        <span class="dropdown-icon" style="color: #d93025;">+</span> Drop a Salary
+                    </a>
+
+                    <div class="dropdown-header" style="margin-top: 10px; border-top: 1px dashed #eee;">Strategy</div>
+                    <a href="{% url 'escape_plan' %}">
+                        <span class="dropdown-icon">→</span> Service Co. Escape
+                    </a>
+                </div>
+            </div>
+
             <a href="{% url 'wizard_start' %}" class="nav-link">Analyzer</a>
             <a href="{% url 'about' %}" class="nav-link">About</a>
         </nav>
@@ -54,10 +81,23 @@
         <nav class="mobile-nav">
             <div class="mobile-nav-header">MENU</div>
 
-            <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
-                In-Hand Calculator
-                <span class="nav-badge">NEW</span>
-            </a>
+            <div class="mobile-nav-group" style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+                <div class="mobile-nav-header" style="opacity: 0.5; font-size: 10px; margin-bottom: 0.5rem;">SALARIES
+                </div>
+                <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Reality Check</a>
+                <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
+                    CTC Decoder <span class="nav-badge">NEW</span>
+                </a>
+                <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
+                    Layoff Radar <span class="nav-badge" style="background:#d93025;">BETA</span>
+                </a>
+                <a href="{% url 'submit_salary' %}" class="mobile-nav-link" style="color: #d93025; font-weight: 700;">
+                    + Drop a Salary
+                </a>
+                <a href="{% url 'escape_plan' %}" class="mobile-nav-link" style="font-size: 14px; opacity: 0.8;">
+                    → Escape Plan
+                </a>
+            </div>
             <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Salary Data</a>
             <a href="{% url 'wizard_start' %}" class="mobile-nav-link">Risk Analyzer</a>
             <a href="{% url 'about' %}" class="mobile-nav-link">About</a>

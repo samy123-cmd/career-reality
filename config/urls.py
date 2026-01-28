@@ -32,5 +32,4 @@ urlpatterns = [
     path('', include('content.urls')),
     path('resignation-risk/', include('analyzer.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('robots.txt', core_views.robots_txt, name='robots_txt'),
 ]

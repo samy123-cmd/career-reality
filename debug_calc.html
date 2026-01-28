@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta name="description" content="Don't get fooled by CTC. Calculate your real in-hand salary after PF, Taxes, and Hidden
+Deductions. For TCS, Infosys, Wipro, and Startup employees.">
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerReality — Uncomfortable Career Truths</title>
+
+<!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
+
+<meta name="google-adsense-account" content="ca-pub-3766621537317806">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="http://127.0.0.1:8000/salary-calculator/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://127.0.0.1:8000/salary-calculator/">
+<meta property="og:title"
+    content="Career Reality (India) - The Brutal Truth">
+<meta property="og:description"
+    content="Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.">
+<meta property="og:image" content="/static/img/og-default.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="http://127.0.0.1:8000/salary-calculator/">
+<meta property="twitter:title"
+    content="Career Reality (India) - The Brutal Truth">
+<meta property="twitter:description"
+    content="Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.">
+<meta property="twitter:image" content="/static/img/og-default.png">
+
+<!-- Critical CSS - Inlined for instant FCP -->
+<style>
+    /* Critical Above-the-Fold CSS */
+    :root {
+        --c-white: #ffffff;
+        --c-black: #000000;
+        --c-grey-dark: #222222;
+        --c-grey-mid: #666666;
+        --c-grey-light: #999999;
+        --c-divider: #e6e6e6;
+        --c-bg-footer: #f9f9f9;
+        --w-wide: 1100px;
+        --w-medium: 840px;
+        --w-narrow: 640px;
+        --space-sm: 16px;
+        --space-md: 48px;
+        --space-lg: 96px;
+        --space-xl: 180px
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        background-color: var(--c-white);
+        color: var(--c-grey-mid);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased
+    }
+
+    .container-wide {
+        max-width: var(--w-wide);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    .container-medium {
+        max-width: var(--w-medium);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    .container-reading {
+        max-width: var(--w-narrow);
+        margin: 0 auto;
+        padding: 0 var(--space-sm)
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: var(--c-black);
+        line-height: 1.1;
+        letter-spacing: -0.02em
+    }
+
+    h1 {
+        font-size: 64px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: var(--space-sm);
+        color: var(--c-black)
+    }
+
+    .site-header {
+        padding: var(--space-md) 0;
+        margin-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--c-divider);
+        position: sticky;
+        top: 0;
+        background: var(--c-white);
+        z-index: 900
+    }
+
+    .nav-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center
+    }
+
+    .site-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        transition: transform 0.2s ease
+    }
+
+    .brand-text {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        color: var(--c-black)
+    }
+
+    .brand-highlight {
+        font-weight: 400;
+        color: var(--c-grey-mid);
+        margin-left: 2px
+    }
+
+    .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 0
+    }
+
+    .nav-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-grey-mid);
+        text-decoration: none;
+        padding: 8px 16px;
+        transition: color 0.2s ease, background 0.2s ease
+    }
+
+    .nav-dropdown {
+        position: relative;
+        display: inline-block
+    }
+
+    .nav-dropdown-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-black);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        transition: all 0.2s ease
+    }
+
+    .nav-dropdown-content {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        background: var(--c-white);
+        border: 1px solid var(--c-black);
+        min-width: 220px;
+        z-index: 1000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        transform: translateY(-4px);
+        animation: dropIn 0.15s ease forwards
+    }
+
+    @keyframes dropIn {
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .mobile-menu-toggle {
+        display: none
+    }
+
+    @media (max-width:768px) {
+        .site-nav {
+            display: none !important
+        }
+
+        .mobile-menu-toggle {
+            display: flex
+        }
+    }
+
+    /* Self-Hosted Fonts - Eliminates 750ms render-blocking delay */
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src:url('/static/fonts/Inter-Regular.woff2') format('woff2')
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src:url('/static/fonts/Inter-SemiBold.woff2') format('woff2')
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src:url('/static/fonts/Inter-Bold.woff2') format('woff2')
+    }
+</style>
+
+<!-- Preload critical font weight only - LCP (Headline) is 700 bold -->
+<link rel="preload" href="/static/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Main CSS - Using raw file for dev/fix (Minify for prod later) -->
+<link rel="stylesheet" href="/static/css/style.css?v=newsletter-mobile-fix">
+
+<!-- JSON-LD Organization & WebSite Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Career Reality (India)",
+    "alternateName": "CareerReality.in",
+    "url": "http://127.0.0.1:8000",
+    "description": "The brutal truth about engineering careers in India. No-BS salary data, career reality checks, and honest career advice.",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Reality (India)",
+        "url": "http://127.0.0.1:8000",
+        "sameAs": []
+    }
+}
+</script>
+</head>
+
+<body>
+    <header class="site-header">
+    <div class="container-wide nav-flex">
+        <!-- Premium Logo/Brand -->
+        <a href="/" class="site-brand">
+            <span class="brand-icon">◆</span>
+            <span class="brand-text">CAREER<span class="brand-highlight">REALITY</span></span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav class="site-nav">
+            <!-- Topics Dropdown with enhanced styling -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Topics
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content" style="display:none;">
+                    <div class="dropdown-header">Browse by Category</div>
+                    
+                    <a href="/category/career-reality-checks/">
+                        <span class="dropdown-icon">→</span>
+                        Career Reality Checks
+                    </a>
+                    
+                    <a href="/category/career-strategy/">
+                        <span class="dropdown-icon">→</span>
+                        Career Strategy
+                    </a>
+                    
+                    <a href="/category/data-science/">
+                        <span class="dropdown-icon">→</span>
+                        Data Science
+                    </a>
+                    
+                    <a href="/category/education/">
+                        <span class="dropdown-icon">→</span>
+                        Education
+                    </a>
+                    
+                    <a href="/category/engineering/">
+                        <span class="dropdown-icon">→</span>
+                        Engineering
+                    </a>
+                    
+                    <a href="/category/learning/">
+                        <span class="dropdown-icon">→</span>
+                        Learning
+                    </a>
+                    
+                    <a href="/category/money-reality/">
+                        <span class="dropdown-icon">→</span>
+                        Money Reality
+                    </a>
+                    
+                    <a href="/category/design/">
+                        <span class="dropdown-icon">→</span>
+                        Design
+                    </a>
+                    
+                    <a href="/category/financial-reality/">
+                        <span class="dropdown-icon">→</span>
+                        Financial Reality
+                    </a>
+                    
+                    <a href="/category/marketing/">
+                        <span class="dropdown-icon">→</span>
+                        Marketing
+                    </a>
+                    
+                    <a href="/category/product-management/">
+                        <span class="dropdown-icon">→</span>
+                        Product Management
+                    </a>
+                    
+                    <a href="/category/software-engineering/">
+                        <span class="dropdown-icon">→</span>
+                        Software Engineering
+                    </a>
+                    
+                </div>
+            </div>
+
+            <!-- Salaries Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Salaries
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content" style="display:none;">
+                    <div class="dropdown-header">Tools & Data</div>
+                    <a href="/salary-reality/">
+                        <span class="dropdown-icon">→</span> Reality Check
+                    </a>
+                    <a href="/salary-calculator/">
+                        <span class="dropdown-icon">→</span> CTC Decoder <span class="nav-badge"
+                            style="margin-left:5px;">NEW</span>
+                    </a>
+                    <a href="/layoff-radar/">
+                        <span class="dropdown-icon">⚠</span> Layoff Radar <span class="nav-badge"
+                            style="background:#d93025; margin-left:5px; color:white;">BETA</span>
+                    </a>
+                    <a href="/salary-drop/" style="color: #d93025; font-weight: 700;">
+                        <span class="dropdown-icon" style="color: #d93025;">+</span> Drop a Salary
+                    </a>
+
+                    <div class="dropdown-header" style="margin-top: 10px; border-top: 1px dashed #eee;">Strategy</div>
+                    <a href="/escape-plan/">
+                        <span class="dropdown-icon">→</span> Service Co. Escape
+                    </a>
+                </div>
+            </div>
+
+            <a href="/resignation-risk/start/" class="nav-link">Analyzer</a>
+            <a href="/about/" class="nav-link">About</a>
+        </nav>
+
+        <!-- Mobile Menu Toggle (hidden on desktop) -->
+        <button class="mobile-menu-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay"></div>
+
+        <!-- Mobile Slide-out Navigation -->
+        <nav class="mobile-nav">
+            <div class="mobile-nav-header">MENU</div>
+
+            <div class="mobile-nav-group" style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+                <div class="mobile-nav-header" style="opacity: 0.5; font-size: 10px; margin-bottom: 0.5rem;">SALARIES
+                </div>
+                <a href="/salary-reality/" class="mobile-nav-link">Reality Check</a>
+                <a href="/salary-calculator/" class="mobile-nav-link">
+                    CTC Decoder <span class="nav-badge">NEW</span>
+                </a>
+                <a href="/layoff-radar/" class="mobile-nav-link">
+                    Layoff Radar <span class="nav-badge" style="background:#d93025;">BETA</span>
+                </a>
+                <a href="/salary-drop/" class="mobile-nav-link" style="color: #d93025; font-weight: 700;">
+                    + Drop a Salary
+                </a>
+                <a href="/escape-plan/" class="mobile-nav-link" style="font-size: 14px; opacity: 0.8;">
+                    → Escape Plan
+                </a>
+            </div>
+            <a href="/salary-reality/" class="mobile-nav-link">Salary Data</a>
+            <a href="/resignation-risk/start/" class="mobile-nav-link">Risk Analyzer</a>
+            <a href="/about/" class="mobile-nav-link">About</a>
+
+            <div class="mobile-nav-categories">
+                <div class="mobile-nav-header">BROWSE TOPICS</div>
+                
+                <a href="/category/career-reality-checks/" class="mobile-category-link">
+                    Career Reality Checks
+                </a>
+                
+                <a href="/category/career-strategy/" class="mobile-category-link">
+                    Career Strategy
+                </a>
+                
+                <a href="/category/data-science/" class="mobile-category-link">
+                    Data Science
+                </a>
+                
+                <a href="/category/education/" class="mobile-category-link">
+                    Education
+                </a>
+                
+                <a href="/category/engineering/" class="mobile-category-link">
+                    Engineering
+                </a>
+                
+                <a href="/category/learning/" class="mobile-category-link">
+                    Learning
+                </a>
+                
+                <a href="/category/money-reality/" class="mobile-category-link">
+                    Money Reality
+                </a>
+                
+                <a href="/category/design/" class="mobile-category-link">
+                    Design
+                </a>
+                
+                <a href="/category/financial-reality/" class="mobile-category-link">
+                    Financial Reality
+                </a>
+                
+                <a href="/category/marketing/" class="mobile-category-link">
+                    Marketing
+                </a>
+                
+                <a href="/category/product-management/" class="mobile-category-link">
+                    Product Management
+                </a>
+                
+                <a href="/category/software-engineering/" class="mobile-category-link">
+                    Software Engineering
+                </a>
+                
+            </div>
+
+            <div class="mobile-nav-footer">
+                <a href="/contact/">Contact</a>
+                <a href="/terms/">Terms</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <!-- Removed global main.container constraint. 
+       Templates must define their own containers (wide/med/reading) -->
+    <main>
+        
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CTC Decoder (India)",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "INR"
+  },
+  "description": "Calculate accurate in-hand salary from Indian CTC structure, deducting PF, Gratuity, and Taxes (New/Old Regime)."
+}
+</script>
+<section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+
+    <div style="text-align: center; margin-bottom: var(--space-lg);">
+        <h1 style="font-size: 36px;">CTC Decoder</h1>
+        <p class="hero-subtitle" style="max-width: 600px; margin: 1rem auto;">
+            See where your "20 LPA" actually goes. We deduct the "Ghost Components" (Employer PF, Gratuity, Variable
+            Pay)
+            that HR adds to inflate the number.
+        </p>
+    </div>
+
+    <!-- Calculator Form -->
+    <div class="calculator-card"
+        style="background: #fafafa; border: 1px solid var(--c-divider); padding: 2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <!-- CTC -->
+            <div>
+                <label
+                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                    Annual CTC (₹)
+                </label>
+                <input type="number" id="ctc-input" placeholder="e.g. 1200000"
+                    style="width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--c-black); background: white;">
+            </div>
+
+            <!-- Variable Pay -->
+            <div>
+                <label
+                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                    Variable Pay / Bonus (%)
+                </label>
+                <input type="number" id="variable-input" value="10"
+                    style="width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--c-black); background: white;">
+                <p style="font-size: 11px; color: var(--c-grey-mid); margin-top: 4px;">Money you *might* get annually,
+                    not monthly.</p>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px dashed #ddd;">
+            <p style="font-size: 14px; font-weight: 600; margin-bottom: 1rem;">For Old Regime Optimization (HRA):</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <!-- Rent -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                        Monthly Rent Paid (₹)
+                    </label>
+                    <input type="number" id="rent-input" value="0"
+                        style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc;">
+                </div>
+
+                <!-- City Type -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                        City Type
+                    </label>
+                    <select id="city-input"
+                        style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc;">
+                        <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
+                        <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="calculateSalary()"
+            style="width: 100%; padding: 16px; background: var(--c-black); color: white; border: none; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;">
+            Decode My Salary
+        </button>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results" style="display: none; max-width: 800px; margin: 0 auto;">
+
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2
+                style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--c-grey-mid); margin-bottom: 0.5rem;">
+                The Real Monthly In-Hand</h2>
+            <div style="font-size: 48px; font-weight: 800; line-height: 1;">
+                <span id="final-monthly">₹0</span>
+            </div>
+            <p style="margin-top: 0.5rem; font-size: 14px; color: var(--c-grey-light);">
+                (Using <span id="best-regime" style="font-weight: 700; color: #000;">New Regime</span>)
+            </p>
+        </div>
+
+        <!-- The Breakdown (Waterfall) -->
+        <div style="background: white; border: 1px solid #eee; padding: 2rem; border-radius: 8px;">
+            <h3 style="font-size: 16px; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                Where did the money go?</h3>
+
+            <table class="editorial-table" style="font-family: var(--font-mono, monospace);">
+                <tbody>
+                    <!-- CTC -->
+                    <tr style="background: #fdfdfd;">
+                        <td style="font-weight: 700;">Annual CTC (Offer)</td>
+                        <td id="res-ctc" style="text-align: right; font-weight: 700;">₹0</td>
+                    </tr>
+
+                    <!-- Ghost Components -->
+                    <tr style="color: #d93025;">
+                        <td style="padding-left: 1.5rem;">(-) Variable Pay / Bonus <span
+                                style="font-size: 11px; opacity: 0.7;">(Not guaranteed monthly)</span></td>
+                        <td id="res-variable" style="text-align: right;">-₹0</td>
+                    </tr>
+                    <tr style="color: #d93025;">
+                        <td style="padding-left: 1.5rem;">(-) Employer PF <span
+                                style="font-size: 11px; opacity: 0.7;">(12% of Basic, Locked)</span></td>
+                        <td id="res-emplyr-pf" style="text-align: right;">-₹0</td>
+                    </tr>
+                    <tr style="color: #d93025;">
+                        <td style="padding-left: 1.5rem;">(-) Gratuity <span
+                                style="font-size: 11px; opacity: 0.7;">(4.8% of Basic, Locked 5yrs)</span></td>
+                        <td id="res-gratuity" style="text-align: right;">-₹0</td>
+                    </tr>
+
+                    <!-- Gross -->
+                    <tr style="border-top: 1px dashed #ccc; background: #fafafa;">
+                        <td style="font-weight: 600;">= Actual Gross Salary</td>
+                        <td id="res-gross" style="text-align: right; font-weight: 600;">₹0</td>
+                    </tr>
+
+                    <!-- Deductions -->
+                    <tr style="color: #e67c00;">
+                        <td style="padding-left: 1.5rem;">(-) Employee PF <span
+                                style="font-size: 11px; opacity: 0.7;">(Your contribution)</span></td>
+                        <td id="res-emplye-pf" style="text-align: right;">-₹0</td>
+                    </tr>
+                    <tr style="color: #e67c00;">
+                        <td style="padding-left: 1.5rem;">(-) Professional Tax</td>
+                        <td id="res-pt" style="text-align: right;">-₹2,400</td>
+                    </tr>
+                    <tr style="color: #e67c00;">
+                        <td style="padding-left: 1.5rem;">(-) Income Tax <span id="tax-regime-label"
+                                style="font-size: 10px; background: #eee; padding: 2px 4px; border-radius: 4px;">NEW
+                                REGIME</span></td>
+                        <td id="res-tax" style="text-align: right;">-₹0</td>
+                    </tr>
+
+                    <!-- Final -->
+                    <tr style="background: var(--c-black); font-size: 16px;">
+                        <td style="font-weight: 700; padding: 1.5rem; color: #ffffff !important;">= Net Annual In-Hand
+                        </td>
+                        <td id="res-annual-inhand"
+                            style="text-align: right; font-weight: 700; padding: 1.5rem; color: #ffffff !important;">₹0
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="font-size: 12px; color: #999; margin-top: 1rem; text-align: center;">
+                * This assumes 'Basic Salary' is 50% of Fixed Pay (standard structure).
+                Variable pay is excluded from monthly flow as it's discretionary/annual.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align: center; margin-top: var(--space-xl);">
+        <p style="font-size: 14px; color: var(--c-grey-mid);">
+            Shocked? That's the point.
+        </p>
+        <a href="/salary-reality/"
+            style="display: inline-block; margin-top: 1rem; padding: 12px 24px; background: var(--c-black); color: white; text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">
+            Compare with Market Standards →
+        </a>
+    </div>
+
+</section>
+
+<script>
+    function calculateSalary() {
+        const ctc = parseFloat(document.getElementById('ctc-input').value) || 0;
+        const variablePercent = parseFloat(document.getElementById('variable-input').value) || 0;
+        const monthlyRent = parseFloat(document.getElementById('rent-input').value) || 0;
+        const isMetro = document.getElementById('city-input').value === 'metro';
+
+        if (ctc <= 0) {
+            alert('Please enter a valid CTC amount');
+            return;
+        }
+
+        // --- 1. Deconstruct CTC ---
+        // Variable Pay
+        const variablePay = ctc * (variablePercent / 100);
+        const fixedCTC = ctc - variablePay;
+
+        // "Ghost" Components in Fixed Pay
+        // Typically Basic is 40-50% of Fixed CTC. Let's assume 50% of Fixed is Basic for calculation safety.
+        // But Employer PF and Gratuity are calculated ON Basic.
+        // Equation: FixedCTC = Gross + EmployerPF + Gratuity
+        // Gross = Basic + HRA + Special
+        // EmployerPF = 12% of Basic
+        // Gratuity = 4.81% of Basic
+        // Let's approximate: Basic is usually designed to be 50% of Gross. 
+        // Reverse engineering exact components is complex, let's take a standard structure assumption:
+        // Assume Basic = 40% of CTC (safe bet for standard structures to keep allowances high)
+        const basic = fixedCTC * 0.40;
+
+        const employerPF = Math.min(basic, 15000 * 12) * 0.12;
+        // Note: Many companies cap PF on 15k basic monthly. 
+        // If basic > 15k/mo (1.8L/yr), PF is often capped at 1800 * 12 = 21,600.
+        // Let's use the cap logic widely used in private sector.
+        const pfCapAnnual = 21600;
+        const actualEmployerPF = employerPF; // Some cap, some don't. Let's assume full 12% for aggressive deduction view, or capped? 
+        // Let's cap it to be realistic for higher salaries, or uncapped for "trusts". 
+        // Let's use Uncapped for "Ghost Component" visualization primarily (as it hurts more), but Capped for standard startups. 
+        // We'll stick to 12% of Basic (capped at 15k/mo basic usually).
+        const pfMonCap = 1800 * 12;
+        const finalEmployerPF = (basic > 180000) ? pfMonCap : (basic * 0.12);
+
+        const gratuity = basic * 0.0481; // 15/26 * basic_monthly * 12 ?? No, it's ~4.81% of annual basic
+
+        // Gross = Fixed CTC - (EmployerPF + Gratuity)
+        // Note: Insurance is often separate, let's ignore for simplicity.
+        const grossSalary = fixedCTC - finalEmployerPF - gratuity;
+
+        // --- 2. Deductions from Gross ---
+        const pt = 2400;
+        const employeePF = finalEmployerPF; // Matching employer contribution usually
+
+        // Taxable Income Calculation
+        // New Regime Taxable = Gross - Std Deduction (75k)
+        const newTaxable = Math.max(0, grossSalary - 75000);
+        const newTax = calcNewRegimeTax(newTaxable);
+
+        // Old Regime Taxable = Gross - Std Deduction (50k) - PT - HRA - 80C - EmployeePF
+        // HRA Exemption: Min of (Actual HRA Received, Rent - 10% Basic, 50%/40% Basic)
+        // We need "Actual HRA Received". In standard structure HRA is 40% (Non-Metro) or 50% (Metro) of Basic.
+        const hraReceived = basic * (isMetro ? 0.5 : 0.4);
+        // Rent Paid Annual
+        const rentPaidAnnual = monthlyRent * 12;
+
+        const hraCondition1 = hraReceived;
+        const hraCondition2 = Math.max(0, rentPaidAnnual - (basic * 0.10));
+        const hraCondition3 = basic * (isMetro ? 0.5 : 0.4);
+        const hraExemption = Math.min(hraCondition1, hraCondition2, hraCondition3);
+
+        const deductions80C = Math.min(150000, employeePF); // Assume only PF fills 80C for "Auto" calc. User might have more.
+        // Let's start with just PF.
+
+        const oldTaxable = Math.max(0, grossSalary - 50000 - pt - hraExemption - deductions80C);
+        const oldTax = calcOldRegimeTax(oldTaxable);
+
+        // --- 3. Compare Regimes ---
+        let finalTax = newTax;
+        let isNewRegime = true;
+        if (oldTax < newTax) {
+            finalTax = oldTax;
+            isNewRegime = false;
+        }
+
+        const annualInHand = grossSalary - employeePF - pt - finalTax;
+        const monthlyInHand = Math.round(annualInHand / 12);
+
+        // --- 4. Render ---
+        const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('final-monthly').textContent = fmt(monthlyInHand);
+        document.getElementById('best-regime').textContent = isNewRegime ? "New Regime" : "Old Regime";
+        document.getElementById('tax-regime-label').textContent = isNewRegime ? "NEW REGIME" : "OLD REGIME";
+
+        document.getElementById('res-ctc').textContent = fmt(ctc);
+        document.getElementById('res-variable').textContent = '-' + fmt(variablePay);
+        document.getElementById('res-emplyr-pf').textContent = '-' + fmt(finalEmployerPF);
+        document.getElementById('res-gratuity').textContent = '-' + fmt(gratuity);
+
+        document.getElementById('res-gross').textContent = fmt(grossSalary);
+
+        document.getElementById('res-emplye-pf').textContent = '-' + fmt(employeePF);
+        document.getElementById('res-pt').textContent = '-' + fmt(pt);
+        document.getElementById('res-tax').textContent = '-' + fmt(finalTax);
+
+        document.getElementById('res-annual-inhand').textContent = fmt(annualInHand);
+
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function calcNewRegimeTax(income) {
+        // FY 2025-26 Slabs
+        if (income <= 300000) return 0;
+        /*
+        0-3L: Nil
+        3-7L: 5%
+        7-10L: 10%
+        10-12L: 15%
+        12-15L: 20%
+        >15L: 30%
+        */
+        let tax = 0;
+        if (income <= 700000) {
+            tax = (income - 300000) * 0.05;
+        } else if (income <= 1000000) {
+            tax = 20000 + (income - 700000) * 0.10;
+        } else if (income <= 1200000) {
+            tax = 50000 + (income - 1000000) * 0.15;
+        } else if (income <= 1500000) {
+            tax = 80000 + (income - 1200000) * 0.20;
+        } else {
+            tax = 140000 + (income - 1500000) * 0.30;
+        }
+
+        // Rebate 87A (Income <= 7L -> No tax)
+        if (income <= 700000) tax = 0;
+
+        return tax * 1.04; // Cess
+    }
+
+    function calcOldRegimeTax(income) {
+        if (income <= 250000) return 0;
+        /*
+        0-2.5: Nil
+        2.5-5: 5%
+        5-10: 20%
+        >10: 30%
+        */
+        let tax = 0;
+        if (income <= 500000) {
+            tax = (income - 250000) * 0.05;
+        } else if (income <= 1000000) {
+            tax = 12500 + (income - 500000) * 0.20;
+        } else {
+            tax = 112500 + (income - 1000000) * 0.30;
+        }
+
+        // Rebate 87A (Income <= 5L -> No tax)
+        if (income <= 500000) tax = 0;
+
+        return tax * 1.04; // Cess
+    }
+</script>
+
+
+    </main>
+
+    <footer class="site-footer">
+    <div class="container-medium">
+
+        <!-- Newsletter Signup -->
+        <div class="newsletter-section">
+            <h3 class="newsletter-title">Get Career Reality in Your Inbox</h3>
+            <p class="newsletter-desc">Weekly reality checks. No spam. Unsubscribe anytime.</p>
+            <form class="newsletter-form" action="/newsletter/signup/" method="POST">
+                <input type="hidden" name="csrfmiddlewaretoken" value="3136DF6v1IyZlL6Xr9Or6tCqn8tuPdVpif7FkwpGpLgLDOBcUrO3UThAbrqfWCLM">
+                <input type="email" name="email" placeholder="your@email.com" required class="newsletter-input">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;">
+
+        <p>
+            Independently written. No sponsors. No courses.
+            AI used only for assistive editing.
+        </p>
+
+        <p style="opacity: 0.8; margin-top: 1.5rem; font-size: 14px;">
+            <a href="/contact/" style="text-decoration: none; color: inherit;">Contact</a> ·
+            <a href="/terms/" style="text-decoration: none; color: inherit;">Terms</a> ·
+            <a href="/privacy-policy/" style="text-decoration: none; color: inherit;">Privacy</a>
+        </p>
+
+        <!-- Partner Site Card -->
+        <a href="https://www.globalainews.in/" target="_blank" rel="noopener" class="partner-card"
+            style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; margin-top: 1rem; background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 6px; text-decoration: none; color: inherit; transition: background 0.2s, border-color 0.2s;">
+            <span style="font-size: 24px; line-height: 1;">🌐</span>
+            <span style="flex: 1;">
+                <strong style="display: block; font-size: 14px; color: #111;">Global AI News</strong>
+                <span style="font-size: 12px; color: #666;">World news · Business · Tech · Updates</span>
+            </span>
+            <span style="font-size: 18px; color: #999;">→</span>
+        </a>
+
+        <p style="opacity: 0.6; margin-top: 1.5rem;">
+            &copy; 2026 CareerReality
+        </p>
+    </div>
+</footer>
+
+    <script defer src="/static/js/main.js"></script>
+    
+</body>
+
+</html>

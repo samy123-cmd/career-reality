@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Anonymous Salary Drop — Career Reality{% endblock %}
+
+{% block content %}
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 32px; margin-bottom: 0.5rem;">The Salary Drop</h1>
+        <p class="hero-subtitle" style="max-width: 500px; margin: 0 auto;">
+            Glassdoor is censored. LinkedIn is fake.
+            <br>Drop your real numbers anonymously. Help the community.
+        </p>
+    </div>
+
+    <div class="calculator-card"
+        style="background: #fafafa; border: 1px solid var(--c-divider); padding: 2rem; max-width: 600px; margin: 0 auto;">
+        <form method="POST" action="{% url 'submit_salary' %}">
+            {% csrf_token %}
+
+            <!-- Role -->
+            <div style="margin-bottom: 1.5rem;">
+                <label
+                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">Role
+                    / Job Title</label>
+                <input type="text" name="role" placeholder="e.g. Senior Backend Engineer" required
+                    style="width: 100%; padding: 12px; border: 2px solid var(--c-black);">
+            </div>
+
+            <!-- Tech Stack -->
+            <div style="margin-bottom: 1.5rem;">
+                <label
+                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">Tech
+                    Stack (Optional)</label>
+                <input type="text" name="tech_stack" placeholder="e.g. Java, Spring Boot, AWS"
+                    style="width: 100%; padding: 12px; border: 1px solid #ccc;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <!-- Exp -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">Experience
+                        (Years)</label>
+                    <input type="number" step="0.1" name="experience" placeholder="e.g. 3.5" required
+                        style="width: 100%; padding: 12px; border: 2px solid var(--c-black);">
+                </div>
+                <!-- CTC -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">Annual
+                        CTC (₹)</label>
+                    <input type="number" name="ctc" placeholder="e.g. 1200000" required
+                        style="width: 100%; padding: 12px; border: 2px solid var(--c-black);">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <!-- Company Type -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">Company
+                        Type</label>
+                    <select name="company_type" required style="width: 100%; padding: 12px; border: 1px solid #ccc;">
+                        <option value="service">Service Based (TCS/Wipro/etc)</option>
+                        <option value="product">Product Based</option>
+                        <option value="startup">Startup</option>
+                        <option value="unicorn">Unicorn / FAANG</option>
+                    </select>
+                </div>
+                <!-- City -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">City</label>
+                    <input type="text" name="city" placeholder="e.g. Bangalore" required
+                        style="width: 100%; padding: 12px; border: 1px solid #ccc;">
+                </div>
+            </div>
+
+            <button type="submit"
+                style="width: 100%; padding: 16px; background: var(--c-black); color: white; border: none; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;">
+                Submit Anonymously
+            </button>
+            <p style="font-size: 11px; color: #999; text-align: center; margin-top: 1rem;">
+                No names. No emails. Pure data.
+            </p>
+        </form>
+    </div>
+
+</section>
+{% endblock %}

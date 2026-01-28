@@ -10,19 +10,22 @@
 <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="article">
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
-<meta property="og:title" content="{{ article.meta_title|default:'Career Reality (India)' }}">
+<meta property="og:title"
+    content="{% block og_title %}{{ article.meta_title|default:'Career Reality (India) - The Brutal Truth' }}{% endblock %}">
 <meta property="og:description"
-    content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
-<meta property="og:image" content="{% static 'img/og-default.png' %}">
+    content="{% block og_description %}{{ article.meta_description|default:'Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.' }}{% endblock %}">
+<meta property="og:image" content="{% block og_image %}{% static 'img/og-default.png' %}{% endblock %}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
-<meta property="twitter:title" content="{{ article.meta_title|default:'Career Reality (India)' }}">
+<meta property="twitter:title"
+    content="{% block twitter_title %}{{ article.meta_title|default:'Career Reality (India) - The Brutal Truth' }}{% endblock %}">
 <meta property="twitter:description"
-    content="{{ article.meta_description|default:'The brutal truth about engineering careers in India.' }}">
+    content="{% block twitter_description %}{{ article.meta_description|default:'Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.' }}{% endblock %}">
+<meta property="twitter:image" content="{% block twitter_image %}{% static 'img/og-default.png' %}{% endblock %}">
 
 <!-- Critical CSS - Inlined for instant FCP -->
 <style>
@@ -234,11 +237,16 @@
     }
 </style>
 
-<!-- Preload critical font weight only - LCP (Headline) is 700 bold -->
+<!-- Preload critical font weights -->
 <link rel="preload" href="{% static 'fonts/Inter-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{% static 'fonts/Inter-Regular.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{% static 'fonts/Inter-SemiBold.woff2' %}" as="font" type="font/woff2" crossorigin>
 
 <!-- Main CSS - Using raw file for dev/fix (Minify for prod later) -->
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=newsletter-mobile-fix">
+<link rel="preload" href="{% static 'css/style.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</noscript>
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">

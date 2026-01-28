@@ -1,5 +1,7 @@
 import os
 import django
+from django.db.models import Sum, F, Value
+from django.db.models.functions import Length
 
 # Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -13,53 +15,52 @@ def count_words(text):
     return len(text.split())
 
 def analyze_content():
+    print(" Analyzing Article Content Length...\n")
+    print(f"{'TITLE':<60} | {'WORDS':<10} | {'STATUS'}")
+    print("-" * 90)
+
     articles = Article.objects.all()
     thin_count = 0
-    total_articles = 0
-    
-    with open('audit_report.txt', 'w', encoding='utf-8') as f:
-        f.write(f"{'ID':<4} | {'Word Count':<10} | {'Status':<10} | {'Title'}\n")
-        f.write("-" * 100 + "\n")
-        
-        for article in articles:
-            # Combine all substantial fields
-            parts = [
-                article.common_expectation,
-                article.actual_reality,
-                article.salary_reality,
-                article.stuck_point,
-                article.verdict,
-                article.target_persona,
-                article.who_should_avoid
-            ]
-            
-            # basic cleaning of none
-            parts = [p if p else "" for p in parts]
-            full_text = " ".join(parts)
-            
-            word_count = count_words(full_text)
-            
-            status = "OK"
-            if word_count < 600:
-                status = "CRITICAL"
-                thin_count += 1
-            elif word_count < 1000:
-                status = "THIN"
-                thin_count += 1
-                
-            try:
-                title = article.title[:50] if article.title else "NO TITLE"
-                f.write(f"{article.id:<4} | {word_count:<10} | {status:<10} | {title}\n")
-            except Exception as e:
-                f.write(f"Error printing article {article.id}: {e}\n")
-                
-            total_articles += 1
+    total_count = 0
 
-        f.write("-" * 100 + "\n")
-        f.write(f"Total Articles: {total_articles}\n")
-        f.write(f"Thin Content (< 1000 words): {thin_count}\n")
-    
-    print("Report written to audit_report.txt")
+    results = []
+
+    for article in articles:
+        # Calculate total word count across all content fields
+        content_fields = [
+            article.common_expectation,
+            article.actual_reality,
+            article.salary_reality,
+            article.stuck_point,
+            article.verdict
+        ]
+        
+        # Add intro fields too for completeness
+        intro_fields = [
+            article.target_persona,
+            article.who_should_avoid
+        ]
+
+        total_words = sum(count_words(field) for field in content_fields + intro_fields)
+        results.append((article.title, total_words, article.slug))
+
+    # Sort by word count (ascending)
+    results.sort(key=lambda x: x[1])
+
+    for title, words, slug in results:
+        status = "🔴 THIN" if words < 600 else "🟢 GOOD"
+        if words < 600:
+            thin_count += 1
+        
+        # Truncate title for display
+        display_title = (title[:57] + '..') if len(title) > 57 else title
+        print(f"{display_title:<60} | {words:<10} | {status}")
+
+    print("-" * 90)
+    print(f"\nSummary:")
+    print(f"Total Articles: {len(articles)}")
+    print(f"Thin Articles (< 600 words): {thin_count}")
+    print(f"Healthy Articles (> 600 words): {len(articles) - thin_count}")
 
 if __name__ == "__main__":
     analyze_content()

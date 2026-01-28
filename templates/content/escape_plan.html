@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Service Company Escape Plan: Roadmap to Product Firms — Career Reality{% endblock %}
+
+{% block meta_description %}Stuck in TCS/Infosys? Check your 'Career Rot' score and get a step-by-step roadmap to switch
+to Product companies. Tailored for Support, QA, and Legacy Devs.{% endblock %}
+
+{% block og_title %}The Service Company Escape Plan{% endblock %}
+{% block og_description %}Stuck in TCS/Infosys? Check your 'Career Rot' score and get a step-by-step roadmap to switch
+to Product companies.{% endblock %}
+
+{% block content %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to switch from Service to Product Company",
+  "description": "A guide for Indian IT engineers to switch from service-based companies (TCS, Infy, Wipro) to product-based startups.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "text": "Assess your current 'Skill Rot' using our quiz."
+    },
+    {
+      "@type": "HowToStep",
+      "text": "Choose your specific exit path: Automation for Support, SDET for QA, or Refactoring for Legacy Devs."
+    },
+    {
+      "@type": "HowToStep",
+      "text": "Build a portfolio project using modern stack (React/Go/Python)."
+    }
+  ]
+}
+</script>
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+
+    <!-- HEADER -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-size: 42px; line-height: 1.1;">The Service Company<br><span style="color: #d93025;">Escape
+                Plan</span></h1>
+        <p class="hero-subtitle" style="max-width: 600px; margin: 1rem auto;">
+            Stuck in TCS, Infosys, Wipro, or HCL?
+            <br>The longer you stay, the harder it is to leave.
+            <br>Check your "Career Rot" level below.
+        </p>
+    </div>
+
+    <!-- THE ROT CHECK QUIZ -->
+    <div id="rot-quiz-container" class="calculator-card"
+        style="background: #fff; border: 2px solid var(--c-black); padding: 2rem; margin-bottom: 4rem;">
+
+        <!-- STEP 0: ROLE -->
+        <div class="quiz-step" id="step-role">
+            <h3 style="margin-top: 0;">First, what is your official role?</h3>
+            <div class="quiz-options">
+                <button onclick="setRole('dev')" class="quiz-btn">Developer / Engineer</button>
+                <button onclick="setRole('qa')" class="quiz-btn">QA / Tester (Manual or Auto)</button>
+                <button onclick="setRole('support')" class="quiz-btn">Support / Operations / Analyst</button>
+            </div>
+        </div>
+
+        <!-- STEP 1: CODING -->
+        <div class="quiz-step" id="step-1" style="display: none;">
+            <h3 style="margin-top: 0;">1. When was the last time you wrote code from scratch?</h3>
+            <div class="quiz-options">
+                <button onclick="nextStep(1, 0)" class="quiz-btn">Yesterday</button>
+                <button onclick="nextStep(1, 5)" class="quiz-btn">Last Month (Maintenance only)</button>
+                <button onclick="nextStep(1, 10)" class="quiz-btn">I just forward emails / manage Jira</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: STACK (DIVERSIFIED) -->
+        <div class="quiz-step" id="step-2" style="display: none;">
+            <h3 style="margin-top: 0;">2. What is your primary domain/stack?</h3>
+            <div class="quiz-options-grid">
+                <button onclick="setStack('web'); nextStep(2, 0)" class="quiz-btn">Web (React, Node, Py, Go)</button>
+                <button onclick="setStack('mobile'); nextStep(2, 0)" class="quiz-btn">Mobile (iOS, Android,
+                    Flutter)</button>
+                <button onclick="setStack('data'); nextStep(2, 0)" class="quiz-btn">Data / AI (Python, SQL, ML)</button>
+                <button onclick="setStack('devops'); nextStep(2, 0)" class="quiz-btn">Cloud / DevOps (AWS,
+                    Docker)</button>
+                <button onclick="setStack('legacy'); nextStep(2, 5)" class="quiz-btn">Legacy (JSP, Mainframe,
+                    .NET)</button>
+                <button onclick="setStack('proprietary'); nextStep(2, 10)" class="quiz-btn">Proprietary (SAP,
+                    Salesforce, CRM)</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: MEETINGS -->
+        <div class="quiz-step" id="step-3" style="display: none;">
+            <h3 style="margin-top: 0;">3. How much of your day is meetings?</h3>
+            <div class="quiz-options">
+                <button onclick="nextStep(3, 0)" class="quiz-btn">Less than 1 hour</button>
+                <button onclick="nextStep(3, 5)" class="quiz-btn">2-4 Hours</button>
+                <button onclick="nextStep(3, 10)" class="quiz-btn">My entire calendar is blocked</button>
+            </div>
+        </div>
+
+        <!-- RESULTS CARD -->
+        <div id="quiz-result" style="display: none; text-align: center;">
+            <div id="result-badge"
+                style="display: inline-block; padding: 8px 16px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: white; margin-bottom: 1rem;">
+                RESULT
+            </div>
+            <h2 id="result-title" style="margin: 0 0 1rem 0; font-size: 32px;"></h2>
+            <p id="result-desc" style="max-width: 500px; margin: 0 auto 2rem;"></p>
+
+            <button onclick="revealRoadmap()" class="btn-primary" style="margin-top: 1rem;">View Your Personalized
+                Roadmap ↓</button>
+        </div>
+    </div>
+
+    <!-- DYNAMIC ROADMAPS CONTAINER -->
+    <div id="roadmap-container" style="padding-top: 2rem; display: none;">
+        <h2 style="font-size: 28px; border-bottom: 2px solid black; padding-bottom: 1rem; margin-bottom: 2rem;">Your
+            Personalized Escape Protocol</h2>
+
+        <!-- 1. SUPPORT / OPS -->
+        <div id="roadmap-support" class="roadmap-scenario" style="display: none;">
+            <div class="roadmap-step">
+                <h3 class="step-title">Strategy: The "Automation" Trojan Horse</h3>
+                <p>External recruiters ignore "Support" titles. You must hack your way out.</p>
+                <ul class="step-list">
+                    <li><strong>Step 1: Code your job.</strong> If you restart servers manually, write a script. Put
+                        "Built Automation Tools" on your resume.</li>
+                    <li><strong>Step 2: internal Switch.</strong> Apply for QA/Dev roles <em>inside</em> your company.
+                        The bar is lower.</li>
+                    <li><strong>Step 3: The Jump.</strong> Once you have the "Engineer" title for 6 months, apply to
+                        startups.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2. QA / TESTER -->
+        <div id="roadmap-qa" class="roadmap-scenario" style="display: none;">
+            <div class="roadmap-step">
+                <h3 class="step-title">Strategy: The SDET Pivot</h3>
+                <p>Manual testing is irrelevant. You need to become an "Engineer in Test".</p>
+                <ul class="step-list">
+                    <li><strong>Must Learn:</strong> Selenium or Playwright + One Language (Java/Python).</li>
+                    <li><strong>The Project:</strong> writes a test suite for a public website (e.g., Amazon search
+                        flow) and put it on Github.</li>
+                    <li><strong>Target:</strong> Series A Startups looking for their "First QA Hire".</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3. DEV - WEB -->
+        <div id="roadmap-dev-web" class="roadmap-scenario" style="display: none;">
+            <div class="roadmap-step">
+                <h3 class="step-title">Strategy: The Portfolio Play</h3>
+                <p>You have the right stack, but the wrong label. Show you can build product.</p>
+                <ul class="step-list">
+                    <li><strong>Build ONE Complex App:</strong> Not a ToDo list. Build a Trello Clone or Chat App with
+                        WebSockets.</li>
+                    <li><strong>DSA:</strong> Solve Blind 75 Leetcode. Product companies WILL ask this.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. DEV - MOBILE -->
+        <div id="roadmap-dev-mobile" class="roadmap-scenario" style="display: none;">
+            <div class="roadmap-step">
+                <h3 class="step-title">Strategy: The App Store Validation</h3>
+                <p>Mobile devs are judged by shipped apps.</p>
+                <ul class="step-list">
+                    <li><strong>Ship It:</strong> Publish one app to Play Store / App Store. Even a simple utility.</li>
+                    <li><strong>Focus:</strong> Clean architecture (MVVM/Bloc) and UI Polish.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 5. DEV - DATA -->
+        <div id="roadmap-dev-data" class="roadmap-scenario" style="display: none;">
+            <div class="roadmap-step">
+                <h3 class="step-title">Strategy: The Real-World Project</h3>
+                <p>Don't just do Titanic Kaggle. Solve a messy problem.</p>
+                <ul class="step-list">
+                    <li><strong>Project:</strong> Scrape a website, clean the data, and visualize insights. End-to-end
+                        pipeline.</li>
+                    <li><strong>Target:</strong> "Data Engineer" roles are easier to get than "Data Scientist" roles
+                        initially.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 6. DEV - LEGACY/PROPRIETARY -->
+        <div id="roadmap-dev-legacy" class="roadmap-scenario" style="display: none;">
+            <div class="roadmap-step">
+                <h3 class="step-title">Strategy: The Strangler Fig</h3>
+                <p>You have "Mainframe" or "SAP" on your resume. It's poison to startups.</p>
+                <ul class="step-list">
+                    <li><strong>Rebrand:</strong> "Maintained Legacy Code" -> "Refactored Monolith to Services".</li>
+                    <li><strong>Side Project:</strong> You MUST build something in a modern stack (MERN/Go) to prove you
+                        aren't a dinosaur.</li>
+                    <li><strong>Target:</strong> Banks/Fintechs. They value legacy knowledge + modern intent.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        .quiz-options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quiz-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quiz-btn {
+            padding: 1rem;
+            border: 1px solid #ccc;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .quiz-btn:hover {
+            border-color: black;
+            background: #fafafa;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--c-black);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            border: none;
+        }
+
+        .roadmap-step {
+            margin-bottom: 2.5rem;
+            background: #fafafa;
+            padding: 1.5rem;
+            border-left: 4px solid var(--c-black);
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-list {
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+            list-style-type: disc;
+        }
+
+        .step-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        let score = 0;
+        let userRole = 'dev';
+        let userStack = 'web';
+
+        function setRole(role) {
+            userRole = role;
+            document.getElementById('step-role').style.display = 'none';
+            // If Support, skip tech stack? No, let them answer "Proprietary" or similar.
+            document.getElementById('step-1').style.display = 'block';
+        }
+
+        function setStack(stack) {
+            userStack = stack;
+        }
+
+        function nextStep(step, points) {
+            score += points;
+            document.getElementById(`step-${step}`).style.display = 'none';
+            if (step < 3) {
+                document.getElementById(`step-${step + 1}`).style.display = 'block';
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const res = document.getElementById('quiz-result');
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+            const badge = document.getElementById('result-badge');
+
+            res.style.display = 'block';
+
+            let risk = 'safe';
+            if (score > 15) risk = 'critical';
+            else if (score > 5) risk = 'warning';
+
+            if (risk === 'safe') {
+                badge.style.background = '#2e7d32';
+                badge.innerText = "STATUS: SAFE";
+                title.innerText = "You are an Engineer.";
+                desc.innerText = "You are writing code. Time to level up.";
+            } else if (risk === 'warning') {
+                badge.style.background = '#f57f17';
+                badge.innerText = "STATUS: WARNING";
+                title.innerText = "Skill Rot Detected.";
+                desc.innerText = "You are doing too much maintenance work.";
+            } else {
+                badge.style.background = '#d93025';
+                badge.innerText = "STATUS: CRITICAL";
+                title.innerText = "Professional Bench Warmer.";
+                desc.innerText = "If you get laid off, you are in trouble.";
+            }
+        }
+
+        function revealRoadmap() {
+            document.getElementById('roadmap-container').style.display = 'block';
+            document.querySelectorAll('.roadmap-scenario').forEach(el => el.style.display = 'none');
+
+            // Logic Tree
+            if (userRole === 'support') {
+                document.getElementById('roadmap-support').style.display = 'block';
+            }
+            else if (userRole === 'qa') {
+                document.getElementById('roadmap-qa').style.display = 'block';
+            }
+            else {
+                // Developers
+                if (userStack === 'legacy' || userStack === 'proprietary' || score > 15) {
+                    document.getElementById('roadmap-dev-legacy').style.display = 'block';
+                } else if (userStack === 'mobile') {
+                    document.getElementById('roadmap-dev-mobile').style.display = 'block';
+                } else if (userStack === 'data') {
+                    document.getElementById('roadmap-dev-data').style.display = 'block';
+                } else {
+                    // Default / Web / DevOps -> General Web + DSA
+                    document.getElementById('roadmap-dev-web').style.display = 'block';
+                }
+            }
+
+            document.getElementById('roadmap-container').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</section>
+{% endblock %}

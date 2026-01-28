@@ -1,163 +1,202 @@
 {% extends 'base.html' %}
 
-{% block title %}In-Hand Salary Calculator — Career Reality (India){% endblock %}
-{% block meta_description %}Calculate your actual in-hand salary from CTC. Compare Old vs New tax regime. Accurate for
-FY 2025-26.{% endblock %}
+{% block title %}CTC Decoder: Calculate In-Hand Salary India (2026) — Career Reality{% endblock %}
+
+{% block meta_description %}Don't get fooled by CTC. Calculate your real in-hand salary after PF, Taxes, and Hidden
+Deductions. For TCS, Infosys, Wipro, and Startup employees.{% endblock %}
+
+{% block og_title %}CTC Decoder: Calculate In-Hand Salary India (2026){% endblock %}
+{% block og_description %}Don't get fooled by CTC. Calculate your real in-hand salary after PF, Taxes, and Hidden
+Deductions.{% endblock %}
 
 {% block content %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CTC Decoder (India)",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "INR"
+  },
+  "description": "Calculate accurate in-hand salary from Indian CTC structure, deducting PF, Gratuity, and Taxes (New/Old Regime)."
+}
+</script>
 <section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
 
     <div style="text-align: center; margin-bottom: var(--space-lg);">
-        <h1 style="font-size: 36px;">In-Hand Salary Calculator</h1>
-        <p class="hero-subtitle" style="max-width: 500px; margin: 1rem auto;">
-            Enter your CTC. See what actually hits your bank account each month.
+        <h1 style="font-size: 36px;">CTC Decoder</h1>
+        <p class="hero-subtitle" style="max-width: 600px; margin: 1rem auto;">
+            See where your "20 LPA" actually goes. We deduct the "Ghost Components" (Employer PF, Gratuity, Variable
+            Pay)
+            that HR adds to inflate the number.
         </p>
     </div>
 
     <!-- Calculator Form -->
     <div class="calculator-card"
-        style="background: #fafafa; border: 1px solid var(--c-divider); padding: 2rem; margin-bottom: 2rem;">
-        <div style="margin-bottom: 1.5rem;">
-            <label
-                style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 600;">
-                Annual CTC (₹)
-            </label>
-            <input type="number" id="ctc-input" placeholder="e.g. 1200000"
-                style="width: 100%; padding: 16px; font-size: 20px; border: 2px solid var(--c-black); background: white;">
+        style="background: #fafafa; border: 1px solid var(--c-divider); padding: 2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <!-- CTC -->
+            <div>
+                <label
+                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                    Annual CTC (₹)
+                </label>
+                <input type="number" id="ctc-input" placeholder="e.g. 1200000"
+                    style="width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--c-black); background: white;">
+            </div>
+
+            <!-- Variable Pay -->
+            <div>
+                <label
+                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                    Variable Pay / Bonus (%)
+                </label>
+                <input type="number" id="variable-input" value="10"
+                    style="width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--c-black); background: white;">
+                <p style="font-size: 11px; color: var(--c-grey-mid); margin-top: 4px;">Money you *might* get annually,
+                    not monthly.</p>
+            </div>
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
-            <label
-                style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 600;">
-                Age Group
-            </label>
-            <select id="age-input"
-                style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid var(--c-black);">
-                <option value="below60">Below 60 years</option>
-                <option value="60to80">60-80 years (Senior Citizen)</option>
-                <option value="above80">Above 80 years (Super Senior)</option>
-            </select>
+        <div style="margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px dashed #ddd;">
+            <p style="font-size: 14px; font-weight: 600; margin-bottom: 1rem;">For Old Regime Optimization (HRA):</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <!-- Rent -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                        Monthly Rent Paid (₹)
+                    </label>
+                    <input type="number" id="rent-input" value="0"
+                        style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc;">
+                </div>
+
+                <!-- City Type -->
+                <div>
+                    <label
+                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                        City Type
+                    </label>
+                    <select id="city-input"
+                        style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc;">
+                        <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
+                        <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <button onclick="calculateSalary()"
             style="width: 100%; padding: 16px; background: var(--c-black); color: white; border: none; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;">
-            Calculate In-Hand Salary
+            Decode My Salary
         </button>
     </div>
 
     <!-- Results Section -->
-    <div id="results" style="display: none;">
+    <div id="results" style="display: none; max-width: 800px; margin: 0 auto;">
 
-        <h2 style="font-size: 18px; margin-bottom: 1.5rem; text-align: center;">Your Salary Breakdown</h2>
-
-        <!-- Monthly Summary -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-            <div style="background: var(--c-black); color: white; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7;">New Regime
-                </div>
-                <div id="new-monthly" style="font-size: 28px; font-weight: 700; margin-top: 0.5rem;">₹0</div>
-                <div style="font-size: 12px; opacity: 0.7;">per month</div>
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2
+                style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--c-grey-mid); margin-bottom: 0.5rem;">
+                The Real Monthly In-Hand</h2>
+            <div style="font-size: 48px; font-weight: 800; line-height: 1;">
+                <span id="final-monthly">₹0</span>
             </div>
-            <div style="background: #333; color: white; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7;">Old Regime
-                </div>
-                <div id="old-monthly" style="font-size: 28px; font-weight: 700; margin-top: 0.5rem;">₹0</div>
-                <div style="font-size: 12px; opacity: 0.7;">per month</div>
-            </div>
+            <p style="margin-top: 0.5rem; font-size: 14px; color: var(--c-grey-light);">
+                (Using <span id="best-regime" style="font-weight: 700; color: #000;">New Regime</span>)
+            </p>
         </div>
 
-        <!-- Recommendation -->
-        <div id="recommendation" class="key-takeaway" style="margin-bottom: 2rem;">
-            <h4>Recommendation</h4>
-            <p id="rec-text">Based on your CTC...</p>
-        </div>
+        <!-- The Breakdown (Waterfall) -->
+        <div style="background: white; border: 1px solid #eee; padding: 2rem; border-radius: 8px;">
+            <h3 style="font-size: 16px; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                Where did the money go?</h3>
 
-        <!-- Detailed Breakdown -->
-        <details class="collapsible" open>
-            <summary>New Tax Regime Breakdown</summary>
-            <div class="content">
-                <table class="editorial-table">
+            <div class="table-scroll">
+                <table class="editorial-table" style="font-family: var(--font-mono, monospace);">
                     <tbody>
-                        <tr>
-                            <td>Gross Salary</td>
-                            <td id="new-gross" style="text-align: right;">₹0</td>
+                        <!-- CTC -->
+                        <tr style="background: #fdfdfd;">
+                            <td style="font-weight: 700;">Annual CTC (Offer)</td>
+                            <td id="res-ctc" style="text-align: right; font-weight: 700;">₹0</td>
                         </tr>
-                        <tr>
-                            <td>EPF Deduction (12%)</td>
-                            <td id="new-epf" style="text-align: right;">-₹0</td>
+
+                        <!-- Ghost Components -->
+                        <tr style="color: #d93025;">
+                            <td style="padding-left: 1.5rem;">(-) Variable Pay / Bonus <span
+                                    style="font-size: 11px; opacity: 0.7;">(Not guaranteed monthly)</span></td>
+                            <td id="res-variable" style="text-align: right;">-₹0</td>
                         </tr>
-                        <tr>
-                            <td>Professional Tax</td>
-                            <td id="new-pt" style="text-align: right;">-₹2,400</td>
+                        <tr style="color: #d93025;">
+                            <td style="padding-left: 1.5rem;">(-) Employer PF <span
+                                    style="font-size: 11px; opacity: 0.7;">(12% of Basic, Locked)</span></td>
+                            <td id="res-emplyr-pf" style="text-align: right;">-₹0</td>
                         </tr>
-                        <tr>
-                            <td>Income Tax</td>
-                            <td id="new-tax" style="text-align: right;">-₹0</td>
+                        <tr style="color: #d93025;">
+                            <td style="padding-left: 1.5rem;">(-) Gratuity <span
+                                    style="font-size: 11px; opacity: 0.7;">(4.8% of Basic, Locked 5yrs)</span></td>
+                            <td id="res-gratuity" style="text-align: right;">-₹0</td>
                         </tr>
-                        <tr style="font-weight: 700; border-top: 2px solid black;">
-                            <td>Annual In-Hand</td>
-                            <td id="new-annual" style="text-align: right;">₹0</td>
+
+                        <!-- Gross -->
+                        <tr style="border-top: 1px dashed #ccc; background: #fafafa;">
+                            <td style="font-weight: 600;">= Actual Gross Salary</td>
+                            <td id="res-gross" style="text-align: right; font-weight: 600;">₹0</td>
+                        </tr>
+
+                        <!-- Deductions -->
+                        <tr style="color: #e67c00;">
+                            <td style="padding-left: 1.5rem;">(-) Employee PF <span
+                                    style="font-size: 11px; opacity: 0.7;">(Your contribution)</span></td>
+                            <td id="res-emplye-pf" style="text-align: right;">-₹0</td>
+                        </tr>
+                        <tr style="color: #e67c00;">
+                            <td style="padding-left: 1.5rem;">(-) Professional Tax</td>
+                            <td id="res-pt" style="text-align: right;">-₹2,400</td>
+                        </tr>
+                        <tr style="color: #e67c00;">
+                            <td style="padding-left: 1.5rem;">(-) Income Tax <span id="tax-regime-label"
+                                    style="font-size: 10px; background: #eee; padding: 2px 4px; border-radius: 4px;">NEW
+                                    REGIME</span></td>
+                            <td id="res-tax" style="text-align: right;">-₹0</td>
+                        </tr>
+
+                        <!-- Final -->
+                        <tr style="background: var(--c-black); font-size: 16px;">
+                            <td style="font-weight: 700; padding: 1.5rem; color: #ffffff !important;">= Net Annual
+                                In-Hand
+                            </td>
+                            <td id="res-annual-inhand"
+                                style="text-align: right; font-weight: 700; padding: 1.5rem; color: #ffffff !important;">
+                                ₹0
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        </details>
 
-        <details class="collapsible">
-            <summary>Old Tax Regime Breakdown</summary>
-            <div class="content">
-                <table class="editorial-table">
-                    <tbody>
-                        <tr>
-                            <td>Gross Salary</td>
-                            <td id="old-gross" style="text-align: right;">₹0</td>
-                        </tr>
-                        <tr>
-                            <td>EPF Deduction (12%)</td>
-                            <td id="old-epf" style="text-align: right;">-₹0</td>
-                        </tr>
-                        <tr>
-                            <td>Standard Deduction</td>
-                            <td id="old-std" style="text-align: right;">-₹50,000</td>
-                        </tr>
-                        <tr>
-                            <td>Professional Tax</td>
-                            <td id="old-pt" style="text-align: right;">-₹2,400</td>
-                        </tr>
-                        <tr>
-                            <td>Income Tax</td>
-                            <td id="old-tax" style="text-align: right;">-₹0</td>
-                        </tr>
-                        <tr style="font-weight: 700; border-top: 2px solid black;">
-                            <td>Annual In-Hand</td>
-                            <td id="old-annual" style="text-align: right;">₹0</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="font-size: 13px; color: var(--c-grey-mid); margin-top: 1rem;">
-                    *Old regime assumes ₹1.5L in 80C deductions. Your actual in-hand may vary based on investments.
-                </p>
-            </div>
-        </details>
-
-        <!-- Disclaimer -->
-        <div
-            style="margin-top: 2rem; padding: 1rem; background: #fff3cd; border-left: 3px solid #ffc107; font-size: 13px;">
-            <strong>Disclaimer:</strong> This is an estimate based on standard assumptions. Actual in-hand may vary
-            based on
-            company-specific allowances, HRA, variable pay, and your investment declarations. Consult a CA for tax
-            planning.
+            <p style="font-size: 12px; color: #999; margin-top: 1rem; text-align: center;">
+                * This assumes 'Basic Salary' is 50% of Fixed Pay (standard structure).
+                Variable pay is excluded from monthly flow as it's discretionary/annual.
+            </p>
         </div>
+
     </div>
 
     <!-- CTA -->
     <div style="text-align: center; margin-top: var(--space-xl);">
         <p style="font-size: 14px; color: var(--c-grey-mid);">
-            Want the reality behind salary negotiations?
+            Shocked? That's the point.
         </p>
         <a href="{% url 'salary_reality' %}"
             style="display: inline-block; margin-top: 1rem; padding: 12px 24px; background: var(--c-black); color: white; text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">
-            View Salary Reality Check →
+            Compare with Market Standards →
         </a>
     </div>
 
@@ -165,120 +204,164 @@ FY 2025-26.{% endblock %}
 
 <script>
     function calculateSalary() {
-        const ctc = parseFloat(document.getElementById('ctc-input').value);
-        if (!ctc || ctc < 0) {
+        const ctc = parseFloat(document.getElementById('ctc-input').value) || 0;
+        const variablePercent = parseFloat(document.getElementById('variable-input').value) || 0;
+        const monthlyRent = parseFloat(document.getElementById('rent-input').value) || 0;
+        const isMetro = document.getElementById('city-input').value === 'metro';
+
+        if (ctc <= 0) {
             alert('Please enter a valid CTC amount');
             return;
         }
 
-        // Constants
-        const PT = 2400; // Professional Tax per year (Karnataka/Maharashtra)
-        const EPF_RATE = 0.12;
-        const EPF_CEILING = 15000 * 12; // EPF on basic capped at 15k/month basic
+        // --- 1. Deconstruct CTC ---
+        // Variable Pay
+        const variablePay = ctc * (variablePercent / 100);
+        const fixedCTC = ctc - variablePay;
 
-        // Assume Basic = 50% of CTC for EPF calculation
-        const basic = ctc * 0.5;
-        const epfBase = Math.min(basic, EPF_CEILING);
-        const epf = epfBase * EPF_RATE;
+        // "Ghost" Components in Fixed Pay
+        // Typically Basic is 40-50% of Fixed CTC. Let's assume 50% of Fixed is Basic for calculation safety.
+        // But Employer PF and Gratuity are calculated ON Basic.
+        // Equation: FixedCTC = Gross + EmployerPF + Gratuity
+        // Gross = Basic + HRA + Special
+        // EmployerPF = 12% of Basic
+        // Gratuity = 4.81% of Basic
+        // Let's approximate: Basic is usually designed to be 50% of Gross. 
+        // Reverse engineering exact components is complex, let's take a standard structure assumption:
+        // Assume Basic = 40% of CTC (safe bet for standard structures to keep allowances high)
+        const basic = fixedCTC * 0.40;
 
-        // New Regime Tax Calculation (FY 2025-26)
-        function calcNewRegimeTax(income) {
-            // Standard deduction of 75,000 in new regime from FY 2024-25
-            const taxableIncome = Math.max(0, income - 75000);
+        const employerPF = Math.min(basic, 15000 * 12) * 0.12;
+        // Note: Many companies cap PF on 15k basic monthly. 
+        // If basic > 15k/mo (1.8L/yr), PF is often capped at 1800 * 12 = 21,600.
+        // Let's use the cap logic widely used in private sector.
+        const pfCapAnnual = 21600;
+        const actualEmployerPF = employerPF; // Some cap, some don't. Let's assume full 12% for aggressive deduction view, or capped? 
+        // Let's cap it to be realistic for higher salaries, or uncapped for "trusts". 
+        // Let's use Uncapped for "Ghost Component" visualization primarily (as it hurts more), but Capped for standard startups. 
+        // We'll stick to 12% of Basic (capped at 15k/mo basic usually).
+        const pfMonCap = 1800 * 12;
+        const finalEmployerPF = (basic > 180000) ? pfMonCap : (basic * 0.12);
 
-            // New regime slabs (FY 2025-26)
-            let tax = 0;
-            if (taxableIncome <= 300000) {
-                tax = 0;
-            } else if (taxableIncome <= 700000) {
-                tax = (taxableIncome - 300000) * 0.05;
-            } else if (taxableIncome <= 1000000) {
-                tax = 20000 + (taxableIncome - 700000) * 0.10;
-            } else if (taxableIncome <= 1200000) {
-                tax = 50000 + (taxableIncome - 1000000) * 0.15;
-            } else if (taxableIncome <= 1500000) {
-                tax = 80000 + (taxableIncome - 1200000) * 0.20;
-            } else {
-                tax = 140000 + (taxableIncome - 1500000) * 0.30;
-            }
+        const gratuity = basic * 0.0481; // 15/26 * basic_monthly * 12 ?? No, it's ~4.81% of annual basic
 
-            // Rebate u/s 87A - if taxable income <= 7L, no tax
-            if (taxableIncome <= 700000) tax = 0;
+        // Gross = Fixed CTC - (EmployerPF + Gratuity)
+        // Note: Insurance is often separate, let's ignore for simplicity.
+        const grossSalary = fixedCTC - finalEmployerPF - gratuity;
 
-            // Add 4% Health & Education Cess
-            tax = tax * 1.04;
+        // --- 2. Deductions from Gross ---
+        const pt = 2400;
+        const employeePF = finalEmployerPF; // Matching employer contribution usually
 
-            return Math.round(tax);
+        // Taxable Income Calculation
+        // New Regime Taxable = Gross - Std Deduction (75k)
+        const newTaxable = Math.max(0, grossSalary - 75000);
+        const newTax = calcNewRegimeTax(newTaxable);
+
+        // Old Regime Taxable = Gross - Std Deduction (50k) - PT - HRA - 80C - EmployeePF
+        // HRA Exemption: Min of (Actual HRA Received, Rent - 10% Basic, 50%/40% Basic)
+        // We need "Actual HRA Received". In standard structure HRA is 40% (Non-Metro) or 50% (Metro) of Basic.
+        const hraReceived = basic * (isMetro ? 0.5 : 0.4);
+        // Rent Paid Annual
+        const rentPaidAnnual = monthlyRent * 12;
+
+        const hraCondition1 = hraReceived;
+        const hraCondition2 = Math.max(0, rentPaidAnnual - (basic * 0.10));
+        const hraCondition3 = basic * (isMetro ? 0.5 : 0.4);
+        const hraExemption = Math.min(hraCondition1, hraCondition2, hraCondition3);
+
+        const deductions80C = Math.min(150000, employeePF); // Assume only PF fills 80C for "Auto" calc. User might have more.
+        // Let's start with just PF.
+
+        const oldTaxable = Math.max(0, grossSalary - 50000 - pt - hraExemption - deductions80C);
+        const oldTax = calcOldRegimeTax(oldTaxable);
+
+        // --- 3. Compare Regimes ---
+        let finalTax = newTax;
+        let isNewRegime = true;
+        if (oldTax < newTax) {
+            finalTax = oldTax;
+            isNewRegime = false;
         }
 
-        // Old Regime Tax Calculation
-        function calcOldRegimeTax(income, epf) {
-            // Deductions: Standard 50k + 80C (1.5L assumed) + EPF employee contribution
-            const deductions = 50000 + 150000;
-            const taxableIncome = Math.max(0, income - deductions);
+        const annualInHand = grossSalary - employeePF - pt - finalTax;
+        const monthlyInHand = Math.round(annualInHand / 12);
 
-            // Old regime slabs
-            let tax = 0;
-            if (taxableIncome <= 250000) {
-                tax = 0;
-            } else if (taxableIncome <= 500000) {
-                tax = (taxableIncome - 250000) * 0.05;
-            } else if (taxableIncome <= 1000000) {
-                tax = 12500 + (taxableIncome - 500000) * 0.20;
-            } else {
-                tax = 112500 + (taxableIncome - 1000000) * 0.30;
-            }
+        // --- 4. Render ---
+        const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
 
-            // Rebate u/s 87A - if taxable income <= 5L, no tax
-            if (taxableIncome <= 500000) tax = 0;
-
-            // Add 4% Cess
-            tax = tax * 1.04;
-
-            return Math.round(tax);
-        }
-
-        // Calculate taxes
-        const newTax = calcNewRegimeTax(ctc);
-        const oldTax = calcOldRegimeTax(ctc, epf);
-
-        // Calculate in-hand
-        const newAnnual = ctc - epf - PT - newTax;
-        const oldAnnual = ctc - epf - PT - oldTax;
-        const newMonthly = Math.round(newAnnual / 12);
-        const oldMonthly = Math.round(oldAnnual / 12);
-
-        // Format currency
-        const fmt = (n) => '₹' + n.toLocaleString('en-IN');
-
-        // Update UI
         document.getElementById('results').style.display = 'block';
-        document.getElementById('new-monthly').textContent = fmt(newMonthly);
-        document.getElementById('old-monthly').textContent = fmt(oldMonthly);
+        document.getElementById('final-monthly').textContent = fmt(monthlyInHand);
+        document.getElementById('best-regime').textContent = isNewRegime ? "New Regime" : "Old Regime";
+        document.getElementById('tax-regime-label').textContent = isNewRegime ? "NEW REGIME" : "OLD REGIME";
 
-        document.getElementById('new-gross').textContent = fmt(ctc);
-        document.getElementById('new-epf').textContent = '-' + fmt(Math.round(epf));
-        document.getElementById('new-tax').textContent = '-' + fmt(newTax);
-        document.getElementById('new-annual').textContent = fmt(Math.round(newAnnual));
+        document.getElementById('res-ctc').textContent = fmt(ctc);
+        document.getElementById('res-variable').textContent = '-' + fmt(variablePay);
+        document.getElementById('res-emplyr-pf').textContent = '-' + fmt(finalEmployerPF);
+        document.getElementById('res-gratuity').textContent = '-' + fmt(gratuity);
 
-        document.getElementById('old-gross').textContent = fmt(ctc);
-        document.getElementById('old-epf').textContent = '-' + fmt(Math.round(epf));
-        document.getElementById('old-tax').textContent = '-' + fmt(oldTax);
-        document.getElementById('old-annual').textContent = fmt(Math.round(oldAnnual));
+        document.getElementById('res-gross').textContent = fmt(grossSalary);
 
-        // Recommendation
-        const recText = document.getElementById('rec-text');
-        const diff = newAnnual - oldAnnual;
-        if (Math.abs(diff) < 5000) {
-            recText.textContent = `At ${fmt(ctc)} CTC, both regimes are roughly equal. The New Regime is simpler with no investment requirements.`;
-        } else if (diff > 0) {
-            recText.textContent = `New Regime saves you ${fmt(Math.abs(Math.round(diff)))} per year (${fmt(Math.abs(Math.round(diff / 12)))}/month more in-hand). Recommended unless you have significant tax-saving investments.`;
+        document.getElementById('res-emplye-pf').textContent = '-' + fmt(employeePF);
+        document.getElementById('res-pt').textContent = '-' + fmt(pt);
+        document.getElementById('res-tax').textContent = '-' + fmt(finalTax);
+
+        document.getElementById('res-annual-inhand').textContent = fmt(annualInHand);
+
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function calcNewRegimeTax(income) {
+        // FY 2025-26 Slabs
+        if (income <= 300000) return 0;
+        /*
+        0-3L: Nil
+        3-7L: 5%
+        7-10L: 10%
+        10-12L: 15%
+        12-15L: 20%
+        >15L: 30%
+        */
+        let tax = 0;
+        if (income <= 700000) {
+            tax = (income - 300000) * 0.05;
+        } else if (income <= 1000000) {
+            tax = 20000 + (income - 700000) * 0.10;
+        } else if (income <= 1200000) {
+            tax = 50000 + (income - 1000000) * 0.15;
+        } else if (income <= 1500000) {
+            tax = 80000 + (income - 1200000) * 0.20;
         } else {
-            recText.textContent = `Old Regime saves you ${fmt(Math.abs(Math.round(diff)))} per year. But only if you actually invest ₹1.5L+ in 80C instruments (PPF, ELSS, etc).`;
+            tax = 140000 + (income - 1500000) * 0.30;
         }
 
-        // Scroll to results
-        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Rebate 87A (Income <= 7L -> No tax)
+        if (income <= 700000) tax = 0;
+
+        return tax * 1.04; // Cess
+    }
+
+    function calcOldRegimeTax(income) {
+        if (income <= 250000) return 0;
+        /*
+        0-2.5: Nil
+        2.5-5: 5%
+        5-10: 20%
+        >10: 30%
+        */
+        let tax = 0;
+        if (income <= 500000) {
+            tax = (income - 250000) * 0.05;
+        } else if (income <= 1000000) {
+            tax = 12500 + (income - 500000) * 0.20;
+        } else {
+            tax = 112500 + (income - 1000000) * 0.30;
+        }
+
+        // Rebate 87A (Income <= 5L -> No tax)
+        if (income <= 500000) tax = 0;
+
+        return tax * 1.04; // Cess
     }
 </script>
 

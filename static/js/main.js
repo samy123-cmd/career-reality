@@ -47,65 +47,83 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Topics Dropdown Handler (Desktop)
-    const topicsDropdown = document.querySelector('.nav-dropdown');
-    const topicsButton = document.querySelector('.nav-dropdown-trigger');
-    const topicsContent = document.querySelector('.nav-dropdown-content');
+    // Generic Dropdown Handler (Supports multiple)
+    const dropdowns = document.querySelectorAll('.nav-dropdown');
 
-    if (topicsButton && topicsContent) {
-        let isOpen = false;
+    dropdowns.forEach(dropdown => {
+        const trigger = dropdown.querySelector('.nav-dropdown-trigger');
+        const content = dropdown.querySelector('.nav-dropdown-content');
 
-        topicsButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            isOpen = !isOpen;
+        if (trigger && content) {
+            let isOpen = false;
 
-            if (isOpen) {
-                topicsContent.style.display = 'block';
-                topicsButton.setAttribute('aria-expanded', 'true');
-            } else {
-                topicsContent.style.display = 'none';
-                topicsButton.setAttribute('aria-expanded', 'false');
-            }
-        });
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
 
-        // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (topicsDropdown && !topicsDropdown.contains(e.target) && isOpen) {
-                topicsContent.style.display = 'none';
-                topicsButton.setAttribute('aria-expanded', 'false');
-                isOpen = false;
-            }
-        });
+                // Close others
+                dropdowns.forEach(other => {
+                    if (other !== dropdown) {
+                        const otherContent = other.querySelector('.nav-dropdown-content');
+                        const otherTrigger = other.querySelector('.nav-dropdown-trigger');
+                        if (otherContent) otherContent.style.display = 'none';
+                        if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+                    }
+                });
 
-        // Close on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isOpen) {
-                topicsContent.style.display = 'none';
-                topicsButton.setAttribute('aria-expanded', 'false');
-                isOpen = false;
-                topicsButton.focus(); // Return focus to button
-            }
-        });
+                isOpen = !isOpen; // Toggle current
 
-        // Optional: Keep hover behavior for desktop as enhancement
-        if (topicsDropdown) {
-            let hoverTimeout;
-
-            topicsDropdown.addEventListener('mouseenter', () => {
-                clearTimeout(hoverTimeout);
-                if (!isOpen) {
-                    topicsContent.style.display = 'block';
+                if (isOpen) {
+                    content.style.display = 'block';
+                    trigger.setAttribute('aria-expanded', 'true');
+                } else {
+                    content.style.display = 'none';
+                    trigger.setAttribute('aria-expanded', 'false');
                 }
             });
 
-            topicsDropdown.addEventListener('mouseleave', () => {
+            // Hover support (Desktop)
+            let hoverTimeout;
+            dropdown.addEventListener('mouseenter', () => {
+                // Close others first? Maybe not needed for hover, CSS handles it mostly.
+                // But for consistency with JS state:
+                clearTimeout(hoverTimeout);
+                content.style.display = 'block';
+            });
+            dropdown.addEventListener('mouseleave', () => {
                 hoverTimeout = setTimeout(() => {
-                    if (!isOpen) {
-                        topicsContent.style.display = 'none';
-                    }
+                    content.style.display = 'none';
+                    isOpen = false; // Sync state
+                    trigger.setAttribute('aria-expanded', 'false');
                 }, 200);
             });
         }
-    }
+    });
+
+    // Global Close on outside click
+    document.addEventListener('click', (e) => {
+        dropdowns.forEach(dropdown => {
+            const content = dropdown.querySelector('.nav-dropdown-content');
+            const trigger = dropdown.querySelector('.nav-dropdown-trigger');
+            if (content && !dropdown.contains(e.target)) {
+                content.style.display = 'none';
+                if (trigger) trigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            dropdowns.forEach(dropdown => {
+                const content = dropdown.querySelector('.nav-dropdown-content');
+                const trigger = dropdown.querySelector('.nav-dropdown-trigger');
+                if (content) content.style.display = 'none';
+                if (trigger) {
+                    trigger.setAttribute('aria-expanded', 'false');
+                    // Optionally focus back? trigger.focus();
+                }
+            });
+        }
+    });
 });

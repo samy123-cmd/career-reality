@@ -113,3 +113,79 @@ def result_view(request):
     return render(request, 'analyzer/result.html', {
         'result': result
     })
+
+def submit_salary(request):
+    """
+    Handle anonymous salary submissions.
+    """
+    if request.method == 'POST':
+        try:
+            models.SalarySubmission.objects.create(
+                role=request.POST.get('role'),
+                experience_years=float(request.POST.get('experience')),
+                company_type=request.POST.get('company_type'),
+                ctc=int(request.POST.get('ctc')),
+                city=request.POST.get('city'),
+                tech_stack=request.POST.get('tech_stack', '')
+            )
+            return redirect(reverse('salary_submit_success'))
+        except Exception as e:
+            # Basic error handling for now
+            return render(request, 'analyzer/submit_salary.html', {'error': 'Invalid data'})
+
+    return render(request, 'analyzer/submit_salary.html')
+
+def salary_submit_success(request):
+    return render(request, 'analyzer/submit_success.html')
+
+def salary_feed_api(request):
+    """
+    Returns last 20 verified (or all for now) salaries for the ticker.
+    """
+    from django.http import JsonResponse
+    # For now, return all recent submissions. In prod, filter by is_verified=True
+    submissions = models.SalarySubmission.objects.all().order_by('-created_at')[:20]
+    data = []
+    for s in submissions:
+        data.append({
+            'role': s.role,
+            'company': s.get_company_type_display(), # or short code
+            'exp': f"{s.experience_years}y",
+            'ctc': f"{s.ctc/100000:.1f} LPA",
+            'city': s.city
+        })
+    return JsonResponse({'submissions': data})
+
+def layoff_radar(request):
+    """
+    Dashboard showing company stability status.
+    Aggregates reports to show 'Danger' vs 'Safe'.
+    """
+    # Simple aggregation for V1: Get recent reports
+    recent_reports = models.LayoffReport.objects.all().order_by('-created_at')[:50]
+    
+    # In V2, we would group by company_name and calculate a score.
+    # For now, just list them.
+    
+    return render(request, 'analyzer/layoff_radar.html', {
+        'reports': recent_reports
+    })
+
+def report_layoff(request):
+    """
+    Anonymous form to report company status.
+    """
+    if request.method == 'POST':
+        try:
+            models.LayoffReport.objects.create(
+                company_name=request.POST.get('company_name'),
+                status=request.POST.get('status'),
+                role_affected=request.POST.get('role_affected', ''),
+                location=request.POST.get('location', ''),
+                details=request.POST.get('details', '')
+            )
+            return redirect('layoff_radar')
+        except Exception:
+            pass # Silent fail for now
+            
+    return render(request, 'analyzer/report_layoff.html')

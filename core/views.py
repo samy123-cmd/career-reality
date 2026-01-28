@@ -21,7 +21,7 @@ def home(request):
     - Shows mission statement.
     - Lists only PUBLISHED articles.
     """
-    articles = Article.objects.filter(status='published').select_related('author', 'category').order_by('-published_at')
+    articles = Article.objects.filter(status='published').select_related('author', 'category').order_by('-published_at')[:10]
     categories = Category.objects.all()
     
     return render(request, 'core/home.html', {
@@ -42,6 +42,13 @@ def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
     categories = Category.objects.all()
     return render(request, 'core/salary_calculator.html', {'categories': categories})
+
+def escape_plan(request):
+    """
+    The Service Company Escape Plan.
+    Contains the "Rot Check" quiz and the roadmap.
+    """
+    return render(request, 'content/escape_plan.html')
 
 def privacy_policy(request):
     return render(request, 'core/privacy_policy.html')

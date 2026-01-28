@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Submission Received — Career Reality{% endblock %}
+
+{% block content %}
+<section class="container-medium" style="margin-top: var(--space-xl); text-align: center;">
+    <h1 style="font-size: 48px; margin-bottom: 1rem;">🫡</h1>
+    <h2 style="font-size: 24px; margin-bottom: 1rem;">Respect.</h2>
+    <p style="max-width: 400px; margin: 0 auto 2rem auto;">
+        Your data has been dropped into the system. It helps thousands of others know their worth.
+    </p>
+
+    <a href="{% url 'home' %}" class="btn">Return to Base</a>
+</section>
+{% endblock %}
