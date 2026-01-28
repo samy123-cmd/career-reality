@@ -451,12 +451,17 @@ a:hover {
     z-index: 1001;
     padding: 80px 24px 40px;
     overflow-y: auto;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s step-start;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+
+    /* LCP FIX: Hide from paint until active */
+    visibility: hidden;
 }
 
 .mobile-nav.active {
     right: 0;
+    visibility: visible;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
 }
 
 .mobile-nav-header {
@@ -484,8 +489,8 @@ a:hover {
 }
 
 .mobile-nav-link:hover {
-    color: var(--c-grey-mid);
-    opacity: 1;
+    color: var(--c-grey-dark);
+    padding-left: 8px;
 }
 
 .mobile-nav-link .nav-badge {
@@ -494,7 +499,7 @@ a:hover {
 }
 
 .mobile-nav-categories {
-    margin-top: 24px;
+    margin-top: 40px;
 }
 
 .mobile-nav-categories .mobile-nav-header {
@@ -542,7 +547,11 @@ a:hover {
         display: flex;
     }
 
-    .mobile-nav,
+    .mobile-nav {
+        display: block;
+        /* Kept block, relying on visibility:hidden */
+    }
+
     .mobile-menu-overlay {
         display: block;
     }
@@ -558,6 +567,10 @@ a:hover {
 
     .site-header {
         padding: var(--space-sm) 0;
+    }
+
+    .newsletter-section {
+        padding: 1.5rem 1rem;
     }
 
     .nav-flex {
