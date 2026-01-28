@@ -290,15 +290,15 @@ industry. Data-backed and brutally honest.{% endblock %}
 
 <!-- DIVIDER -->
 <div class="container-medium" style="margin-top: 2.5rem;">
-    <hr class="editorial-divider">
+    <hr class="editorial-divider reveal-on-scroll">
 </div>
 <div style="height: 40px;"></div>
 
 <!-- LATEST: MEDIUM CONTAINER (RHYTHM) -->
 <section class="container-medium">
-    <span class="section-label">LATEST</span>
+    <span class="section-label reveal-on-scroll">LATEST</span>
 
-    <div class="article-list">
+    <div class="article-list reveal-on-scroll">
         {% for article in articles %}
         <div class="article-list-item">
             <div class="article-list-meta">{{ article.category.name }} · {{ article.updated_at|date:"F Y" }}</div>
@@ -378,23 +378,32 @@ industry. Data-backed and brutally honest.{% endblock %}
             return;
         }
 
-        // --- SCROLL TRIGGERS ---
-        // Target existing sections like the article list or dividers
-        const sections = document.querySelectorAll('.editorial-divider, .section-label, .article-list');
+        // --- SCROLL TRIGGERS (CLS OPTIMIZED) ---
+        // We use .reveal-on-scroll CSS class to hide elements initially.
+        // GSAP then animates them TO visibility.
+        const sections = document.querySelectorAll('.reveal-on-scroll');
 
         sections.forEach(section => {
-            gsap.from(section, {
+            gsap.to(section, {
                 scrollTrigger: {
                     trigger: section,
                     start: "top 85%",
                     toggleActions: "play none none reverse"
                 },
-                y: 30,
-                opacity: 0,
+                y: 0,
+                opacity: 1,
                 duration: 0.6,
                 ease: "power2.out"
             });
         });
     });
 </script>
+<noscript>
+    <style>
+        .reveal-on-scroll {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+    </style>
+</noscript>
 {% endblock %}

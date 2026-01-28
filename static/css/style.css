@@ -1555,3 +1555,13 @@ blockquote.pullquote {
         height: 20px;
     }
 }
+
+/* 
+   PERFORMANCE UTILITIES 
+   Prevents CLS by setting initial animation state in CSS
+*/
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    will-change: opacity, transform;
+}
