@@ -126,6 +126,13 @@ a:hover {
     opacity: 0.7;
 }
 
+/* Animation Utility */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    will-change: opacity, transform;
+}
+
 /* Navigation (Wide) */
 .site-header {
     padding: var(--space-md) 0;
@@ -548,8 +555,8 @@ a:hover {
     }
 
     .mobile-nav {
-        display: block;
-        /* Kept block, relying on visibility:hidden */
+        /* display: block; REMOVED to prevent LCP issue. Visibility handled by JS/active class */
+        width: 85%;
     }
 
     .mobile-menu-overlay {

@@ -21,16 +21,16 @@ industry. Data-backed and brutally honest.{% endblock %}
             gap: 4rem;
             align-items: center;
             min-height: 55vh;
-            /* CLS FIX: Ensure strict layering */
+            /* CLS FIX: Ensure strict layering & containment */
             contain: layout paint;
+            /* content-visibility: auto; REMOVED to prevent thrashing */
             width: 100%;
             position: relative;
             overflow: hidden;
             /* Rule #1: Same Base Background */
             background-color: #fafafa;
-            /* Rule #2: Subtle Noise Texture */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-
+            /* Rule #2: SVG Noise Removed for Performance (3.0s Main Thread Fix) */
+            /* background-image: ...; */
         }
 
         /* Optional Vignette */
@@ -185,9 +185,9 @@ industry. Data-backed and brutally honest.{% endblock %}
                 flex-direction: column-reverse !important;
                 gap: 3rem;
                 padding: 3rem 1.5rem;
-                min-height: auto;
-                height: auto !important;
-                /* Override explicit height */
+                /* CLS FIX: Reserve explicit height on mobile to prevent shift */
+                min-height: 90vh !important;
+                /* Removed height: auto to enforce reservation */
             }
 
             .split-side {

@@ -30,9 +30,8 @@
     content="{% block twitter_description %}{{ article.meta_description|default:'Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service industry.' }}{% endblock %}">
 <meta property="twitter:image" content="{% block twitter_image %}{% static 'img/og-default.png' %}{% endblock %}">
 
-<!-- Critical CSS - Inlined for instant FCP -->
+<!-- Critical CSS - Inlined for instant FCP & Stability -->
 <style>
-    /* Critical Above-the-Fold CSS */
     :root {
         --c-white: #ffffff;
         --c-black: #000000;
@@ -54,6 +53,10 @@
         box-sizing: border-box
     }
 
+    html {
+        overflow-x: hidden;
+    }
+
     body {
         background-color: var(--c-white);
         color: var(--c-grey-mid);
@@ -62,33 +65,30 @@
         line-height: 1.65;
         margin: 0;
         padding: 0;
-        -webkit-font-smoothing: antialiased
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
     }
 
+    /* Layout Containers */
     .container-wide {
         max-width: var(--w-wide);
         margin: 0 auto;
-        padding: 0 var(--space-sm)
+        padding: 0 var(--space-sm);
     }
 
     .container-medium {
         max-width: var(--w-medium);
         margin: 0 auto;
-        padding: 0 var(--space-sm)
+        padding: 0 var(--space-sm);
     }
 
-    .container-reading {
-        max-width: var(--w-narrow);
-        margin: 0 auto;
-        padding: 0 var(--space-sm)
-    }
-
+    /* Typography */
     h1,
     h2,
     h3 {
         color: var(--c-black);
         line-height: 1.1;
-        letter-spacing: -0.02em
+        letter-spacing: -0.02em;
     }
 
     h1 {
@@ -96,72 +96,54 @@
         font-weight: 700;
         margin-top: 0;
         margin-bottom: var(--space-sm);
-        color: var(--c-black)
     }
 
+    a {
+        color: var(--c-black);
+        text-decoration: none;
+    }
+
+    /* Site Header Critical */
     .site-header {
         padding: var(--space-md) 0;
-        margin-bottom: var(--space-lg);
         border-bottom: 1px solid var(--c-divider);
         position: sticky;
         top: 0;
         background: var(--c-white);
-        z-index: 900
+        z-index: 900;
     }
 
     .nav-flex {
         display: flex;
         justify-content: space-between;
-        align-items: center
+        align-items: center;
     }
 
     .site-brand {
         display: flex;
         align-items: center;
         gap: 10px;
-        text-decoration: none;
-        transition: transform 0.2s ease
     }
 
     .brand-text {
         font-size: 13px;
         font-weight: 800;
         letter-spacing: 0.15em;
-        color: var(--c-black)
+        color: var(--c-black);
     }
 
     .brand-highlight {
         font-weight: 400;
         color: var(--c-grey-mid);
-        margin-left: 2px
     }
 
     .site-nav {
         display: flex;
         align-items: center;
-        gap: 0
+        gap: 0;
     }
 
-    .nav-link {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--c-grey-mid);
-        text-decoration: none;
-        padding: 8px 16px;
-        transition: color 0.2s ease, background 0.2s ease
-    }
-
-    .nav-dropdown {
-        position: relative;
-        display: inline-block
-    }
-
+    .nav-link,
     .nav-dropdown-trigger {
         display: inline-flex;
         align-items: center;
@@ -170,51 +152,49 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.12em;
-        color: var(--c-black);
-        background: none;
-        border: none;
-        cursor: pointer;
+        color: var(--c-grey-mid);
         padding: 8px 16px;
-        transition: all 0.2s ease
     }
 
-    .nav-dropdown-content {
-        display: none;
-        position: absolute;
-        top: calc(100% + 8px);
-        left: 0;
-        background: var(--c-white);
-        border: 1px solid var(--c-black);
-        min-width: 220px;
-        z-index: 1000;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        opacity: 0;
-        transform: translateY(-4px);
-        animation: dropIn 0.15s ease forwards
-    }
-
-    @keyframes dropIn {
-        to {
-            opacity: 1;
-            transform: translateY(0)
-        }
-    }
-
+    /* Mobile Toggle Critical */
     .mobile-menu-toggle {
-        display: none
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 20px;
+        cursor: pointer;
+        z-index: 1002;
     }
 
+    .mobile-menu-toggle span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--c-black);
+        transition: all 0.3s ease;
+    }
+
+    /* Mobile Responsive Critical */
     @media (max-width:768px) {
         .site-nav {
-            display: none !important
+            display: none !important;
         }
 
         .mobile-menu-toggle {
-            display: flex
+            display: flex;
+        }
+
+        .site-header {
+            padding: 16px 0;
+        }
+
+        h1 {
+            font-size: 42px;
         }
     }
 
-    /* Self-Hosted Fonts - Eliminates 750ms render-blocking delay */
+    /* Font Faces */
     @font-face {
         font-family: 'Inter';
         font-style: normal;
@@ -238,6 +218,25 @@
         font-display: swap;
         src:url('{% static "fonts/Inter-Bold.woff2" %}') format('woff2')
     }
+
+    /* CRITICAL LAYOUT STABILITY (Prevents CLS & LCP delay) */
+    .mobile-nav {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .reality-split-container {
+        contain: layout paint style;
+        min-height: 55vh;
+    }
+
+    @media (max-width: 768px) {
+        .reality-split-container {
+            display: flex;
+            flex-direction: column-reverse;
+            min-height: 90vh;
+        }
+    }
 </style>
 
 <!-- Preload critical font weights -->
@@ -245,10 +244,10 @@
 <link rel="preload" href="{% static 'fonts/Inter-Regular.woff2' %}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{% static 'fonts/Inter-SemiBold.woff2' %}" as="font" type="font/woff2" crossorigin>
 
-<!-- Main CSS - Using raw file for dev/fix (Minify for prod later) -->
-<link rel="preload" href="{% static 'css/style.css' %}?v=2" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<!-- Main CSS - Async Load to Unblock LCP -->
+<link rel="preload" href="{% static 'css/style.css' %}?v=4" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
 </noscript>
 
 <!-- JSON-LD Organization & WebSite Schema -->
