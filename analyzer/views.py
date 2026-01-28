@@ -143,18 +143,22 @@ def salary_feed_api(request):
     Returns last 20 verified (or all for now) salaries for the ticker.
     """
     from django.http import JsonResponse
-    # For now, return all recent submissions. In prod, filter by is_verified=True
-    submissions = models.SalarySubmission.objects.all().order_by('-created_at')[:20]
-    data = []
-    for s in submissions:
-        data.append({
-            'role': s.role,
-            'company': s.get_company_type_display(), # or short code
-            'exp': f"{s.experience_years}y",
-            'ctc': f"{s.ctc/100000:.1f} LPA",
-            'city': s.city
-        })
-    return JsonResponse({'submissions': data})
+    try:
+        # For now, return all recent submissions. In prod, filter by is_verified=True
+        submissions = models.SalarySubmission.objects.all().order_by('-created_at')[:20]
+        data = []
+        for s in submissions:
+            data.append({
+                'role': s.role,
+                'company': s.get_company_type_display(), # or short code
+                'exp': f"{s.experience_years}y",
+                'ctc': f"{s.ctc/100000:.1f} LPA",
+                'city': s.city
+            })
+        return JsonResponse({'submissions': data})
+    except Exception as e:
+        import traceback
+        return JsonResponse({'error': str(e), 'trace': traceback.format_exc()}, status=500)
 
 def layoff_radar(request):
     """
