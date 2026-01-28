@@ -29,216 +29,290 @@ industry. Data-backed and brutally honest.{% endblock %}
             /* Rule #1: Same Base Background */
             background-color: #fafafa;
             /* Rule #2: Subtle Noise Texture */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200'
- xmlns='http://www.w3.org/2000/svg' %3E%3Cfilter id='noiseFilter' %3E%3CfeTurbulence type='fractalNoise'
-                    baseFrequency='0.8' numOctaves='3' stitchTiles='stitch' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25'
-                    filter='url(%23noiseFilter)' opacity='0.04' /%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
 
+        }
+
+        /* Optional Vignette */
+        .reality-split-container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.03) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .split-side {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* LEFT SIDE: COMFORTABLE LIES */
+        .side-lies {
+            text-align: right;
+            /* Rule #3: Use blur/opacity for contrast */
+            opacity: 0.6;
+            filter: blur(0.8px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .side-lies:hover {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        .side-lies h2 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            /* Lighter weight */
+            color: #999;
+            /* Grey */
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        .side-lies ul {
+            list-style: none;
+            padding: 0;
+            color: #888;
+        }
+
+        .side-lies li {
+            margin-bottom: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+        }
+
+        /* RIGHT SIDE: CAREER REALITY */
+        .side-reality {
+            text-align: left;
+        }
+
+        .side-reality h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            /* Heavy */
+            color: #111;
+            /* Razor sharp black */
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .side-reality ul {
+            list-style: none;
+            padding: 0;
+            color: #000;
+        }
+
+        .side-reality li {
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            /* Slightly larger */
+            font-weight: 600;
+            /* Sharp */
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        /* Custom checkmark for Reality */
+        .reality-check {
+            /* Rule #3: Muted Red Icons */
+            color: #cc3333;
+            font-weight: 900;
+            font-size: 1.1em;
+        }
+
+        /* DIVIDER */
+        /* Rule #4: The Drama Lives Here */
+        .split-divider {
+            width: 1px;
+            height: 40vh;
+            background: rgba(0, 0, 0, 0.1);
+            /* Graphite base */
+            position: relative;
+            overflow: visible;
+        }
+
+        .split-divider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -1px;
+            /* Center it */
+            width: 3px;
+            height: 150px;
+            /* The pulse length */
+            background: linear-gradient(to bottom, transparent, #cc3333, transparent);
+            opacity: 0.8;
+            filter: blur(2px);
+            animation: pulse-travel 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse-travel {
+            0% {
+                top: -20%;
+                opacity: 0;
             }
 
-            /* Optional Vignette */
-            .reality-split-container::after {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.03) 100%);
-                pointer-events: none;
-                z-index: 1;
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 120%;
+                opacity: 0;
+            }
+        }
+
+        /* MOBILE RESPONSIVE FIX */
+        @media (max-width: 768px) {
+            .reality-split-container {
+                display: flex !important;
+                flex-direction: column-reverse !important;
+                gap: 3rem;
+                padding: 3rem 1.5rem;
+                min-height: auto;
+                height: auto !important;
+                /* Override explicit height */
             }
 
             .split-side {
-                padding: 2rem;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                position: relative;
-                height: 100%;
-                z-index: 2;
+                text-align: center;
+                width: 100%;
+                padding: 0;
+                height: auto !important;
             }
 
-            /* LEFT SIDE: COMFORTABLE LIES */
             .side-lies {
-                text-align: right;
-                /* Rule #3: Use blur/opacity for contrast */
-                opacity: 0.6;
-                filter: blur(0.8px);
-                transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            }
-
-            .side-lies:hover {
-                opacity: 1;
+                text-align: center;
+                opacity: 0.8;
                 filter: blur(0);
+                /* Remove blur for mobile readability */
+                margin-top: 1rem;
             }
 
-            .side-lies h2 {
-                font-size: 2.2rem;
-                font-weight: 300;
-                /* Lighter weight */
-                color: #999;
-                /* Grey */
-                margin-bottom: 2rem;
-                letter-spacing: 0.05em;
-            }
-
-            .side-lies ul {
-                list-style: none;
-                padding: 0;
-                color: #888;
-            }
-
-            .side-lies li {
-                margin-bottom: 1.5rem;
-                font-size: 1.15rem;
-                font-weight: 300;
-                letter-spacing: 0.02em;
-            }
-
-            /* RIGHT SIDE: CAREER REALITY */
             .side-reality {
-                text-align: left;
-            }
-
-            .side-reality h2 {
-                font-size: 2.8rem;
-                font-weight: 800;
-                /* Heavy */
-                color: #111;
-                /* Razor sharp black */
-                margin-bottom: 2rem;
-                letter-spacing: -0.03em;
-                line-height: 1;
-            }
-
-            .side-reality ul {
-                list-style: none;
-                padding: 0;
-                color: #000;
+                text-align: center;
             }
 
             .side-reality li {
-                margin-bottom: 1.5rem;
-                font-size: 1.25rem;
-                /* Slightly larger */
-                font-weight: 600;
-                /* Sharp */
+                justify-content: center;
                 display: flex;
-                align-items: center;
-                gap: 16px;
-                letter-spacing: -0.01em;
+                width: 100%;
             }
 
-            /* Custom checkmark for Reality */
-            .reality-check {
-                /* Rule #3: Muted Red Icons */
-                color: #cc3333;
-                font-weight: 900;
-                font-size: 1.1em;
+            .side-reality h2,
+            .side-lies h2 {
+                font-size: 2rem;
             }
 
-            /* DIVIDER */
-            /* Rule #4: The Drama Lives Here */
+            /* Horizontal Divider for Mobile */
             .split-divider {
-                width: 1px;
-                height: 40vh;
+                width: 80%;
+                height: 1px;
                 background: rgba(0, 0, 0, 0.1);
-                /* Graphite base */
-                position: relative;
-                overflow: visible;
+                margin: 0 auto;
             }
 
             .split-divider::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -1px;
-                /* Center it */
-                width: 3px;
-                height: 150px;
-                /* The pulse length */
-                background: linear-gradient(to bottom, transparent, #cc3333, transparent);
-                opacity: 0.8;
-                filter: blur(2px);
-                animation: pulse-travel 6s ease-in-out infinite;
+                width: 100px;
+                height: 3px;
+                background: linear-gradient(to right, transparent, #cc3333, transparent);
+                top: -1px;
+                left: 0;
+                animation: pulse-travel-mobile 4s ease-in-out infinite;
+            }
+        }
+
+        @keyframes pulse-travel-mobile {
+            0% {
+                left: -20%;
+                opacity: 0;
             }
 
-            @keyframes pulse-travel {
-                0% {
-                    top: -20%;
-                    opacity: 0;
-                }
-
-                20% {
-                    opacity: 1;
-                }
-
-                80% {
-                    opacity: 1;
-                }
-
-                100% {
-                    top: 120%;
-                    opacity: 0;
-                }
+            50% {
+                opacity: 1;
             }
 
-            /* MOBILE RESPONSIVE FIX */
-            @media (max-width: 768px) {
-                .reality-split-container {
-                    display: flex !important;
-                    flex-direction: column-reverse !important;
-                    gap: 3rem;
-                    padding: 3rem 1.5rem;
-                    min-height: auto;
-                    height: auto !important;
-                    /* Override explicit height */
-                }
+            100% {
+                left: 120%;
+                opacity: 0;
+            }
+        }
 
-                .split-side {
-                    text-align: center;
-                    width: 100%;
-                    padding: 0;
-                    height: auto !important;
-                }
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .reality-split-container {
+                display: flex !important;
+                flex-direction: column-reverse !important;
+                gap: 3rem;
+                padding: 3rem 1.5rem;
+                min-height: auto;
+            }
 
-                .side-lies {
-                    text-align: center;
-                    opacity: 0.8;
-                    filter: blur(0);
-                    /* Remove blur for mobile readability */
-                    margin-top: 1rem;
-                }
+            .split-side {
+                text-align: center;
+                width: 100%;
+                padding: 0;
+                height: auto !important;
+            }
 
-                .side-reality {
-                    text-align: center;
-                }
+            .side-lies {
+                text-align: center;
+                opacity: 0.7;
+                /* More legible on mobile */
+                filter: blur(0);
+                /* Remove blur for mobile readability */
+                margin-top: 1rem;
+            }
 
-                .side-reality li {
-                    justify-content: center;
-                    display: flex;
-                    width: 100%;
-                }
+            .side-reality {
+                text-align: center;
+            }
 
-                .side-reality h2,
-                .side-lies h2 {
-                    font-size: 2rem;
-                }
+            .side-reality li {
+                justify-content: center;
+                text-align: left;
+                /* Keep text left aligned for readability, or center? Let's try aligned flex */
+                display: inline-flex;
+                /* Center the block */
+                width: 100%;
+            }
 
-                /* Horizontal Divider for Mobile */
-                .split-divider {
-                    width: 80%;
-                    height: 1px;
-                    background: rgba(0, 0, 0, 0.1);
-                    margin: 0 auto;
-                }
+            .side-reality h2,
+            .side-lies h2 {
+                font-size: 2rem;
+            }
 
-                .split-divider::after {
-                    width: 100px;
-                    height: 3px;
-                    background: linear-gradient(to right, transparent, #cc3333, transparent);
-                    top: -1px;
-                    left: 0;
-                    animation: pulse-travel-mobile 4s ease-in-out infinite;
-                }
+            /* Horizontal Divider for Mobile */
+            .split-divider {
+                width: 80%;
+                height: 1px;
+                background: rgba(0, 0, 0, 0.1);
+                margin: 0 auto;
+            }
+
+            .split-divider::after {
+                width: 100px;
+                height: 3px;
+                background: linear-gradient(to right, transparent, #cc3333, transparent);
+                top: -1px;
+                left: 0;
+                animation: pulse-travel-mobile 4s ease-in-out infinite;
             }
 
             @keyframes pulse-travel-mobile {
@@ -256,84 +330,7 @@ industry. Data-backed and brutally honest.{% endblock %}
                     opacity: 0;
                 }
             }
-
-            /* MOBILE RESPONSIVE */
-            @media (max-width: 768px) {
-                .reality-split-container {
-                    display: flex !important;
-                    flex-direction: column-reverse !important;
-                    gap: 3rem;
-                    padding: 3rem 1.5rem;
-                    min-height: auto;
-                }
-
-                .split-side {
-                    text-align: center;
-                    width: 100%;
-                    padding: 0;
-                    height: auto !important;
-                }
-
-                .side-lies {
-                    text-align: center;
-                    opacity: 0.7;
-                    /* More legible on mobile */
-                    filter: blur(0);
-                    /* Remove blur for mobile readability */
-                    margin-top: 1rem;
-                }
-
-                .side-reality {
-                    text-align: center;
-                }
-
-                .side-reality li {
-                    justify-content: center;
-                    text-align: left;
-                    /* Keep text left aligned for readability, or center? Let's try aligned flex */
-                    display: inline-flex;
-                    /* Center the block */
-                    width: 100%;
-                }
-
-                .side-reality h2,
-                .side-lies h2 {
-                    font-size: 2rem;
-                }
-
-                /* Horizontal Divider for Mobile */
-                .split-divider {
-                    width: 80%;
-                    height: 1px;
-                    background: rgba(0, 0, 0, 0.1);
-                    margin: 0 auto;
-                }
-
-                .split-divider::after {
-                    width: 100px;
-                    height: 3px;
-                    background: linear-gradient(to right, transparent, #cc3333, transparent);
-                    top: -1px;
-                    left: 0;
-                    animation: pulse-travel-mobile 4s ease-in-out infinite;
-                }
-
-                @keyframes pulse-travel-mobile {
-                    0% {
-                        left: -20%;
-                        opacity: 0;
-                    }
-
-                    50% {
-                        opacity: 1;
-                    }
-
-                    100% {
-                        left: 120%;
-                        opacity: 0;
-                    }
-                }
-            }
+        }
     </style>
 
     <div class="reality-split-container">
