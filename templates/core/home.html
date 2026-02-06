@@ -239,11 +239,13 @@ real trade-offs you need to plan for.{% endblock %}
             opacity: 0.8;
             filter: blur(2px);
             animation: pulse-travel 6s ease-in-out infinite;
+            will-change: transform, opacity;
+            /* Hint to browser */
         }
 
         @keyframes pulse-travel {
             0% {
-                top: -20%;
+                transform: translateY(-20%);
                 opacity: 0;
             }
 
@@ -256,7 +258,7 @@ real trade-offs you need to plan for.{% endblock %}
             }
 
             100% {
-                top: 120%;
+                transform: translateY(120%);
                 opacity: 0;
             }
         }
@@ -322,12 +324,13 @@ real trade-offs you need to plan for.{% endblock %}
                 top: -1px;
                 left: 0;
                 animation: pulse-travel-mobile 4s ease-in-out infinite;
+                will-change: transform, opacity;
             }
         }
 
         @keyframes pulse-travel-mobile {
             0% {
-                left: -20%;
+                transform: translateX(-20%);
                 opacity: 0;
             }
 
@@ -336,7 +339,7 @@ real trade-offs you need to plan for.{% endblock %}
             }
 
             100% {
-                left: 120%;
+                transform: translateX(120%);
                 opacity: 0;
             }
         }
@@ -558,7 +561,7 @@ real trade-offs you need to plan for.{% endblock %}
             loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js')
                 .then(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js'))
                 .then(initGsap)
-                .catch(() => {});
+                .catch(() => { });
         }
 
         if ('requestIdleCallback' in window) {
