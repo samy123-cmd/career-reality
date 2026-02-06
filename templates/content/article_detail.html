@@ -138,7 +138,7 @@
 </article>
 
 <div class="progress-bar" id="reading-progress"
-    style="position: fixed; top: 0; left: 0; height: 3px; background: var(--c-black); width: 0; z-index: 1000;"></div>
+    style="position: fixed; top: 0; left: 0; height: 3px; background: var(--c-black); width: 100%; transform: scaleX(0); transform-origin: left; will-change: transform; z-index: 1000;"></div>
 <script>
     (function () {
         var article = document.querySelector('.article-body');
@@ -161,7 +161,7 @@
         function updateProgress() {
             var scrolled = window.scrollY - articleTop + windowHeight;
             var progress = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100));
-            progressBar.style.width = progress + '%';
+            progressBar.style.transform = 'scaleX(' + (progress / 100) + ')';
             ticking = false;
         }
 

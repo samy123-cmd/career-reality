@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.cache import cache_page
+from django.utils.cache import patch_cache_control
 from . import forms, logic, models
 
 # Wizard Configuration
@@ -165,6 +167,7 @@ def salary_submit_success(request):
         'twitter_description': description,
     })
 
+@cache_page(120)
 def salary_feed_api(request):
     """
     Returns last 20 verified (or all for now) salaries for the ticker.
@@ -182,10 +185,14 @@ def salary_feed_api(request):
                 'ctc': f"{s.ctc/100000:.1f} LPA",
                 'city': s.city
             })
-        return JsonResponse({'submissions': data})
+        response = JsonResponse({'submissions': data})
+        patch_cache_control(response, public=True, max_age=120, stale_while_revalidate=60)
+        return response
     except Exception as e:
         import traceback
-        return JsonResponse({'error': str(e), 'trace': traceback.format_exc()}, status=500)
+        response = JsonResponse({'error': str(e), 'trace': traceback.format_exc()}, status=500)
+        patch_cache_control(response, no_store=True)
+        return response
 
 def layoff_radar(request):
     """
