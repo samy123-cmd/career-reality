@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.views.decorators.cache import cache_page
 from content.models import Article, Category
 
 def robots_txt(request):
@@ -15,6 +16,7 @@ def robots_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
+@cache_page(300)
 def home(request):
     """
     Home page view.

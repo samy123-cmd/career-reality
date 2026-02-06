@@ -117,6 +117,15 @@ else:
         }
     }
 
+# Cache: simple in-memory cache to reduce TTFB on repeated requests
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'career-reality-cache',
+        'TIMEOUT': 300,
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

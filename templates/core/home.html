@@ -43,10 +43,6 @@ real trade-offs you need to plan for.{% endblock %}
 <!-- HERO: REALITY SPLIT SECTION -->
 <section class="container-wide" style="padding: 0; margin-bottom: 4rem;">
     <style>
-        .hero-statement {
-            min-height: 220px;
-        }
-
         .hero-cta {
             display: flex;
             flex-wrap: wrap;
@@ -239,13 +235,11 @@ real trade-offs you need to plan for.{% endblock %}
             opacity: 0.8;
             filter: blur(2px);
             animation: pulse-travel 6s ease-in-out infinite;
-            will-change: transform, opacity;
-            /* Hint to browser */
         }
 
         @keyframes pulse-travel {
             0% {
-                transform: translateY(-20%);
+                top: -20%;
                 opacity: 0;
             }
 
@@ -258,17 +252,13 @@ real trade-offs you need to plan for.{% endblock %}
             }
 
             100% {
-                transform: translateY(120%);
+                top: 120%;
                 opacity: 0;
             }
         }
 
         /* MOBILE RESPONSIVE FIX */
         @media (max-width: 768px) {
-            .hero-statement {
-                min-height: 180px;
-            }
-
             .reality-split-container {
                 display: flex !important;
                 flex-direction: column-reverse !important;
@@ -324,13 +314,12 @@ real trade-offs you need to plan for.{% endblock %}
                 top: -1px;
                 left: 0;
                 animation: pulse-travel-mobile 4s ease-in-out infinite;
-                will-change: transform, opacity;
             }
         }
 
         @keyframes pulse-travel-mobile {
             0% {
-                transform: translateX(-20%);
+                left: -20%;
                 opacity: 0;
             }
 
@@ -339,7 +328,7 @@ real trade-offs you need to plan for.{% endblock %}
             }
 
             100% {
-                transform: translateX(120%);
+                left: 120%;
                 opacity: 0;
             }
         }
@@ -451,7 +440,8 @@ real trade-offs you need to plan for.{% endblock %}
     <span class="section-label reveal-on-scroll">LATEST</span>
 
     <div class="article-list reveal-on-scroll">
-        {% for article in articles|slice:"1:" %}
+        {% for article in articles %}
+        {% if forloop.first %}{% continue %}{% endif %}
         <div class="article-list-item">
             <div class="article-list-meta">{{ article.category.name }} &middot; {{ article.updated_at|date:"F Y" }}
             </div>

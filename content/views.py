@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import escape
+from django.views.decorators.cache import cache_page
 from .models import Article, Category, Author
 
 def author_detail(request, author_id):
@@ -12,6 +13,7 @@ def author_detail(request, author_id):
         'articles': articles
     })
 
+@cache_page(300)
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug, status='published')
     og_image_url = request.build_absolute_uri(reverse('article_og_image', args=[article.slug]))
@@ -37,6 +39,7 @@ def article_detail(request, slug):
         'twitter_image': og_image_url,
     })
 
+@cache_page(300)
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
     og_title = f"{category.name} Careers in India - Career Reality"
