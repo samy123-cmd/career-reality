@@ -441,7 +441,7 @@ real trade-offs you need to plan for.{% endblock %}
 
     <div class="article-list reveal-on-scroll">
         {% for article in articles %}
-        {% if forloop.first %}{% continue %}{% endif %}
+        {% if not forloop.first %}
         <div class="article-list-item">
             <div class="article-list-meta">{{ article.category.name }} &middot; {{ article.updated_at|date:"F Y" }}
             </div>
@@ -456,6 +456,7 @@ real trade-offs you need to plan for.{% endblock %}
                 {{ article.common_expectation|striptags|truncatewords:20 }}
             </p>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </section>
