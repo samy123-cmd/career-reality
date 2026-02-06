@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Anonymous Salary Drop — Career Reality{% endblock %}
+{% block title %}Anonymous Salary Drop -- Career Reality{% endblock %}
+{% block meta_description %}Submit an anonymous salary data point to improve Career Reality salary ranges and insights.{% endblock %}
+{% block og_title %}Anonymous Salary Drop{% endblock %}
+{% block og_description %}Submit an anonymous salary data point to improve Career Reality salary ranges and insights.{% endblock %}
+{% block twitter_title %}Anonymous Salary Drop{% endblock %}
+{% block twitter_description %}Submit an anonymous salary data point to improve Career Reality salary ranges and insights.{% endblock %}
 
 {% block content %}
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
@@ -49,7 +54,7 @@
                 <div>
                     <label
                         style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.5rem;">Annual
-                        CTC (₹)</label>
+                        CTC (Rs)</label>
                     <input type="number" name="ctc" placeholder="e.g. 1200000" required
                         style="width: 100%; padding: 12px; border: 2px solid var(--c-black);">
                 </div>
@@ -87,5 +92,49 @@
         </form>
     </div>
 
+<div style="max-width: 700px; margin: 2rem auto 0;">
+    <div class="key-takeaway" style="margin-bottom: var(--space-md);">
+        <h4>How Your Data Is Used</h4>
+        <p>
+            We aggregate submissions to improve salary ranges and reality checks. No personal identifiers are stored.
+        </p>
+    </div>
+
+    <details class="collapsible" open>
+        <summary>Privacy and Safety</summary>
+        <div class="content">
+            <ul style="padding-left: 20px; margin: 0;">
+                <li>No names, emails, or employer IDs are stored.</li>
+                <li>We publish aggregated ranges only, not individual entries.</li>
+                <li>Suspicious or low-quality submissions are filtered.</li>
+            </ul>
+        </div>
+    </details>
+
+    <details class="collapsible">
+        <summary>What Happens Next</summary>
+        <div class="content">
+            <p>Your entry is reviewed, normalized, and added to the dataset on the next update cycle.</p>
+        </div>
+    </details>
+
+    <details class="collapsible">
+        <summary>FAQ</summary>
+        <div class="content">
+            <p><strong>Should I enter fixed pay or total CTC?</strong> Use total annual CTC.</p>
+            <p><strong>Can I submit for multiple offers?</strong> Yes, submit separate entries.</p>
+            <p><strong>Do you show company names?</strong> Not publicly. We use them only for internal validation.</p>
+        </div>
+    </details>
+
+    <p style="font-size: 12px; color: var(--c-grey-light); text-align: center; margin-top: 1.5rem;">
+        Last updated: {% now "F Y" %}
+    </p>
+</div>
 </section>
 {% endblock %}
+
+
+
+
+

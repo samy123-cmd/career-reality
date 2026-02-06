@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Editorial Standards - Career Reality (India){% endblock %}
+{% block title %}Editorial Standards - Career Reality India{% endblock %}
+{% block meta_description %}Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts.{% endblock %}
+{% block og_title %}Editorial Standards - Career Reality India{% endblock %}
+{% block og_description %}Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts.{% endblock %}
+{% block twitter_title %}Editorial Standards - Career Reality India{% endblock %}
+{% block twitter_description %}Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts.{% endblock %}
 
 {% block content %}
 
@@ -10,7 +15,7 @@
         <h1>Editorial Standards</h1>
         <p class="hero-subtitle">
             Career Reality operates on a small set of strict editorial principles. These principles exist to protect
-            trust — not scale.
+            trust -- not scale.
         </p>
     </div>
 </section>
@@ -34,7 +39,7 @@
     <h2>2. No Universal Advice</h2>
     <p>Career outcomes are context-dependent. We avoid:</p>
     <ul>
-        <li>“You should” statements</li>
+        <li>"You should" statements</li>
         <li>guaranteed paths</li>
         <li>one-size-fits-all frameworks</li>
     </ul>
@@ -48,7 +53,7 @@
         <li>summarize social media discourse</li>
         <li>aggregate content from other sites</li>
     </ul>
-    <p>Each article is framed independently, even when addressing familiar topics. The goal is not novelty — it is
+    <p>Each article is framed independently, even when addressing familiar topics. The goal is not novelty -- it is
         clarity.</p>
 
     <h2>4. Updates & Corrections</h2>
@@ -90,6 +95,30 @@
             Accuracy matters more than comfort.<br>
             Trust matters more than traffic.
         </p>
+    </div>
+
+    <div style="margin-top: 3rem;">
+        <span class="section-label">Explore Core Tools</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <a href="{% url 'salary_reality' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
+                <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark the real market range.</p>
+            </a>
+            <a href="{% url 'salary_calculator' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
+                <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Convert CTC to in-hand.</p>
+            </a>
+            <a href="{% url 'layoff_radar' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Signal</div>
+                <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Track risk signals by company.</p>
+            </a>
+        </div>
     </div>
 
     <p

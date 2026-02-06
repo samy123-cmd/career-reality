@@ -29,19 +29,37 @@ def home(request):
         'categories': categories,
     })
 
+def _seo(title, description):
+    return {
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
+    }
+
 def about(request):
-    return render(request, 'core/about.html')
+    title = "About Career Reality - India Career Truths"
+    description = "Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis."
+    return render(request, 'core/about.html', _seo(title, description))
 
 def editorial_standards(request):
-    return render(request, 'core/editorial.html')
+    title = "Editorial Standards - Career Reality India"
+    description = "Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts."
+    return render(request, 'core/editorial.html', _seo(title, description))
 
 def salary_reality(request):
-    return render(request, 'core/salary.html')
+    title = "Salary Reality (India) - Career Reality"
+    description = "Real, uninflated salary data for Indian tech roles with context and median ranges."
+    return render(request, 'core/salary.html', _seo(title, description))
 
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
     categories = Category.objects.all()
-    return render(request, 'core/salary_calculator.html', {'categories': categories})
+    title = "CTC Decoder: Calculate In-Hand Salary India (2026)"
+    description = "Decode CTC into real in-hand salary with PF, gratuity, variable pay, and tax regime logic."
+    context = {'categories': categories}
+    context.update(_seo(title, description))
+    return render(request, 'core/salary_calculator.html', context)
 
 def escape_plan(request):
     """
@@ -51,13 +69,19 @@ def escape_plan(request):
     return render(request, 'content/escape_plan.html')
 
 def privacy_policy(request):
-    return render(request, 'core/privacy_policy.html')
+    title = "Privacy Policy - Career Reality India"
+    description = "Privacy Policy for Career Reality India. Covers cookies, data collection, and ad network compliance."
+    return render(request, 'core/privacy_policy.html', _seo(title, description))
 
 def contact(request):
-    return render(request, 'core/contact.html')
+    title = "Contact Career Reality - Editorial Inquiries"
+    description = "Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis."
+    return render(request, 'core/contact.html', _seo(title, description))
 
 def terms(request):
-    return render(request, 'core/terms.html')
+    title = "Terms of Service - Career Reality India"
+    description = "Terms of Service for Career Reality India. Read before using the site and its career content."
+    return render(request, 'core/terms.html', _seo(title, description))
 
 def newsletter_signup(request):
     """Handle newsletter signup form submission."""

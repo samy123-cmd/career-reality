@@ -1,13 +1,41 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Career Reality (India){% endblock %}
+{% block title %}Career Reality India - Salary Truths and Career Reality Checks{% endblock %}
 
-{% block meta_description %}Unfiltered insights on Indian tech careers, salary stagflation, and the traps of the service
-industry. Data-backed and brutally honest.{% endblock %}
+{% block meta_description %}Data-backed reality checks on Indian tech careers: salary stagnation, skill decay, and the
+real trade-offs you need to plan for.{% endblock %}
 
 {% block extra_head %}
 <!-- No image preloads needed (CSS only) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Career Reality India - Salary Truths and Career Reality Checks",
+    "url": "{{ request.build_absolute_uri }}",
+    "description": "Data-backed reality checks on Indian tech careers: salary stagnation, skill decay, and the real trade-offs you need to plan for.",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Career Reality (India)",
+        "url": "{{ request.scheme }}://{{ request.get_host }}"
+    }
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ request.build_absolute_uri }}"
+        }
+    ]
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -15,6 +43,57 @@ industry. Data-backed and brutally honest.{% endblock %}
 <!-- HERO: REALITY SPLIT SECTION -->
 <section class="container-wide" style="padding: 0; margin-bottom: 4rem;">
     <style>
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .cta-primary,
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            padding: 0 24px;
+            border: 1px solid var(--c-black);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-primary {
+            background: var(--c-black);
+            color: var(--c-white);
+        }
+
+        .cta-primary:hover {
+            background: transparent;
+            color: var(--c-black);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--c-black);
+        }
+
+        .cta-secondary:hover {
+            background: var(--c-black);
+            color: var(--c-white);
+        }
+
+        .hero-proof {
+            margin-top: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--c-grey-light);
+        }
+
         .reality-split-container {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
@@ -57,14 +136,14 @@ industry. Data-backed and brutally honest.{% endblock %}
         .side-lies {
             text-align: right;
             /* Rule #3: Use blur/opacity for contrast */
-            opacity: 0.6;
-            filter: blur(0.8px);
+            opacity: 0.75;
+            filter: none;
             transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .side-lies:hover {
             opacity: 1;
-            filter: blur(0);
+            filter: none;
         }
 
         .side-lies h2 {
@@ -199,8 +278,8 @@ industry. Data-backed and brutally honest.{% endblock %}
 
             .side-lies {
                 text-align: center;
-                opacity: 0.8;
-                filter: blur(0);
+                opacity: 0.9;
+                filter: none;
                 /* Remove blur for mobile readability */
                 margin-top: 1rem;
             }
@@ -253,85 +332,20 @@ industry. Data-backed and brutally honest.{% endblock %}
                 opacity: 0;
             }
         }
-
-        /* MOBILE RESPONSIVE */
-        @media (max-width: 768px) {
-            .reality-split-container {
-                display: flex !important;
-                flex-direction: column-reverse !important;
-                gap: 3rem;
-                padding: 3rem 1.5rem;
-                min-height: auto;
-            }
-
-            .split-side {
-                text-align: center;
-                width: 100%;
-                padding: 0;
-                height: auto !important;
-            }
-
-            .side-lies {
-                text-align: center;
-                opacity: 0.7;
-                /* More legible on mobile */
-                filter: blur(0);
-                /* Remove blur for mobile readability */
-                margin-top: 1rem;
-            }
-
-            .side-reality {
-                text-align: center;
-            }
-
-            .side-reality li {
-                justify-content: center;
-                text-align: left;
-                /* Keep text left aligned for readability, or center? Let's try aligned flex */
-                display: inline-flex;
-                /* Center the block */
-                width: 100%;
-            }
-
-            .side-reality h2,
-            .side-lies h2 {
-                font-size: 2rem;
-            }
-
-            /* Horizontal Divider for Mobile */
-            .split-divider {
-                width: 80%;
-                height: 1px;
-                background: rgba(0, 0, 0, 0.1);
-                margin: 0 auto;
-            }
-
-            .split-divider::after {
-                width: 100px;
-                height: 3px;
-                background: linear-gradient(to right, transparent, #cc3333, transparent);
-                top: -1px;
-                left: 0;
-                animation: pulse-travel-mobile 4s ease-in-out infinite;
-            }
-
-            @keyframes pulse-travel-mobile {
-                0% {
-                    left: -20%;
-                    opacity: 0;
-                }
-
-                50% {
-                    opacity: 1;
-                }
-
-                100% {
-                    left: 120%;
-                    opacity: 0;
-                }
-            }
-        }
     </style>
+
+    <div class="container-wide" style="padding: 4rem var(--space-sm) 2rem;">
+        <div class="hero-statement">
+            <h1>Career Reality: Salary Truths and Career Trade-offs in India</h1>
+            <p class="hero-subtitle">Data-backed reality checks on pay, growth, and risk so you can make better moves in
+                Indian tech.</p>
+            <div class="hero-cta">
+                <a class="cta-primary" href="{% url 'salary_reality' %}">Start With Salary Reality</a>
+                <a class="cta-secondary" href="{% url 'salary_calculator' %}">Use CTC Decoder</a>
+            </div>
+            <div class="hero-proof">Updated monthly. No sponsors. No courses.</div>
+        </div>
+    </div>
 
     <div class="reality-split-container">
         <!-- LEFT: LIES (Bottom on Mobile) -->
@@ -357,10 +371,10 @@ industry. Data-backed and brutally honest.{% endblock %}
             <div style="position: relative; z-index: 1;">
                 <h2>Career Reality.</h2>
                 <ul>
-                    <li><span class="reality-check">✓</span> Salary stagnation is structural</li>
-                    <li><span class="reality-check">✓</span> Skills expire faster than titles</li>
-                    <li><span class="reality-check">✓</span> Competition is relentless</li>
-                    <li><span class="reality-check">✓</span> Switching late is brutally hard</li>
+                    <li><span class="reality-check">&#10003;</span> Salary stagnation is structural</li>
+                    <li><span class="reality-check">&#10003;</span> Skills expire faster than titles</li>
+                    <li><span class="reality-check">&#10003;</span> Competition is relentless</li>
+                    <li><span class="reality-check">&#10003;</span> Switching late is brutally hard</li>
                 </ul>
             </div>
         </div>
@@ -373,14 +387,63 @@ industry. Data-backed and brutally honest.{% endblock %}
 </div>
 <div style="height: 40px;"></div>
 
-<!-- LATEST: MEDIUM CONTAINER (RHYTHM) -->
-<section class="container-medium">
+<!-- START HERE -->
+<section class="container-medium" style="margin-bottom: var(--space-lg);">
+    <span class="section-label reveal-on-scroll">START HERE</span>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+        <a href="{% url 'salary_reality' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
+                Data</div>
+            <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
+            <p style="margin: 0; color: var(--c-grey-mid);">See where the market really pays.</p>
+        </a>
+        <a href="{% url 'salary_calculator' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
+                Tool</div>
+            <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
+            <p style="margin: 0; color: var(--c-grey-mid);">Convert CTC into actual in-hand.</p>
+        </a>
+        <a href="{% url 'layoff_radar' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
+                Signal</div>
+            <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
+            <p style="margin: 0; color: var(--c-grey-mid);">Track risk signals by company.</p>
+        </a>
+    </div>
+</section>
+
+<!-- FEATURED + LATEST: MEDIUM CONTAINER (RHYTHM) -->
+<section class="container-medium" id="latest">
+    {% if articles %}
+    <span class="section-label reveal-on-scroll">FEATURED</span>
+    {% with featured=articles.0 %}
+    <div class="article-list-item"
+        style="border: 1px solid var(--c-divider); padding: 2rem; margin-bottom: var(--space-lg);">
+        <div class="article-list-meta">{{ featured.category.name }} &middot; {{ featured.updated_at|date:"F Y" }}</div>
+        <h2 style="margin: 0.75rem 0 1rem 0; font-size: 36px;">
+            <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
+        </h2>
+        <p class="article-list-summary" style="max-width: 700px; font-size: 18px;">
+            {{ featured.common_expectation|striptags|truncatewords:28 }}
+        </p>
+        <a href="{% url 'article_detail' featured.slug %}"
+            style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">
+            Read the reality check
+        </a>
+    </div>
+    {% endwith %}
+    {% endif %}
+
     <span class="section-label reveal-on-scroll">LATEST</span>
 
     <div class="article-list reveal-on-scroll">
-        {% for article in articles %}
+        {% for article in articles|slice:"1:" %}
         <div class="article-list-item">
-            <div class="article-list-meta">{{ article.category.name }} · {{ article.updated_at|date:"F Y" }}</div>
+            <div class="article-list-meta">{{ article.category.name }} &middot; {{ article.updated_at|date:"F Y" }}
+            </div>
 
             <h3 class="article-list-title">
                 <a href="{% url 'article_detail' article.slug %}">
@@ -417,6 +480,12 @@ industry. Data-backed and brutally honest.{% endblock %}
 
         100% {
             transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        #salary-ticker-container {
+            display: none;
         }
     }
 </style>

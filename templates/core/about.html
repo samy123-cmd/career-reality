@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}About - Career Reality (India){% endblock %}
+{% block title %}About Career Reality - India Career Truths{% endblock %}
+{% block meta_description %}Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis.{% endblock %}
+{% block og_title %}About Career Reality - India Career Truths{% endblock %}
+{% block og_description %}Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis.{% endblock %}
+{% block twitter_title %}About Career Reality - India Career Truths{% endblock %}
+{% block twitter_description %}Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis.{% endblock %}
 
 {% block content %}
 
@@ -20,7 +25,7 @@
 <!-- BODY: READING WIDTH (INTIMACY) -->
 <div class="container-reading">
     <p>
-        This site exists because much of the public conversation around careers — especially in technology — is
+        This site exists because much of the public conversation around careers -- especially in technology -- is
         dominated by:
     </p>
     <ul>
@@ -38,9 +43,9 @@
         <li>trade-offs</li>
         <li>salary realities</li>
         <li>career plateaus</li>
-        <li>and decisions that don’t have clean, optimistic endings</li>
+        <li>and decisions that don't have clean, optimistic endings</li>
     </ul>
-    <p>Not to discourage — but to clarify.</p>
+    <p>Not to discourage -- but to clarify.</p>
 
     <hr class="editorial-divider" style="margin: 3rem 0;">
 
@@ -52,14 +57,14 @@
         <li>those with enough experience to sense that reality feels different than promised</li>
     </ul>
 
-    <p>If you’ve ever felt that:</p>
+    <p>If you've ever felt that:</p>
     <ul>
         <li>growth slowed down unexpectedly</li>
-        <li>compensation didn’t change your life the way you thought it would</li>
-        <li>“upskilling” stopped delivering returns</li>
+        <li>compensation didn't change your life the way you thought it would</li>
+        <li>"upskilling" stopped delivering returns</li>
         <li>or career advice online felt disconnected from lived experience</li>
     </ul>
-    <p>—you are the intended reader.</p>
+    <p>If this sounds familiar, you are the intended reader.</p>
 
     <h2>Who This Is Not For</h2>
     <p>This site is not written for:</p>
@@ -120,6 +125,30 @@
             If an article feels uncomfortable, it is usually because it is describing something familiar that rarely
             gets named.
         </p>
+    </div>
+
+    <div style="margin-top: 3rem;">
+        <span class="section-label">Explore Core Tools</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <a href="{% url 'salary_reality' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
+                <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark the real market range.</p>
+            </a>
+            <a href="{% url 'salary_calculator' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
+                <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Convert CTC to in-hand.</p>
+            </a>
+            <a href="{% url 'layoff_radar' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Signal</div>
+                <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Track risk signals by company.</p>
+            </a>
+        </div>
     </div>
 
     <p

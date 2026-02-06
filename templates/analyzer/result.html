@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Risk Analysis Result{% endblock %}
+{% block title %}Risk Result: {{ result.label }} - Career Reality{% endblock %}
+{% block meta_description %}Your resignation risk level with context and next steps based on common Indian employment patterns.{% endblock %}
 
 {% block content %}
 <style>
@@ -151,7 +152,7 @@
     <!-- 2. WHAT CAN GO WRONG -->
     {% if result.warnings %}
     <div class="section-box">
-        <h2 class="box-title">⚠️ What Can Go Wrong</h2>
+        <h2 class="box-title">What Can Go Wrong</h2>
         <ul class="risk-list">
             {% for warning in result.warnings %}
             <li>{{ warning }}</li>
@@ -162,7 +163,7 @@
 
     <!-- 3. NEXT 7 DAYS -->
     <div class="section-box" style="border-left: 4px solid #000;">
-        <h2 class="box-title">📅 What matters in the next 7 days</h2>
+        <h2 class="box-title">What matters in the next 7 days</h2>
         <p>{{ result.next_steps_intro }}</p>
         <ul class="risk-list" style="margin-top: 1rem;">
             <li><strong>Documentation is leverage.</strong> Keep personal copies of all communication.</li>
@@ -181,7 +182,7 @@
         <button
             style="background: #ccc; color: #666; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: not-allowed;"
             title="Coming Soon">
-            Download Detailed Risk Report (₹199)
+            Download Detailed Risk Report (Rs 199)
         </button>
         <div style="font-size: 0.75rem; color: #999; margin-top: 0.5rem;">Processing currently paused.</div>
     </div>
@@ -200,3 +201,13 @@
 
 </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+

@@ -14,7 +14,14 @@ def intro_view(request):
     Landing page for the analyzer.
     Static, indexable content + Start button.
     """
-    return render(request, 'analyzer/intro.html')
+    title = "Career Risk Analyzer - Career Reality India"
+    description = "Answer 6 questions to estimate career risk and get a reality-first action plan."
+    return render(request, 'analyzer/intro.html', {
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
+    })
 
 def wizard_start_session(request):
     """
@@ -110,8 +117,14 @@ def result_view(request):
         )
         request.session['analyzer_logged'] = True
     
+    title = f"Risk Result: {result.get('label', 'Assessment')} - Career Reality India"
+    description = "Your resignation risk level with context and next steps based on common Indian employment patterns."
     return render(request, 'analyzer/result.html', {
-        'result': result
+        'result': result,
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
     })
 
 def submit_salary(request):
@@ -133,10 +146,24 @@ def submit_salary(request):
             # Basic error handling for now
             return render(request, 'analyzer/submit_salary.html', {'error': 'Invalid data'})
 
-    return render(request, 'analyzer/submit_salary.html')
+    title = "Anonymous Salary Drop"
+    description = "Submit an anonymous salary data point to improve Career Reality salary ranges and insights."
+    return render(request, 'analyzer/submit_salary.html', {
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
+    })
 
 def salary_submit_success(request):
-    return render(request, 'analyzer/submit_success.html')
+    title = "Submission Received - Career Reality India"
+    description = "Thanks for contributing anonymous salary data. It helps improve salary reality checks for everyone."
+    return render(request, 'analyzer/submit_success.html', {
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
+    })
 
 def salary_feed_api(request):
     """
@@ -166,13 +193,34 @@ def layoff_radar(request):
     Aggregates reports to show 'Danger' vs 'Safe'.
     """
     # Simple aggregation for V1: Get recent reports
-    recent_reports = models.LayoffReport.objects.all().order_by('-created_at')[:50]
+    recent_reports = list(models.LayoffReport.objects.all().order_by('-created_at')[:50])
+
+    # Add a lightweight confidence score per report
+    from django.utils import timezone
+    for report in recent_reports:
+        score = 30
+        if report.details:
+            score += 20
+        if report.status in ['freeze', 'rumor', 'layoff']:
+            score += 10
+        age_days = (timezone.now() - report.created_at).days
+        if age_days <= 7:
+            score += 40
+        elif age_days <= 30:
+            score += 20
+        report.confidence_score = min(score, 100)
     
     # In V2, we would group by company_name and calculate a score.
     # For now, just list them.
     
+    title = "Indian Tech Layoff Radar (2026)"
+    description = "Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously."
     return render(request, 'analyzer/layoff_radar.html', {
-        'reports': recent_reports
+        'reports': recent_reports,
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
     })
 
 def report_layoff(request):
@@ -192,4 +240,11 @@ def report_layoff(request):
         except Exception:
             pass # Silent fail for now
             
-    return render(request, 'analyzer/report_layoff.html')
+    title = "Report Layoff Status - Career Reality India"
+    description = "Anonymous, secure layoff and hiring freeze reports to help others assess company risk."
+    return render(request, 'analyzer/report_layoff.html', {
+        'og_title': title,
+        'og_description': description,
+        'twitter_title': title,
+        'twitter_description': description,
+    })

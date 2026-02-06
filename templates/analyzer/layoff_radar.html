@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Indian Tech Layoff Radar (2026): Live Hiring Tracker — Career Reality{% endblock %}
+{% block title %}Indian Tech Layoff Radar (2026): Live Hiring Tracker -- Career Reality{% endblock %}
 
-{% block meta_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is
-safe. Anonymous reporting for TCS, Byjus, Unacademy, and more.{% endblock %}
+{% block meta_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
 
 {% block og_title %}Indian Tech Layoff Radar (2026){% endblock %}
-{% block og_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is
-safe.{% endblock %}
+{% block og_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
+{% block twitter_title %}Indian Tech Layoff Radar (2026){% endblock %}
+{% block twitter_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
 
 {% block content %}
 <script type="application/ld+json">
@@ -23,6 +23,38 @@ safe.{% endblock %}
   "keywords": ["Layoffs", "Hiring Freeze", "Indian IT", "Tech Jobs"]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How fresh is the data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Reports are time-stamped and shown in reverse chronological order. Newer entries carry higher confidence."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this verified?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It is crowdsourced. Treat it as a signal and cross-check with other sources."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I report anonymously?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Reports do not require login or personal information."
+      }
+    }
+  ]
+}
+</script>
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
 
     <div style="text-align: center; margin-bottom: 3rem;">
@@ -36,7 +68,7 @@ safe.{% endblock %}
 
         <a href="{% url 'report_layoff' %}" class="btn"
             style="margin-top: 2rem; display: inline-block; background: #d93025; color: white; border: none; font-weight: 700; padding: 12px 24px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px;">
-            ⚠ Report a Company
+            Report a Company
         </a>
     </div>
 
@@ -76,13 +108,18 @@ safe.{% endblock %}
                     <div>
                         <h3 class="company-name">{{ report.company_name }}</h3>
                         <div class="meta-info">
-                            {{ report.location }} • {{ report.created_at|timesince }} ago
+                            {{ report.location }} &middot; {{ report.created_at|timesince }} ago
                         </div>
                     </div>
-                    <span
-                        class="status-badge {% if report.status == 'hiring' %}badge-safe{% elif report.status == 'freeze' %}badge-warn{% else %}badge-danger{% endif %}">
-                        {{ report.get_status_display }}
-                    </span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                        <span
+                            class="status-badge {% if report.status == 'hiring' %}badge-safe{% elif report.status == 'freeze' %}badge-warn{% else %}badge-danger{% endif %}">
+                            {{ report.get_status_display }}
+                        </span>
+                        <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #999;">
+                            Confidence: {{ report.confidence_score }}%
+                        </span>
+                    </div>
                 </div>
 
                 {% if report.role_affected %}
@@ -242,3 +279,4 @@ safe.{% endblock %}
 
 </section>
 {% endblock %}
+

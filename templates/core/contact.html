@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Contact — Career Reality (India){% endblock %}
-{% block meta_description %}Get in touch with Career Reality. For editorial inquiries, corrections, or feedback about
-our career insights content.{% endblock %}
+{% block title %}Contact Career Reality - Editorial Inquiries{% endblock %}
+{% block meta_description %}Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis.{% endblock %}
+{% block og_title %}Contact Career Reality - Editorial Inquiries{% endblock %}
+{% block og_description %}Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis.{% endblock %}
+{% block twitter_title %}Contact Career Reality - Editorial Inquiries{% endblock %}
+{% block twitter_description %}Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis.{% endblock %}
 
 {% block content %}
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
@@ -29,7 +32,7 @@ our career insights content.{% endblock %}
             <summary>Response Policy</summary>
             <div class="content">
                 <p>We read every email but cannot respond to all inquiries individually. If your message requires a
-                    response, please allow 3–5 business days.</p>
+                    response, please allow 3-5 business days.</p>
                 <p>Priority is given to factual corrections and editorial clarifications.</p>
             </div>
         </details>
@@ -65,9 +68,33 @@ our career insights content.{% endblock %}
         </p>
     </div>
 
+    <div style="margin-top: var(--space-lg);">
+        <span class="section-label">Explore Core Tools</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <a href="{% url 'salary_reality' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
+                <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark the real market range.</p>
+            </a>
+            <a href="{% url 'salary_calculator' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
+                <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Convert CTC to in-hand.</p>
+            </a>
+            <a href="{% url 'layoff_radar' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Signal</div>
+                <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Track risk signals by company.</p>
+            </a>
+        </div>
+    </div>
+
     <!-- Response Times -->
     <div style="margin-top: var(--space-lg); font-size: 13px; color: var(--c-grey-light); text-align: center;">
-        <p style="margin: 0;">Average response time: 3–5 business days</p>
+        <p style="margin: 0;">Average response time: 3-5 business days</p>
     </div>
 </section>
 {% endblock %}

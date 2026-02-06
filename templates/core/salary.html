@@ -19,26 +19,43 @@ reality.{% endblock %}
     </p>
 </section>
 
+<section class="container-medium" style="margin-bottom: var(--space-lg);">
+    <span class="section-label">MARKET SUMMARY</span>
+    <div style="border: 1px solid var(--c-divider); padding: 1.5rem; background: #fafafa;">
+        <p style="margin: 0 0 0.75rem 0; font-weight: 600; color: var(--c-black);">
+            Quick read for this month:
+        </p>
+        <ul style="margin: 0; padding-left: 20px;">
+            <li>Median offers are steady in core engineering roles; junior roles remain flat.</li>
+            <li>Design and product ranges show the widest gap between hype and reality.</li>
+            <li>Data roles remain competitive but are flattening at the entry level.</li>
+        </ul>
+        <p style="font-size: 12px; color: var(--c-grey-light); margin-top: 0.75rem;">
+            Updated: {% now "F Y" %}
+        </p>
+    </div>
+</section>
+
 <!-- METHODOLOGY & CONTEXT -->
 <section class="container-reading" style="margin-bottom: var(--space-xl);">
     <h2 style="font-size: 18px; margin-bottom: var(--space-md);">Why These Numbers Matter</h2>
 
     <p>
         Salary conversations in India are distorted by survivorship bias. LinkedIn posts celebrate
-        outliers — the friend who joined a unicorn at 40 LPA, the batchmate who cracked FAANG. These
+        outliers -- the friend who joined a unicorn at 40 LPA, the batchmate who cracked FAANG. These
         stories spread because they're exceptional. What doesn't spread are the thousands of offers
         at 6 LPA for the same roles, in the same cities, with the same skill sets.
     </p>
 
     <p>
-        The data below reflects the <strong>80th percentile reality</strong> — what 80% of companies
+        The data below reflects the <strong>80th percentile reality</strong> -- what 80% of companies
         actually pay for these roles. This includes IT services giants (TCS, Infosys, Wipro),
         mid-sized agencies, and the vast majority of startups that aren't funded by Sequoia or Tiger Global.
     </p>
 
     <p>
         The "Hype" column shows what influencers, bootcamps, and edtech platforms promise. These numbers
-        are technically possible — but only for a small fraction of candidates, usually those with
+        are technically possible -- but only for a small fraction of candidates, usually those with
         specific pedigrees (IIT/IIM), prior experience at top-tier companies, or rare technical specializations.
     </p>
 
@@ -49,6 +66,22 @@ reality.{% endblock %}
         and direct conversations with hiring managers across 50+ companies. We exclude remote-US roles,
         contractor positions, and outlier packages from well-funded unicorns.
     </p>
+</section>
+
+<section class="container-reading" style="margin-bottom: var(--space-xl);">
+    <h3 style="font-size: 16px; margin-bottom: var(--space-sm);">Coverage and Limits</h3>
+    <ul style="padding-left: 20px; margin: 0;">
+        <li>India-only, full-time roles; US-remote and contractor roles are excluded.</li>
+        <li>Ranges are median-heavy and calibrated for typical offers, not unicorn outliers.</li>
+        <li>Data is refreshed monthly; volatile roles may shift faster than the table.</li>
+    </ul>
+    <p style="font-size: 14px; color: var(--c-grey-mid); margin-top: 1rem;">
+        Have better data or corrections? Use the Salary Drop to improve the ranges.
+    </p>
+    <a href="{% url 'submit_salary' %}"
+        style="display: inline-block; margin-top: 0.75rem; padding: 10px 18px; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">
+        Submit a Salary Data Point
+    </a>
 </section>
 
 <!-- SECTION 1: ENGINEERING -->
@@ -362,7 +395,7 @@ reality.{% endblock %}
 <!-- EXPLANATION -->
 <section class="container-reading"
     style="margin-bottom: var(--space-xl); background-color: #f9f9f9; padding: var(--space-md); border-left: 2px solid var(--c-black);">
-    <h3 style="margin-top: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;">⚠️ How to read this
+    <h3 style="margin-top: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;"> How to read this
     </h3>
     <p style="font-size: 15px; margin-bottom: 0;">
         The <strong>"Hype"</strong> number is what influencers, bootcamps, and viral LinkedIn posts tell you to expect.
@@ -375,3 +408,5 @@ reality.{% endblock %}
 </section>
 
 {% endblock %}
+
+

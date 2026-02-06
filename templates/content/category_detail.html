@@ -1,9 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}{{ category.name }} — Career Reality (India){% endblock %}
-{% block meta_description %}Reality checks and insights about {{ category.name|lower }} careers in India.{% endblock %}
+{% block title %}{{ category.name }} Careers in India - Career Reality{% endblock %}
+{% block meta_description %}Reality checks and insights about {{ category.name|lower }} careers in India. Salary expectations, trade-offs, and growth risks.{% endblock %}
 
 {% block content %}
+
+<!-- JSON-LD Structured Data for SEO -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "{{ category.name|escapejs }} Careers in India - Career Reality",
+    "description": "Reality checks and insights about {{ category.name|lower|escapejs }} careers in India. Salary expectations, trade-offs, and growth risks.",
+    "url": "{{ request.build_absolute_uri }}",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-default.svg' %}"
+}
+</script>
 
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1 style="margin-bottom: var(--space-sm);">{{ category.name }}</h1>
@@ -20,6 +33,24 @@
 
     <hr class="editorial-divider" style="margin-bottom: var(--space-lg);">
 
+    <div style="margin-bottom: var(--space-lg);">
+        <span class="section-label">START HERE</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+            <a href="{% url 'salary_reality' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
+                <h3 style="margin: 0.5rem 0; font-size: 18px;">Salary Reality Check</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark your expectations.</p>
+            </a>
+            <a href="{% url 'salary_calculator' %}"
+                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
+                <h3 style="margin: 0.5rem 0; font-size: 18px;">CTC Decoder</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Know your actual take-home.</p>
+            </a>
+        </div>
+    </div>
+
     {% if articles %}
     <span class="section-label">{{ articles.count }} ARTICLE{% if articles.count != 1 %}S{% endif %}</span>
 
@@ -28,7 +59,7 @@
         <div class="article-list-item">
             <div class="article-list-meta">
                 <a href="{% url 'author_detail' article.author.id %}"
-                    style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> · {{ article.updated_at|date:"F Y" }}
+                    style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> &middot; {{ article.updated_at|date:"F Y" }}
             </div>
 
             <h3 class="article-list-title">

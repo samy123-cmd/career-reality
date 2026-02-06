@@ -2,7 +2,7 @@
     <div class="container-wide nav-flex">
         <!-- Premium Logo/Brand -->
         <a href="/" class="site-brand">
-            <span class="brand-icon">◆</span>
+            <span class="brand-icon">&diams;</span>
             <span class="brand-text">CAREER<span class="brand-highlight">REALITY</span></span>
         </a>
 
@@ -20,13 +20,13 @@
                     <div class="dropdown-header">Browse by Category</div>
                     {% for category in categories %}
                     <a href="{% url 'category_detail' category.slug %}">
-                        <span class="dropdown-icon">→</span>
+                        <span class="dropdown-icon">&rarr;</span>
                         {{ category.name }}
                     </a>
                     {% empty %}
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">→</span>Career Strategy</a>
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">→</span>Software Engineering</a>
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">→</span>Money Reality</a>
+                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Career Strategy</a>
+                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Software Engineering</a>
+                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Money Reality</a>
                     {% endfor %}
                 </div>
             </div>
@@ -42,14 +42,14 @@
                 <div class="nav-dropdown-content" style="display:none;">
                     <div class="dropdown-header">Tools & Data</div>
                     <a href="{% url 'salary_reality' %}">
-                        <span class="dropdown-icon">→</span> Reality Check
+                        <span class="dropdown-icon">&rarr;</span> Reality Check
                     </a>
                     <a href="{% url 'salary_calculator' %}">
-                        <span class="dropdown-icon">→</span> CTC Decoder <span class="nav-badge"
+                        <span class="dropdown-icon">&rarr;</span> CTC Decoder <span class="nav-badge"
                             style="margin-left:5px;">NEW</span>
                     </a>
                     <a href="{% url 'layoff_radar' %}">
-                        <span class="dropdown-icon">⚠</span> Layoff Radar <span class="nav-badge"
+                        <span class="dropdown-icon">&#9888;</span> Layoff Radar <span class="nav-badge"
                             style="background:#d93025; margin-left:5px; color:white;">BETA</span>
                     </a>
                     <a href="{% url 'submit_salary' %}" style="color: #d93025; font-weight: 700;">
@@ -58,7 +58,7 @@
 
                     <div class="dropdown-header" style="margin-top: 10px; border-top: 1px dashed #eee;">Strategy</div>
                     <a href="{% url 'escape_plan' %}">
-                        <span class="dropdown-icon">→</span> Service Co. Escape
+                        <span class="dropdown-icon">&rarr;</span> Service Co. Escape
                     </a>
                 </div>
             </div>
@@ -94,9 +94,7 @@
                 <a href="{% url 'submit_salary' %}" class="mobile-nav-link" style="color: #d93025; font-weight: 700;">
                     + Drop a Salary
                 </a>
-                <a href="{% url 'escape_plan' %}" class="mobile-nav-link" style="font-size: 14px; opacity: 0.8;">
-                    → Escape Plan
-                </a>
+                <a href="{% url 'escape_plan' %}" class="mobile-nav-link" style="font-size: 14px; opacity: 0.8;">&rarr; Escape Plan</a>
             </div>
             <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Salary Data</a>
             <a href="{% url 'wizard_start' %}" class="mobile-nav-link">Risk Analyzer</a>
@@ -122,3 +120,4 @@
         </nav>
     </div>
 </header>
+

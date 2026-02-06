@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ article.meta_title }}{% endblock %}
 {% block meta_description %}{{ article.meta_description }}{% endblock %}
@@ -12,15 +13,21 @@
     "@type": "Article",
     "headline": "{{ article.title|escapejs }}",
     "description": "{{ article.meta_description|escapejs }}",
+    "image": "{{ request.build_absolute_uri|slice:':-1' }}{% url 'article_og_image' article.slug %}",
     "author": {
         "@type": "Person",
         "name": "{{ article.author.display_name|escapejs }}",
-        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'author_detail' article.author.id %}"
+        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'author_detail' article.author.id %}",
+        "sameAs": []
     },
     "publisher": {
         "@type": "Organization",
         "name": "Career Reality (India)",
-        "url": "{{ request.scheme }}://{{ request.get_host }}"
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-default.png' %}"
+        }
     },
     "datePublished": "{{ article.published_at|date:'c' }}",
     "dateModified": "{{ article.updated_at|date:'c' }}",
@@ -38,9 +45,9 @@
         <h1>{{ article.title }}</h1>
         <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{ article.target_persona|safe }}</div>
         <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;"><a
-                href="{% url 'author_detail' article.author.id %}"
-                style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> - {{ article.updated_at|date:"F Y" }} · <a href="{% url 'category_detail' article.category.slug %}"
-                style="color: inherit;">{{ article.category.name }}</a></div>
+        href="{% url 'author_detail' article.author.id %}"
+        style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> &middot; {{ article.published_at|date:"F Y" }} &middot; <a href="{% url 'category_detail' article.category.slug %}"
+        style="color: inherit;">{{ article.category.name }}</a></div>
     </header>
 
     <div class="container-reading">
@@ -167,3 +174,5 @@
     })();
 </script>
 {% endblock %}
+
+
