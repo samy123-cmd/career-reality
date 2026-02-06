@@ -146,17 +146,24 @@
         var progressBar = document.getElementById('reading-progress');
         var articleHeight = 0;
         var articleTop = 0;
-        var windowHeight = window.innerHeight;
+        var windowHeight = document.documentElement.clientHeight;
         var ticking = false;
+        var resizeTicking = false;
 
         function cacheLayout() {
             var rect = article.getBoundingClientRect();
             articleTop = window.scrollY + rect.top;
             articleHeight = article.offsetHeight;
-            windowHeight = window.innerHeight;
+            windowHeight = document.documentElement.clientHeight;
+            resizeTicking = false;
         }
-        cacheLayout();
-        window.addEventListener('resize', cacheLayout, { passive: true });
+        requestAnimationFrame(cacheLayout);
+        window.addEventListener('resize', function () {
+            if (!resizeTicking) {
+                resizeTicking = true;
+                requestAnimationFrame(cacheLayout);
+            }
+        }, { passive: true });
 
         function updateProgress() {
             var scrolled = window.scrollY - articleTop + windowHeight;
