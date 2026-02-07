@@ -148,24 +148,27 @@
         var articleTop = 0;
         var windowHeight = document.documentElement.clientHeight;
         var ticking = false;
-        var resizeTicking = false;
+        var initialized = false;
 
         function cacheLayout() {
             var rect = article.getBoundingClientRect();
             articleTop = window.scrollY + rect.top;
             articleHeight = article.offsetHeight;
             windowHeight = document.documentElement.clientHeight;
-            resizeTicking = false;
+            initialized = true;
         }
-        requestAnimationFrame(cacheLayout);
-        window.addEventListener('resize', function () {
-            if (!resizeTicking) {
-                resizeTicking = true;
+        window.addEventListener('load', function () {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(function () {
+                    requestAnimationFrame(cacheLayout);
+                }, { timeout: 2000 });
+            } else {
                 requestAnimationFrame(cacheLayout);
             }
-        }, { passive: true });
+        }, { once: true });
 
         function updateProgress() {
+            if (!initialized) return;
             var scrolled = window.scrollY - articleTop + windowHeight;
             var progress = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100));
             progressBar.style.transform = 'scaleX(' + (progress / 100) + ')';
