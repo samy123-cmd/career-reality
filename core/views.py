@@ -88,12 +88,31 @@ def home(request):
     recent_updates = article_qs.order_by('-updated_at')[:5]
     index_rows = _career_reality_index_rows()
     
+    title = "Career Reality India - Salary Truths and Career Reality Checks"
+    description = "Data-backed reality checks on Indian tech careers: salary stagnation, skill decay, and the real trade-offs you need to plan for."
+    home_faq = [
+        {
+            "q": "What makes Career Reality different from generic career blogs?",
+            "a": "We prioritize evidence-backed analysis, role-level trade-offs, and correction logs over motivational narratives."
+        },
+        {
+            "q": "How often is content updated?",
+            "a": "Core market pages are reviewed monthly, with additional updates when salary or hiring conditions shift materially."
+        },
+        {
+            "q": "Does advertising influence editorial conclusions?",
+            "a": "No. Editorial and commercial decisions are separated under published standards and sponsorship policy."
+        },
+    ]
+
     return render(request, 'core/home.html', {
         'articles': articles,
         'categories': categories,
         'recent_updates': recent_updates,
         'topic_clusters': _topic_clusters(),
         'latest_index_row': index_rows[0],
+        'home_faq': home_faq,
+        **_seo(title, description),
     })
 
 def _seo(title, description):

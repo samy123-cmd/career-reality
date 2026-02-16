@@ -11,10 +11,11 @@ real trade-offs you need to plan for.{% endblock %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "CollectionPage",
     "name": "Career Reality India - Salary Truths and Career Reality Checks",
-    "url": "{{ request.build_absolute_uri }}",
+    "url": "{{ canonical_url|default:request.build_absolute_uri }}",
     "description": "Data-backed reality checks on Indian tech careers: salary stagnation, skill decay, and the real trade-offs you need to plan for.",
+    "inLanguage": "en-IN",
     "isPartOf": {
         "@type": "WebSite",
         "name": "Career Reality (India)",
@@ -25,13 +26,61 @@ real trade-offs you need to plan for.{% endblock %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Career Reality (India)",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "inLanguage": "en-IN"
+}
+</script>
+{% if articles %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Latest Career Reality Articles",
+    "itemListElement": [
+        {% for article in articles %}
+        {
+            "@type": "ListItem",
+            "position": {{ forloop.counter }},
+            "name": "{{ article.title|escapejs }}",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'article_detail' article.slug %}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
+{% if home_faq %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for item in home_faq %}
+        {
+            "@type": "Question",
+            "name": "{{ item.q|escapejs }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ item.a|escapejs }}"
+            }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
         {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "{{ request.build_absolute_uri }}"
+            "item": "{{ canonical_url|default:request.build_absolute_uri }}"
         }
     ]
 }
@@ -150,7 +199,7 @@ real trade-offs you need to plan for.{% endblock %}
             font-size: 2.2rem;
             font-weight: 300;
             /* Lighter weight */
-            color: #999;
+            color: #666;
             /* Grey */
             margin-bottom: 2rem;
             letter-spacing: 0.05em;
@@ -159,7 +208,7 @@ real trade-offs you need to plan for.{% endblock %}
         .side-lies ul {
             list-style: none;
             padding: 0;
-            color: #888;
+            color: #666;
         }
 
         .side-lies li {
@@ -563,6 +612,19 @@ real trade-offs you need to plan for.{% endblock %}
     </div>
 </section>
 
+<!-- FAQ -->
+<section class="container-medium" style="margin-bottom: var(--space-lg);">
+    <span class="section-label reveal-on-scroll">FAQ</span>
+    {% for item in home_faq %}
+    <details class="collapsible" {% if forloop.first %}open{% endif %}>
+        <summary>{{ item.q }}</summary>
+        <div class="content">
+            <p style="margin: 0;">{{ item.a }}</p>
+        </div>
+    </details>
+    {% endfor %}
+</section>
+
 <!-- INLINE MARKET FEED -->
 <div class="container-medium" id="salary-ticker-container"
     style="margin-bottom: var(--space-xl); border: 1px solid #333; background: var(--c-black); color: white; display: flex; align-items: center; overflow: hidden; white-space: nowrap;">
@@ -583,7 +645,11 @@ real trade-offs you need to plan for.{% endblock %}
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('/api/salary-feed/')
+        if (window.matchMedia('(max-width: 768px)').matches) {
+            return;
+        }
+
+        const loadFeed = () => fetch('/api/salary-feed/')
             .then(response => response.json())
             .then(data => {
                 const submissions = data.submissions;
@@ -592,15 +658,22 @@ real trade-offs you need to plan for.{% endblock %}
                     let html = '';
                     submissions.forEach(sub => {
                         html += `<span style="margin-right: 24px; font-family: monospace; font-size: 12px; line-height: 40px;">
-                                <span style="color: #bbb;">${sub.role}</span> 
-                                <span style="color: #666;">(${sub.exp})</span> 
+                                <span style="color: #d6d6d6;">${sub.role}</span> 
+                                <span style="color: #a8a8a8;">(${sub.exp})</span> 
                                 <span style="font-weight: 700; color: #fff;">${sub.ctc}</span> 
-                                <span style="color: #666; font-size: 10px;">${sub.city}</span>
+                                <span style="color: #a8a8a8; font-size: 10px;">${sub.city}</span>
                             </span>`;
                     });
                     tickerContent.innerHTML = html;
                 }
-            });
+            })
+            .catch(() => { });
+
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadFeed, { timeout: 1500 });
+        } else {
+            setTimeout(loadFeed, 250);
+        }
     });
 </script>
 {% endblock %}
@@ -639,6 +712,10 @@ real trade-offs you need to plan for.{% endblock %}
         }
 
         function start() {
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                return;
+            }
+
             loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js')
                 .then(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js'))
                 .then(initGsap)
