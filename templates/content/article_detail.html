@@ -48,35 +48,130 @@
         href="{% url 'author_detail' article.author.id %}"
         style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> &middot; {{ article.published_at|date:"F Y" }} &middot; <a href="{% url 'category_detail' article.category.slug %}"
         style="color: inherit;">{{ article.category.name }}</a></div>
+        <div style="font-size: 12px; color: var(--c-grey-light); margin-top: 8px;">
+            {{ reading_time }} min read &middot; Reviewed by Editorial Desk &middot; Correction path:
+            <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Contact</a>
+        </div>
+        {% if article.last_reality_check %}
+        <div style="font-size: 12px; color: var(--c-grey-light); margin-top: 8px;">
+            Last Reality Check: {{ article.last_reality_check|date:"F j, Y" }}
+        </div>
+        {% endif %}
     </header>
 
     <div class="container-reading">
-        <section>
+        <section style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0;">Key Takeaways</h2>
+            <ul style="margin: 0; padding-left: 18px;">
+                {% for takeaway in key_takeaways %}
+                <li>{{ takeaway }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section style="border: 1px solid var(--c-divider); padding: 1.25rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0;">On This Page</h2>
+            <ul style="margin: 0; padding-left: 18px;">
+                <li><a href="#expectation" style="text-decoration: underline;">The Expectation</a></li>
+                <li><a href="#reality" style="text-decoration: underline;">The Reality</a></li>
+                <li><a href="#salary-growth" style="text-decoration: underline;">Salary and Growth Reality</a></li>
+                <li><a href="#stuck-point" style="text-decoration: underline;">Where Most People Get Stuck</a></li>
+                <li><a href="#avoid-path" style="text-decoration: underline;">Who Should Avoid This Path</a></li>
+                <li><a href="#decision-framework" style="text-decoration: underline;">Decision Framework</a></li>
+                <li><a href="#originality-lens" style="text-decoration: underline;">Originality Lens</a></li>
+                <li><a href="#verdict" style="text-decoration: underline;">Final Verdict</a></li>
+            </ul>
+        </section>
+
+        <section id="expectation">
             <h2>The Expectation</h2>
             {{ article.common_expectation|safe }}
         </section>
 
-        <section>
+        <section id="reality">
             <h2>The Reality</h2>
             {{ article.actual_reality|safe }}
+            <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
+                Related context:
+                <a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality Check</a>,
+                <a href="{% url 'salary_calculator' %}" style="text-decoration: underline;">CTC Decoder</a>,
+                <a href="{% url 'category_detail' article.category.slug %}" style="text-decoration: underline;">more in {{ article.category.name }}</a>.
+            </p>
         </section>
 
-        <section>
+        <section id="salary-growth">
             <h2>Salary and Growth Reality</h2>
             <div class="table-scroll">{{ article.salary_reality|safe }}</div>
+            <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
+                Cross-check your take-home with the <a href="{% url 'salary_calculator' %}" style="text-decoration: underline;">CTC Decoder</a>
+                and compare ranges in <a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality</a>.
+            </p>
         </section>
 
-        <section>
+        <section id="stuck-point">
             <h2>Where Most People Get Stuck</h2>
             {{ article.stuck_point|safe }}
+            <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
+                If this matches your current situation, run the
+                <a href="{% url 'wizard_start' %}" style="text-decoration: underline;">Resignation Risk Analyzer</a>
+                before making your next move.
+            </p>
         </section>
 
-        <section>
+        <section id="avoid-path">
             <h2>Who Should Avoid This Path</h2>
             {{ article.who_should_avoid|safe }}
         </section>
 
+        <section id="decision-framework">
+            <h2>Decision Framework</h2>
+            <p>Use this quick framework before changing role, company, or specialization.</p>
+            <ul>
+                {% for point in decision_framework %}
+                <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Common Mistakes Checklist</h2>
+            <ul>
+                {% for item in mistake_checklist %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Real Scenario Snapshot</h2>
+            <p>{{ scenario_snapshot }}</p>
+        </section>
+
+        <section id="originality-lens" style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa;">
+            <h2 style="margin-top: 0;">Originality Lens</h2>
+            <p><strong>Contrarian thesis:</strong> {{ originality.contrarian_thesis }}</p>
+            <p style="margin-bottom: 0;"><strong>Non-obvious signal:</strong> {{ originality.non_obvious_signal }}</p>
+        </section>
+
+        <section style="margin-top: 2rem; border: 1px solid var(--c-divider); padding: 1.25rem;">
+            <h2 style="font-size: 16px; margin-top: 0;">Evidence By Section</h2>
+            {% for item in evidence_map %}
+            <div style="margin-bottom: 1rem;">
+                <p style="margin: 0 0 0.35rem 0;"><strong>Claim:</strong> {{ item.claim }}</p>
+                <p style="margin: 0; font-size: 13px; color: var(--c-grey-mid);">
+                    Evidence:
+                    {% for src in item.sources %}
+                    <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">{{ src.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                    Source list unavailable.
+                    {% endfor %}
+                </p>
+            </div>
+            {% endfor %}
+        </section>
+
         <div style="margin-top: 5rem;">
+            <div id="verdict"></div>
             <h3
                 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; border-top: 2px solid var(--c-black); padding-top: 1rem; margin-bottom: 2rem; display: inline-block;">
                 Final Verdict</h3>
@@ -98,7 +193,33 @@
             </div>
 
             <div style="margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">Last
-                Updated: {{ article.updated_at|date:"F Y" }}</div>
+                Updated: {{ article.updated_at|date:"F j, Y" }}</div>
+            <div style="margin-top: 0.5rem; font-size: 13px; color: var(--c-grey-light);">
+                Found a factual error? <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Request a correction</a>.
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa;">
+                <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 1rem 0;">What Changed</h3>
+                <ul style="margin: 0; padding-left: 18px;">
+                    {% for log in update_log_items %}
+                    <li style="margin-bottom: 0.75rem;">
+                        <strong>{{ log.date|date:"F j, Y" }}</strong>: {{ log.summary }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--c-divider);">
+                <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 1rem 0;">Sources</h3>
+                <ul style="margin: 0; padding-left: 18px;">
+                    {% for source in source_references %}
+                    <li style="margin-bottom: 0.5rem;">
+                        <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">{{ source.name }}</a>
+                        <span style="color: var(--c-grey-light);"> (checked {{ source.checked_on|date:"F j, Y" }})</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 

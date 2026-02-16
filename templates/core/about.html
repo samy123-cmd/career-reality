@@ -1,161 +1,119 @@
 {% extends "base.html" %}
 
 {% block title %}About Career Reality - India Career Truths{% endblock %}
-{% block meta_description %}Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis.{% endblock %}
-{% block og_title %}About Career Reality - India Career Truths{% endblock %}
-{% block og_description %}Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis.{% endblock %}
-{% block twitter_title %}About Career Reality - India Career Truths{% endblock %}
-{% block twitter_description %}Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis.{% endblock %}
+{% block meta_description %}Why Career Reality exists, who it serves, and how we publish evidence-backed, no-hype analysis on Indian careers.{% endblock %}
 
 {% block content %}
-
-<!-- HEADER: WIDE (AUTHORITY) -->
 <section class="container-wide">
     <div class="hero-statement">
         <h1>About Career Reality</h1>
         <p class="hero-subtitle">
-            An independent editorial project focused on the uncomfortable truths of working life in India.
+            We document how Indian careers actually work after the optimism slides are over.
         </p>
     </div>
 </section>
 
-<!-- SILENCE GAP -->
 <div class="silence-gap"></div>
 
-<!-- BODY: READING WIDTH (INTIMACY) -->
 <div class="container-reading">
     <p>
-        This site exists because much of the public conversation around careers -- especially in technology -- is
-        dominated by:
+        Career Reality exists because most career advice on the internet sounds like this:
+        "Follow your passion, stay positive, network harder, and success will eventually happen."
     </p>
+    <p>
+        Sometimes that works. Usually, people hit a quieter reality: pay stalls, scope narrows, skills age, and everyone is still told to
+        "just keep grinding." We write for that reality.
+    </p>
+
+    <hr class="editorial-divider" style="margin: 3rem 0;">
+
+    <h2>What We Actually Do</h2>
     <ul>
-        <li>exaggerated success stories</li>
-        <li>motivational narratives</li>
-        <li>curated LinkedIn outcomes</li>
-        <li>and advice that works only in hindsight</li>
+        <li>Track salary and market pressure with practical context.</li>
+        <li>Publish role-level trade-offs across engineering, product, design, data, and marketing.</li>
+        <li>Map risk signals (switching friction, layoffs, compensation compression).</li>
+        <li>Update old articles when conditions change, not when algorithms demand "fresh content".</li>
+    </ul>
+
+    <h2>Who This Is For</h2>
+    <p>This publication is built for people inside the system, not outside commentary about the system.</p>
+    <ul>
+        <li>Working professionals who have seen at least one plan fail in real life.</li>
+        <li>Mid-career operators trying to make fewer expensive mistakes.</li>
+        <li>Anyone suspicious of salary screenshots as a business model.</li>
+    </ul>
+
+    <h2>Who This Is Not For</h2>
+    <ul>
+        <li>Shortcut seekers looking for guaranteed outcomes.</li>
+        <li>People who want universal formulas that work in every city, role, and cycle.</li>
+        <li>Readers who only want reassuring conclusions.</li>
+    </ul>
+    <p>
+        We are not anti-ambition. We are anti-fiction dressed as strategy.
+    </p>
+
+    <hr class="editorial-divider" style="margin: 3rem 0;">
+
+    <h2>How We Write</h2>
+    <ul>
+        <li>Human-led editorial judgment.</li>
+        <li>Evidence-backed claims with visible sources and check dates.</li>
+        <li>Section-level frameworks: expectation, reality, stuck points, and decision filters.</li>
+        <li>Correction workflow for factual errors.</li>
     </ul>
 
     <p>
-        Career Reality takes a different approach. We write about:
+        AI may assist with language cleanup or verification support.
+        AI does not define viewpoints, conclusions, or editorial standards.
     </p>
-    <ul>
-        <li>stagnation</li>
-        <li>trade-offs</li>
-        <li>salary realities</li>
-        <li>career plateaus</li>
-        <li>and decisions that don't have clean, optimistic endings</li>
-    </ul>
-    <p>Not to discourage -- but to clarify.</p>
-
-    <hr class="editorial-divider" style="margin: 3rem 0;">
-
-    <h2>Who This Is For</h2>
-    <p>Career Reality is written for:</p>
-    <ul>
-        <li>working professionals</li>
-        <li>people already inside the system</li>
-        <li>those with enough experience to sense that reality feels different than promised</li>
-    </ul>
-
-    <p>If you've ever felt that:</p>
-    <ul>
-        <li>growth slowed down unexpectedly</li>
-        <li>compensation didn't change your life the way you thought it would</li>
-        <li>"upskilling" stopped delivering returns</li>
-        <li>or career advice online felt disconnected from lived experience</li>
-    </ul>
-    <p>If this sounds familiar, you are the intended reader.</p>
-
-    <h2>Who This Is Not For</h2>
-    <p>This site is not written for:</p>
-    <ul>
-        <li>students looking for career roadmaps</li>
-        <li>people seeking shortcuts or guarantees</li>
-        <li>motivational content consumers</li>
-        <li>hustle culture</li>
-        <li>or anyone expecting universally positive narratives</li>
-    </ul>
-    <p>Career Reality does not promise outcomes. It documents patterns.</p>
-
-    <hr class="editorial-divider" style="margin: 3rem 0;">
-
-    <h2>How This Site Is Written</h2>
-    <p>All articles on Career Reality are:</p>
-    <ul>
-        <li>written and maintained by a human editor</li>
-        <li>based on industry observation, experience, and long-term pattern recognition</li>
-        <li>updated when realities change</li>
-    </ul>
-
-    <p>AI tools may be used only to assist with:</p>
-    <ul>
-        <li>grammar</li>
-        <li>language refinement</li>
-        <li>research cross-checks</li>
-    </ul>
-    <p>AI does not determine viewpoints, conclusions, or editorial direction.</p>
 
     <h2>Independence</h2>
-    <p>Career Reality:</p>
+    <p>
+        We designed revenue to avoid editorial capture. See <a href="{% url 'revenue_model' %}" style="text-decoration: underline;">Revenue Model</a>
+        and <a href="{% url 'sponsorship_policy' %}" style="text-decoration: underline;">Sponsorship Policy</a> for constraints.
+    </p>
     <ul>
-        <li>does not sell courses</li>
-        <li>does not offer coaching</li>
-        <li>does not accept paid reviews</li>
-        <li>does not publish sponsored content</li>
+        <li>No paid praise.</li>
+        <li>No stealth affiliate agendas hidden as advice.</li>
+        <li>No "we reviewed this because someone asked nicely" policy.</li>
     </ul>
-    <p>The absence of monetized advice is intentional. Editorial independence matters more than reach.</p>
 
-    <h2>Location & Scope</h2>
-    <p>This publication focuses on India, because career outcomes are deeply shaped by:</p>
-    <ul>
-        <li>geography</li>
-        <li>compensation structures</li>
-        <li>labor markets</li>
-        <li>cost of living</li>
-        <li>and cultural expectations</li>
-    </ul>
-    <p>Generalized global advice often fails when applied locally. Career Reality is intentionally specific.</p>
+    <h2>Scope</h2>
+    <p>
+        We focus on India because local market mechanics matter: compensation structures, notice periods, labor supply,
+        and city-level cost pressure. Generic global advice often sounds elegant and performs badly.
+    </p>
 
     <div style="margin-top: 4rem; padding: 2rem; background: #fafafa; border-top: 2px solid var(--c-black);">
-        <h3
-            style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">
-            Final Note</h3>
+        <h3 style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Editorial Promise</h3>
         <p style="margin-bottom: 0;">
-            Career Reality is not designed to be reassuring. It is designed to be accurate.<br><br>
-            If an article feels uncomfortable, it is usually because it is describing something familiar that rarely
-            gets named.
+            If a piece feels uncomfortable, it should still be useful.
+            If a piece feels optimistic, it should still be defensible.
+            If a piece goes wrong, we correct it.
         </p>
     </div>
 
     <div style="margin-top: 3rem;">
-        <span class="section-label">Explore Core Tools</span>
+        <span class="section-label">Read Next</span>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
-            <a href="{% url 'salary_reality' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
-                <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark the real market range.</p>
+            <a href="{% url 'editorial' %}" style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <h3 style="margin: 0 0 0.5rem 0;">Editorial Standards</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">How we publish and correct content.</p>
             </a>
-            <a href="{% url 'salary_calculator' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
-                <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Convert CTC to in-hand.</p>
+            <a href="{% url 'topic_clusters' %}" style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <h3 style="margin: 0 0 0.5rem 0;">Topic Clusters</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Our authority map across role and risk topics.</p>
             </a>
-            <a href="{% url 'layoff_radar' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Signal</div>
-                <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Track risk signals by company.</p>
+            <a href="{% url 'career_reality_index' %}" style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+                <h3 style="margin: 0 0 0.5rem 0;">Career Reality Index</h3>
+                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Monthly pressure signals for Indian careers.</p>
             </a>
         </div>
     </div>
 
-    <p
-        style="text-align: center; margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">
-        Last Updated: {% now "Y" %}
+    <p style="text-align: center; margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">
+        Last updated: {% now "F j, Y" %}
     </p>
-
 </div>
-
 {% endblock %}

@@ -1,100 +1,85 @@
 {% extends 'base.html' %}
 
 {% block title %}Contact Career Reality - Editorial Inquiries{% endblock %}
-{% block meta_description %}Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis.{% endblock %}
-{% block og_title %}Contact Career Reality - Editorial Inquiries{% endblock %}
-{% block og_description %}Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis.{% endblock %}
-{% block twitter_title %}Contact Career Reality - Editorial Inquiries{% endblock %}
-{% block twitter_description %}Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis.{% endblock %}
+{% block meta_description %}How to contact Career Reality for corrections, editorial clarifications, and professional feedback.{% endblock %}
 
 {% block content %}
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1>Contact</h1>
-
     <p class="hero-subtitle" style="margin-bottom: var(--space-lg);">
-        For editorial inquiries, corrections, or feedback.
+        Corrections, editorial clarifications, topic suggestions, and intelligent disagreement are welcome.
     </p>
 
-    <!-- Primary Email Card -->
     <div class="contact-card" style="border-left: 3px solid var(--c-black);">
-        <h3>Editorial Inquiries</h3>
+        <h3>Editorial Desk</h3>
         <p>
-            Questions about an article, corrections, or topic suggestions.
+            Email: <strong>samfischer14aug@gmail.com</strong><br>
+            Include the page URL and your specific claim if you are reporting an error.
         </p>
-        <span class="contact-email">editorial@careerreality.in</span>
     </div>
 
-    <!-- Collapsible FAQ Section -->
     <div style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
-        <span class="section-label">FAQ</span>
+        <span class="section-label">RESPONSE POLICY</span>
 
         <details class="collapsible" open>
-            <summary>Response Policy</summary>
-            <div class="content">
-                <p>We read every email but cannot respond to all inquiries individually. If your message requires a
-                    response, please allow 3-5 business days.</p>
-                <p>Priority is given to factual corrections and editorial clarifications.</p>
-            </div>
-        </details>
-
-        <details class="collapsible">
-            <summary>What We Don't Do</summary>
+            <summary>What gets priority</summary>
             <div class="content">
                 <ul style="margin: 0; padding-left: 20px;">
-                    <li>Career counseling or personal advice</li>
-                    <li>Resume reviews or job referrals</li>
-                    <li>Sponsored content or paid mentions</li>
-                    <li>Guest posts or link exchanges</li>
+                    <li>Factual corrections with evidence.</li>
+                    <li>Requests about methodology and source transparency.</li>
+                    <li>Serious feedback on clarity, utility, and missing context.</li>
                 </ul>
             </div>
         </details>
 
         <details class="collapsible">
-            <summary>Share Your Story</summary>
+            <summary>Expected timeline</summary>
             <div class="content">
-                <p>Have a career story that challenges conventional wisdom? We occasionally feature reader experiences
-                    (anonymously, if preferred).</p>
-                <p>Email with "Story Submission" in the subject line.</p>
+                <p>
+                    Typical response window is 3-5 business days.
+                    During major market events, response times may stretch.
+                </p>
+            </div>
+        </details>
+
+        <details class="collapsible">
+            <summary>What we do not offer</summary>
+            <div class="content">
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>Personalized career counseling.</li>
+                    <li>Resume rewrites or direct referrals.</li>
+                    <li>Paid "positive mention" packages.</li>
+                    <li>Link exchanges disguised as collaboration.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="collapsible">
+            <summary>How to submit a correction</summary>
+            <div class="content">
+                <ol style="margin: 0; padding-left: 20px;">
+                    <li>Share the exact article URL.</li>
+                    <li>Quote the specific statement in question.</li>
+                    <li>Provide supporting evidence or source link.</li>
+                </ol>
+                <p style="margin-bottom: 0; margin-top: 0.75rem;">
+                    "This feels wrong" is a valid start. "Here is why" gets faster resolution.
+                </p>
             </div>
         </details>
     </div>
 
-    <!-- Corrections Policy -->
     <div class="key-takeaway">
-        <h4>Corrections Policy</h4>
+        <h4>Editorial Integrity Note</h4>
         <p>
-            If you believe an article contains a factual error, please email with the article URL,
-            the specific claim in question, and your source. Verified corrections are published transparently.
+            We publish uncomfortable analysis and we still correct mistakes.
+            Those two things are not contradictory. They are the job.
         </p>
     </div>
 
-    <div style="margin-top: var(--space-lg);">
-        <span class="section-label">Explore Core Tools</span>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
-            <a href="{% url 'salary_reality' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
-                <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark the real market range.</p>
-            </a>
-            <a href="{% url 'salary_calculator' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
-                <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Convert CTC to in-hand.</p>
-            </a>
-            <a href="{% url 'layoff_radar' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Signal</div>
-                <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Track risk signals by company.</p>
-            </a>
-        </div>
-    </div>
-
-    <!-- Response Times -->
     <div style="margin-top: var(--space-lg); font-size: 13px; color: var(--c-grey-light); text-align: center;">
         <p style="margin: 0;">Average response time: 3-5 business days</p>
+        <p style="margin: 0.5rem 0 0 0;">Last updated: {% now "F j, Y" %}</p>
     </div>
 </section>
 {% endblock %}

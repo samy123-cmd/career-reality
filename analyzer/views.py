@@ -89,7 +89,8 @@ def wizard_step(request, step):
     return render(request, f'analyzer/step_{step}.html', {
         'form': form, 
         'step': step, 
-        'total_steps': 3
+        'total_steps': 3,
+        'meta_robots': 'noindex, follow',
     })
 
 def result_view(request):
@@ -127,6 +128,7 @@ def result_view(request):
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
+        'meta_robots': 'noindex, follow',
     })
 
 def submit_salary(request):
@@ -155,6 +157,7 @@ def submit_salary(request):
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
+        'meta_robots': 'noindex, follow',
     })
 
 def salary_submit_success(request):
@@ -165,6 +168,7 @@ def salary_submit_success(request):
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
+        'meta_robots': 'noindex, follow',
     })
 
 @cache_page(120)
@@ -254,4 +258,5 @@ def report_layoff(request):
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
+        'meta_robots': 'noindex, follow',
     })

@@ -33,6 +33,18 @@
 
     <hr class="editorial-divider" style="margin-bottom: var(--space-lg);">
 
+    <div style="border: 1px solid var(--c-divider); padding: 1.25rem; margin-bottom: var(--space-lg); background: #fafafa;">
+        <span class="section-label">CLUSTER PATH</span>
+        <p style="margin-top: 0.75rem; margin-bottom: 0.75rem; color: var(--c-grey-mid);">
+            Move from broad signals to role-specific decisions in this order:
+        </p>
+        <ol style="margin: 0; padding-left: 20px;">
+            <li><a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality baseline</a></li>
+            <li><a href="{% url 'category_detail' category.slug %}" style="text-decoration: underline;">{{ category.name }} role deep dives</a></li>
+            <li><a href="{% url 'career_reality_index' %}" style="text-decoration: underline;">Monthly Career Reality Index</a></li>
+        </ol>
+    </div>
+
     <div style="margin-bottom: var(--space-lg);">
         <span class="section-label">START HERE</span>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
@@ -78,6 +90,20 @@
     <p style="color: var(--c-grey-mid);">
         No published articles in this category yet.
     </p>
+    {% endif %}
+
+    {% if related_categories %}
+    <div style="margin-top: var(--space-lg); border-top: 1px solid #e5e5e5; padding-top: var(--space-md);">
+        <span class="section-label">RELATED CLUSTERS</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;">
+            {% for related in related_categories %}
+            <a href="{% url 'category_detail' related.slug %}"
+                style="display: inline-block; padding: 0.5rem 1rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">
+                {{ related.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
     {% endif %}
 </section>
 

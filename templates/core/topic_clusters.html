@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Topic Clusters - Career Reality India{% endblock %}
+{% block meta_description %}The full authority map of Career Reality: pillar pages, supporting pages, and decision paths by topic.{% endblock %}
+
+{% block content %}
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <h1>Topic Clusters</h1>
+    <p class="hero-subtitle" style="max-width: 760px;">
+        This is our editorial map. If the internet gives you random career advice, this page gives you structure.
+    </p>
+
+    <div style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa; margin-top: 1.5rem;">
+        <h2 style="font-size: 18px; margin-top: 0;">How To Use This Page</h2>
+        <ol style="margin: 0; padding-left: 20px;">
+            <li>Start with a pillar page for baseline reality.</li>
+            <li>Move into role-specific or risk-specific supporting pages.</li>
+            <li>Use tools only after you understand context (not before).</li>
+        </ol>
+    </div>
+
+    <div style="display: grid; gap: 1.25rem; margin-top: 2rem;">
+        {% for cluster in clusters %}
+        <article style="border: 1px solid var(--c-divider); padding: 1.5rem;">
+            <h2 style="font-size: 24px; margin: 0 0 0.5rem 0;">{{ cluster.name }}</h2>
+            <p style="margin: 0 0 1rem 0; color: var(--c-grey-mid);">{{ cluster.description }}</p>
+            <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-grey-light); margin-bottom: 0.5rem;">Navigation Path</div>
+            <ul style="margin: 0; padding-left: 18px;">
+                <li><a href="{% url cluster.pillar_url_name %}" style="text-decoration: underline;">Cluster pillar</a></li>
+                {% for item in cluster.supporting_urls %}
+                <li><a href="{% url item.url_name %}" style="text-decoration: underline;">{{ item.label }}</a></li>
+                {% endfor %}
+            </ul>
+        </article>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: var(--space-lg);">
+        <span class="section-label">ROLE TOPICS</span>
+        <p style="margin-top: 0.75rem; margin-bottom: 0.75rem; color: var(--c-grey-mid);">
+            Choose your domain, then read at least two articles before making a career decision.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;">
+            {% for cat in categories %}
+            <a href="{% url 'category_detail' cat.slug %}"
+                style="display: inline-block; padding: 0.5rem 1rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div style="margin-top: var(--space-lg); border-top: 1px solid var(--c-divider); padding-top: 1.25rem;">
+        <h2 style="font-size: 18px;">Quality Rule</h2>
+        <p style="margin-bottom: 0;">
+            New pages are added to this map only if they improve decision quality. We do not publish filler pages to look busy.
+        </p>
+    </div>
+</section>
+{% endblock %}

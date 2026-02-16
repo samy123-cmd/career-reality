@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Revenue Model - Career Reality India{% endblock %}
+{% block meta_description %}How Career Reality earns money without turning editorial pages into disguised sales brochures.{% endblock %}
+
+{% block content %}
+<section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <h1>Revenue Model</h1>
+    <p>
+        We make money. Transparently. If editorial work has no business model, it eventually gets replaced by something with one.
+        We prefer a model that does not require pretending every trend is revolutionary.
+    </p>
+
+    <h2>Principles</h2>
+    <ul>
+        <li>Editorial first, monetization second.</li>
+        <li>Diversified income so no single partner can bend coverage.</li>
+        <li>Clear labeling for all commercial placements.</li>
+    </ul>
+
+    <h2>Current Streams</h2>
+    <ul>
+        <li><strong>Display advertising:</strong> policy-compliant, separated from editorial conclusions.</li>
+        <li><strong>Newsletter growth:</strong> reader channel for recurring analysis and updates.</li>
+        <li><strong>Research outputs:</strong> paid deep dives built from aggregated market signals.</li>
+    </ul>
+
+    <h2>What We Do Not Sell</h2>
+    <ul>
+        <li>Guaranteed career outcomes.</li>
+        <li>Positive coverage as a service.</li>
+        <li>Hidden affiliate recommendations dressed as neutral advice.</li>
+    </ul>
+
+    <h2>Commercial Constraints</h2>
+    <ul>
+        <li>No sponsor can approve, delay, or edit independent editorial content.</li>
+        <li>Sponsored units are disclosed and separated from ranking systems.</li>
+        <li>Correction policy applies equally everywhere.</li>
+    </ul>
+
+    <h2>Roadmap</h2>
+    <ul>
+        <li>Quarterly index report with downloadable benchmark tables.</li>
+        <li>Role-level salary and switching-risk packs for subscribers.</li>
+        <li>More tooling that improves planning quality, not panic quality.</li>
+    </ul>
+
+    <div style="margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa;">
+        <h3 style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;">Short Version</h3>
+        <p style="margin-bottom: 0;">
+            If revenue threatens editorial integrity, we cut the revenue path.
+            Bad money is expensive money.
+        </p>
+    </div>
+
+    <p style="font-size: 13px; color: var(--c-grey-light); margin-top: 2rem;">
+        Related: <a href="{% url 'sponsorship_policy' %}" style="text-decoration: underline;">Sponsorship Policy</a>.
+        Questions: <a href="{% url 'contact' %}" style="text-decoration: underline;">Contact Editorial</a>.
+    </p>
+</section>
+{% endblock %}

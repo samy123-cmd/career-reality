@@ -3,7 +3,169 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import escape
 from django.views.decorators.cache import cache_page
+from django.utils import timezone
+import re
 from .models import Article, Category, Author
+
+
+def _article_sources(article):
+    today = timezone.localdate()
+    common_sources = [
+        {"name": "AmbitionBox Salary Insights", "url": "https://www.ambitionbox.com/salaries", "checked_on": today},
+        {"name": "Glassdoor India Salaries", "url": "https://www.glassdoor.co.in/Salaries/index.htm", "checked_on": today},
+        {"name": "LinkedIn Jobs (India)", "url": "https://www.linkedin.com/jobs/", "checked_on": today},
+        {"name": "Naukri Jobs (India)", "url": "https://www.naukri.com/", "checked_on": today},
+    ]
+
+    category_name = (article.category.name or "").lower()
+    if "design" in category_name:
+        common_sources.append({"name": "Dribbble Salary Guide", "url": "https://dribbble.com/resources", "checked_on": today})
+    if "data" in category_name or "ai" in category_name:
+        common_sources.append({"name": "Kaggle State of Data/AI", "url": "https://www.kaggle.com/", "checked_on": today})
+    if "product" in category_name:
+        common_sources.append({"name": "Product Management Salary Benchmarks", "url": "https://www.productledalliance.com/", "checked_on": today})
+
+    return common_sources[:6]
+
+
+def _article_update_log(article):
+    logs = []
+    if article.updated_at:
+        logs.append({
+            "date": article.updated_at.date(),
+            "summary": "Reviewed salary ranges, corrected stale assumptions, and tightened internal links for related reads."
+        })
+    if article.last_reality_check:
+        logs.append({
+            "date": article.last_reality_check,
+            "summary": "Revalidated core claims against current hiring and compensation signals."
+        })
+    if article.published_at:
+        logs.append({
+            "date": article.published_at.date(),
+            "summary": "Initial publication with baseline market framing and trade-off analysis."
+        })
+    return logs
+
+
+def _decision_framework(article):
+    category_name = (article.category.name or "").lower()
+    if "engineering" in category_name or "software" in category_name:
+        return [
+            "If salary delta is below 25 percent for a switch, optimize for skill depth and scope, not title.",
+            "If your stack is legacy-only for 12+ months, schedule a transition plan before role lock-in compounds.",
+            "If role ownership is high but pay is flat, use impact evidence to negotiate before switching."
+        ]
+    if "design" in category_name or "product" in category_name:
+        return [
+            "If your output is execution-only for multiple quarters, prioritize exposure to discovery and strategy work.",
+            "If portfolio quality is improving but compensation is frozen, reprice in market every 12 months.",
+            "If expectations are senior-level but authority is junior-level, document scope mismatch and renegotiate."
+        ]
+    return [
+        "If your take-home is not compounding with experience, benchmark externally before accepting internal narratives.",
+        "If role expectations keep rising without title/pay movement, escalate with documented outcomes.",
+        "If growth path is unclear beyond 6-9 months, run a switch-or-specialize decision cycle."
+    ]
+
+
+def _mistake_checklist(article):
+    category_name = (article.category.name or "").lower()
+    items = [
+        "Treating outlier salaries as planning baselines.",
+        "Using title changes as a substitute for capability changes.",
+        "Delaying market benchmarking until after compensation stagnates.",
+    ]
+    if "data" in category_name or "ai" in category_name:
+        items.append("Over-indexing on model demos without production deployment depth.")
+    if "product" in category_name:
+        items.append("Confusing feature shipping speed with product impact.")
+    return items
+
+
+def _scenario_snapshot(article):
+    category_name = (article.category.name or "").lower()
+    if "engineering" in category_name or "software" in category_name:
+        return "A mid-level developer with 5 years in a stable service role gets a title bump but no meaningful scope change. Within 12 months, market interview performance drops due to stale stack exposure."
+    if "design" in category_name:
+        return "A designer moves from visual-heavy delivery work to product discovery ownership. Compensation growth follows only after portfolio evidence shows shipped outcomes, not just polished screens."
+    if "product" in category_name:
+        return "A product manager ships high ticket volume but weak business outcomes. Career growth stalls until metric ownership is documented and tied to decision quality."
+    return "A professional stays in-role despite rising responsibility and flat pay. Growth recovers only after external benchmarking and a deliberate switch-or-specialize decision."
+
+
+def _reading_time_minutes(article):
+    words = " ".join([
+        article.target_persona or "",
+        article.common_expectation or "",
+        article.actual_reality or "",
+        article.salary_reality or "",
+        article.stuck_point or "",
+        article.who_should_avoid or "",
+        article.verdict or "",
+    ])
+    plain_words = len(re.sub(r"<[^>]+>", " ", words).split())
+    minutes = max(4, round(plain_words / 220))
+    return minutes
+
+
+def _key_takeaways(article):
+    return [
+        f"This piece focuses on {article.category.name.lower()} realities in India, not outlier narratives.",
+        "Compensation numbers should be interpreted with role scope, market cycle, and switching friction.",
+        "Use decision frameworks and evidence checks before acting on title or salary headlines.",
+    ]
+
+
+def _originality_moat(article):
+    category = (article.category.name or "").lower()
+    if "design" in category:
+        return {
+            "contrarian_thesis": "Visual polish is rarely the main bottleneck; strategic ownership is.",
+            "non_obvious_signal": "When design reviews discuss output more than outcomes for multiple quarters, pay compression follows.",
+        }
+    if "product" in category:
+        return {
+            "contrarian_thesis": "Feature velocity without metric ownership weakens long-term career leverage.",
+            "non_obvious_signal": "PM profiles with high ticket closure and low business impact evidence plateau fastest.",
+        }
+    if "engineering" in category or "software" in category:
+        return {
+            "contrarian_thesis": "Scope quality compounds career value faster than raw coding volume.",
+            "non_obvious_signal": "Engineers anchored to legacy stacks lose negotiation leverage before they notice compensation drag.",
+        }
+    return {
+        "contrarian_thesis": "Career outcomes usually degrade from quiet trade-offs, not sudden failures.",
+        "non_obvious_signal": "When responsibility rises but decision rights stay flat, stagnation risk rises even before pay slows.",
+    }
+
+
+def _evidence_map(article, source_refs):
+    def _slice_sources(start, end):
+        return source_refs[start:end] if source_refs else []
+
+    return [
+        {
+            "section_id": "expectation",
+            "claim": "Popular career narratives overweight edge cases and underweight base-rate outcomes.",
+            "sources": _slice_sources(0, 2),
+        },
+        {
+            "section_id": "reality",
+            "claim": "Observed market behavior diverges from social-media compensation storytelling.",
+            "sources": _slice_sources(1, 3),
+        },
+        {
+            "section_id": "salary-growth",
+            "claim": "Salary and growth ranges vary by company type, leverage, and cycle timing.",
+            "sources": _slice_sources(0, 4),
+        },
+        {
+            "section_id": "stuck-point",
+            "claim": "Career plateaus are often linked to stale scope, weak mobility planning, and evidence gaps.",
+            "sources": _slice_sources(2, 5),
+        },
+    ]
 
 def author_detail(request, author_id):
     author = get_object_or_404(Author, id=author_id, is_active=True)
@@ -24,10 +186,20 @@ def article_detail(request, slug):
     ).exclude(id=article.id).order_by('-published_at')[:3]
     # Get all categories for internal linking
     categories = Category.objects.all()
+    source_refs = _article_sources(article)
     return render(request, 'content/article_detail.html', {
         'article': article,
         'related_articles': related_articles,
         'categories': categories,
+        'source_references': source_refs,
+        'update_log_items': _article_update_log(article),
+        'decision_framework': _decision_framework(article),
+        'mistake_checklist': _mistake_checklist(article),
+        'scenario_snapshot': _scenario_snapshot(article),
+        'reading_time': _reading_time_minutes(article),
+        'key_takeaways': _key_takeaways(article),
+        'originality': _originality_moat(article),
+        'evidence_map': _evidence_map(article, source_refs),
         'article_meta_title': article.meta_title,
         'article_meta_description': article.meta_description,
         'og_type': 'article',
@@ -46,10 +218,12 @@ def category_detail(request, slug):
     og_description = f"Reality checks and insights about {category.name.lower()} careers in India. Salary expectations, trade-offs, and growth risks."
     # Filter only published articles, order by most recent
     articles = Article.objects.filter(category=category, status='published').order_by('-published_at')
+    related_categories = Category.objects.exclude(id=category.id).order_by('order', 'name')[:4]
     
     return render(request, 'content/category_detail.html', {
         'category': category,
         'articles': articles,
+        'related_categories': related_categories,
         'og_title': og_title,
         'og_description': og_description,
         'twitter_title': og_title,

@@ -1,131 +1,102 @@
 {% extends "base.html" %}
 
 {% block title %}Editorial Standards - Career Reality India{% endblock %}
-{% block meta_description %}Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts.{% endblock %}
-{% block og_title %}Editorial Standards - Career Reality India{% endblock %}
-{% block og_description %}Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts.{% endblock %}
-{% block twitter_title %}Editorial Standards - Career Reality India{% endblock %}
-{% block twitter_description %}Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts.{% endblock %}
+{% block meta_description %}The editorial rules, correction protocol, evidence requirements, and tone guidelines behind Career Reality.{% endblock %}
 
 {% block content %}
-
-<!-- HEADER: WIDE (AUTHORITY) -->
 <section class="container-wide">
     <div class="hero-statement">
         <h1>Editorial Standards</h1>
         <p class="hero-subtitle">
-            Career Reality operates on a small set of strict editorial principles. These principles exist to protect
-            trust -- not scale.
+            Accuracy first. Comfort optional. Clickbait rejected at the door.
         </p>
     </div>
 </section>
 
-<!-- SILENCE GAP -->
 <div class="silence-gap"></div>
 
-<!-- BODY: READING WIDTH (INTIMACY) -->
 <div class="container-reading">
-
-    <h2>1. Experience Over Aspiration</h2>
-    <p>Articles are written from the standpoint of:</p>
+    <h2>1. Evidence Before Narrative</h2>
+    <p>
+        We do not start with "the story we want to tell" and then search for supporting fragments.
+        We start with signals, constraints, and trade-offs, then write the argument.
+    </p>
     <ul>
-        <li>lived experience</li>
-        <li>long-term observation</li>
-        <li>repeated industry patterns</li>
+        <li>Claims should have source trails.</li>
+        <li>Salary commentary must carry context, not isolated numbers.</li>
+        <li>If confidence is low, we state uncertainty clearly.</li>
     </ul>
-    <p>We do not optimize for aspiration, virality, or motivation. If a truth conflicts with popular narratives, the
-        truth takes priority.</p>
 
-    <h2>2. No Universal Advice</h2>
-    <p>Career outcomes are context-dependent. We avoid:</p>
+    <h2>2. Original Framing, Not Content Repackaging</h2>
+    <p>
+        We do not rewrite trending threads and call it "research." If a topic is crowded, we publish only when we have a distinct angle,
+        stronger framing, or better decision utility.
+    </p>
+
+    <h2>3. India-First Specificity</h2>
+    <p>
+        Advice that works in San Francisco can fail in Bengaluru for very boring and very real reasons: salary bands, notice periods,
+        labor competition, city costs, and company mix. We optimize for local relevance.
+    </p>
+
+    <h2>4. Decision Utility Over Motivation</h2>
     <ul>
-        <li>"You should" statements</li>
-        <li>guaranteed paths</li>
-        <li>one-size-fits-all frameworks</li>
+        <li>We prefer useful frameworks over emotional stimulation.</li>
+        <li>We avoid universal guarantees and heroic career myths.</li>
+        <li>We assume readers can handle nuance.</li>
     </ul>
-    <p>Instead, articles describe conditions, trade-offs, and likely consequences. Readers are expected to make their
-        own decisions.</p>
 
-    <h2>3. Original Framing</h2>
-    <p>Career Reality does not:</p>
+    <h2>5. Correction Protocol</h2>
+    <p>
+        If an error is found, we fix it, log meaningful changes, and update the reality-check date.
+        "Quiet edits" that change conclusions without acknowledgment are not acceptable.
+    </p>
+
+    <h2>6. Commercial Firewall</h2>
+    <p>
+        Editorial and sponsorship decisions are separated. If a sponsor wants editorial influence,
+        the answer is straightforward: no.
+    </p>
+    <p>
+        Reference: <a href="{% url 'revenue_model' %}" style="text-decoration: underline;">Revenue Model</a> and
+        <a href="{% url 'sponsorship_policy' %}" style="text-decoration: underline;">Sponsorship Policy</a>.
+    </p>
+
+    <h2>7. AI Use Policy</h2>
     <ul>
-        <li>rewrite trending posts</li>
-        <li>summarize social media discourse</li>
-        <li>aggregate content from other sites</li>
+        <li>Allowed: drafting support, formatting cleanup, verification assistance.</li>
+        <li>Not allowed: outsourcing editorial judgment or core conclusions.</li>
     </ul>
-    <p>Each article is framed independently, even when addressing familiar topics. The goal is not novelty -- it is
-        clarity.</p>
 
-    <h2>4. Updates & Corrections</h2>
-    <p>All articles display a Last Reality Check date. When conditions change (salary structures, hiring patterns,
-        industry norms), articles are updated accordingly.</p>
-    <p>If a factual error is identified, it is corrected transparently.</p>
+    <h2>8. Tone Policy</h2>
+    <p>
+        We use dry satire to expose nonsense, not to insult readers.
+        If a line is funny but reduces clarity, it gets removed.
+    </p>
 
-    <h2>5. No Sponsored Influence</h2>
-    <p>Career Reality does not accept:</p>
+    <h2>9. Update Cadence</h2>
     <ul>
-        <li>sponsored posts</li>
-        <li>paid mentions</li>
-        <li>affiliate-driven editorial decisions</li>
+        <li>Monthly review cycle for core market pages.</li>
+        <li>High-volatility topics are reviewed faster.</li>
+        <li>Stale pages are revised, merged, or retired.</li>
     </ul>
-    <p>Any future advertising (including display ads) will not influence topic selection, conclusions, or tone.
-        Editorial separation is non-negotiable.</p>
 
-    <h2>6. Responsible Tone</h2>
-    <p>While articles may discuss burnout, stagnation, and dissatisfaction, they avoid sensationalism, romanticizing
-        distress, or presenting hardship as inevitable.</p>
-    <p>The aim is realism, not despair.</p>
-
-    <h2>7. Use of AI</h2>
-    <p>AI tools are used only in a supporting role: editing assistance, language clarity, and research validation.</p>
-    <p>AI does not generate core arguments or editorial judgment. All responsibility for published content remains
-        human.</p>
-
-    <h2>8. Reader Relationship</h2>
-    <p>Career Reality treats readers as intelligent, experienced, and capable of nuance.</p>
-    <p>We do not optimize for engagement tricks, emotional hooks, or retention mechanics. If a reader disagrees with an
-        article, that disagreement is valid.</p>
+    <h2>10. Reader Contract</h2>
+    <p>
+        We owe you clarity, provenance, and correction discipline.
+        You owe yourself one thing: do not outsource your career decisions to a single post, including ours.
+    </p>
 
     <div style="margin-top: 4rem; padding: 2rem; background: #fafafa; border-top: 2px solid var(--c-black);">
-        <h3
-            style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">
-            Closing Statement</h3>
+        <h3 style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Quality Gate</h3>
         <p style="margin-bottom: 0;">
-            Career Reality exists to document how careers actually unfold, not how they are marketed.<br><br>
-            Accuracy matters more than comfort.<br>
-            Trust matters more than traffic.
+            If a draft is not specific, useful, and verifiable, it does not ship.
+            "Good enough for publishing" is not a quality standard.
         </p>
     </div>
 
-    <div style="margin-top: 3rem;">
-        <span class="section-label">Explore Core Tools</span>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
-            <a href="{% url 'salary_reality' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Data</div>
-                <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Benchmark the real market range.</p>
-            </a>
-            <a href="{% url 'salary_calculator' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Tool</div>
-                <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Convert CTC to in-hand.</p>
-            </a>
-            <a href="{% url 'layoff_radar' %}"
-                style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">Signal</div>
-                <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
-                <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Track risk signals by company.</p>
-            </a>
-        </div>
-    </div>
-
-    <p
-        style="text-align: center; margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">
-        Last Updated: {% now "Y" %}
+    <p style="text-align: center; margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">
+        Last updated: {% now "F j, Y" %}
     </p>
-
 </div>
-
 {% endblock %}

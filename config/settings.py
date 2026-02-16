@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-u%qb-ssytsy%*gpi8$qfjxgcxak#pr!ay6_9^0-0fc6#6jby7-')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'cr-prod-fallback-3vN9q1Lx4mJ8rK2pW7sD5tY0hB6cF1uZ8aQ4eR7nV2')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Defaults to True locally, False if set in env
@@ -88,6 +88,16 @@ TEMPLATES = [
         },
     },
 ]
+
+# Security hardening defaults for production-like environments.
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = int(os.environ.get('SECURE_HSTS_SECONDS', '31536000'))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 WSGI_APPLICATION = 'config.wsgi.application'
 

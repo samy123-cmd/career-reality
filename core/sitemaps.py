@@ -7,7 +7,8 @@ class ArticleSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Article.objects.filter(status='published')
+        # Keep deterministic ordering so sitemap pagination is stable.
+        return Article.objects.filter(status='published').order_by('-updated_at', '-id')
 
     def lastmod(self, obj):
         return obj.last_reality_check
@@ -33,6 +34,10 @@ class StaticViewSitemap(Sitemap):
             'privacy_policy', 
             'contact',
             'terms',
+            'topic_clusters',
+            'career_reality_index',
+            'revenue_model',
+            'sponsorship_policy',
             'analyzer_home'
         ]
 

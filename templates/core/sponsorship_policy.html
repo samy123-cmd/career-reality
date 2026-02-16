@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Sponsorship Policy - Career Reality India{% endblock %}
+{% block meta_description %}Commercial partnership rules with strict editorial separation, disclosure standards, and rejection criteria.{% endblock %}
+
+{% block content %}
+<section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <h1>Sponsorship Policy</h1>
+    <p>
+        Sponsorship is allowed. Editorial capture is not.
+        This page defines the difference in writing, so there is no "misunderstanding" later.
+    </p>
+
+    <h2>Acceptable Commercial Formats</h2>
+    <ul>
+        <li>Clearly labeled display placements.</li>
+        <li>Time-bound campaigns with transparent scope.</li>
+        <li>Category-relevant partnerships aligned with our readership.</li>
+    </ul>
+
+    <h2>Automatic Rejections</h2>
+    <ul>
+        <li>Requests for guaranteed favorable coverage.</li>
+        <li>Undisclosed links, stealth promotions, or ghostwritten editorial content.</li>
+        <li>Any demand to edit or suppress independent analysis.</li>
+        <li>Requests to frame sponsored messaging as independent editorial.</li>
+    </ul>
+
+    <h2>Editorial Firewall</h2>
+    <ul>
+        <li>Editorial team owns topic selection and conclusions.</li>
+        <li>Commercial team cannot rewrite editorial claims.</li>
+        <li>Sponsor interest does not change correction obligations.</li>
+    </ul>
+
+    <h2>Disclosure Rules</h2>
+    <p>
+        Sponsored units must be explicitly labeled. If clear disclosure cannot be shown,
+        the placement does not go live.
+    </p>
+
+    <h2>Measurement and Reporting</h2>
+    <p>
+        We report campaign metrics on delivery and engagement, not invented vanity narratives.
+        Editorial credibility is treated as a non-negotiable asset.
+    </p>
+
+    <div style="margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa;">
+        <h3 style="margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;">Partner Expectation</h3>
+        <p style="margin-bottom: 0;">
+            If you want access to readers, we can discuss inventory.
+            If you want control over editorial judgment, we are not a fit.
+        </p>
+    </div>
+
+    <p style="font-size: 13px; color: var(--c-grey-light); margin-top: 2rem;">
+        Last updated: {% now "F j, Y" %} &middot;
+        Related: <a href="{% url 'revenue_model' %}" style="text-decoration: underline;">Revenue Model</a>
+    </p>
+</section>
+{% endblock %}
