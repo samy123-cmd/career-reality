@@ -19,7 +19,7 @@ real trade-offs you need to plan for.{% endblock %}
     "isPartOf": {
         "@type": "WebSite",
         "name": "Career Reality (India)",
-        "url": "{{ request.scheme }}://{{ request.get_host }}"
+        "url": "{{ site_base_url }}"
     }
 }
 </script>
@@ -28,7 +28,7 @@ real trade-offs you need to plan for.{% endblock %}
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Career Reality (India)",
-    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "url": "{{ site_base_url }}",
     "inLanguage": "en-IN"
 }
 </script>
@@ -44,7 +44,7 @@ real trade-offs you need to plan for.{% endblock %}
             "@type": "ListItem",
             "position": {{ forloop.counter }},
             "name": "{{ article.title|escapejs }}",
-            "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'article_detail' article.slug %}"
+            "url": "{{ site_base_url }}{% url 'article_detail' article.slug %}"
         }{% if not forloop.last %},{% endif %}
         {% endfor %}
     ]

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from urllib.parse import urlsplit
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +33,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', DEV_FALLBACK_SECRET)
 # SECURITY WARNING: don't run with debug turned on in production!
 # Defaults to True locally, False if set in env
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "https://www.careerreality.in").strip().rstrip("/")
+CANONICAL_HOST = urlsplit(CANONICAL_BASE_URL).netloc.lower()
 
 if DEBUG:
     ALLOWED_HOSTS = _csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver")
@@ -83,6 +86,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.CanonicalHostRedirectMiddleware',
     'django.middleware.gzip.GZipMiddleware', # Added for HTML compression
     'whitenoise.middleware.WhiteNoiseMiddleware', # Added WhiteNoise
     'core.middleware.SecurityHeadersMiddleware',

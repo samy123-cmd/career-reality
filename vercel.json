@@ -1,4 +1,17 @@
 {
+    "redirects": [
+        {
+            "source": "/(.*)",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "careerreality.in"
+                }
+            ],
+            "destination": "https://www.careerreality.in/$1",
+            "permanent": true
+        }
+    ],
     "builds": [
         {
             "src": "api/index.py",

@@ -63,7 +63,7 @@ class CoreViewsTests(TestCase):
         body = response.content.decode("utf-8")
         self.assertIn("User-agent: *", body)
         self.assertIn("Disallow: /resignation-risk/step/", body)
-        self.assertIn("Sitemap: http://testserver/sitemap.xml", body)
+        self.assertIn("Sitemap: https://www.careerreality.in/sitemap.xml", body)
 
     def test_career_reality_index_has_expected_latest_band(self):
         response = self.client.get(reverse("career_reality_index"))

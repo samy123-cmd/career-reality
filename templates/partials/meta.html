@@ -18,8 +18,8 @@
 <!-- Open Graph / Facebook -->
 {% static 'img/og-default.svg' as og_default_image %}
 {% static 'img/og-default.png' as og_default_image_png %}
-{% with og_default_image_abs=request.scheme|add:"://"|add:request.get_host|add:og_default_image %}
-{% with og_default_image_png_abs=request.scheme|add:"://"|add:request.get_host|add:og_default_image_png %}
+{% with og_default_image_abs=site_base_url|add:og_default_image %}
+{% with og_default_image_png_abs=site_base_url|add:og_default_image_png %}
 <meta property="og:type" content="{{ og_type|default:'website' }}">
 <meta property="og:url" content="{{ canonical_url|default:request.build_absolute_uri }}">
 <meta property="og:site_name" content="Career Reality (India)">
@@ -46,7 +46,7 @@
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Career Reality",
-  "url": "{{ request.scheme }}://{{ request.get_host }}",
+  "url": "{{ site_base_url }}",
   "email": "samfischer14aug@gmail.com",
   "sameAs": [
     "https://www.careerreality.in/about/",
@@ -298,13 +298,13 @@
     "@type": "WebSite",
     "name": "Career Reality (India)",
     "alternateName": "CareerReality.in",
-    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "url": "{{ site_base_url }}",
     "description": "The brutal truth about engineering careers in India. No-BS salary data, career reality checks, and honest career advice.",
-    "image": "{{ request.scheme }}://{{ request.get_host }}{{ og_default_image_png }}",
+    "image": "{{ site_base_url }}{{ og_default_image_png }}",
     "publisher": {
         "@type": "Organization",
         "name": "Career Reality (India)",
-        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "url": "{{ site_base_url }}",
         "sameAs": []
     }
 }

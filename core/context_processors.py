@@ -1,6 +1,9 @@
+from django.conf import settings
+
+
 def seo_defaults(request):
     # Build canonical URL without query parameters to prevent duplicate indexing.
-    canonical_url = f"{request.scheme}://{request.get_host()}{request.path}"
+    canonical_url = f"{settings.CANONICAL_BASE_URL}{request.path}"
 
     # Keep header category navigation populated across all templates.
     categories = []
@@ -21,6 +24,7 @@ def seo_defaults(request):
         "twitter_description": "",
         "twitter_image": "",
         "meta_robots": "index, follow",
+        "site_base_url": settings.CANONICAL_BASE_URL,
         "canonical_url": canonical_url,
         "categories": categories,
     }

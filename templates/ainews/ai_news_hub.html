@@ -13,12 +13,12 @@ Indian tech professionals.{% endblock %}
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "AI Pulse - Latest AI Developments for Your Career",
-    "url": "{{ request.build_absolute_uri }}",
+    "url": "{{ canonical_url }}",
     "description": "Track AI model releases, industry shifts, and career-impacting developments. Curated for Indian tech professionals.",
     "isPartOf": {
         "@type": "WebSite",
         "name": "Career Reality (India)",
-        "url": "{{ request.scheme }}://{{ request.get_host }}"
+        "url": "{{ site_base_url }}"
     }
 }
 </script>
@@ -34,7 +34,7 @@ Indian tech professionals.{% endblock %}
             "@type": "ListItem",
             "position": {{ forloop.counter }},
             "name": "{{ item.title|escapejs }}",
-            "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'ai_news_detail' item.slug %}"
+            "url": "{{ site_base_url }}{% url 'ai_news_detail' item.slug %}"
         }{% if not forloop.last %},{% endif %}
         {% endfor %}
     ]
@@ -50,13 +50,13 @@ Indian tech professionals.{% endblock %}
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "{{ request.scheme }}://{{ request.get_host }}/"
+            "item": "{{ site_base_url }}/"
         },
         {
             "@type": "ListItem",
             "position": 2,
             "name": "AI Pulse",
-            "item": "{{ request.build_absolute_uri }}"
+            "item": "{{ canonical_url }}"
         }
     ]
 }

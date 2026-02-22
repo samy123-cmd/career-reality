@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.views.decorators.cache import cache_page
 from content.models import Article, Category
 from django.utils import timezone
+from django.conf import settings
 
 
 def _topic_clusters():
@@ -77,7 +78,7 @@ def robots_txt(request):
         "Disallow: /salary-drop/success/",
         "Disallow: /layoff-radar/report/",
         "",
-        f"Sitemap: {request.scheme}://{request.get_host()}/sitemap.xml",
+        f"Sitemap: {settings.CANONICAL_BASE_URL}/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
@@ -304,4 +305,3 @@ def newsletter_signup(request):
     
     # Redirect back to the previous page
     return redirect(request.META.get('HTTP_REFERER', 'home'))
-

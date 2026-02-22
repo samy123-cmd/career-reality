@@ -704,7 +704,11 @@ body.menu-open {
     display: block;
     border-top: 2px solid var(--c-black);
     padding-top: 16px;
-    width: 80px;
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: normal;
 }
 
 .audience-text {

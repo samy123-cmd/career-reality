@@ -17,19 +17,19 @@ India.{% endblock %}
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "{{ request.scheme }}://{{ request.get_host }}/"
+            "item": "{{ site_base_url }}/"
         },
         {
             "@type": "ListItem",
             "position": 2,
             "name": "AI Pulse",
-            "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'ai_news_hub' %}"
+            "item": "{{ site_base_url }}{% url 'ai_news_hub' %}"
         },
         {
             "@type": "ListItem",
             "position": 3,
             "name": "{{ tag.name }}",
-            "item": "{{ request.build_absolute_uri }}"
+            "item": "{{ canonical_url }}"
         }
     ]
 }

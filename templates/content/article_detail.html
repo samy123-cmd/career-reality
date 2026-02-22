@@ -17,23 +17,23 @@
     "author": {
         "@type": "Person",
         "name": "{{ article.author.display_name|escapejs }}",
-        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'author_detail' article.author.id %}",
+        "url": "{{ site_base_url }}{% url 'author_detail' article.author.id %}",
         "sameAs": []
     },
     "publisher": {
         "@type": "Organization",
         "name": "Career Reality (India)",
-        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "url": "{{ site_base_url }}",
         "logo": {
             "@type": "ImageObject",
-            "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-default.png' %}"
+            "url": "{{ site_base_url }}{% static 'img/og-default.png' %}"
         }
     },
     "datePublished": "{{ article.published_at|date:'c' }}",
     "dateModified": "{{ article.updated_at|date:'c' }}",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "{{ request.build_absolute_uri }}"
+        "@id": "{{ canonical_url }}"
     },
     "articleSection": "{{ article.category.name|escapejs }}",
     "keywords": "career advice, india, {{ article.category.name|lower }}, salary reality"

@@ -13,8 +13,8 @@
     "@type": "CollectionPage",
     "name": "{{ category.name|escapejs }} Careers in India - Career Reality",
     "description": "Reality checks and insights about {{ category.name|lower|escapejs }} careers in India. Salary expectations, trade-offs, and growth risks.",
-    "url": "{{ request.build_absolute_uri }}",
-    "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-default.svg' %}"
+    "url": "{{ canonical_url }}",
+    "image": "{{ site_base_url }}{% static 'img/og-default.svg' %}"
 }
 </script>
 
