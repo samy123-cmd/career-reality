@@ -1412,6 +1412,19 @@ blockquote.pullquote {
         font-size: 27px !important;
         line-height: 1.2 !important;
     }
+
+    /* Mobile does not run GSAP reveals on home; keep content visible. */
+    .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        will-change: auto;
+    }
+
+    /* Reduce oversized vertical rhythm in article lists on mobile. */
+    .article-list-item {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+    }
 }
 
 /* ============================================

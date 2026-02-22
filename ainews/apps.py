@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class AinewsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'ainews'
+    verbose_name = 'AI News'

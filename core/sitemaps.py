@@ -1,6 +1,8 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from content.models import Article, Category
+from ainews.models import AINewsItem
+
 
 class ArticleSitemap(Sitemap):
     changefreq = "weekly"
@@ -13,6 +15,7 @@ class ArticleSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.last_reality_check
 
+
 class CategorySitemap(Sitemap):
     changefreq = "weekly"
     priority = 0.6
@@ -20,25 +23,38 @@ class CategorySitemap(Sitemap):
     def items(self):
         return Category.objects.all()
 
+
+class AINewsSitemap(Sitemap):
+    changefreq = "daily"
+    priority = 0.7
+
+    def items(self):
+        return AINewsItem.objects.filter(status='published').order_by('-reviewed_at', '-published_at')
+
+    def lastmod(self, obj):
+        return obj.reviewed_at or obj.published_at
+
+
 class StaticViewSitemap(Sitemap):
     priority = 0.5
     changefreq = "monthly"
 
     def items(self):
         return [
-            'home', 
-            'about', 
-            'editorial', 
-            'salary_reality', 
-            'salary_calculator', 
-            'privacy_policy', 
+            'home',
+            'about',
+            'editorial',
+            'salary_reality',
+            'salary_calculator',
+            'privacy_policy',
             'contact',
             'terms',
             'topic_clusters',
             'career_reality_index',
             'revenue_model',
             'sponsorship_policy',
-            'analyzer_home'
+            'analyzer_home',
+            'ai_news_hub',
         ]
 
     def location(self, item):

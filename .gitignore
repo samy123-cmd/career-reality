@@ -1,0 +1,17 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test/cache tooling
+.pytest_cache/
+
+# Local databases
+db.sqlite3
+*.sqlite3
+*.db
+
+# Generated reports/artifacts
+audit_reports/
+*.log
+*.tmp

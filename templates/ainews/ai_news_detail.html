@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ item.title }} - AI Pulse | Career Reality{% endblock %}
+
+{% block meta_description %}{{ item.summary|truncatewords:25 }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/ai_pulse.css' %}">
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "{{ item.title|escapejs }}",
+    "url": "{{ request.build_absolute_uri }}",
+    "datePublished": "{{ item.event_date|default:item.published_at|date:'c' }}",
+    "dateModified": "{{ item.reviewed_at|default:item.published_at|date:'c' }}",
+    "description": "{{ item.summary|truncatewords:25|escapejs }}",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Reality India"
+    },
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Career Reality (India)",
+        "url": "{{ request.scheme }}://{{ request.get_host }}"
+    }
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ request.scheme }}://{{ request.get_host }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "AI Pulse",
+            "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'ai_news_hub' %}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ item.title|escapejs }}",
+            "item": "{{ request.build_absolute_uri }}"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="container-medium ai-detail-page">
+    <div class="ai-detail-shell">
+        <a href="{% url 'ai_news_hub' %}" class="ai-back-link">&larr; Back to AI Pulse</a>
+
+        <div class="ai-detail-header">
+            <div class="ai-detail-meta">
+                <span class="significance-badge significance-{{ item.significance }}"
+                    style="display:inline-block;width:8px;height:8px;border-radius:50%;{% if item.significance == 'high' %}background:#d93025;{% elif item.significance == 'medium' %}background:#f9a825;{% else %}background:#aaa;{% endif %}"></span>
+                {{ item.source_name }}
+                &middot;
+                Updated {{ item.reviewed_at|default:item.published_at|date:"F j, Y" }}
+                {% if item.event_date %}
+                &middot;
+                Event {{ item.event_date|date:"F j, Y" }}
+                {% endif %}
+            </div>
+            <h1>{{ item.title }}</h1>
+            <div class="ai-detail-tags">
+                {% for tag in item.tags.all %}
+                <a href="{% url 'ai_news_by_tag' tag.slug %}" class="ai-detail-tag">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="ai-prose">
+            {{ item.summary|safe }}
+        </div>
+
+        {% if item.career_angle %}
+        <div class="career-angle-box">
+            <h2>What This Means for Your Career</h2>
+            <div class="career-angle-box-content">{{ item.career_angle|safe }}</div>
+        </div>
+        {% endif %}
+
+        <div class="ai-source-box">
+            Source: <a href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer">{{ item.source_name }} - Read original</a>
+        </div>
+
+        <div class="ai-evolution-box">
+            <h2>Where This Sits in AI Evolution</h2>
+            <p>This article sits in the <strong>{{ timeline_position.label }}</strong> phase: <strong>{{ timeline_position.title }}</strong>. {{ timeline_position.note }}</p>
+            <div class="ai-evolution-mini">
+                {% for milestone in ai_evolution_timeline %}
+                <article class="ai-evo-mini-card">
+                    <div class="era">{{ milestone.label }}</div>
+                    <div class="title">{{ milestone.title }}</div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="margin: 2rem 0;">
+            <h2 class="ai-section-title">Visual Story</h2>
+            <div class="ai-visual-grid">
+                <img src="/static/images/ai/{{ item.slug }}-timeline.svg"
+                    alt="Timeline for {{ item.title }}"
+                    loading="lazy"
+                    onerror="this.style.display='none'">
+                <img src="/static/images/ai/{{ item.slug }}-signals.svg"
+                    alt="Signal chart for {{ item.title }}"
+                    loading="lazy"
+                    onerror="this.style.display='none'">
+            </div>
+        </div>
+
+        {% if related_items %}
+        <div class="ai-related-section">
+            <h2 class="ai-section-title">More from AI Pulse</h2>
+            {% for related in related_items %}
+            <a href="{% url 'ai_news_detail' related.slug %}" class="ai-related-card">
+                <h3>{{ related.title }}</h3>
+                <p>{{ related.source_name }} &middot; {{ related.published_at|date:"M j, Y" }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

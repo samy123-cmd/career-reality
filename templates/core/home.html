@@ -481,6 +481,13 @@ real trade-offs you need to plan for.{% endblock %}
             <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
             <p style="margin: 0; color: var(--c-grey-mid);">Track risk signals by company.</p>
         </a>
+        <a href="{% url 'ai_news_hub' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
+                Signal</div>
+            <h3 style="margin: 0.5rem 0;">AI Pulse</h3>
+            <p style="margin: 0; color: var(--c-grey-mid);">Latest AI developments that affect your career.</p>
+        </a>
     </div>
 </section>
 
@@ -553,17 +560,23 @@ real trade-offs you need to plan for.{% endblock %}
 <section class="container-medium" style="margin-bottom: var(--space-xl);">
     <span class="section-label reveal-on-scroll">ABOUT THIS SITE</span>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-        <a href="{% url 'about' %}" style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+        <a href="{% url 'about' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
             <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">Who Writes This</h3>
-            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Editorial scope, audience, and independence policy.</p>
+            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Editorial scope, audience, and independence
+                policy.</p>
         </a>
-        <a href="{% url 'editorial' %}" style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+        <a href="{% url 'editorial' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
             <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">How We Publish</h3>
-            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Standards, correction workflow, and update methodology.</p>
+            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Standards, correction workflow, and update
+                methodology.</p>
         </a>
-        <a href="{% url 'privacy_policy' %}" style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
+        <a href="{% url 'privacy_policy' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
             <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">Data & Privacy</h3>
-            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Exactly what we collect and how it is handled.</p>
+            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Exactly what we collect and how it is
+                handled.</p>
         </a>
     </div>
 </section>
@@ -576,7 +589,8 @@ real trade-offs you need to plan for.{% endblock %}
         <article style="border: 1px solid var(--c-divider); padding: 1.25rem;">
             <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">{{ cluster.name }}</h3>
             <p style="margin: 0 0 0.75rem 0; color: var(--c-grey-mid); font-size: 14px;">{{ cluster.description }}</p>
-            <a href="{% url cluster.pillar_url_name %}" style="text-decoration: underline; font-size: 13px;">Explore cluster pillar</a>
+            <a href="{% url cluster.pillar_url_name %}" style="text-decoration: underline; font-size: 13px;">Explore
+                cluster pillar</a>
         </article>
         {% endfor %}
     </div>
@@ -596,7 +610,8 @@ real trade-offs you need to plan for.{% endblock %}
         <p style="margin: 0 0 0.75rem 0; color: var(--c-grey-mid); font-size: 14px;">
             Latest publication: {{ latest_index_row.month }} &middot; Overall index {{ latest_index_row.overall }}.
         </p>
-        <a href="{% url 'career_reality_index' %}" style="text-decoration: underline;">Read full methodology and monthly table</a>
+        <a href="{% url 'career_reality_index' %}" style="text-decoration: underline;">Read full methodology and monthly
+            table</a>
     </div>
 </section>
 
@@ -605,7 +620,8 @@ real trade-offs you need to plan for.{% endblock %}
     <span class="section-label reveal-on-scroll">COMMERCIAL RESILIENCE</span>
     <div style="border: 1px solid var(--c-divider); padding: 1.25rem;">
         <p style="margin-top: 0; margin-bottom: 0.75rem; color: var(--c-grey-mid);">
-            Revenue streams are diversified across ads, research products, and subscriber-led offerings to protect editorial independence.
+            Revenue streams are diversified across ads, research products, and subscriber-led offerings to protect
+            editorial independence.
         </p>
         <a href="{% url 'revenue_model' %}" style="text-decoration: underline;">Revenue Model</a> &middot;
         <a href="{% url 'sponsorship_policy' %}" style="text-decoration: underline;">Sponsorship Policy</a>
@@ -633,7 +649,8 @@ real trade-offs you need to plan for.{% endblock %}
         Market Feed
     </div>
     <div id="salary-ticker-content" style="display: inline-block; padding-left: 24px;">
-        <span style="font-size: 11px; font-family: monospace; opacity: 0.8;">Loading recent anonymous salary submissions...</span>
+        <span style="font-size: 11px; font-family: monospace; opacity: 0.8;">Loading recent anonymous salary
+            submissions...</span>
     </div>
 </div>
 <style>

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}AI Pulse - Latest AI Developments for Your Career | Career Reality{% endblock %}
+
+{% block meta_description %}Track AI model releases, industry shifts, and career-impacting developments. Curated for
+Indian tech professionals.{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/ai_pulse.css' %}">
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "AI Pulse - Latest AI Developments for Your Career",
+    "url": "{{ request.build_absolute_uri }}",
+    "description": "Track AI model releases, industry shifts, and career-impacting developments. Curated for Indian tech professionals.",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Career Reality (India)",
+        "url": "{{ request.scheme }}://{{ request.get_host }}"
+    }
+}
+</script>
+{% if page_obj.object_list %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "AI Pulse - Latest Updates",
+    "itemListElement": [
+        {% for item in page_obj.object_list %}
+        {
+            "@type": "ListItem",
+            "position": {{ forloop.counter }},
+            "name": "{{ item.title|escapejs }}",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'ai_news_detail' item.slug %}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ request.scheme }}://{{ request.get_host }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "AI Pulse",
+            "item": "{{ request.build_absolute_uri }}"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="container-wide ai-page">
+    <div class="ai-shell">
+        <div class="ai-masthead">
+            <div class="ai-kicker">AI Pulse Intelligence Desk</div>
+            <h1>AI Developments That Matter for Careers, Not Vanity Benchmarks</h1>
+            <p>High-signal model updates, translated into engineering skills, workflow implications, and hiring leverage for India-focused builders.</p>
+            <div class="ai-stats">
+                <span class="ai-stat">Reviewed by Editorial Lens</span>
+                <span class="ai-stat">Career Translation Included</span>
+                <span class="ai-stat">Technical Sections Standardized</span>
+            </div>
+        </div>
+
+        <div class="ai-tag-bar">
+            <a href="{% url 'ai_news_hub' %}" class="ai-tag-pill {% if not active_tag %}active{% endif %}">All</a>
+            {% for tag in tags %}
+            <a href="{% url 'ai_news_hub' %}?tag={{ tag.slug }}"
+                class="ai-tag-pill {% if active_tag.slug == tag.slug %}active{% endif %}">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="ai-evolution-strip">
+            <h3>AI Evolution: How We Got Here</h3>
+            <div class="ai-evolution-row">
+                {% for milestone in ai_evolution_timeline %}
+                <article class="ai-evo-card">
+                    <div class="era">{{ milestone.label }}</div>
+                    <div class="title">{{ milestone.title }}</div>
+                    <div class="note">{{ milestone.note }}</div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if page_obj.object_list %}
+        <div class="ai-layout">
+            <div class="ai-main-col">
+                {% with lead=page_obj.object_list.0 %}
+                {% if lead %}
+                <article class="ai-feature-card">
+                    <div class="meta">
+                        <span class="significance-badge significance-{{ lead.significance }}"></span>
+                        {{ lead.source_name }} &middot; Updated {{ lead.reviewed_at|default:lead.published_at|date:"F j, Y" }}
+                    </div>
+                    <h2><a href="{% url 'ai_news_detail' lead.slug %}">{{ lead.title }}</a></h2>
+                    <p>{{ lead.summary|striptags|truncatewords:52 }}</p>
+                </article>
+                {% endif %}
+                {% endwith %}
+
+                <div class="ai-cards">
+                    {% for item in page_obj.object_list %}
+                    {% if not forloop.first %}
+                    <article class="ai-news-card">
+                        <div class="ai-news-meta">
+                            <span class="significance-badge significance-{{ item.significance }}"></span>
+                            {{ item.source_name }} &middot; Updated {{ item.reviewed_at|default:item.published_at|date:"M j, Y" }}
+                        </div>
+                        <h3><a href="{% url 'ai_news_detail' item.slug %}">{{ item.title }}</a></h3>
+                        <p class="ai-news-summary">{{ item.summary|striptags|truncatewords:28 }}</p>
+                        <div class="ai-news-tags">
+                            {% for tag in item.tags.all %}
+                            <a href="{% url 'ai_news_hub' %}?tag={{ tag.slug }}" class="ai-news-tag">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </article>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <aside class="ai-rail">
+                <div class="ai-rail-card">
+                    <h4>Significance Guide</h4>
+                    <p>High = immediate skill/hiring impact. Medium = relevant in the next planning cycle. Low = watchlist, not immediate priority.</p>
+                    <div class="ai-legend-row">
+                        <span class="ai-legend-chip"><span class="significance-badge significance-high"></span>High</span>
+                        <span class="ai-legend-chip"><span class="significance-badge significance-medium"></span>Medium</span>
+                        <span class="ai-legend-chip"><span class="significance-badge significance-low"></span>Low</span>
+                    </div>
+                </div>
+                <div class="ai-rail-card">
+                    <h4>How to Read Faster</h4>
+                    <p>Start with TL;DR, then jump to Skill Map and Decision Checklist. If those sections do not change your next 30-day plan, skip the model.</p>
+                </div>
+                <div class="ai-rail-card">
+                    <h4>Builder Standard</h4>
+                    <p>Every article follows one framework: what changed, where it fails, what to learn, what to build, and how to convert it into career leverage.</p>
+                </div>
+            </aside>
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-bar">
+            {% if page_obj.has_previous %}
+            <a href="?{% if active_tag %}tag={{ active_tag.slug }}&{% endif %}page={{ page_obj.previous_page_number }}">&lsaquo; Previous</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?{% if active_tag %}tag={{ active_tag.slug }}&{% endif %}page={{ page_obj.next_page_number }}">Next &rsaquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% else %}
+        <div style="border: 1px solid var(--c-divider); padding: 2rem; text-align: center;">
+            <p style="margin: 0 0 0.5rem; font-size: 1.1rem; font-weight: 600;">No AI updates yet{% if active_tag %} for "{{ active_tag.name }}"{% endif %}.</p>
+            <p style="margin: 0; color: var(--c-grey-mid);">Check back soon - we track developments from OpenAI, DeepMind, HuggingFace, and more.</p>
+            {% if active_tag %}
+            <a href="{% url 'ai_news_hub' %}" style="display: inline-block; margin-top: 1rem; text-decoration: underline;">View all AI updates</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

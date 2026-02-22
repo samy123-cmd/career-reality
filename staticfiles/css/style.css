@@ -8,8 +8,8 @@
     --c-white: #ffffff;
     --c-black: #000000;
     --c-grey-dark: #222222;
-    --c-grey-mid: #666666;
-    --c-grey-light: #999999;
+    --c-grey-mid: #555555;
+    --c-grey-light: #666666;
     --c-divider: #e6e6e6;
     --c-bg-footer: #f9f9f9;
 
@@ -1083,7 +1083,7 @@ details.collapsible summary::after {
 }
 
 details.collapsible[open] summary::after {
-    content: '−';
+    content: '-';
 }
 
 details.collapsible summary:hover {
@@ -1357,6 +1357,73 @@ blockquote.pullquote {
 
     details.collapsible summary {
         padding: 1rem 1.25rem;
+    }
+    /* Keep bottom content visible above fixed mobile dock. */
+    body {
+        padding-bottom: 86px;
+    }
+
+    .article-header h1 {
+        font-size: 34px;
+        line-height: 1.15;
+    }
+
+    .article-list-title {
+        font-size: 26px;
+        line-height: 1.2;
+    }
+
+    .author-name {
+        font-size: 32px;
+    }
+
+    .key-takeaway p {
+        font-size: 16px;
+    }
+
+    /* Collapse inline two-column grids used in forms/calculators. */
+    [style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* Tame oversized inline typography for narrow screens. */
+    [style*="font-size: 48px"] {
+        font-size: 34px !important;
+        line-height: 1.15 !important;
+    }
+
+    [style*="font-size: 42px"] {
+        font-size: 32px !important;
+        line-height: 1.15 !important;
+    }
+
+    [style*="font-size: 40px"] {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+    }
+
+    [style*="font-size: 36px"] {
+        font-size: 29px !important;
+        line-height: 1.2 !important;
+    }
+
+    [style*="font-size: 32px"] {
+        font-size: 27px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Mobile does not run GSAP reveals on home; keep content visible. */
+    .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        will-change: auto;
+    }
+
+    /* Reduce oversized vertical rhythm in article lists on mobile. */
+    .article-list-item {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
     }
 }
 

@@ -17,19 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
-from core.sitemaps import ArticleSitemap, StaticViewSitemap, CategorySitemap
+from core.sitemaps import ArticleSitemap, StaticViewSitemap, CategorySitemap, AINewsSitemap
 from core import views as core_views
 
 sitemaps = {
     'articles': ArticleSitemap,
     'categories': CategorySitemap,
     'static': StaticViewSitemap,
+    'ainews': AINewsSitemap,
 }
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('', include('content.urls')),
+    path('ai/', include('ainews.urls')),
     path('resignation-risk/', include('analyzer.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]

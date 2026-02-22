@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+<rect width="1200" height="420" fill="#fff"/>
+<text x="60" y="58" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#111">Signal Chart</text>
+<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">Claude 3.5 Sonnet Proved That Practical Model Quality Beats Raw Hype Cycles</text>
+<rect x="320" y="120" width="760" height="34" fill="#efefef"/>
+<rect x="320" y="120" width="720" height="34" fill="#111"/>
+<text x="60" y="143" font-family="Arial,sans-serif" font-size="18" fill="#222">Capability Jump</text>
+<text x="1110" y="143" font-family="Arial,sans-serif" font-size="16" fill="#222" text-anchor="end">90/100</text>
+<rect x="320" y="210" width="760" height="34" fill="#efefef"/>
+<rect x="320" y="210" width="600" height="34" fill="#d93025"/>
+<text x="60" y="233" font-family="Arial,sans-serif" font-size="18" fill="#222">Cost Efficiency</text>
+<text x="1110" y="233" font-family="Arial,sans-serif" font-size="16" fill="#222" text-anchor="end">75/100</text>
+<rect x="320" y="300" width="760" height="34" fill="#efefef"/>
+<rect x="320" y="300" width="672" height="34" fill="#1a73e8"/>
+<text x="60" y="323" font-family="Arial,sans-serif" font-size="18" fill="#222">Deployment Readiness</text>
+<text x="1110" y="323" font-family="Arial,sans-serif" font-size="16" fill="#222" text-anchor="end">84/100</text>
+<text x="60" y="380" font-family="Arial,sans-serif" font-size="14" fill="#666">Editorial framing scores; not universal benchmarks.</text>
+</svg>

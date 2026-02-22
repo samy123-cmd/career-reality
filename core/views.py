@@ -35,6 +35,12 @@ def _topic_clusters():
                 {"label": "Topic Clusters", "url_name": "topic_clusters"},
             ],
         },
+        {
+            "name": "AI Intelligence Cluster",
+            "description": "AI model releases, career impact, and India-specific developments.",
+            "pillar_url_name": "ai_news_hub",
+            "supporting_urls": [],
+        },
     ]
 
 

@@ -17,24 +17,45 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def _csv_env(name: str, default: str = "") -> list[str]:
+    raw = os.environ.get(name, default)
+    return [x.strip() for x in raw.split(",") if x.strip()]
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'cr-prod-fallback-3vN9q1Lx4mJ8rK2pW7sD5tY0hB6cF1uZ8aQ4eR7nV2')
+DEV_FALLBACK_SECRET = 'cr-local-fallback-9N2vL6qP3xR8mT1cW5yK7dF4hB0zQ9eA2sU6jM8nC3'
+SECRET_KEY = os.environ.get('SECRET_KEY', DEV_FALLBACK_SECRET)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Defaults to True locally, False if set in env
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*'] if not DEBUG else []
-if os.environ.get('VERCEL_URL'):
-    ALLOWED_HOSTS += ['.vercel.app', '.careerreality.in', os.environ.get('VERCEL_URL')]
+if DEBUG:
+    ALLOWED_HOSTS = _csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver")
+else:
+    ALLOWED_HOSTS = _csv_env("ALLOWED_HOSTS")
+    vercel_url = os.environ.get("VERCEL_URL", "").strip()
+    if vercel_url:
+        ALLOWED_HOSTS.append(vercel_url)
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://careerreality.in',
-    'https://www.careerreality.in',
+# Always allow the canonical domains.
+for host in [".vercel.app", ".careerreality.in", "careerreality.in", "www.careerreality.in"]:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+
+default_csrf_origins = [
+    "https://careerreality.in",
+    "https://www.careerreality.in",
 ]
+CSRF_TRUSTED_ORIGINS = _csv_env("CSRF_TRUSTED_ORIGINS", ",".join(default_csrf_origins))
+vercel_url = os.environ.get("VERCEL_URL", "").strip()
+if vercel_url:
+    vercel_origin = f"https://{vercel_url}"
+    if vercel_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(vercel_origin)
 
 # Use signed cookies for sessions to avoid writing to read-only DB on Vercel
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
@@ -55,6 +76,7 @@ INSTALLED_APPS = [
     'core',
     'content',
     'analyzer',
+    'ainews',
 ]
 
 SITE_ID = 1
@@ -63,6 +85,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.gzip.GZipMiddleware', # Added for HTML compression
     'whitenoise.middleware.WhiteNoiseMiddleware', # Added WhiteNoise
+    'core.middleware.SecurityHeadersMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,31 +96,57 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+template_options = {
+    'context_processors': [
+        'django.template.context_processors.request',
+        'django.contrib.auth.context_processors.auth',
+        'django.contrib.messages.context_processors.messages',
+        'core.context_processors.seo_defaults',
+    ],
+}
+if not DEBUG:
+    template_options['loaders'] = [
+        (
+            'django.template.loaders.cached.Loader',
+            [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ],
+        )
+    ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'core.context_processors.seo_defaults',
-            ],
-        },
+        'APP_DIRS': DEBUG,
+        'OPTIONS': template_options,
     },
 ]
 
 # Security hardening defaults for production-like environments.
 if not DEBUG:
+    if SECRET_KEY == DEV_FALLBACK_SECRET:
+        raise RuntimeError("SECRET_KEY must be set in production.")
+    if not ALLOWED_HOSTS:
+        raise RuntimeError("ALLOWED_HOSTS must be set in production.")
+
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SAMESITE = 'Lax'
     SECURE_HSTS_SECONDS = int(os.environ.get('SECURE_HSTS_SECONDS', '31536000'))
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.environ.get('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'True') == 'True'
+    SECURE_HSTS_PRELOAD = os.environ.get('SECURE_HSTS_PRELOAD', 'True') == 'True'
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
+    SECURE_BROWSER_XSS_FILTER = True
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -114,7 +163,8 @@ if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
-            conn_max_age=600,
+            conn_max_age=int(os.environ.get('DB_CONN_MAX_AGE', '600')),
+            conn_health_checks=True,
             ssl_require=True
         )
     }
@@ -132,7 +182,10 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'career-reality-cache',
-        'TIMEOUT': 300,
+        'TIMEOUT': int(os.environ.get('CACHE_TIMEOUT_SECONDS', '300')),
+        'OPTIONS': {
+            'MAX_ENTRIES': int(os.environ.get('CACHE_MAX_ENTRIES', '5000')),
+        },
     }
 }
 
@@ -179,6 +232,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 if not DEBUG:
     # Production: Use Manifest for hashing and long-term caching
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    WHITENOISE_MAX_AGE = int(os.environ.get('WHITENOISE_MAX_AGE', '31536000'))
+    WHITENOISE_IMMUTABLE_FILE_TEST = lambda path, url: url.startswith('/static/')
 else:
     # Development: No manifest needed, just serving
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
