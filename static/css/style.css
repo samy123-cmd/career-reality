@@ -130,7 +130,6 @@ a:hover {
 .reveal-on-scroll {
     opacity: 0;
     transform: translateY(30px);
-    will-change: opacity, transform;
 }
 
 /* Navigation (Wide) */
@@ -1078,6 +1077,10 @@ details.collapsible summary::-webkit-details-marker {
     display: none;
 }
 
+details.collapsible summary::marker {
+    display: none;
+}
+
 details.collapsible summary::after {
     content: '+';
     font-size: 20px;
@@ -1650,9 +1653,5 @@ blockquote.pullquote {
 /* 
    PERFORMANCE UTILITIES 
    Prevents CLS by setting initial animation state in CSS
+   (duplicate removed - primary rule is above)
 */
-.reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    will-change: opacity, transform;
-}

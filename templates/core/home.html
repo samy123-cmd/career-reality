@@ -717,56 +717,33 @@ real trade-offs you need to plan for.{% endblock %}
 {% block scripts %}
 <script>
     (function () {
-        function loadScript(src) {
-            return new Promise((resolve, reject) => {
-                const s = document.createElement('script');
-                s.src = src;
-                s.async = true;
-                s.onload = resolve;
-                s.onerror = reject;
-                document.head.appendChild(s);
+        var elements = document.querySelectorAll('.reveal-on-scroll');
+        if (!elements.length) return;
+
+        function showAll() {
+            elements.forEach(function (el) {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
             });
         }
 
-        function initGsap() {
-            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-            gsap.registerPlugin(ScrollTrigger);
-            const sections = document.querySelectorAll('.reveal-on-scroll');
-            sections.forEach(section => {
-                gsap.to(section, {
-                    scrollTrigger: {
-                        trigger: section,
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    },
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.6,
-                    ease: "power2.out"
-                });
+        if (!('IntersectionObserver' in window)) {
+            showAll();
+            return;
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'none';
+                    observer.unobserve(entry.target);
+                }
             });
-        }
+        }, { threshold: 0.05 });
 
-        function start() {
-            if (window.matchMedia('(max-width: 768px)').matches) {
-                document.querySelectorAll('.reveal-on-scroll').forEach(function(el) {
-                    el.style.opacity = '1';
-                    el.style.transform = 'none';
-                });
-                return;
-            }
-
-            loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js')
-                .then(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js'))
-                .then(initGsap)
-                .catch(() => { });
-        }
-
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(start, { timeout: 2000 });
-        } else {
-            window.addEventListener('load', start, { once: true });
-        }
+        elements.forEach(function (el) { observer.observe(el); });
     })();
 </script>
 <noscript>

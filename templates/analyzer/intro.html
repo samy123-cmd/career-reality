@@ -139,10 +139,17 @@ manager pressure to predict exit outcomes.{% endblock %}
     color: #333;
     font-size: 0.95rem;
     list-style: none;
-    /* Hide default triangle */
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::marker {
+    display: none;
   }
 
   details[open] summary {
@@ -182,9 +189,20 @@ manager pressure to predict exit outcomes.{% endblock %}
       <li>Clarify your position for the next 7 days.</li>
     </ul>
 
-    <div class="privacy-box">
-      <strong>Privacy Note:</strong> This tool runs anonymously. We do not store your bond details, company name, or
-      personal signals. No email required.
+    <div class="privacy-box" style="border-color: #d93025; background: #fffcfc;">
+      <h3
+        style="margin-top: 0; margin-bottom: 8px; font-size: 0.95rem; color: #d93025; display: flex; align-items: center; gap: 6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        Zero User Data Guarantee
+      </h3>
+      <p style="margin: 0; line-height: 1.5; font-size: 0.85rem;">
+        Your inputs are analyzed programmatically. We <strong>do not store</strong> your raw inputs, and your scenario
+        is <strong>NEVER used to train public LLM models</strong>. All session data is destroyed upon completion. No
+        email or login required.
+      </p>
     </div>
 
     <form action="{% url 'wizard_start' %}" method="post">
