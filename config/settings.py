@@ -31,8 +31,8 @@ DEV_FALLBACK_SECRET = 'cr-local-fallback-9N2vL6qP3xR8mT1cW5yK7dF4hB0zQ9eA2sU6jM8
 SECRET_KEY = os.environ.get('SECRET_KEY', DEV_FALLBACK_SECRET)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Defaults to True locally, False if set in env
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+# Defaults to False for safety. Explicitly set DEBUG=True in local .env.
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "https://www.careerreality.in").strip().rstrip("/")
 CANONICAL_HOST = urlsplit(CANONICAL_BASE_URL).netloc.lower()
 
@@ -54,6 +54,8 @@ default_csrf_origins = [
     "https://www.careerreality.in",
 ]
 CSRF_TRUSTED_ORIGINS = _csv_env("CSRF_TRUSTED_ORIGINS", ",".join(default_csrf_origins))
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS.extend(["http://127.0.0.1:8000", "http://localhost:8000"])
 vercel_url = os.environ.get("VERCEL_URL", "").strip()
 if vercel_url:
     vercel_origin = f"https://{vercel_url}"
@@ -91,6 +93,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware', # Added WhiteNoise
     'core.middleware.SecurityHeadersMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -182,17 +185,31 @@ else:
         }
     }
 
-# Cache: simple in-memory cache to reduce TTFB on repeated requests
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'career-reality-cache',
-        'TIMEOUT': int(os.environ.get('CACHE_TIMEOUT_SECONDS', '300')),
-        'OPTIONS': {
-            'MAX_ENTRIES': int(os.environ.get('CACHE_MAX_ENTRIES', '5000')),
-        },
+# Cache: use Redis in production (required for shared state across Vercel
+# serverless instances). Falls back to locmem for local development only.
+_REDIS_URL = os.environ.get('REDIS_URL') or os.environ.get('KV_URL')
+_CACHE_TIMEOUT = int(os.environ.get('CACHE_TIMEOUT_SECONDS', '300'))
+
+if _REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': _REDIS_URL,
+            'TIMEOUT': _CACHE_TIMEOUT,
+        }
     }
-}
+else:
+    # Local development fallback only — NOT suitable for multi-process/serverless.
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'career-reality-cache',
+            'TIMEOUT': _CACHE_TIMEOUT,
+            'OPTIONS': {
+                'MAX_ENTRIES': int(os.environ.get('CACHE_MAX_ENTRIES', '5000')),
+            },
+        }
+    }
 
 
 # Password validation
@@ -218,6 +235,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+from django.utils.translation import gettext_lazy as _
+LANGUAGES = [
+    ('en', _('English')),
+    ('hi', _('Hindi')),
+]
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 TIME_ZONE = 'Asia/Kolkata'
 
@@ -247,3 +273,42 @@ else:
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Logging: structured console output captured by Vercel / stdout.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
+from django.urls import reverse
 from content.models import Article, Category
 from django.utils import timezone
 from django.conf import settings
@@ -76,13 +77,13 @@ def robots_txt(request):
         "Disallow: /resignation-risk/result/",
         "Disallow: /salary-drop/",
         "Disallow: /salary-drop/success/",
-        "Disallow: /layoff-radar/report/",
+        "Disallow: /layoff-radar/",
         "",
         f"Sitemap: {settings.CANONICAL_BASE_URL}/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
-@cache_page(300)
+@cache_page(60 * 15)
 def home(request):
     """
     Home page view.
@@ -118,6 +119,7 @@ def home(request):
         'recent_updates': recent_updates,
         'topic_clusters': _topic_clusters(),
         'latest_index_row': index_rows[0],
+        'latest_band': _index_band(index_rows[0]['overall']),
         'home_faq': home_faq,
         **_seo(title, description),
     })
@@ -130,21 +132,25 @@ def _seo(title, description):
         'twitter_description': description,
     }
 
+@cache_page(60 * 60)
 def about(request):
     title = "About Career Reality - India Career Truths"
     description = "Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis."
     return render(request, 'core/about.html', _seo(title, description))
 
+@cache_page(60 * 60)
 def editorial_standards(request):
     title = "Editorial Standards - Career Reality India"
     description = "Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts."
     return render(request, 'core/editorial.html', _seo(title, description))
 
+@cache_page(60 * 15)
 def salary_reality(request):
     title = "Salary Reality (India) - Career Reality"
     description = "Real, uninflated salary data for Indian tech roles with context and median ranges."
     return render(request, 'core/salary.html', _seo(title, description))
 
+@cache_page(60 * 60)
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
     categories = Category.objects.all()
@@ -154,6 +160,7 @@ def salary_calculator(request):
     context.update(_seo(title, description))
     return render(request, 'core/salary_calculator.html', context)
 
+@cache_page(60 * 60)
 def escape_plan(request):
     """
     The Service Company Escape Plan.
@@ -177,6 +184,7 @@ def terms(request):
     return render(request, 'core/terms.html', _seo(title, description))
 
 
+@cache_page(60 * 15)
 def topic_clusters(request):
     title = "Topic Clusters - Career Reality India"
     description = "Explore Career Reality authority clusters: salary, career risk, and role-specific market realities."
@@ -188,6 +196,7 @@ def topic_clusters(request):
     })
 
 
+@cache_page(60 * 15)
 def career_reality_index(request):
     title = "Career Reality Index (India) - Monthly Career Pressure Tracker"
     description = "Monthly index tracking salary pressure, switching difficulty, and layoff risk in Indian tech careers."
@@ -256,6 +265,7 @@ def career_reality_index(request):
     ]
 
     change_log = [
+        {"date": "March 8, 2026", "note": "March 2026 scores published. Salary pressure ticks up on appraisal-cycle compression; layoff risk eases slightly as Q1 hiring stabilises."},
         {"date": "February 17, 2026", "note": "Expanded methodology transparency, interpretation bands, and persona-specific playbooks."},
         {"date": "February 1, 2026", "note": "Refreshed monthly scores and revised layoff signal weighting checks."},
         {"date": "January 2, 2026", "note": "Added switch difficulty component to reduce headline-bias decisions."},
@@ -279,29 +289,56 @@ def career_reality_index(request):
 def revenue_model(request):
     title = "Revenue Model - Career Reality India"
     description = "How Career Reality earns revenue while protecting editorial independence and quality."
-    return render(request, 'core/revenue_model.html', _seo(title, description))
+    return render(request, 'core/revenue_model.html', {
+        **_seo(title, description),
+        'meta_robots': 'noindex, follow',
+    })
 
 
 def sponsorship_policy(request):
     title = "Sponsorship Policy - Career Reality India"
     description = "Rules for sponsorships and commercial partnerships at Career Reality with strict editorial separation."
-    return render(request, 'core/sponsorship_policy.html', _seo(title, description))
+    return render(request, 'core/sponsorship_policy.html', {
+        **_seo(title, description),
+        'meta_robots': 'noindex, follow',
+    })
 
 def newsletter_signup(request):
     """Handle newsletter signup form submission."""
-    if request.method == 'POST':
-        email = request.POST.get('email', '').strip()
-        if email:
-            # For now, just show a success message
-            # In production, integrate with Mailchimp/Buttondown/database
-            from core.models import NewsletterSubscriber
-            try:
-                NewsletterSubscriber.objects.get_or_create(email=email)
-                messages.success(request, 'Thanks for subscribing! You\'ll get our weekly reality checks.')
-            except Exception:
-                messages.info(request, 'Thanks for your interest!')
-        else:
-            messages.error(request, 'Please enter a valid email address.')
-    
-    # Redirect back to the previous page
-    return redirect(request.META.get('HTTP_REFERER', 'home'))
+    if request.method != 'POST':
+        return redirect(request.META.get('HTTP_REFERER') or reverse('home'))
+
+    # Basic rate-limit: max 3 signups per IP per hour via cache counter.
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+    rate_key = f"newsletter_signup_ip_{ip}"
+    from django.core.cache import cache
+    count = cache.get(rate_key, 0)
+    if count >= 3:
+        messages.error(request, 'Too many requests. Please try again later.')
+        return redirect(request.META.get('HTTP_REFERER') or reverse('home'))
+    cache.set(rate_key, count + 1, timeout=3600)
+
+    email = request.POST.get('email', '').strip()
+    if email:
+        from core.models import NewsletterSubscriber
+        try:
+            NewsletterSubscriber.objects.get_or_create(email=email)
+            messages.success(request, 'Thanks for subscribing! You\'ll get our weekly reality checks.')
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).exception("Newsletter signup failed for %s: %s", email, exc)
+            messages.info(request, 'Thanks for your interest!')
+    else:
+        messages.error(request, 'Please enter a valid email address.')
+
+    return redirect(request.META.get('HTTP_REFERER') or reverse('home'))
+
+
+def custom_404(request, exception):
+    """Branded 404 — keeps users in the funnel with helpful navigation links."""
+    return render(request, '404.html', {'meta_robots': 'noindex, follow'}, status=404)
+
+
+def custom_500(request):
+    """Minimal 500 — self-contained HTML to avoid cascade template failures."""
+    return render(request, '500.html', status=500)

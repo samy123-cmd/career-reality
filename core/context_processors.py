@@ -3,15 +3,39 @@ from django.conf import settings
 
 def seo_defaults(request):
     # Build canonical URL without query parameters to prevent duplicate indexing.
-    canonical_url = f"{settings.CANONICAL_BASE_URL}{request.path}"
+    path = request.path
+    canonical_url = f"{settings.CANONICAL_BASE_URL}{path}"
+
+    # Compute language-specific alternate URLs for hreflang signals.
+    # /hi/ prefix is the Django i18n_patterns locale prefix for Hindi.
+    if path.startswith('/hi/'):
+        en_path = path[3:]  # strip /hi prefix → /article/slug/
+        hi_path = path
+    elif path == '/hi':
+        en_path = '/'
+        hi_path = path
+    else:
+        en_path = path
+        hi_path = '/hi' + path
+
+    en_canonical_url = f"{settings.CANONICAL_BASE_URL}{en_path}"
+    hi_canonical_url = f"{settings.CANONICAL_BASE_URL}{hi_path}"
 
     # Keep header category navigation populated across all templates.
-    categories = []
-    try:
-        from content.models import Category
-        categories = Category.objects.all()
-    except Exception:
-        categories = []
+    # Only show categories that have at least one published article.
+    # Cached for 1 hour to avoid a DB hit on every uncached page request.
+    from django.core.cache import cache
+    categories = cache.get('nav_categories')
+    if categories is None:
+        try:
+            from django.db.models import Count, Q
+            from content.models import Category
+            categories = list(Category.objects.annotate(
+                article_count=Count('article', filter=Q(article__status='published'))
+            ).filter(article_count__gt=0).order_by('order', 'name'))
+            cache.set('nav_categories', categories, 3600)
+        except Exception:
+            categories = []
 
     return {
         "article_meta_title": "",
@@ -26,5 +50,8 @@ def seo_defaults(request):
         "meta_robots": "index, follow",
         "site_base_url": settings.CANONICAL_BASE_URL,
         "canonical_url": canonical_url,
+        "en_canonical_url": en_canonical_url,
+        "hi_canonical_url": hi_canonical_url,
         "categories": categories,
     }
+

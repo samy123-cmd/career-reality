@@ -136,23 +136,26 @@ def submit_salary(request):
     Handle anonymous salary submissions.
     """
     if request.method == 'POST':
-        try:
+        form = forms.SalarySubmissionForm(request.POST)
+        if form.is_valid():
+            d = form.cleaned_data
             models.SalarySubmission.objects.create(
-                role=request.POST.get('role'),
-                experience_years=float(request.POST.get('experience')),
-                company_type=request.POST.get('company_type'),
-                ctc=int(request.POST.get('ctc')),
-                city=request.POST.get('city'),
-                tech_stack=request.POST.get('tech_stack', '')
+                role=d['role'],
+                experience_years=d['experience_years'],
+                company_type=d['company_type'],
+                ctc=d['ctc'],
+                city=d['city'],
+                tech_stack=d.get('tech_stack', ''),
             )
             return redirect(reverse('salary_submit_success'))
-        except Exception as e:
-            # Basic error handling for now
-            return render(request, 'analyzer/submit_salary.html', {'error': 'Invalid data'})
+        # Re-render with validation errors
+    else:
+        form = forms.SalarySubmissionForm()
 
     title = "Anonymous Salary Drop"
     description = "Submit an anonymous salary data point to improve Career Reality salary ranges and insights."
     return render(request, 'analyzer/submit_salary.html', {
+        'form': form,
         'og_title': title,
         'og_description': description,
         'twitter_title': title,
@@ -170,13 +173,13 @@ def salary_submit_success(request):
         'twitter_description': description,
         'meta_robots': 'noindex, follow',
     })
-
-@cache_page(120)
 def salary_feed_api(request):
     """
     Returns last 20 verified (or all for now) salaries for the ticker.
     """
+    import logging
     from django.http import JsonResponse
+    logger = logging.getLogger(__name__)
     try:
         # For now, return all recent submissions. In prod, filter by is_verified=True
         submissions = models.SalarySubmission.objects.all().order_by('-created_at')[:20]
@@ -184,7 +187,7 @@ def salary_feed_api(request):
         for s in submissions:
             data.append({
                 'role': s.role,
-                'company': s.get_company_type_display(), # or short code
+                'company': s.get_company_type_display(),
                 'exp': f"{s.experience_years}y",
                 'ctc': f"{s.ctc/100000:.1f} LPA",
                 'city': s.city
@@ -192,9 +195,9 @@ def salary_feed_api(request):
         response = JsonResponse({'submissions': data})
         patch_cache_control(response, public=True, max_age=120, stale_while_revalidate=60)
         return response
-    except Exception as e:
-        import traceback
-        response = JsonResponse({'error': str(e), 'trace': traceback.format_exc()}, status=500)
+    except Exception:
+        logger.exception("salary_feed_api failed")
+        response = JsonResponse({'error': 'Service temporarily unavailable.'}, status=500)
         patch_cache_control(response, no_store=True)
         return response
 
@@ -228,6 +231,7 @@ def layoff_radar(request):
     description = "Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously."
     return render(request, 'analyzer/layoff_radar.html', {
         'reports': recent_reports,
+        'meta_robots': 'noindex, follow',
         'og_title': title,
         'og_description': description,
         'twitter_title': title,
@@ -239,21 +243,26 @@ def report_layoff(request):
     Anonymous form to report company status.
     """
     if request.method == 'POST':
-        try:
+        form = forms.LayoffReportForm(request.POST)
+        if form.is_valid():
+            d = form.cleaned_data
             models.LayoffReport.objects.create(
-                company_name=request.POST.get('company_name'),
-                status=request.POST.get('status'),
-                role_affected=request.POST.get('role_affected', ''),
-                location=request.POST.get('location', ''),
-                details=request.POST.get('details', '')
+                company_name=d['company_name'],
+                status=d['status'],
+                role_affected=d.get('role_affected', ''),
+                location=d.get('location', ''),
+                details=d.get('details', ''),
             )
             return redirect('layoff_radar')
-        except Exception:
-            pass # Silent fail for now
+        # Re-render with validation errors
             
+    else:
+        form = forms.LayoffReportForm()
+
     title = "Report Layoff Status - Career Reality India"
     description = "Anonymous, secure layoff and hiring freeze reports to help others assess company risk."
     return render(request, 'analyzer/report_layoff.html', {
+        'form': form,
         'og_title': title,
         'og_description': description,
         'twitter_title': title,

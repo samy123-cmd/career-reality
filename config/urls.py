@@ -20,6 +20,9 @@ from django.contrib.sitemaps.views import sitemap
 from core.sitemaps import ArticleSitemap, StaticViewSitemap, CategorySitemap, AINewsSitemap
 from core import views as core_views
 
+handler404 = 'core.views.custom_404'
+handler500 = 'core.views.custom_500'
+
 sitemaps = {
     'articles': ArticleSitemap,
     'categories': CategorySitemap,
@@ -27,11 +30,20 @@ sitemaps = {
     'ainews': AINewsSitemap,
 }
 
+from django.conf.urls.i18n import i18n_patterns
+
+# Non-translated URLs
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+]
+
+# Translated URLs
+urlpatterns += i18n_patterns(
     path('', include('core.urls')),
     path('', include('content.urls')),
     path('ai/', include('ainews.urls')),
     path('resignation-risk/', include('analyzer.urls')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-]
+    prefix_default_language=False # Only prefix non-default languages (e.g., /hi/)
+)

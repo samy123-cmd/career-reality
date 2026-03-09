@@ -16,6 +16,10 @@
     "datePublished": "{{ item.event_date|default:item.published_at|date:'c' }}",
     "dateModified": "{{ item.reviewed_at|default:item.published_at|date:'c' }}",
     "description": "{{ item.summary|truncatewords:25|escapejs }}",
+    "image": {
+        "@type": "ImageObject",
+        "url": "{{ site_base_url }}{% static 'img/og-default.png' %}"
+    },
     "publisher": {
         "@type": "Organization",
         "name": "Career Reality India"
@@ -53,6 +57,26 @@
     ]
 }
 </script>
+{% if faqs %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for q, a in faqs %}
+        {
+            "@type": "Question",
+            "name": "{{ q|escapejs }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ a|escapejs }}"
+            }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -62,8 +86,7 @@
 
         <div class="ai-detail-header">
             <div class="ai-detail-meta">
-                <span class="significance-badge significance-{{ item.significance }}"
-                    style="display:inline-block;width:8px;height:8px;border-radius:50%;{% if item.significance == 'high' %}background:#d93025;{% elif item.significance == 'medium' %}background:#f9a825;{% else %}background:#aaa;{% endif %}"></span>
+                <span class="significance-badge significance-{{ item.significance }}"></span>
                 {{ item.source_name }}
                 &middot;
                 Updated {{ item.reviewed_at|default:item.published_at|date:"F j, Y" }}

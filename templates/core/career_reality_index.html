@@ -3,6 +3,46 @@
 {% block title %}Career Reality Index (India) - Monthly Career Pressure Tracker{% endblock %}
 {% block meta_description %}Monthly pressure signals for Indian careers: salary pressure, switch difficulty, layoff risk, and methodology notes.{% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Career Reality Index (India)",
+  "description": "Monthly index tracking salary pressure, switching difficulty, and layoff risk in Indian tech careers.",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
+  "creator": {
+    "@type": "Organization",
+    "name": "Career Reality",
+    "url": "{{ site_base_url }}"
+  },
+  "temporalCoverage": "2025-11/..",
+  "spatialCoverage": "India",
+  "keywords": ["career pressure", "salary pressure", "layoff risk", "India tech careers", "switching difficulty"]
+}
+</script>
+{% if faq_items %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for item in faq_items %}
+    {
+      "@type": "Question",
+      "name": "{{ item.q|escapejs }}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{ item.a|escapejs }}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1>Career Reality Index (India)</h1>

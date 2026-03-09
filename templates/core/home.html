@@ -436,6 +436,25 @@ real trade-offs you need to plan for.{% endblock %}
 </div>
 <div style="height: 40px;"></div>
 
+<!-- SITE INTRODUCTION -->
+<section class="container-medium" style="margin-bottom: var(--space-lg);">
+    <p style="font-size: 18px; line-height: 1.75; margin: 0 0 1rem 0; max-width: 720px;">
+        Career Reality India publishes data-backed analysis of the Indian tech job market. Every page covers the
+        trade-offs you need to plan your career &mdash; not the optimistic framing most career content uses to sell
+        courses.
+    </p>
+    <p style="font-size: 16px; line-height: 1.75; color: var(--c-grey-mid); margin: 0 0 1rem 0; max-width: 720px;">
+        Who it is for: software engineers, product managers, and data professionals at any stage who want to
+        understand what Indian tech salaries actually look like, how much competition has increased, when
+        job-switching makes financial sense, and which skills are losing market value faster than hiring trends
+        suggest.
+    </p>
+    <p style="font-size: 16px; line-height: 1.75; color: var(--c-grey-mid); margin: 0; max-width: 720px;">
+        All salary ranges, difficulty estimates, and market signals are reviewed monthly. Sources and review
+        dates are listed on every page. We take corrections publicly.
+    </p>
+</section>
+
 <!-- EDITORIAL BASELINE -->
 <section class="container-medium" style="margin-bottom: var(--space-lg);">
     <span class="section-label reveal-on-scroll">EDITORIAL BASELINE</span>
@@ -511,7 +530,6 @@ real trade-offs you need to plan for.{% endblock %}
         </a>
     </div>
     {% endwith %}
-    {% endif %}
 
     <span class="section-label reveal-on-scroll">LATEST</span>
 
@@ -535,6 +553,14 @@ real trade-offs you need to plan for.{% endblock %}
         {% endif %}
         {% endfor %}
     </div>
+
+    {% else %}
+    <span class="section-label reveal-on-scroll">LATEST</span>
+    <p style="color: var(--c-grey-mid); font-size: 15px; margin: 0.5rem 0 1.5rem 0;">
+        Detailed reality checks are being published. Use the tools below to analyse your own situation while they go
+        live.
+    </p>
+    {% endif %}
 </section>
 
 <!-- THIS MONTH'S UPDATES -->
@@ -604,27 +630,20 @@ real trade-offs you need to plan for.{% endblock %}
     <span class="section-label reveal-on-scroll">CAREER REALITY INDEX</span>
     <div style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa;">
         <p style="margin-top: 0; margin-bottom: 0.5rem;">
-            Monthly signal: salary pressure <strong>{{ latest_index_row.salary_pressure }}</strong>, switch difficulty
-            <strong>{{ latest_index_row.switch_difficulty }}</strong>, layoff risk <strong>{{ latest_index_row.layoff_risk }}</strong>.
+            <strong>{{ latest_band }}</strong> &mdash; {{ latest_index_row.month }} overall score
+            {{ latest_index_row.overall }}/100.
+        </p>
+        <p style="margin: 0 0 0.5rem 0;">
+            Salary pressure <strong>{{ latest_index_row.salary_pressure }}</strong> &middot; switch difficulty
+            <strong>{{ latest_index_row.switch_difficulty }}</strong> &middot; layoff risk
+            <strong>{{ latest_index_row.layoff_risk }}</strong>.
         </p>
         <p style="margin: 0 0 0.75rem 0; color: var(--c-grey-mid); font-size: 14px;">
-            Latest publication: {{ latest_index_row.month }} &middot; Overall index {{ latest_index_row.overall }}.
+            Scores run 0&ndash;100. High Pressure (65+) means the market actively disadvantages career moves;
+            plan accordingly.
         </p>
         <a href="{% url 'career_reality_index' %}" style="text-decoration: underline;">Read full methodology and monthly
             table</a>
-    </div>
-</section>
-
-<!-- COMMERCIAL RESILIENCE -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">COMMERCIAL RESILIENCE</span>
-    <div style="border: 1px solid var(--c-divider); padding: 1.25rem;">
-        <p style="margin-top: 0; margin-bottom: 0.75rem; color: var(--c-grey-mid);">
-            Revenue streams are diversified across ads, research products, and subscriber-led offerings to protect
-            editorial independence.
-        </p>
-        <a href="{% url 'revenue_model' %}" style="text-decoration: underline;">Revenue Model</a> &middot;
-        <a href="{% url 'sponsorship_policy' %}" style="text-decoration: underline;">Sponsorship Policy</a>
     </div>
 </section>
 
