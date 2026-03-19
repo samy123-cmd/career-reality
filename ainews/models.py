@@ -93,6 +93,14 @@ class AINewsItem(models.Model):
         verbose_name = "AI News Item"
         verbose_name_plural = "AI News Items"
         ordering = ['-published_at']
+        indexes = [
+            # Covers filter(status='published').order_by('-published_at') — hub, detail related
+            models.Index(fields=['status', '-published_at'], name='ainews_status_pubdate_idx'),
+            # Covers filter(status='published').order_by('-event_date', '-published_at') — hub, tag pages
+            models.Index(fields=['status', '-event_date', '-published_at'], name='ainews_status_event_pub_idx'),
+            # Covers sitemap query order_by('-reviewed_at', '-published_at')
+            models.Index(fields=['status', '-reviewed_at'], name='ainews_status_reviewed_idx'),
+        ]
 
     def __str__(self):
         return self.title

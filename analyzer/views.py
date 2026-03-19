@@ -4,6 +4,8 @@ from django.views.decorators.cache import cache_page
 from django.utils.cache import patch_cache_control
 from . import forms, logic, models
 
+COMPANY_TYPE_LABELS = dict(models.SalarySubmission.COMPANY_TYPES)
+
 # Wizard Configuration
 STEPS = {
     1: forms.Step1Form,
@@ -182,16 +184,19 @@ def salary_feed_api(request):
     logger = logging.getLogger(__name__)
     try:
         # For now, return all recent submissions. In prod, filter by is_verified=True
-        submissions = models.SalarySubmission.objects.all().order_by('-created_at')[:20]
-        data = []
-        for s in submissions:
-            data.append({
-                'role': s.role,
-                'company': s.get_company_type_display(),
-                'exp': f"{s.experience_years}y",
-                'ctc': f"{s.ctc/100000:.1f} LPA",
-                'city': s.city
-            })
+        submissions = models.SalarySubmission.objects.values(
+            'role', 'company_type', 'experience_years', 'ctc', 'city'
+        ).order_by('-created_at')[:20]
+        data = [
+            {
+                'role': row['role'],
+                'company': COMPANY_TYPE_LABELS.get(row['company_type'], row['company_type']),
+                'exp': f"{row['experience_years']}y",
+                'ctc': f"{row['ctc']/100000:.1f} LPA",
+                'city': row['city'],
+            }
+            for row in submissions
+        ]
         response = JsonResponse({'submissions': data})
         patch_cache_control(response, public=True, max_age=120, stale_while_revalidate=60)
         return response
@@ -207,17 +212,22 @@ def layoff_radar(request):
     Aggregates reports to show 'Danger' vs 'Safe'.
     """
     # Simple aggregation for V1: Get recent reports
-    recent_reports = list(models.LayoffReport.objects.all().order_by('-created_at')[:50])
+    recent_reports = list(
+        models.LayoffReport.objects.only(
+            'company_name', 'status', 'role_affected', 'location', 'details', 'created_at'
+        ).order_by('-created_at')[:50]
+    )
 
     # Add a lightweight confidence score per report
     from django.utils import timezone
+    now = timezone.now()
     for report in recent_reports:
         score = 30
         if report.details:
             score += 20
         if report.status in ['freeze', 'rumor', 'layoff']:
             score += 10
-        age_days = (timezone.now() - report.created_at).days
+        age_days = (now - report.created_at).days
         if age_days <= 7:
             score += 40
         elif age_days <= 30:

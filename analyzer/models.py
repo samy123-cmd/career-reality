@@ -10,7 +10,7 @@ class AssessmentLog(models.Model):
     scenario_type = models.CharField(max_length=100, help_text="Primary driver (e.g. manager_pressure)")
     has_offer = models.BooleanField(default=False)
     tool_version = models.CharField(max_length=20, default="v1.0")
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def __str__(self):
         return f"{self.risk_level} - {self.created_at.strftime('%Y-%m-%d')}"
@@ -36,7 +36,7 @@ class SalarySubmission(models.Model):
     tech_stack = models.CharField(max_length=200, help_text="e.g. Java, React, AWS", blank=True)
     
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -62,7 +62,7 @@ class LayoffReport(models.Model):
     details = models.TextField(blank=True, help_text="Context (optional)")
     
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ['-created_at']

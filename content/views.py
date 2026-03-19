@@ -9,21 +9,25 @@ from .models import Article, Category, Author
 
 
 def _article_sources(article):
-    today = timezone.localdate()
+    checked_on = article.last_reality_check
+    if checked_on is None and article.updated_at:
+        checked_on = timezone.localtime(article.updated_at).date()
+    if checked_on is None:
+        checked_on = timezone.localdate()
     common_sources = [
-        {"name": "AmbitionBox Salary Insights", "url": "https://www.ambitionbox.com/salaries", "checked_on": today},
-        {"name": "Glassdoor India Salaries", "url": "https://www.glassdoor.co.in/Salaries/index.htm", "checked_on": today},
-        {"name": "LinkedIn Jobs (India)", "url": "https://www.linkedin.com/jobs/", "checked_on": today},
-        {"name": "Naukri Jobs (India)", "url": "https://www.naukri.com/", "checked_on": today},
+        {"name": "AmbitionBox Salary Insights", "url": "https://www.ambitionbox.com/salaries", "checked_on": checked_on},
+        {"name": "Glassdoor India Salaries", "url": "https://www.glassdoor.co.in/Salaries/index.htm", "checked_on": checked_on},
+        {"name": "LinkedIn Jobs (India)", "url": "https://www.linkedin.com/jobs/", "checked_on": checked_on},
+        {"name": "Naukri Jobs (India)", "url": "https://www.naukri.com/", "checked_on": checked_on},
     ]
 
     category_name = (article.category.name or "").lower()
     if "design" in category_name:
-        common_sources.append({"name": "Dribbble Salary Guide", "url": "https://dribbble.com/resources", "checked_on": today})
+        common_sources.append({"name": "Dribbble Salary Guide", "url": "https://dribbble.com/resources", "checked_on": checked_on})
     if "data" in category_name or "ai" in category_name:
-        common_sources.append({"name": "Kaggle State of Data/AI", "url": "https://www.kaggle.com/", "checked_on": today})
+        common_sources.append({"name": "Kaggle State of Data/AI", "url": "https://www.kaggle.com/", "checked_on": checked_on})
     if "product" in category_name:
-        common_sources.append({"name": "Product Management Salary Benchmarks", "url": "https://www.productledalliance.com/", "checked_on": today})
+        common_sources.append({"name": "Product Management Salary Benchmarks", "url": "https://www.productledalliance.com/", "checked_on": checked_on})
 
     return common_sources[:6]
 
@@ -110,11 +114,40 @@ def _reading_time_minutes(article):
 
 
 def _key_takeaways(article):
-    return [
-        f"This piece focuses on {article.category.name.lower()} realities in India, not outlier narratives.",
-        "Compensation numbers should be interpreted with role scope, market cycle, and switching friction.",
-        "Use decision frameworks and evidence checks before acting on title or salary headlines.",
-    ]
+    """Generate article-specific takeaways from the article's own content
+    instead of identical generic text across all articles (AdSense quality signal)."""
+    from django.utils.html import strip_tags
+    takeaways = []
+
+    # First takeaway: from the verdict (the article's core conclusion)
+    verdict_text = strip_tags(article.verdict).strip()
+    if verdict_text:
+        first_sentence = verdict_text.split('.')[0].strip()
+        if first_sentence:
+            takeaways.append(first_sentence + '.')
+
+    # Second takeaway: from stuck_point (where people fail)
+    stuck_text = strip_tags(article.stuck_point).strip()
+    if stuck_text:
+        first_sentence = stuck_text.split('.')[0].strip()
+        if first_sentence:
+            takeaways.append(first_sentence + '.')
+
+    # Third takeaway: from who_should_avoid
+    avoid_text = strip_tags(article.who_should_avoid).strip()
+    if avoid_text:
+        first_sentence = avoid_text.split('.')[0].strip()
+        if first_sentence:
+            takeaways.append(first_sentence + '.')
+
+    # Fallback if content fields are too short
+    if len(takeaways) < 2:
+        takeaways.append(
+            f"This analysis covers {article.category.name.lower()}"
+            " career realities specific to the Indian market."
+        )
+
+    return takeaways[:3]
 
 
 def _originality_moat(article):
@@ -170,22 +203,31 @@ def _evidence_map(article, source_refs):
 def author_detail(request, author_id):
     author = get_object_or_404(Author, id=author_id, is_active=True)
     articles = Article.objects.filter(author=author, status='published').order_by('-published_at')
+
+    # Noindex thin author pages to avoid AdSense "low value content" flag
+    has_minimum_articles = articles.values('id')[1:2].exists()
+    meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
+
     return render(request, 'content/author_detail.html', {
         'author': author,
-        'articles': articles
+        'articles': articles,
+        'meta_robots': meta_robots,
     })
-
-@cache_page(300)
+@cache_page(60 * 15)
 def article_detail(request, slug):
-    article = get_object_or_404(Article, slug=slug, status='published')
+    article = get_object_or_404(
+        Article.objects.select_related('author', 'category'),
+        slug=slug,
+        status='published',
+    )
     og_image_url = request.build_absolute_uri(reverse('article_og_image', args=[article.slug]))
     # Get related articles from the same category, excluding the current article
     related_articles = Article.objects.filter(
         category=article.category,
         status='published'
-    ).exclude(id=article.id).order_by('-published_at')[:3]
+    ).exclude(id=article.id).select_related('category').order_by('-published_at')[:3]
     # Get all categories for internal linking
-    categories = Category.objects.all()
+    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     source_refs = _article_sources(article)
     return render(request, 'content/article_detail.html', {
         'article': article,
@@ -210,20 +252,24 @@ def article_detail(request, slug):
         'twitter_description': article.meta_description,
         'twitter_image': og_image_url,
     })
-
-@cache_page(300)
+@cache_page(60 * 15)
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
     og_title = f"{category.name} Careers in India - Career Reality"
     og_description = f"Reality checks and insights about {category.name.lower()} careers in India. Salary expectations, trade-offs, and growth risks."
     # Filter only published articles, order by most recent
-    articles = Article.objects.filter(category=category, status='published').order_by('-published_at')
+    articles = Article.objects.filter(category=category, status='published').select_related('author').order_by('-published_at')
     related_categories = Category.objects.exclude(id=category.id).order_by('order', 'name')[:4]
-    
+
+    # Noindex thin categories (< 3 articles) to avoid AdSense "low value content" flag
+    has_minimum_articles = articles.values('id')[2:3].exists()
+    meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
+
     return render(request, 'content/category_detail.html', {
         'category': category,
         'articles': articles,
         'related_categories': related_categories,
+        'meta_robots': meta_robots,
         'og_title': og_title,
         'og_description': og_description,
         'twitter_title': og_title,
