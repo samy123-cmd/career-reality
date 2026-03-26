@@ -73,7 +73,7 @@ Indian tech professionals.{% endblock %}
             <div class="ai-stats">
                 <span class="ai-stat">Reviewed by Editorial Lens</span>
                 <span class="ai-stat">Career Translation Included</span>
-                <span class="ai-stat">Technical Sections Standardized</span>
+                <span class="ai-stat">Verification State Shown</span>
             </div>
         </div>
 
@@ -106,7 +106,12 @@ Indian tech professionals.{% endblock %}
                 <article class="ai-feature-card">
                     <div class="meta">
                         <span class="significance-badge significance-{{ lead.significance }}"></span>
-                        {{ lead.source_name }} &middot; Updated {{ lead.reviewed_at|default:lead.published_at|date:"F j, Y" }}
+                        {{ lead.source_name }} &middot;
+                        {% if lead.fact_check_status == 'verified' %}
+                        Verified {{ lead.last_verified_at|default:lead.reviewed_at|default:lead.published_at|date:"F j, Y" }}
+                        {% else %}
+                        Pending verification
+                        {% endif %}
                     </div>
                     <h2><a href="{% url 'ai_news_detail' lead.slug %}">{{ lead.title }}</a></h2>
                     <p>{{ lead.summary|striptags|truncatewords:52 }}</p>
@@ -120,7 +125,12 @@ Indian tech professionals.{% endblock %}
                     <article class="ai-news-card">
                         <div class="ai-news-meta">
                             <span class="significance-badge significance-{{ item.significance }}"></span>
-                            {{ item.source_name }} &middot; Updated {{ item.reviewed_at|default:item.published_at|date:"M j, Y" }}
+                            {{ item.source_name }} &middot;
+                            {% if item.fact_check_status == 'verified' %}
+                            Verified {{ item.last_verified_at|default:item.reviewed_at|default:item.published_at|date:"M j, Y" }}
+                            {% else %}
+                            Pending verification
+                            {% endif %}
                         </div>
                         <h3><a href="{% url 'ai_news_detail' item.slug %}">{{ item.title }}</a></h3>
                         <p class="ai-news-summary">{{ item.summary|striptags|truncatewords:28 }}</p>

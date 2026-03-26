@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
 <rect width="1200" height="420" fill="#fafafa"/>
 <text x="60" y="58" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#111">Timeline</text>
-<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">Llama 3.1 (405B) Reframed Open Models as Strategic Infrastructure</text>
+<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">Meta Llama 3.1 Open Source: Career Impact for Indian AI Engineers (2026)</text>
 <line x1="100" y1="240" x2="1100" y2="240" stroke="#222" stroke-width="2"/>
 <circle cx="190" cy="240" r="10" fill="#d93025"/>
 <text x="105" y="205" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#111">Jul 24, 2024</text>
@@ -10,7 +10,7 @@
 <text x="525" y="205" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#111">H2 2024</text>
 <text x="460" y="285" font-family="Arial,sans-serif" font-size="14" fill="#444">Cloud providers and tooling vendors expand open-model support.</text>
 <circle cx="1030" cy="240" r="10" fill="#d93025"/>
-<text x="945" y="205" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#111">2025</text>
-<text x="880" y="285" font-family="Arial,sans-serif" font-size="14" fill="#444">Open-model ecosystems mature with better serving and alignment tooli</text>
+<text x="945" y="205" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#111">Dec 2024</text>
+<text x="880" y="285" font-family="Arial,sans-serif" font-size="14" fill="#444">Llama 3.3 delivers 70B-class performance competitive with the 405B.</text>
 <text x="60" y="370" font-family="Arial,sans-serif" font-size="14" fill="#666">Career Reality AI Pulse visual context.</text>
 </svg>

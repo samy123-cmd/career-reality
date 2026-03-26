@@ -1,15 +1,22 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
+from django.views.decorators.http import require_GET
 from django.urls import reverse
 from content.models import Article, Category
 from django.utils import timezone
 from django.conf import settings
+from datetime import date
+import os
+import io
+from django.core.management import call_command
+from core.publishing import AI_SECTION_INDEXABLE
 
 
 def _topic_clusters():
-    return [
+    clusters = [
         {
             "name": "Salary Reality Cluster",
             "description": "Compensation truth, in-hand math, and negotiation leverage.",
@@ -37,21 +44,34 @@ def _topic_clusters():
                 {"label": "Topic Clusters", "url_name": "topic_clusters"},
             ],
         },
-        {
-            "name": "AI Intelligence Cluster",
-            "description": "AI model releases, career impact, and India-specific developments.",
-            "pillar_url_name": "ai_news_hub",
-            "supporting_urls": [],
-        },
     ]
+    if AI_SECTION_INDEXABLE:
+        clusters.append(
+            {
+                "name": "AI Intelligence Cluster",
+                "description": "AI model releases, career impact, and India-specific developments.",
+                "pillar_url_name": "ai_news_hub",
+                "supporting_urls": [],
+            }
+        )
+    return clusters
 
 
 def _career_reality_index_rows():
+    def _shift_month(d, months_back):
+        year = d.year
+        month = d.month - months_back
+        while month <= 0:
+            month += 12
+            year -= 1
+        return date(year, month, 1)
+
+    base = timezone.localdate()
     return [
-        {"month": "February 2026", "salary_pressure": 72, "switch_difficulty": 68, "layoff_risk": 54, "overall": 65},
-        {"month": "January 2026", "salary_pressure": 71, "switch_difficulty": 66, "layoff_risk": 56, "overall": 64},
-        {"month": "December 2025", "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 58, "overall": 63},
-        {"month": "November 2025", "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 57, "overall": 62},
+        {"month": _shift_month(base, 0).strftime("%B %Y"), "salary_pressure": 72, "switch_difficulty": 68, "layoff_risk": 54, "overall": 65},
+        {"month": _shift_month(base, 1).strftime("%B %Y"), "salary_pressure": 71, "switch_difficulty": 66, "layoff_risk": 56, "overall": 64},
+        {"month": _shift_month(base, 2).strftime("%B %Y"), "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 58, "overall": 63},
+        {"month": _shift_month(base, 3).strftime("%B %Y"), "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 57, "overall": 62},
     ]
 
 
@@ -83,6 +103,46 @@ def robots_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
+
+def healthz(request):
+    """Lightweight health endpoint for uptime checks and deploy verification."""
+    from django.db import connection
+    from django.core.cache import cache
+
+    db_ok = True
+    cache_ok = True
+    db_error = ""
+    cache_error = ""
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+    except Exception as exc:
+        db_ok = False
+        db_error = str(exc)
+
+    try:
+        cache_key = "healthz_probe"
+        cache.set(cache_key, "ok", timeout=30)
+        cache_ok = cache.get(cache_key) == "ok"
+    except Exception as exc:
+        cache_ok = False
+        cache_error = str(exc)
+
+    status_code = 200 if db_ok and cache_ok else 503
+    return JsonResponse(
+        {
+            "status": "ok" if status_code == 200 else "degraded",
+            "timestamp": timezone.now().isoformat(),
+            "checks": {
+                "database": {"ok": db_ok, "error": db_error},
+                "cache": {"ok": cache_ok, "error": cache_error},
+            },
+        },
+        status=status_code,
+    )
+
 @cache_page(60 * 15)
 def home(request):
     """
@@ -92,7 +152,7 @@ def home(request):
     """
     article_qs = Article.objects.filter(status='published').select_related('author', 'category').order_by('-published_at')
     articles = article_qs[:10]
-    categories = Category.objects.all()
+    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     recent_updates = article_qs.order_by('-updated_at')[:5]
     index_rows = _career_reality_index_rows()
     
@@ -153,11 +213,13 @@ def salary_reality(request):
 @cache_page(60 * 60)
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
-    categories = Category.objects.all()
+    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     title = "CTC Decoder: Calculate In-Hand Salary India (2026)"
     description = "Decode CTC into real in-hand salary with PF, gratuity, variable pay, and tax regime logic."
-    context = {'categories': categories}
-    context.update(_seo(title, description))
+    context = {
+        'categories': categories,
+        **_seo(title, description),
+    }
     return render(request, 'core/salary_calculator.html', context)
 
 @cache_page(60 * 60)
@@ -332,6 +394,63 @@ def newsletter_signup(request):
         messages.error(request, 'Please enter a valid email address.')
 
     return redirect(request.META.get('HTTP_REFERER') or reverse('home'))
+
+
+@require_GET
+def run_freshness_cron(request):
+    """Secure internal endpoint for scheduled freshness maintenance jobs."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse(
+            {"status": "error", "message": "cron token is not configured"},
+            status=503,
+        )
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    limit = int(request.GET.get("limit", os.environ.get("CRON_FETCH_LIMIT", "12")))
+    commit_refresh = request.GET.get("commit_refresh", os.environ.get("CRON_REFRESH_COMMIT", "False")) == "True"
+    strict_freshness = request.GET.get("strict_freshness", os.environ.get("CRON_STRICT_FRESHNESS", "False")) == "True"
+    warm_cache = request.GET.get("warm_cache", os.environ.get("CRON_WARM_CACHE", "True")) == "True"
+
+    started_at = timezone.now()
+    output = io.StringIO()
+    exit_status = "ok"
+
+    try:
+        call_command(
+            "run_production_maintenance",
+            fetch_limit=limit,
+            commit_refresh=commit_refresh,
+            strict_freshness=strict_freshness,
+            warm_cache=warm_cache,
+            stdout=output,
+        )
+    except Exception as exc:
+        exit_status = "error"
+        output.write(f"\nERROR: {exc}")
+
+    finished_at = timezone.now()
+    elapsed_ms = round((finished_at - started_at).total_seconds() * 1000, 2)
+    status_code = 200 if exit_status == "ok" else 500
+    return JsonResponse(
+        {
+            "status": exit_status,
+            "started_at": started_at.isoformat(),
+            "finished_at": finished_at.isoformat(),
+            "elapsed_ms": elapsed_ms,
+            "log": output.getvalue()[-4000:],
+        },
+        status=status_code,
+    )
 
 
 def custom_404(request, exception):

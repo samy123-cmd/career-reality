@@ -25,6 +25,7 @@ def intro_view(request):
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
+        'meta_robots': 'noindex, follow',
     })
 
 def wizard_start_session(request):
@@ -137,6 +138,7 @@ def submit_salary(request):
     """
     Handle anonymous salary submissions.
     """
+    error = None
     if request.method == 'POST':
         form = forms.SalarySubmissionForm(request.POST)
         if form.is_valid():
@@ -150,7 +152,7 @@ def submit_salary(request):
                 tech_stack=d.get('tech_stack', ''),
             )
             return redirect(reverse('salary_submit_success'))
-        # Re-render with validation errors
+        error = "Invalid data"
     else:
         form = forms.SalarySubmissionForm()
 
@@ -163,6 +165,7 @@ def submit_salary(request):
         'twitter_title': title,
         'twitter_description': description,
         'meta_robots': 'noindex, follow',
+        'error': error,
     })
 
 def salary_submit_success(request):

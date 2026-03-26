@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
 <rect width="1200" height="420" fill="#fff"/>
 <text x="60" y="58" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#111">Signal Chart</text>
-<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">OpenAI o1 Changed the Conversation From Fluent Answers to Verifiable Reasoning</text>
+<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">OpenAI o1 Reasoning Model: What Indian Engineers Must Learn Now (2026 Guide)</text>
 <rect x="320" y="120" width="760" height="34" fill="#efefef"/>
 <rect x="320" y="120" width="720" height="34" fill="#111"/>
 <text x="60" y="143" font-family="Arial,sans-serif" font-size="18" fill="#222">Capability Jump</text>

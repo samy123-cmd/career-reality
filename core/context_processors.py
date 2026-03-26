@@ -1,4 +1,5 @@
 from django.conf import settings
+from core.publishing import AI_SECTION_INDEXABLE
 
 
 def seo_defaults(request):
@@ -53,5 +54,5 @@ def seo_defaults(request):
         "en_canonical_url": en_canonical_url,
         "hi_canonical_url": hi_canonical_url,
         "categories": categories,
+        "ai_section_indexable": AI_SECTION_INDEXABLE,
     }
-

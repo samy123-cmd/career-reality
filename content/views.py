@@ -6,50 +6,24 @@ from django.views.decorators.cache import cache_page
 from django.utils import timezone
 import re
 from .models import Article, Category, Author
+from .editorial import (
+    author_profile_is_indexable,
+    build_article_sources,
+    build_article_update_log,
+    build_author_focus_areas,
+    build_author_page_intro,
+    build_category_profile,
+    build_evidence_map,
+)
+from core.publishing import INDEXABLE_CATEGORY_MIN_ARTICLES
 
 
 def _article_sources(article):
-    checked_on = article.last_reality_check
-    if checked_on is None and article.updated_at:
-        checked_on = timezone.localtime(article.updated_at).date()
-    if checked_on is None:
-        checked_on = timezone.localdate()
-    common_sources = [
-        {"name": "AmbitionBox Salary Insights", "url": "https://www.ambitionbox.com/salaries", "checked_on": checked_on},
-        {"name": "Glassdoor India Salaries", "url": "https://www.glassdoor.co.in/Salaries/index.htm", "checked_on": checked_on},
-        {"name": "LinkedIn Jobs (India)", "url": "https://www.linkedin.com/jobs/", "checked_on": checked_on},
-        {"name": "Naukri Jobs (India)", "url": "https://www.naukri.com/", "checked_on": checked_on},
-    ]
-
-    category_name = (article.category.name or "").lower()
-    if "design" in category_name:
-        common_sources.append({"name": "Dribbble Salary Guide", "url": "https://dribbble.com/resources", "checked_on": checked_on})
-    if "data" in category_name or "ai" in category_name:
-        common_sources.append({"name": "Kaggle State of Data/AI", "url": "https://www.kaggle.com/", "checked_on": checked_on})
-    if "product" in category_name:
-        common_sources.append({"name": "Product Management Salary Benchmarks", "url": "https://www.productledalliance.com/", "checked_on": checked_on})
-
-    return common_sources[:6]
+    return build_article_sources(article)
 
 
 def _article_update_log(article):
-    logs = []
-    if article.updated_at:
-        logs.append({
-            "date": article.updated_at.date(),
-            "summary": "Reviewed salary ranges, corrected stale assumptions, and tightened internal links for related reads."
-        })
-    if article.last_reality_check:
-        logs.append({
-            "date": article.last_reality_check,
-            "summary": "Revalidated core claims against current hiring and compensation signals."
-        })
-    if article.published_at:
-        logs.append({
-            "date": article.published_at.date(),
-            "summary": "Initial publication with baseline market framing and trade-off analysis."
-        })
-    return logs
+    return build_article_update_log(article)
 
 
 def _decision_framework(article):
@@ -174,43 +148,25 @@ def _originality_moat(article):
 
 
 def _evidence_map(article, source_refs):
-    def _slice_sources(start, end):
-        return source_refs[start:end] if source_refs else []
-
-    return [
-        {
-            "section_id": "expectation",
-            "claim": "Popular career narratives overweight edge cases and underweight base-rate outcomes.",
-            "sources": _slice_sources(0, 2),
-        },
-        {
-            "section_id": "reality",
-            "claim": "Observed market behavior diverges from social-media compensation storytelling.",
-            "sources": _slice_sources(1, 3),
-        },
-        {
-            "section_id": "salary-growth",
-            "claim": "Salary and growth ranges vary by company type, leverage, and cycle timing.",
-            "sources": _slice_sources(0, 4),
-        },
-        {
-            "section_id": "stuck-point",
-            "claim": "Career plateaus are often linked to stale scope, weak mobility planning, and evidence gaps.",
-            "sources": _slice_sources(2, 5),
-        },
-    ]
+    return build_evidence_map(article, source_refs)
 
 def author_detail(request, author_id):
     author = get_object_or_404(Author, id=author_id, is_active=True)
-    articles = Article.objects.filter(author=author, status='published').order_by('-published_at')
-
-    # Noindex thin author pages to avoid AdSense "low value content" flag
-    has_minimum_articles = articles.values('id')[1:2].exists()
-    meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
+    articles = list(
+        Article.objects.filter(author=author, status='published')
+        .select_related('category')
+        .order_by('-published_at')
+    )
+    article_count = len(articles)
+    coverage_areas = build_author_focus_areas(articles)
+    meta_robots = "index, follow" if author_profile_is_indexable(author, article_count) else "noindex, follow"
 
     return render(request, 'content/author_detail.html', {
         'author': author,
         'articles': articles,
+        'article_count': article_count,
+        'coverage_areas': coverage_areas,
+        'author_page_intro': build_author_page_intro(author, article_count, coverage_areas),
         'meta_robots': meta_robots,
     })
 @cache_page(60 * 15)
@@ -257,17 +213,20 @@ def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
     og_title = f"{category.name} Careers in India - Career Reality"
     og_description = f"Reality checks and insights about {category.name.lower()} careers in India. Salary expectations, trade-offs, and growth risks."
-    # Filter only published articles, order by most recent
-    articles = Article.objects.filter(category=category, status='published').select_related('author').order_by('-published_at')
+    articles = list(
+        Article.objects.filter(category=category, status='published')
+        .select_related('author')
+        .order_by('-published_at')
+    )
+    article_count = len(articles)
     related_categories = Category.objects.exclude(id=category.id).order_by('order', 'name')[:4]
-
-    # Noindex thin categories (< 3 articles) to avoid AdSense "low value content" flag
-    has_minimum_articles = articles.values('id')[2:3].exists()
-    meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
+    meta_robots = "index, follow" if article_count >= INDEXABLE_CATEGORY_MIN_ARTICLES else "noindex, follow"
 
     return render(request, 'content/category_detail.html', {
         'category': category,
         'articles': articles,
+        'article_count': article_count,
+        'category_profile': build_category_profile(category, article_count),
         'related_categories': related_categories,
         'meta_robots': meta_robots,
         'og_title': og_title,

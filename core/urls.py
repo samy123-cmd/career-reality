@@ -4,6 +4,8 @@ from analyzer import views as analyzer_views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('healthz', views.healthz, name='healthz'),
+    path('internal/cron/freshness/', views.run_freshness_cron, name='run_freshness_cron'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('about/', views.about, name='about'),
     path('editorial/', views.editorial_standards, name='editorial'),

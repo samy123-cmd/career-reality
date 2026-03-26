@@ -40,13 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.addEventListener('click', closeMenu);
     }
 
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-            closeMenu();
-        }
-    });
-
     // Generic Dropdown Handler (Supports multiple)
     const dropdowns = document.querySelectorAll('.nav-dropdown');
 
@@ -112,17 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Close on escape key
+    // Close mobile menu + dropdowns on Escape key (single handler)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                closeMenu();
+            }
             dropdowns.forEach(dropdown => {
                 const content = dropdown.querySelector('.nav-dropdown-content');
                 const trigger = dropdown.querySelector('.nav-dropdown-trigger');
                 if (content) content.style.display = 'none';
-                if (trigger) {
-                    trigger.setAttribute('aria-expanded', 'false');
-                    // Optionally focus back? trigger.focus();
-                }
+                if (trigger) trigger.setAttribute('aria-expanded', 'false');
             });
         }
     });

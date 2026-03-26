@@ -41,7 +41,7 @@ India.{% endblock %}
     <a href="{% url 'ai_news_hub' %}" class="ai-tag-back">&larr; Back to AI Pulse</a>
 
     <div class="ai-tag-hero">
-        <span class="section-label" style="display: block; margin-bottom: 0.8rem;">AI PULSE / {{ tag.name|upper }}</span>
+        <span class="section-label" style="display: block; margin-bottom: 0.8rem;">AI PULSE / {{ tag.name|upper             }}</span>
         <h1>{{ tag.name }}</h1>
     </div>
 
@@ -50,9 +50,19 @@ India.{% endblock %}
         {% for item in page_obj.object_list %}
         <article class="ai-tag-card">
             <div class="ai-tag-meta">
-                <span
-                    style="display:inline-block;width:8px;height:8px;border-radius:50%;{% if item.significance == 'high' %}background:#d93025;{% elif item.significance == 'medium' %}background:#f9a825;{% else %}background:#aaa;{% endif %}"></span>
-                {{ item.source_name }} &middot; Updated {{ item.reviewed_at|default:item.published_at|date:"M j, Y" }}
+                {% if item.significance == 'high' %}
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d93025;"></span>
+                {% elif item.significance == 'medium' %}
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f9a825;"></span>
+                {% else %}
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#aaa;"></span>
+                {% endif %}
+                {{ item.source_name }} &middot;
+                {% if item.fact_check_status == 'verified' %}
+                Verified {{ item.last_verified_at|default:item.reviewed_at|default:item.published_at|date:"M j, Y" }}
+                {% else %}
+                Pending verification
+                {% endif %}
             </div>
             <h3>
                 <a href="{% url 'ai_news_detail' item.slug %}">{{ item.title }}</a>

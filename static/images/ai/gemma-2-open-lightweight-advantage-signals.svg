@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
 <rect width="1200" height="420" fill="#fff"/>
 <text x="60" y="58" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#111">Signal Chart</text>
-<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">Gemma 2 Showed Why Open, Lightweight Models Still Matter in 2025-Scale AI</text>
+<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">How to Self-Host AI Models in India: Gemma 2 Guide for Startups (2026)</text>
 <rect x="320" y="120" width="760" height="34" fill="#efefef"/>
 <rect x="320" y="120" width="632" height="34" fill="#111"/>
 <text x="60" y="143" font-family="Arial,sans-serif" font-size="18" fill="#222">Capability Jump</text>
 <text x="1110" y="143" font-family="Arial,sans-serif" font-size="16" fill="#222" text-anchor="end">79/100</text>
 <rect x="320" y="210" width="760" height="34" fill="#efefef"/>
-<rect x="320" y="210" width="656" height="34" fill="#d93025"/>
+<rect x="320" y="210" width="648" height="34" fill="#d93025"/>
 <text x="60" y="233" font-family="Arial,sans-serif" font-size="18" fill="#222">Cost Efficiency</text>
-<text x="1110" y="233" font-family="Arial,sans-serif" font-size="16" fill="#222" text-anchor="end">82/100</text>
+<text x="1110" y="233" font-family="Arial,sans-serif" font-size="16" fill="#222" text-anchor="end">81/100</text>
 <rect x="320" y="300" width="760" height="34" fill="#efefef"/>
 <rect x="320" y="300" width="600" height="34" fill="#1a73e8"/>
 <text x="60" y="323" font-family="Arial,sans-serif" font-size="18" fill="#222">Deployment Readiness</text>

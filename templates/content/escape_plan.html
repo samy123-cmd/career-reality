@@ -112,55 +112,68 @@ to Product companies.{% endblock %}
     </div>
 
     <!-- DYNAMIC ROADMAPS CONTAINER -->
-    <div id="roadmap-container" style="padding-top: 2rem; display: none;">
+    <div id="roadmap-container" style="padding-top: 2rem;">
         <h2 style="font-size: 28px; border-bottom: 2px solid black; padding-bottom: 1rem; margin-bottom: 2rem;">Your
             Personalized Escape Protocol</h2>
+        <p style="color: var(--c-grey-mid); margin-bottom: 2rem;">Take the quiz above to see your recommended path highlighted. All roadmaps are shown below for reference.</p>
 
         <!-- 1. SUPPORT / OPS -->
-        <div id="roadmap-support" class="roadmap-scenario" style="display: none;">
+        <details id="roadmap-support" class="roadmap-scenario collapsible">
+            <summary><strong>Path: Support / Operations &rarr; Engineer</strong></summary>
+            <div class="content">
             <div class="roadmap-step">
                 <h3 class="step-title">Strategy: The "Automation" Trojan Horse</h3>
                 <p>External recruiters ignore "Support" titles. You must hack your way out.</p>
                 <ul class="step-list">
-                    <li><strong>Step 1: Code your job.</strong> If you restart servers manually, write a script. Put
+                    <li><strong>Step 1: Code your job.</strong> If you restart servers manually, write a script. Use AI coding assistants (GitHub Copilot, Cursor) to accelerate. Put
                         "Built Automation Tools" on your resume.</li>
-                    <li><strong>Step 2: internal Switch.</strong> Apply for QA/Dev roles <em>inside</em> your company.
+                    <li><strong>Step 2: Internal Switch.</strong> Apply for QA/Dev roles <em>inside</em> your company.
                         The bar is lower.</li>
                     <li><strong>Step 3: The Jump.</strong> Once you have the "Engineer" title for 6 months, apply to
-                        startups.</li>
+                        startups. Target companies hiring for AI-ops or platform automation.</li>
                 </ul>
             </div>
-        </div>
+            </div>
+        </details>
 
         <!-- 2. QA / TESTER -->
-        <div id="roadmap-qa" class="roadmap-scenario" style="display: none;">
+        <details id="roadmap-qa" class="roadmap-scenario collapsible">
+            <summary><strong>Path: QA / Tester &rarr; SDET / Engineer in Test</strong></summary>
+            <div class="content">
             <div class="roadmap-step">
                 <h3 class="step-title">Strategy: The SDET Pivot</h3>
                 <p>Manual testing is irrelevant. You need to become an "Engineer in Test".</p>
                 <ul class="step-list">
-                    <li><strong>Must Learn:</strong> Selenium or Playwright + One Language (Java/Python).</li>
-                    <li><strong>The Project:</strong> writes a test suite for a public website (e.g., Amazon search
-                        flow) and put it on Github.</li>
+                    <li><strong>Must Learn:</strong> Playwright (preferred over Selenium in 2026) + One Language (Python/TypeScript).</li>
+                    <li><strong>The Project:</strong> Write an end-to-end test suite for a public website (e.g., Amazon search
+                        flow) and put it on GitHub. Bonus: add API contract tests.</li>
+                    <li><strong>AI Edge:</strong> Learn to write AI-assisted test generation prompts — QA teams at product companies increasingly use LLM-driven test scaffolding.</li>
                     <li><strong>Target:</strong> Series A Startups looking for their "First QA Hire".</li>
                 </ul>
             </div>
-        </div>
+            </div>
+        </details>
 
         <!-- 3. DEV - WEB -->
-        <div id="roadmap-dev-web" class="roadmap-scenario" style="display: none;">
+        <details id="roadmap-dev-web" class="roadmap-scenario collapsible">
+            <summary><strong>Path: Web Developer &rarr; Product Company Engineer</strong></summary>
+            <div class="content">
             <div class="roadmap-step">
                 <h3 class="step-title">Strategy: The Portfolio Play</h3>
                 <p>You have the right stack, but the wrong label. Show you can build product.</p>
                 <ul class="step-list">
-                    <li><strong>Build ONE Complex App:</strong> Not a ToDo list. Build a Trello Clone or Chat App with
-                        WebSockets.</li>
-                    <li><strong>DSA:</strong> Solve Blind 75 Leetcode. Product companies WILL ask this.</li>
+                    <li><strong>Build ONE Complex App:</strong> Not a ToDo list. Build a Trello Clone, a real-time Chat App with WebSockets, or an AI-powered tool (RAG chatbot, document summarizer).</li>
+                    <li><strong>DSA:</strong> Solve Blind 75 Leetcode. Product companies WILL ask this. Use NeetCode roadmap for structure.</li>
+                    <li><strong>2026 Edge:</strong> Add an AI integration layer (LLM API, vector search) to your project — it instantly differentiates you from other service-company applicants.</li>
                 </ul>
             </div>
-        </div>
+            </div>
+        </details>
 
         <!-- 4. DEV - MOBILE -->
-        <div id="roadmap-dev-mobile" class="roadmap-scenario" style="display: none;">
+        <details id="roadmap-dev-mobile" class="roadmap-scenario collapsible">
+            <summary><strong>Path: Mobile Developer &rarr; Product Company</strong></summary>
+            <div class="content">
             <div class="roadmap-step">
                 <h3 class="step-title">Strategy: The App Store Validation</h3>
                 <p>Mobile devs are judged by shipped apps.</p>
@@ -169,35 +182,44 @@ to Product companies.{% endblock %}
                     <li><strong>Focus:</strong> Clean architecture (MVVM/Bloc) and UI Polish.</li>
                 </ul>
             </div>
-        </div>
+            </div>
+        </details>
 
         <!-- 5. DEV - DATA -->
-        <div id="roadmap-dev-data" class="roadmap-scenario" style="display: none;">
+        <details id="roadmap-dev-data" class="roadmap-scenario collapsible">
+            <summary><strong>Path: Data / AI Professional &rarr; Product Data Engineer</strong></summary>
+            <div class="content">
             <div class="roadmap-step">
                 <h3 class="step-title">Strategy: The Real-World Project</h3>
                 <p>Don't just do Titanic Kaggle. Solve a messy problem.</p>
                 <ul class="step-list">
                     <li><strong>Project:</strong> Scrape a website, clean the data, and visualize insights. End-to-end
-                        pipeline.</li>
+                        pipeline. Or build a RAG system on a real dataset — recruiters notice AI-native data work in 2026.</li>
+                    <li><strong>Stack:</strong> Python + SQL + dbt or Airflow for pipelines; add LangChain/LlamaIndex for AI-data projects.</li>
                     <li><strong>Target:</strong> "Data Engineer" roles are easier to get than "Data Scientist" roles
-                        initially.</li>
+                        initially. "AI Engineer" bridges both if you can deploy.</li>
                 </ul>
             </div>
-        </div>
+            </div>
+        </details>
 
         <!-- 6. DEV - LEGACY/PROPRIETARY -->
-        <div id="roadmap-dev-legacy" class="roadmap-scenario" style="display: none;">
+        <details id="roadmap-dev-legacy" class="roadmap-scenario collapsible">
+            <summary><strong>Path: Legacy / Proprietary Stack &rarr; Modern Engineering</strong></summary>
+            <div class="content">
             <div class="roadmap-step">
                 <h3 class="step-title">Strategy: The Strangler Fig</h3>
                 <p>You have "Mainframe" or "SAP" on your resume. It's poison to startups.</p>
                 <ul class="step-list">
-                    <li><strong>Rebrand:</strong> "Maintained Legacy Code" -> "Refactored Monolith to Services".</li>
-                    <li><strong>Side Project:</strong> You MUST build something in a modern stack (MERN/Go) to prove you
-                        aren't a dinosaur.</li>
+                    <li><strong>Rebrand:</strong> "Maintained Legacy Code" → "Refactored Monolith to Services".</li>
+                    <li><strong>Side Project:</strong> You MUST build something in a modern stack (MERN/Go/Python+FastAPI) to prove you
+                        aren't a dinosaur. Bonus: containerize it with Docker and deploy on AWS/GCP free tier.</li>
+                    <li><strong>AI Angle:</strong> Many legacy modernization projects now involve AI-assisted code migration. Position yourself at that intersection — it's rare and valued.</li>
                     <li><strong>Target:</strong> Banks/Fintechs. They value legacy knowledge + modern intent.</li>
                 </ul>
             </div>
-        </div>
+            </div>
+        </details>
 
     </div>
 
@@ -332,31 +354,36 @@ to Product companies.{% endblock %}
         }
 
         function revealRoadmap() {
-            document.getElementById('roadmap-container').style.display = 'block';
-            document.querySelectorAll('.roadmap-scenario').forEach(el => el.style.display = 'none');
+            // Close all roadmaps first
+            document.querySelectorAll('.roadmap-scenario').forEach(el => el.removeAttribute('open'));
 
-            // Logic Tree
+            // Open the relevant one based on quiz answers
+            let targetId = 'roadmap-dev-web'; // default
             if (userRole === 'support') {
-                document.getElementById('roadmap-support').style.display = 'block';
+                targetId = 'roadmap-support';
             }
             else if (userRole === 'qa') {
-                document.getElementById('roadmap-qa').style.display = 'block';
+                targetId = 'roadmap-qa';
             }
             else {
                 // Developers
                 if (userStack === 'legacy' || userStack === 'proprietary' || score > 15) {
-                    document.getElementById('roadmap-dev-legacy').style.display = 'block';
+                    targetId = 'roadmap-dev-legacy';
                 } else if (userStack === 'mobile') {
-                    document.getElementById('roadmap-dev-mobile').style.display = 'block';
+                    targetId = 'roadmap-dev-mobile';
                 } else if (userStack === 'data') {
-                    document.getElementById('roadmap-dev-data').style.display = 'block';
+                    targetId = 'roadmap-dev-data';
                 } else {
-                    // Default / Web / DevOps -> General Web + DSA
-                    document.getElementById('roadmap-dev-web').style.display = 'block';
+                    targetId = 'roadmap-dev-web';
                 }
             }
 
-            document.getElementById('roadmap-container').scrollIntoView({ behavior: 'smooth' });
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.setAttribute('open', '');
+                target.style.border = '2px solid var(--c-black)';
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     </script>
 </section>

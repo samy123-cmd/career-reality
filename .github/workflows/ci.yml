@@ -1,0 +1,53 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    env:
+      DEBUG: "False"
+      SECRET_KEY: "ci-temporary-secret-key"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,testserver"
+      CANONICAL_BASE_URL: "https://www.careerreality.in"
+      SECURE_SSL_REDIRECT: "True"
+      SESSION_COOKIE_SECURE: "True"
+      CSRF_COOKIE_SECURE: "True"
+      SECURE_HSTS_SECONDS: "31536000"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install Pillow
+
+      - name: Django system check
+        run: python manage.py check
+
+      - name: Run tests
+        run: python manage.py test core content ainews
+
+      - name: Release preflight
+        run: python manage.py preflight_release --strict --check-freshness
+
+      - name: Editorial quality gate
+        run: >
+          python manage.py quality_audit --strict
+          --max-low-word 0
+          --max-low-internal 0
+          --max-stale-check 0
+          --max-stale-update 0
+          --max-short-meta 0
+          --max-weak-authors 0

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
 <rect width="1200" height="420" fill="#fff"/>
 <text x="60" y="58" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#111">Signal Chart</text>
-<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">Llama 3.1 (405B) Reframed Open Models as Strategic Infrastructure</text>
+<text x="60" y="92" font-family="Arial,sans-serif" font-size="22" fill="#333">Meta Llama 3.1 Open Source: Career Impact for Indian AI Engineers (2026)</text>
 <rect x="320" y="120" width="760" height="34" fill="#efefef"/>
 <rect x="320" y="120" width="720" height="34" fill="#111"/>
 <text x="60" y="143" font-family="Arial,sans-serif" font-size="18" fill="#222">Capability Jump</text>

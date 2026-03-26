@@ -69,6 +69,7 @@ class AINewsModelAndViewTests(TestCase):
         self.assertEqual(items[0].slug, 'published')
         self.assertIn('ai_evolution_timeline', response.context)
         self.assertTrue(len(response.context['ai_evolution_timeline']) >= 5)
+        self.assertEqual(response.context['meta_robots'], 'noindex, follow')
 
     def test_ai_news_hub_pagination(self):
         for i in range(18):
@@ -100,6 +101,7 @@ class AINewsModelAndViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn('timeline_position', response.context)
+        self.assertEqual(response.context['meta_robots'], 'noindex, follow')
 
     def test_ai_news_detail_returns_404_for_draft(self):
         self._create_item('Draft Detail', 'draft-detail', status='draft')
@@ -149,7 +151,7 @@ class AINewsModelAndViewTests(TestCase):
 
     # --- Sitemap Tests ---
 
-    def test_ai_news_sitemap_includes_published_items(self):
+    def test_ai_news_sitemap_excludes_ai_urls_while_section_is_noindex(self):
         self._create_item('Published News', 'published-news', status='published')
         self._create_item('Draft News', 'draft-news', status='draft')
 
@@ -157,7 +159,7 @@ class AINewsModelAndViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         body = response.content.decode('utf-8')
-        self.assertIn('/ai/published-news/', body)
+        self.assertNotIn('/ai/published-news/', body)
         self.assertNotIn('/ai/draft-news/', body)
 
     # --- Management Command Tests ---

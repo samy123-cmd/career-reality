@@ -500,6 +500,7 @@ real trade-offs you need to plan for.{% endblock %}
             <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
             <p style="margin: 0; color: var(--c-grey-mid);">Track risk signals by company.</p>
         </a>
+        {% if ai_section_indexable %}
         <a href="{% url 'ai_news_hub' %}"
             style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
             <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
@@ -507,6 +508,15 @@ real trade-offs you need to plan for.{% endblock %}
             <h3 style="margin: 0.5rem 0;">AI Pulse</h3>
             <p style="margin: 0; color: var(--c-grey-mid);">Latest AI developments that affect your career.</p>
         </a>
+        {% else %}
+        <a href="{% url 'career_reality_index' %}"
+            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
+                Index</div>
+            <h3 style="margin: 0.5rem 0;">Career Reality Index</h3>
+            <p style="margin: 0; color: var(--c-grey-mid);">See the monthly pressure level across salary, switching, and layoffs.</p>
+        </a>
+        {% endif %}
     </div>
 </section>
 

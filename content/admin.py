@@ -8,7 +8,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'order')
+    list_display = ('name', 'name_hi', 'slug', 'order')
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ('order',)
 
@@ -22,12 +22,15 @@ class ArticleAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Publishing', {
-            'fields': ('title', 'slug', 'author', 'category', 'status', 'published_at', 'updated_at', 'last_reality_check')
+            'fields': ('title', 'title_hi', 'slug', 'author', 'category', 'status', 'published_at', 'updated_at', 'last_reality_check')
         }),
         ('SEO Metadata', {
-            'fields': ('meta_title', 'meta_description')
+            'fields': (
+                ('meta_title', 'meta_title_hi'),
+                ('meta_description', 'meta_description_hi')
+            )
         }),
-        ('Strict Reality Content', {
+        ('Strict Reality Content (English)', {
             'fields': (
                 'target_persona', 
                 'who_should_avoid',
@@ -38,6 +41,19 @@ class ArticleAdmin(admin.ModelAdmin):
                 'verdict'
             ),
             'description': "MUST be filled with honest, non-hype content."
+        }),
+        ('Strict Reality Content (Hindi)', {
+            'fields': (
+                'target_persona_hi', 
+                'who_should_avoid_hi',
+                'common_expectation_hi', 
+                'actual_reality_hi', 
+                'salary_reality_hi', 
+                'stuck_point_hi', 
+                'verdict_hi'
+            ),
+            'description': "Hindi translations of the reality content.",
+            'classes': ('collapse',)
         }),
     )
     readonly_fields = ('updated_at',)
