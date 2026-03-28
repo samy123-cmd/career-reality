@@ -130,26 +130,6 @@
         </button>
     </div>
 
-    <!-- Noscript Fallback for crawlers & no-JS users -->
-    <noscript>
-    <div style="max-width: 800px; margin: 2rem auto; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa;">
-        <h2 style="font-size: 18px; margin-top: 0;">How This Calculator Works</h2>
-        <p>This CTC Decoder breaks down your Indian Cost-to-Company (CTC) into actual monthly take-home salary. Here is what it computes:</p>
-        <ul style="padding-left: 20px;">
-            <li><strong>Basic Pay:</strong> Typically 40-50% of CTC. This is your tax-computation base.</li>
-            <li><strong>Employer PF:</strong> 12% of Basic (capped at Rs 1,800/month for most companies). Not part of your monthly cash.</li>
-            <li><strong>Gratuity:</strong> 4.81% of Basic. Paid only after 5 years of service.</li>
-            <li><strong>Variable Pay:</strong> Performance-linked bonus, usually 10-20% of CTC. Not guaranteed monthly.</li>
-            <li><strong>HRA (Old Tax Regime):</strong> Exemption calculated using rent paid, basic pay, and city type (metro vs non-metro).</li>
-        </ul>
-        <h3 style="font-size: 16px;">New Tax Regime (FY 2025-26)</h3>
-        <p>Standard deduction: Rs 75,000. Tax slabs: 0-4L nil, 4-8L at 5%, 8-12L at 10%, 12-16L at 15%, 16-20L at 20%, 20-24L at 25%, above 24L at 30%. Rebate u/s 87A for income up to Rs 12 lakh.</p>
-        <h3 style="font-size: 16px;">Example: Rs 12 LPA CTC</h3>
-        <p>Basic: ~Rs 5.4L | Employer PF: ~Rs 21,600/yr | Gratuity: ~Rs 26,000/yr | Variable: ~Rs 1.2L/yr | Taxable income (new regime): ~Rs 4.03L | Tax: nil (under rebate) | <strong>Approximate in-hand: Rs 72,000-75,000/month</strong></p>
-        <p style="margin-bottom: 0;">Enable JavaScript for interactive calculations with your exact CTC structure.</p>
-    </div>
-    </noscript>
-
     <!-- Results Section -->
     <div id="results" style="display: none; max-width: 800px; margin: 0 auto;">
 
@@ -421,34 +401,31 @@
     }
 
     function calcNewRegimeTax(income) {
-        // FY 2025-26 Slabs (Union Budget 2025)
-        if (income <= 400000) return 0;
+        // FY 2025-26 Slabs
+        if (income <= 300000) return 0;
         /*
-        0-4L: Nil
-        4-8L: 5%
-        8-12L: 10%
-        12-16L: 15%
-        16-20L: 20%
-        20-24L: 25%
-        >24L: 30%
+        0-3L: Nil
+        3-7L: 5%
+        7-10L: 10%
+        10-12L: 15%
+        12-15L: 20%
+        >15L: 30%
         */
         let tax = 0;
-        if (income <= 800000) {
-            tax = (income - 400000) * 0.05;
+        if (income <= 700000) {
+            tax = (income - 300000) * 0.05;
+        } else if (income <= 1000000) {
+            tax = 20000 + (income - 700000) * 0.10;
         } else if (income <= 1200000) {
-            tax = 20000 + (income - 800000) * 0.10;
-        } else if (income <= 1600000) {
-            tax = 60000 + (income - 1200000) * 0.15;
-        } else if (income <= 2000000) {
-            tax = 120000 + (income - 1600000) * 0.20;
-        } else if (income <= 2400000) {
-            tax = 200000 + (income - 2000000) * 0.25;
+            tax = 50000 + (income - 1000000) * 0.15;
+        } else if (income <= 1500000) {
+            tax = 80000 + (income - 1200000) * 0.20;
         } else {
-            tax = 300000 + (income - 2400000) * 0.30;
+            tax = 140000 + (income - 1500000) * 0.30;
         }
 
-        // Rebate 87A (Taxable income <= 12L -> No tax under new regime)
-        if (income <= 1200000) tax = 0;
+        // Rebate 87A (Income <= 7L -> No tax)
+        if (income <= 700000) tax = 0;
 
         return tax * 1.04; // Cess
     }

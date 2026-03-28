@@ -89,7 +89,7 @@
                 <span class="significance-badge significance-{{ item.significance }}"></span>
                 {{ item.source_name }}
                 &middot;
-                Updated {{ effective_reviewed_at|date:"F j, Y" }}
+                Updated {{ item.reviewed_at|default:item.published_at|date:"F j, Y" }}
                 {% if item.event_date %}
                 &middot;
                 Event {{ item.event_date|date:"F j, Y" }}
@@ -106,12 +106,6 @@
         <div class="ai-prose">
             {{ item.summary|safe }}
         </div>
-
-        {% if content_is_stale %}
-        <div class="ai-source-box" role="status" aria-live="polite">
-            Review status: this brief has not been re-verified in the last 21 days. Validate critical claims against the original source before making career decisions.
-        </div>
-        {% endif %}
 
         {% if item.career_angle %}
         <div class="career-angle-box">
@@ -140,16 +134,12 @@
         <div style="margin: 2rem 0;">
             <h2 class="ai-section-title">Visual Story</h2>
             <div class="ai-visual-grid">
-                <img src="{% static 'images/ai/' %}{{ item.slug }}-timeline.svg"
+                <img src="/static/images/ai/{{ item.slug }}-timeline.svg"
                     alt="Timeline for {{ item.title }}"
-                    width="640"
-                    height="360"
                     loading="lazy"
                     onerror="this.style.display='none'">
-                <img src="{% static 'images/ai/' %}{{ item.slug }}-signals.svg"
+                <img src="/static/images/ai/{{ item.slug }}-signals.svg"
                     alt="Signal chart for {{ item.title }}"
-                    width="640"
-                    height="360"
                     loading="lazy"
                     onerror="this.style.display='none'">
             </div>

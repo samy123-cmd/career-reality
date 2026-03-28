@@ -26,27 +26,7 @@ Run:
 python manage.py preflight_release --strict
 ```
 
-One-command pre-prod bundle (recommended):
-
-```powershell
-./scripts/preprod_release_bundle.ps1 -ProductionLike
-```
-
-Optional full run including tests:
-
-```powershell
-./scripts/preprod_release_bundle.ps1 -ProductionLike -RunTests
-```
-
 This command fails if blocking settings are unsafe for production.
-
-Phase-2 recommendation:
-
-```bash
-python manage.py preflight_release --strict --check-freshness
-```
-
-This additionally enforces stale-content thresholds for published core and AI pages.
 
 ## 3. Database and Assets
 
@@ -58,12 +38,6 @@ python manage.py collectstatic --noinput
 ```
 
 ## 4. Content/Editorial Checks
-
-- Apply deterministic content hardening fixes (if needed):
-
-```bash
-python manage.py apply_release_content_fixes
-```
 
 - Confirm AI items have:
   - `status=published`
@@ -85,14 +59,6 @@ Then verify latest `AINewsFetchRun` in admin:
 - `status` should be `success` or acceptable `partial`
 - warnings/errors are understood and tracked
 
-Run source verification/update for published AI items:
-
-```bash
-python manage.py verify_ai_news_sources --commit --set-verified
-```
-
-This updates `reviewed_at`, `last_verified_at`, and (when enabled) promotes `fact_check_status` to `verified` for reachable source URLs.
-
 ## 6. Post-Deploy Smoke Tests
 
 - `/ai/` renders and paginates
@@ -100,52 +66,8 @@ This updates `reviewed_at`, `last_verified_at`, and (when enabled) promotes `fac
 - `/ai/tag/<slug>/` filtering works
 - `/sitemap.xml` includes `/ai/` URLs
 - Home header links include `AI Pulse`
-- `/healthz` returns `200` with `{"status":"ok"}`
-- response headers include `X-Request-ID` and `X-Response-Time-ms`
 
-## 7. Continuous Integration
-
-- GitHub Actions workflow: `.github/workflows/ci.yml`
-- Runs on push/PR:
-  - `python manage.py check`
-  - `python manage.py test core content ainews`
-  - `python manage.py preflight_release --strict --check-freshness`
-  - `python manage.py quality_audit --strict --max-low-word 0 --max-low-internal 0 --max-stale-check 0 --max-stale-update 0 --max-short-meta 0 --max-weak-authors 0`
-
-## 8. Scheduled Maintenance (Phase 3)
-
-- Configure one of these env vars in production:
-  - `CRON_SECRET` (preferred)
-  - `FRESHNESS_CRON_TOKEN` (fallback)
-- Configure optional env controls:
-  - `CRON_FETCH_LIMIT` (default `12`)
-  - `CRON_REFRESH_COMMIT` (`True` to persist content refresh writes)
-  - `CRON_STRICT_FRESHNESS` (`True` to fail maintenance run if stale thresholds breach)
-  - `CRON_WARM_CACHE` (`True` to warm key pages after maintenance)
-- Scheduled endpoint path:
-  - `/internal/cron/freshness/`
-- Recommended Vercel cron split:
-  - Frequent lightweight run (every 6h): `/internal/cron/freshness/?fetch_limit=8&warm_cache=False`
-  - Nightly committed refresh run (02:30 daily): `/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=12`
-- Manual maintenance run:
-
-```bash
-python manage.py run_production_maintenance --commit-refresh --strict-freshness --warm-cache
-```
-
-- Query-budget profiling run:
-
-```bash
-python manage.py profile_page_queries --strict --query-budget 25
-```
-
-- Cache warm run:
-
-```bash
-python manage.py warm_core_caches
-```
-
-## 9. Rollback Plan
+## 7. Rollback Plan
 
 If post-deploy regression occurs:
 

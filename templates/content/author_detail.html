@@ -17,7 +17,7 @@
         <!-- Author Stats -->
         <div class="author-stats">
             <div class="stat-item">
-                <span class="stat-number">{{ article_count }}</span>
+                <span class="stat-number">{{ articles.count }}</span>
                 <span class="stat-label">Articles</span>
             </div>
             {% if author.linkedin_url %}
@@ -33,24 +33,11 @@
     </div>
 
     <!-- Bio Section -->
-    {% if author_page_intro %}
+    {% if author.bio %}
     <div
         style="margin-bottom: var(--space-lg); text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">
         <div style="font-size: 17px; line-height: 1.8; color: var(--c-grey-dark);">
-            {{ author_page_intro|linebreaks }}
-        </div>
-    </div>
-    {% endif %}
-
-    {% if coverage_areas %}
-    <div style="margin-bottom: var(--space-lg); text-align: center;">
-        <span class="section-label">PRIMARY COVERAGE</span>
-        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;">
-            {% for area in coverage_areas %}
-            <span style="display: inline-block; padding: 0.45rem 0.9rem; border: 1px solid var(--c-divider); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;">
-                {{ area }}
-            </span>
-            {% endfor %}
+            {{ author.bio|linebreaks }}
         </div>
     </div>
     {% endif %}

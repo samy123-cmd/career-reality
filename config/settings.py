@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from urllib.parse import urlsplit
-from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,13 +26,13 @@ def _csv_env(name: str, default: str = "") -> list[str]:
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+# SECURITY WARNING: keep the secret key used in production secret!
+DEV_FALLBACK_SECRET = 'cr-local-fallback-9N2vL6qP3xR8mT1cW5yK7dF4hB0zQ9eA2sU6jM8nC3'
+SECRET_KEY = os.environ.get('SECRET_KEY', DEV_FALLBACK_SECRET)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # Defaults to False for safety. Explicitly set DEBUG=True in local .env.
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-if DEBUG:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or get_random_secret_key()
-else:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
 CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "https://www.careerreality.in").strip().rstrip("/")
 CANONICAL_HOST = urlsplit(CANONICAL_BASE_URL).netloc.lower()
 
@@ -93,7 +92,6 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware', # Added for HTML compression
     'whitenoise.middleware.WhiteNoiseMiddleware', # Added WhiteNoise
     'core.middleware.SecurityHeadersMiddleware',
-    'core.middleware.RequestObservabilityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,7 +133,7 @@ TEMPLATES = [
 
 # Security hardening defaults for production-like environments.
 if not DEBUG:
-    if not SECRET_KEY:
+    if SECRET_KEY == DEV_FALLBACK_SECRET:
         raise RuntimeError("SECRET_KEY must be set in production.")
     if not ALLOWED_HOSTS:
         raise RuntimeError("ALLOWED_HOSTS must be set in production.")

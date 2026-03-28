@@ -4,26 +4,6 @@
 {% block meta_description %}Real, uninflated salary data for Indian tech roles. No '1 Crore' outliers. Just the median
 reality.{% endblock %}
 
-{% block extra_head %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Dataset",
-  "name": "Indian Tech Salary Reality Data",
-  "description": "Median salary ranges for Indian tech roles including AI/GenAI, backend, frontend, data engineering, DevOps, and mobile development.",
-  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
-  "creator": {
-    "@type": "Organization",
-    "name": "Career Reality",
-    "url": "{{ site_base_url }}"
-  },
-  "spatialCoverage": "India",
-  "temporalCoverage": "2025/..",
-  "keywords": ["indian tech salary", "median salary india", "software engineer salary", "data engineer salary", "AI engineer salary"]
-}
-</script>
-{% endblock %}
-
 {% block content %}
 
 <!-- HEADER -->
@@ -46,10 +26,9 @@ reality.{% endblock %}
             Quick read for this month:
         </p>
         <ul style="margin: 0; padding-left: 20px;">
-            <li>Appraisal season (March-April) is compressing offers; counter-offers are rising in mid-senior engineering.</li>
-            <li>AI/GenAI roles continue to pull away from general engineering pay bands; RAG and agent-building skills command premiums.</li>
-            <li>Junior roles remain flat; service-company freshers still anchored at 3.2-4.5 LPA despite inflation.</li>
-            <li>Design and product roles show the widest gap between hype and reality, especially at the agency level.</li>
+            <li>Median offers are steady in core engineering roles; junior roles remain flat.</li>
+            <li>Design and product ranges show the widest gap between hype and reality.</li>
+            <li>Data roles remain competitive but are flattening at the entry level.</li>
         </ul>
         <p style="font-size: 12px; color: var(--c-grey-light); margin-top: 0.75rem;">
             Updated: {% now "F Y" %}
@@ -150,7 +129,7 @@ reality.{% endblock %}
                         <span style="font-size: 12px; color: var(--c-grey-light);">Java/Spring/Node</span>
                     </td>
                     <td>5-8y</td>
-                    <td>18.0 - 30.0</td>
+                    <td>18.0 - 28.0</td>
                     <td><span style="color: #d93025; text-decoration: line-through;">60.0</span></td>
                 </tr>
                 <tr>
@@ -177,7 +156,7 @@ reality.{% endblock %}
                         <span style="font-size: 12px; color: var(--c-grey-light);">AWS/Terraform/CI-CD</span>
                     </td>
                     <td>3-6y</td>
-                    <td>13.0 - 22.0</td>
+                    <td>12.0 - 20.0</td>
                     <td><span style="color: #d93025; text-decoration: line-through;">40.0</span></td>
                 </tr>
                 <tr>
@@ -186,7 +165,7 @@ reality.{% endblock %}
                         <span style="font-size: 12px; color: var(--c-grey-light);">Native or Flutter</span>
                     </td>
                     <td>2-4y</td>
-                    <td>8.5 - 16.0</td>
+                    <td>8.0 - 15.0</td>
                     <td><span style="color: #d93025; text-decoration: line-through;">30.0</span></td>
                 </tr>
                 <tr>
@@ -195,7 +174,7 @@ reality.{% endblock %}
                         <span style="font-size: 12px; color: var(--c-grey-light);">React/Next.js/Perf</span>
                     </td>
                     <td>2-5y</td>
-                    <td>7.5 - 15.0</td>
+                    <td>7.0 - 14.0</td>
                     <td><span style="color: #d93025; text-decoration: line-through;">25.0</span></td>
                 </tr>
             </tbody>
@@ -345,7 +324,7 @@ reality.{% endblock %}
                         <span style="font-size: 12px; color: var(--c-grey-light);">Pipelines/Spark/Cloud</span>
                     </td>
                     <td>3-5y</td>
-                    <td>14.0 - 24.0</td>
+                    <td>12.0 - 22.0</td>
                     <td><span style="color: #d93025; text-decoration: line-through;">35.0</span></td>
                 </tr>
                 <tr>
@@ -355,17 +334,17 @@ reality.{% endblock %}
                             notebooks</span>
                     </td>
                     <td>2-5y</td>
-                    <td>12.0 - 20.0</td>
+                    <td>10.0 - 18.0</td>
                     <td><span style="color: #d93025; text-decoration: line-through;">45.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>AI/GenAI Dev</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">RAG/LLM/Agent Integration</span>
+                        <span style="font-size: 12px; color: var(--c-grey-light);">RAG/LLM Integration</span>
                     </td>
                     <td>1-3y</td>
-                    <td>10.0 - 18.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">35.0</span></td>
+                    <td>8.0 - 15.0</td>
+                    <td><span style="color: #d93025; text-decoration: line-through;">30.0</span></td>
                 </tr>
             </tbody>
         </table>
@@ -438,8 +417,6 @@ reality.{% endblock %}
     <h3 style="font-size: 16px; margin-bottom: var(--space-sm);">What Changed In This Update</h3>
     <ul style="padding-left: 20px; margin: 0;">
         <li><strong>{% now "F j, Y" %}:</strong> Refreshed market notes, validated role bands, and rechecked methodology sources.</li>
-        <li><strong>March 2026:</strong> AI/GenAI and ML Engineer ranges revised upward; senior backend top-end nudged to 30 LPA reflecting appraisal-cycle offers. Mobile dev range adjusted.</li>
-        <li><strong>February 2026:</strong> Rechecked all five tables against AmbitionBox Q4 salary surveys and Naukri demand indices.</li>
         <li><strong>January 2026:</strong> Expanded management and strategy salary coverage.</li>
         <li><strong>December 2025:</strong> Added explicit hype-vs-reality comparisons by role cluster.</li>
     </ul>

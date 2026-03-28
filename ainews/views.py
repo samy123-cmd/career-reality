@@ -9,7 +9,6 @@ from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from datetime import timezone as dt_timezone
 from datetime import timedelta
-from core.publishing import AI_SECTION_INDEXABLE
 
 from .models import AINewsItem, AITag
 
@@ -126,7 +125,7 @@ def ai_news_hub(request):
 
     # Noindex if hub has zero items OR the view is query-param filtered (to avoid
     # duplicate content against the canonical /ai/tag/<slug>/ pages).
-    meta_robots = "noindex, follow"
+    meta_robots = "noindex, follow" if (paginator.count == 0 or active_tag_slug) else "index, follow"
 
     return render(
         request,
@@ -177,7 +176,6 @@ def ai_news_detail(request, slug):
             "content_is_stale": content_is_stale,
             "ai_evolution_timeline": timeline,
             "timeline_position": _timeline_position_for_item(item.event_date or item.published_at),
-            "meta_robots": "index, follow" if AI_SECTION_INDEXABLE else "noindex, follow",
             **_seo(title, description),
         },
     )
@@ -198,7 +196,7 @@ def ai_news_by_tag(request, slug):
     description = f"AI developments tagged '{tag.name}' - curated for career-aware tech professionals in India."
 
     # Noindex thin tag pages to avoid AdSense "low value content" flag
-    meta_robots = "index, follow" if (AI_SECTION_INDEXABLE and paginator.count >= 3) else "noindex, follow"
+    meta_robots = "noindex, follow" if paginator.count < 3 else "index, follow"
 
     return render(
         request,

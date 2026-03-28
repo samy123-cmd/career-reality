@@ -3,23 +3,6 @@
 {% block title %}Topic Clusters - Career Reality India{% endblock %}
 {% block meta_description %}The full authority map of Career Reality: pillar pages, supporting pages, and decision paths by topic.{% endblock %}
 
-{% block extra_head %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": "Topic Clusters - Career Reality India",
-  "description": "The full authority map of Career Reality: pillar pages, supporting pages, and decision paths by topic.",
-  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
-  "publisher": {
-    "@type": "Organization",
-    "name": "Career Reality",
-    "url": "{{ site_base_url }}"
-  }
-}
-</script>
-{% endblock %}
-
 {% block content %}
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1>Topic Clusters</h1>

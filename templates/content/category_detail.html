@@ -18,27 +18,6 @@
 }
 </script>
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-        {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "{{ site_base_url }}/"
-        },
-        {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "{{ category.name|escapejs }}",
-            "item": "{{ canonical_url }}"
-        }
-    ]
-}
-</script>
-
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1 style="margin-bottom: var(--space-sm);">{{ category.name }}</h1>
 
@@ -51,16 +30,6 @@
         Reality checks and uncomfortable truths about {{ category.name|lower }} careers in India.
     </p>
     {% endif %}
-
-    <div style="border: 1px solid var(--c-divider); padding: 1.5rem; margin-bottom: var(--space-lg); background: #fafafa;">
-        <span class="section-label">WHAT THIS CLUSTER COVERS</span>
-        <p style="margin-top: 0.9rem; margin-bottom: 0.75rem; color: var(--c-grey-mid);">
-            {{ category_profile.overview }}
-        </p>
-        <p style="margin: 0; color: var(--c-grey-mid);">
-            {{ category_profile.reader_fit }}
-        </p>
-    </div>
 
     <hr class="editorial-divider" style="margin-bottom: var(--space-lg);">
 
@@ -94,27 +63,8 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: var(--space-lg);">
-        <div style="border: 1px solid var(--c-divider); padding: 1.25rem;">
-            <span class="section-label">WHAT READERS MISS</span>
-            <ul style="margin: 0.85rem 0 0 0; padding-left: 18px;">
-                {% for item in category_profile.what_people_miss %}
-                <li style="margin-bottom: 0.65rem;">{{ item }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div style="border: 1px solid var(--c-divider); padding: 1.25rem;">
-            <span class="section-label">QUESTIONS THIS PAGE HELPS ANSWER</span>
-            <ul style="margin: 0.85rem 0 0 0; padding-left: 18px;">
-                {% for question in category_profile.questions %}
-                <li style="margin-bottom: 0.65rem;">{{ question }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
     {% if articles %}
-    <span class="section-label">{{ category_profile.article_count_label|upper }}</span>
+    <span class="section-label">{{ articles.count }} ARTICLE{% if articles.count != 1 %}S{% endif %}</span>
 
     <div class="article-list" style="margin-top: var(--space-md);">
         {% for article in articles %}

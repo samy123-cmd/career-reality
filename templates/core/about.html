@@ -3,35 +3,6 @@
 {% block title %}About Career Reality - India Career Truths{% endblock %}
 {% block meta_description %}Why Career Reality exists, who it serves, and how we publish evidence-backed, no-hype analysis on Indian careers.{% endblock %}
 
-{% block extra_head %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "name": "About Career Reality",
-  "description": "Why Career Reality exists, who it serves, and how we publish evidence-backed, no-hype analysis on Indian careers.",
-  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
-  "mainEntity": {
-    "@type": "Organization",
-    "name": "Career Reality",
-    "url": "{{ site_base_url }}",
-    "email": "samfischer14aug@gmail.com",
-    "description": "Evidence-backed analysis of Indian tech careers, salary realities, and market pressure."
-  }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site_base_url }}/"},
-    {"@type": "ListItem", "position": 2, "name": "About"}
-  ]
-}
-</script>
-{% endblock %}
-
 {% block content %}
 <section class="container-wide">
     <div class="hero-statement">

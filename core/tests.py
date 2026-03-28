@@ -1,6 +1,4 @@
 from datetime import timedelta
-from unittest.mock import patch
-import os
 
 from django.test import TestCase
 from django.urls import reverse
@@ -8,7 +6,6 @@ from django.utils import timezone
 
 from content.models import Article, Author, Category
 from core.models import NewsletterSubscriber
-from core.publishing import INDEXABLE_CATEGORY_MIN_ARTICLES
 
 
 class CoreViewsTests(TestCase):
@@ -83,52 +80,5 @@ class CoreViewsTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("home"), fetch_redirect_response=False)
+        self.assertEqual(response.url, reverse("home"))
         self.assertTrue(NewsletterSubscriber.objects.filter(email="reader@example.com").exists())
-
-    def test_run_freshness_cron_rejects_invalid_token(self):
-        with patch.dict(os.environ, {"CRON_SECRET": "expected-token"}, clear=False):
-            response = self.client.get(reverse("run_freshness_cron"), {"token": "wrong-token"})
-
-        self.assertEqual(response.status_code, 403)
-
-    @patch("core.views.call_command")
-    def test_run_freshness_cron_allows_valid_token(self, mock_call_command):
-        with patch.dict(os.environ, {"CRON_SECRET": "expected-token"}, clear=False):
-            response = self.client.get(reverse("run_freshness_cron"), {"token": "expected-token"})
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["status"], "ok")
-        self.assertTrue(mock_call_command.called)
-
-    def test_sitemap_excludes_thin_category_urls(self):
-        thin_category = Category.objects.create(
-            name="Thin Category",
-            slug="thin-category",
-            description="Thin category",
-            order=2,
-        )
-        for idx in range(INDEXABLE_CATEGORY_MIN_ARTICLES - 1):
-            Article.objects.create(
-                title=f"Thin {idx}",
-                slug=f"thin-{idx}",
-                author=self.author,
-                category=thin_category,
-                status="published",
-                target_persona="Persona",
-                who_should_avoid="Avoid",
-                common_expectation="Expectation",
-                actual_reality="Reality",
-                salary_reality="Salary",
-                stuck_point="Stuck",
-                verdict="Verdict",
-                meta_title=f"Thin Meta {idx}"[:60],
-                meta_description=(f"Thin description {idx} " * 12)[:160],
-                published_at=timezone.now(),
-                last_reality_check=timezone.localdate(),
-            )
-
-        response = self.client.get("/sitemap.xml")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertNotIn("/category/thin-category/", response.content.decode("utf-8"))

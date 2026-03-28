@@ -5,12 +5,6 @@ from analyzer.models import AssessmentLog, SalarySubmission
 
 
 class AnalyzerFlowTests(TestCase):
-    def test_intro_page_is_noindex(self):
-        response = self.client.get(reverse("analyzer_home"))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["meta_robots"], "noindex, follow")
-
     def test_result_requires_completed_session(self):
         response = self.client.get(reverse("wizard_result"))
 
@@ -28,7 +22,7 @@ class AnalyzerFlowTests(TestCase):
 
         self.client.post(
             reverse("wizard_step", kwargs={"step": 1}),
-            {"company_type": "service", "role_level": "ic", "consent": True},
+            {"company_type": "service", "role_level": "ic"},
         )
         self.client.post(
             reverse("wizard_step", kwargs={"step": 2}),

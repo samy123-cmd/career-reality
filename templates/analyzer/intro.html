@@ -115,44 +115,6 @@ manager pressure to predict exit outcomes.{% endblock %}
     margin-top: 2rem;
   }
 
-  .deep-dive-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .deep-dive-card {
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 1rem;
-    background: #fcfcfc;
-  }
-
-  .deep-dive-card h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.95rem;
-    color: #111;
-  }
-
-  .deep-dive-card p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #555;
-    line-height: 1.55;
-  }
-
-  .related-links {
-    border-top: 1px solid #eee;
-    padding-top: 1.25rem;
-    margin-top: 1.5rem;
-  }
-
-  .related-links a {
-    color: #111;
-    text-decoration: underline;
-  }
-
   .faq-title {
     font-size: 0.9rem;
     font-weight: 600;
@@ -227,30 +189,6 @@ manager pressure to predict exit outcomes.{% endblock %}
       <li>Clarify your position for the next 7 days.</li>
     </ul>
 
-    <div class="deep-dive-grid">
-      <div class="deep-dive-card">
-        <h3>What the score is actually judging</h3>
-        <p>
-          The output is not trying to guess your entire future. It focuses on near-term exit friction: notice-period
-          drag, bond pressure, manager escalation, and whether you have enough leverage to resign cleanly.
-        </p>
-      </div>
-      <div class="deep-dive-card">
-        <h3>Where this tool helps most</h3>
-        <p>
-          It is strongest when you already feel pressure but cannot tell whether that pressure is normal inconvenience
-          or the beginning of a messy resignation cycle that needs documentation and caution.
-        </p>
-      </div>
-      <div class="deep-dive-card">
-        <h3>Where this tool is intentionally limited</h3>
-        <p>
-          It does not replace a lawyer, HR specialist, or written company policy. If the stakes involve withheld
-          salary, formal legal notices, or harassment, use the score as a triage input, not the final answer.
-        </p>
-      </div>
-    </div>
-
     <div class="privacy-box" style="border-color: #d93025; background: #fffcfc;">
       <h3
         style="margin-top: 0; margin-bottom: 8px; font-size: 0.95rem; color: #d93025; display: flex; align-items: center; gap: 6px;">
@@ -273,25 +211,6 @@ manager pressure to predict exit outcomes.{% endblock %}
         Start Risk Assessment &rarr;
       </button>
     </form>
-
-    <div class="related-links">
-      <h2 class="section-title">How To Use The Result Well</h2>
-      <p class="info-text" style="margin-bottom: 1rem;">
-        Use the score to decide your next action, not to outsource judgment. High-risk scenarios usually mean you
-        should slow down, preserve documentation, avoid emotional emails, and read the surrounding editorial context
-        before escalating. Low-risk scenarios do not mean "zero risk"; they mean your downside looks manageable if you
-        still handle notice, handover, and written communication carefully.
-      </p>
-      <ul class="feature-list" style="margin-bottom: 1rem;">
-        <li>Read <a href="{% url 'editorial' %}">Editorial Standards</a> to understand how Career Reality frames uncertainty.</li>
-        <li>Use <a href="{% url 'salary_reality' %}">Salary Reality</a> if the resignation question is really a compensation question in disguise.</li>
-        <li>Check <a href="{% url 'contact' %}">Contact</a> if you need a correction or want to flag a pattern this tool misses.</li>
-      </ul>
-      <p class="info-text" style="margin-bottom: 0;">
-        We keep this page outside search indexing because it is a utility page, not a long-form editorial article. It
-        is here to support decision-making for existing readers, not to inflate page count.
-      </p>
-    </div>
   </div>
 
   <!-- FAQ Semantic Schema for SEO -->
