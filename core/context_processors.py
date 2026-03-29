@@ -6,21 +6,6 @@ def seo_defaults(request):
     path = request.path
     canonical_url = f"{settings.CANONICAL_BASE_URL}{path}"
 
-    # Compute language-specific alternate URLs for hreflang signals.
-    # /hi/ prefix is the Django i18n_patterns locale prefix for Hindi.
-    if path.startswith('/hi/'):
-        en_path = path[3:]  # strip /hi prefix → /article/slug/
-        hi_path = path
-    elif path == '/hi':
-        en_path = '/'
-        hi_path = path
-    else:
-        en_path = path
-        hi_path = '/hi' + path
-
-    en_canonical_url = f"{settings.CANONICAL_BASE_URL}{en_path}"
-    hi_canonical_url = f"{settings.CANONICAL_BASE_URL}{hi_path}"
-
     # Keep header category navigation populated across all templates.
     # Only show categories that have at least one published article.
     # Cached for 1 hour to avoid a DB hit on every uncached page request.
@@ -50,8 +35,6 @@ def seo_defaults(request):
         "meta_robots": "index, follow",
         "site_base_url": settings.CANONICAL_BASE_URL,
         "canonical_url": canonical_url,
-        "en_canonical_url": en_canonical_url,
-        "hi_canonical_url": hi_canonical_url,
         "categories": categories,
     }
 

@@ -3,11 +3,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
 
+<!-- Google AdSense auto-ads (required for approval) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3766621537317806"
+     crossorigin="anonymous"></script>
+
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
 <meta name="robots" content="{{ meta_robots|default:'index, follow' }}">
 <link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
 <link rel="alternate" hreflang="en-IN" href="{{ canonical_url|default:request.build_absolute_uri }}">
 <link rel="alternate" hreflang="x-default" href="{{ canonical_url|default:request.build_absolute_uri }}">
+<!-- Hindi hreflang removed: no Hindi translations exist in the database.
+     Having identical /hi/ duplicates was flagged as low-value duplicate content. -->
 <meta property="og:locale" content="en_IN">
 <meta name="theme-color" content="#000000">
 <meta name="author" content="Career Reality Editorial Desk">

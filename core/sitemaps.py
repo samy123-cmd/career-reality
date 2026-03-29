@@ -40,6 +40,9 @@ class StaticViewSitemap(Sitemap):
     changefreq = "monthly"
 
     def items(self):
+        # Only include pages that are actually indexable.
+        # revenue_model, sponsorship_policy, and analyzer_home are noindexed
+        # and must NOT appear here (contradicts the noindex directive).
         return [
             'home',
             'about',
@@ -51,9 +54,6 @@ class StaticViewSitemap(Sitemap):
             'terms',
             'topic_clusters',
             'career_reality_index',
-            'revenue_model',
-            'sponsorship_policy',
-            'analyzer_home',
             'ai_news_hub',
         ]
 

@@ -30,20 +30,14 @@ sitemaps = {
     'ainews': AINewsSitemap,
 }
 
-from django.conf.urls.i18n import i18n_patterns
-
-# Non-translated URLs
+# All URLs — i18n_patterns removed because no Hindi translations exist.
+# Having /hi/ duplicates of all pages was creating ~78 duplicate URLs
+# with identical English content, triggering AdSense "low value content".
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('i18n/', include('django.conf.urls.i18n')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-]
-
-# Translated URLs
-urlpatterns += i18n_patterns(
     path('', include('core.urls')),
     path('', include('content.urls')),
     path('ai/', include('ainews.urls')),
     path('resignation-risk/', include('analyzer.urls')),
-    prefix_default_language=False # Only prefix non-default languages (e.g., /hi/)
-)
+]

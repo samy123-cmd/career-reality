@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% load static i18n %}
-{% get_current_language as LANGUAGE_CODE %}
+{% load static %}
 
-{% block title %}{% if LANGUAGE_CODE == 'hi' and article.meta_title_hi %}{{ article.meta_title_hi }}{% else %}{{ article.meta_title }}{% endif %}{% endblock %}
-{% block meta_description %}{% if LANGUAGE_CODE == 'hi' and article.meta_description_hi %}{{ article.meta_description_hi }}{% else %}{{ article.meta_description }}{% endif %}{% endblock %}
+{% block title %}{{ article.meta_title }}{% endblock %}
+{% block meta_description %}{{ article.meta_description }}{% endblock %}
 
 {% block content %}
 
@@ -70,12 +69,12 @@
 
 <article class="article-body">
     <header class="container-reading article-header">
-        <h1>{% if LANGUAGE_CODE == 'hi' and article.title_hi %}{{ article.title_hi }}{% else %}{{ article.title }}{% endif %}</h1>
-        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{% if LANGUAGE_CODE == 'hi' and article.target_persona_hi %}{{ article.target_persona_hi|safe }}{% else %}{{ article.target_persona|safe }}{% endif %}</div>
+        <h1>{{ article.title }}</h1>
+        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{ article.target_persona|safe }}</div>
         <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;"><a
         href="{% url 'author_detail' article.author.id %}"
         style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> &middot; {{ article.published_at|date:"F Y" }} &middot; <a href="{% url 'category_detail' article.category.slug %}"
-        style="color: inherit;">{% if LANGUAGE_CODE == 'hi' and article.category.name_hi %}{{ article.category.name_hi }}{% else %}{{ article.category.name }}{% endif %}</a></div>
+        style="color: inherit;">{{ article.category.name }}</a></div>
         <div style="font-size: 12px; color: var(--c-grey-light); margin-top: 8px;">
             {{ reading_time }} min read &middot; Reviewed by Editorial Desk &middot; Correction path:
             <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Contact</a>
@@ -113,23 +112,23 @@
 
         <section id="expectation">
             <h2>The Expectation</h2>
-            {% if LANGUAGE_CODE == 'hi' and article.common_expectation_hi %}{{ article.common_expectation_hi|safe }}{% else %}{{ article.common_expectation|safe }}{% endif %}
+            {{ article.common_expectation|safe }}
         </section>
 
         <section id="reality">
             <h2>The Reality</h2>
-            {% if LANGUAGE_CODE == 'hi' and article.actual_reality_hi %}{{ article.actual_reality_hi|safe }}{% else %}{{ article.actual_reality|safe }}{% endif %}
+            {{ article.actual_reality|safe }}
             <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
                 Related context:
                 <a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality Check</a>,
                 <a href="{% url 'salary_calculator' %}" style="text-decoration: underline;">CTC Decoder</a>,
-                <a href="{% url 'category_detail' article.category.slug %}" style="text-decoration: underline;">more in {% if LANGUAGE_CODE == 'hi' and article.category.name_hi %}{{ article.category.name_hi }}{% else %}{{ article.category.name }}{% endif %}</a>.
+                <a href="{% url 'category_detail' article.category.slug %}" style="text-decoration: underline;">more in {{ article.category.name }}</a>.
             </p>
         </section>
 
         <section id="salary-growth">
             <h2>Salary and Growth Reality</h2>
-            <div class="table-scroll">{% if LANGUAGE_CODE == 'hi' and article.salary_reality_hi %}{{ article.salary_reality_hi|safe }}{% else %}{{ article.salary_reality|safe }}{% endif %}</div>
+            <div class="table-scroll">{{ article.salary_reality|safe }}</div>
             <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
                 Cross-check your take-home with the <a href="{% url 'salary_calculator' %}" style="text-decoration: underline;">CTC Decoder</a>
                 and compare ranges in <a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality</a>.
@@ -138,7 +137,7 @@
 
         <section id="stuck-point">
             <h2>Where Most People Get Stuck</h2>
-            {% if LANGUAGE_CODE == 'hi' and article.stuck_point_hi %}{{ article.stuck_point_hi|safe }}{% else %}{{ article.stuck_point|safe }}{% endif %}
+            {{ article.stuck_point|safe }}
             <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
                 If this matches your current situation, run the
                 <a href="{% url 'wizard_start' %}" style="text-decoration: underline;">Resignation Risk Analyzer</a>
@@ -148,7 +147,7 @@
 
         <section id="avoid-path">
             <h2>Who Should Avoid This Path</h2>
-            {% if LANGUAGE_CODE == 'hi' and article.who_should_avoid_hi %}{{ article.who_should_avoid_hi|safe }}{% else %}{{ article.who_should_avoid|safe }}{% endif %}
+            {{ article.who_should_avoid|safe }}
         </section>
 
         <section id="decision-framework">
@@ -203,7 +202,7 @@
             <h3
                 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; border-top: 2px solid var(--c-black); padding-top: 1rem; margin-bottom: 2rem; display: inline-block;">
                 Final Verdict</h3>
-            <div style="font-size: 20px; line-height: 1.5; color: var(--c-black);">{% if LANGUAGE_CODE == 'hi' and article.verdict_hi %}{{ article.verdict_hi|safe }}{% else %}{{ article.verdict|safe }}{% endif %}</div>
+            <div style="font-size: 20px; line-height: 1.5; color: var(--c-black);">{{ article.verdict|safe }}</div>
 
             <div class="share-section"
                 style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--c-black);">

@@ -53,27 +53,46 @@ def _article_update_log(article):
 
 
 def _decision_framework(article):
+    """Build article-specific decision framework using the article's own content
+    to avoid identical boilerplate across all articles in a category (AdSense quality signal)."""
+    from django.utils.html import strip_tags
     category_name = (article.category.name or "").lower()
+    title_short = article.title[:50]
+
+    # Base items vary by category
     if "engineering" in category_name or "software" in category_name:
-        return [
-            "If salary delta is below 25 percent for a switch, optimize for skill depth and scope, not title.",
+        items = [
+            f"For {title_short}: If salary delta is below 25 percent for a switch, optimize for skill depth and scope, not title.",
             "If your stack is legacy-only for 12+ months, schedule a transition plan before role lock-in compounds.",
             "If role ownership is high but pay is flat, use impact evidence to negotiate before switching."
         ]
-    if "design" in category_name or "product" in category_name:
-        return [
-            "If your output is execution-only for multiple quarters, prioritize exposure to discovery and strategy work.",
+    elif "design" in category_name or "product" in category_name:
+        items = [
+            f"For {title_short}: If your output is execution-only for multiple quarters, prioritize exposure to discovery and strategy work.",
             "If portfolio quality is improving but compensation is frozen, reprice in market every 12 months.",
             "If expectations are senior-level but authority is junior-level, document scope mismatch and renegotiate."
         ]
-    return [
-        "If your take-home is not compounding with experience, benchmark externally before accepting internal narratives.",
-        "If role expectations keep rising without title/pay movement, escalate with documented outcomes.",
-        "If growth path is unclear beyond 6-9 months, run a switch-or-specialize decision cycle."
-    ]
+    else:
+        items = [
+            f"For {title_short}: If your take-home is not compounding with experience, benchmark externally before accepting internal narratives.",
+            "If role expectations keep rising without title/pay movement, escalate with documented outcomes.",
+            "If growth path is unclear beyond 6-9 months, run a switch-or-specialize decision cycle."
+        ]
+
+    # Add an article-specific item from the verdict
+    verdict_text = strip_tags(article.verdict).strip()
+    if verdict_text:
+        first_sentence = verdict_text.split('.')[0].strip()
+        if first_sentence and len(first_sentence) > 20:
+            items.append(f"Key insight from this analysis: {first_sentence}.")
+
+    return items
 
 
 def _mistake_checklist(article):
+    """Build article-specific mistake checklist using the article's own content
+    to avoid identical text across articles in the same category."""
+    from django.utils.html import strip_tags
     category_name = (article.category.name or "").lower()
     items = [
         "Treating outlier salaries as planning baselines.",
@@ -84,10 +103,32 @@ def _mistake_checklist(article):
         items.append("Over-indexing on model demos without production deployment depth.")
     if "product" in category_name:
         items.append("Confusing feature shipping speed with product impact.")
+
+    # Add article-specific mistake from stuck_point
+    stuck_text = strip_tags(article.stuck_point).strip()
+    if stuck_text:
+        first_sentence = stuck_text.split('.')[0].strip()
+        if first_sentence and len(first_sentence) > 20:
+            items.append(f"In this context: {first_sentence}.")
+
     return items
 
 
 def _scenario_snapshot(article):
+    """Build article-specific scenario using the article's own stuck_point content
+    instead of generic category-level text."""
+    from django.utils.html import strip_tags
+
+    # Use the article's own stuck_point as the primary source for the scenario
+    stuck_text = strip_tags(article.stuck_point).strip()
+    if stuck_text and len(stuck_text) > 100:
+        # Extract first two sentences for a concrete scenario
+        sentences = stuck_text.split('.')
+        scenario_sentences = [s.strip() for s in sentences[:2] if s.strip()]
+        if scenario_sentences:
+            return '. '.join(scenario_sentences) + '.'
+
+    # Fallback to category-based if stuck_point is too short
     category_name = (article.category.name or "").lower()
     if "engineering" in category_name or "software" in category_name:
         return "A mid-level developer with 5 years in a stable service role gets a title bump but no meaningful scope change. Within 12 months, market interview performance drops due to stale stack exposure."

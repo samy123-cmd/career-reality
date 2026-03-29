@@ -73,11 +73,16 @@ def robots_txt(request):
     lines = [
         "User-agent: *",
         "Allow: /",
+        "Disallow: /admin/",
         "Disallow: /resignation-risk/step/",
         "Disallow: /resignation-risk/result/",
         "Disallow: /salary-drop/",
         "Disallow: /salary-drop/success/",
         "Disallow: /layoff-radar/",
+        "Disallow: /layoff-radar/report/",
+        "Disallow: /escape-plan/",
+        "Disallow: /newsletter/signup/",
+        "Disallow: /hi/",
         "",
         f"Sitemap: {settings.CANONICAL_BASE_URL}/sitemap.xml",
     ]
@@ -165,8 +170,11 @@ def escape_plan(request):
     """
     The Service Company Escape Plan.
     Contains the "Rot Check" quiz and the roadmap.
+    Interactive tool page — noindexed to avoid AdSense "low value" flag.
     """
-    return render(request, 'content/escape_plan.html')
+    return render(request, 'content/escape_plan.html', {
+        'meta_robots': 'noindex, follow',
+    })
 
 def privacy_policy(request):
     title = "Privacy Policy - Career Reality India"
@@ -342,3 +350,9 @@ def custom_404(request, exception):
 def custom_500(request):
     """Minimal 500 — self-contained HTML to avoid cascade template failures."""
     return render(request, '500.html', status=500)
+
+
+def ads_txt(request):
+    """Serve ads.txt for AdSense verification — required for approval."""
+    content = "google.com, pub-3766621537317806, DIRECT, f08c47fec0942fa0\n"
+    return HttpResponse(content, content_type="text/plain")
