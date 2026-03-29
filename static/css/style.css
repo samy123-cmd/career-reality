@@ -883,6 +883,7 @@ table.editorial-table td {
     }
 }
 
+
 /* Article Detail */
 .article-header {
     text-align: center;
@@ -893,6 +894,32 @@ table.editorial-table td {
     font-size: 48px;
     margin-bottom: 24px;
 }
+
+/* Q1 2026 Reality Check callout blocks — injected via freshness refresh script */
+.reality-check-2026 {
+    border-left: 3px solid #22c55e;
+    background: #f0fdf4;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.reality-check-2026 h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #16a34a;
+    margin: 0 0 0.75rem 0;
+    font-weight: 700;
+}
+
+.reality-check-2026 p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--c-grey-dark);
+}
+
 
 /* Footer */
 footer {

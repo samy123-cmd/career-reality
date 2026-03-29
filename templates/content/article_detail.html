@@ -80,11 +80,22 @@
             <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Contact</a>
         </div>
         {% if article.last_reality_check %}
-        <div style="font-size: 12px; color: var(--c-grey-light); margin-top: 8px;">
-            Last Reality Check: {{ article.last_reality_check|date:"F j, Y" }}
+        <div class="freshness-badge" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px;">
+            {% if article.last_reality_check >= fresh_cutoff %}
+            <span class="freshness-dot freshness-green" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;"></span>
+            {% elif article.last_reality_check >= stale_cutoff %}
+            <span class="freshness-dot freshness-amber" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></span>
+            {% else %}
+            <span class="freshness-dot freshness-red" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span>
+            {% endif %}
+            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-grey-mid);">
+                Last Reality Check: <strong>{{ article.last_reality_check|date:"F j, Y" }}</strong>
+            </span>
         </div>
         {% endif %}
     </header>
+
+
 
     <div class="container-reading">
         <section style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa; margin-bottom: 1.5rem;">

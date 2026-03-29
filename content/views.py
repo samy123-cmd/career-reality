@@ -270,6 +270,8 @@ def article_detail(request, slug):
     # Get all categories for internal linking
     categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     source_refs = _article_sources(article)
+    from datetime import date, timedelta
+    today = date.today()
     return render(request, 'content/article_detail.html', {
         'article': article,
         'related_articles': related_articles,
@@ -292,6 +294,9 @@ def article_detail(request, slug):
         'twitter_title': article.meta_title,
         'twitter_description': article.meta_description,
         'twitter_image': og_image_url,
+        # Freshness badge cutoffs
+        'fresh_cutoff': today - timedelta(days=30),
+        'stale_cutoff': today - timedelta(days=60),
     })
 @cache_page(60 * 15)
 def category_detail(request, slug):
