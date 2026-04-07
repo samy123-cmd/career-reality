@@ -55,9 +55,11 @@
                 <div class="cc-header">
                     <div class="cc-logo">
                         {% if company.logo_url %}
-                        <img src="{{ company.logo_url }}" alt="{{ company.name }}" loading="lazy">
+                        <img src="{{ company.logo_url }}" alt="{{ company.name }}" loading="lazy"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <span style="display:none">{{ company.name|slice:':2'|upper }}</span>
                         {% else %}
-                        {{ company.name|truncatechars:2|upper }}
+                        {{ company.name|slice:':2'|upper }}
                         {% endif %}
                     </div>
                     <div>
