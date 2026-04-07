@@ -23,11 +23,12 @@ class CategorySitemap(Sitemap):
     priority = 0.6
 
     def items(self):
-        # Only include categories with enough published content to avoid
-        # "thin content" signals that trigger AdSense rejection.
+        # Include all categories with at least 1 published article.
+        # Google values category/topic pages as long as they have real content —
+        # even a single well-written article is better than a 404 exclusion.
         return Category.objects.annotate(
             pub_count=Count('article', filter=Q(article__status='published'))
-        ).filter(pub_count__gte=3).order_by('order', 'name')
+        ).filter(pub_count__gte=1).order_by('order', 'name')
 
 
 class AINewsSitemap(Sitemap):
@@ -61,6 +62,7 @@ class StaticViewSitemap(Sitemap):
             'topic_clusters',
             'career_reality_index',
             'ai_news_hub',
+            'company_directory',
         ]
 
     def location(self, item):

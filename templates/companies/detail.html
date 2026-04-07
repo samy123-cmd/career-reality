@@ -10,11 +10,66 @@
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "{{ company.name|escapejs }}",
-    "url": "{{ company.website|default:'' }}",
-    {% if company.logo_url %}"logo": "{{ company.logo_url }}",{% endif %}
-    "description": "{{ company.description|escapejs|truncatechars:200 }}"
+    {% if company.website %}"url": "{{ company.website|escapejs }}",{% endif %}
+    {% if company.logo_url %}"logo": "{{ company.logo_url|escapejs }}",{% endif %}
+    "description": "{{ company.description|escapejs|truncatechars:200 }}",
+    "location": {
+        "@type": "Place",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "{{ company.headquarters|escapejs }}",
+            "addressCountry": "IN"
+        }
+    }
 }
 </script>
+{% if company.overall_score and company.review_count %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "EmployerAggregateRating",
+    "itemReviewed": {
+        "@type": "Organization",
+        "name": "{{ company.name|escapejs }}"{% if company.website %},
+        "url": "{{ company.website|escapejs }}"{% endif %}
+    },
+    "ratingValue": "{{ company.overall_score }}",
+    "bestRating": "5",
+    "worstRating": "1",
+    "ratingCount": "{{ company.review_count }}"
+}
+</script>
+{% endif %}
+{% if company.avg_ctc and company.salary_count %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "hiringOrganization": {
+        "@type": "Organization",
+        "name": "{{ company.name|escapejs }}"{% if company.website %},
+        "url": "{{ company.website|escapejs }}"{% endif %}
+    },
+    "jobLocation": {
+        "@type": "Place",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "{{ company.headquarters|escapejs }}",
+            "addressCountry": "IN"
+        }
+    },
+    "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "INR",
+        "value": {
+            "@type": "QuantitativeValue",
+            "value": {{ company.avg_ctc }},
+            "unitText": "YEAR"
+        }
+    }
+}
+</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}
