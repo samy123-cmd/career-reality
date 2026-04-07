@@ -1,7 +1,9 @@
 from django.contrib.sitemaps import Sitemap
+from django.db.models import Count, Q
 from django.urls import reverse
 from content.models import Article, Category
 from ainews.models import AINewsItem
+from companies.models import Company
 
 
 class ArticleSitemap(Sitemap):
@@ -13,7 +15,7 @@ class ArticleSitemap(Sitemap):
         return Article.objects.filter(status='published').order_by('-updated_at', '-id')
 
     def lastmod(self, obj):
-        return obj.last_reality_check
+        return obj.last_reality_check or (obj.updated_at.date() if obj.updated_at else None)
 
 
 class CategorySitemap(Sitemap):
@@ -21,7 +23,11 @@ class CategorySitemap(Sitemap):
     priority = 0.6
 
     def items(self):
-        return Category.objects.all()
+        # Only include categories with enough published content to avoid
+        # "thin content" signals that trigger AdSense rejection.
+        return Category.objects.annotate(
+            pub_count=Count('article', filter=Q(article__status='published'))
+        ).filter(pub_count__gte=3).order_by('order', 'name')
 
 
 class AINewsSitemap(Sitemap):
@@ -40,15 +46,15 @@ class StaticViewSitemap(Sitemap):
     changefreq = "monthly"
 
     def items(self):
-        # Only include pages that are actually indexable.
-        # revenue_model, sponsorship_policy, and analyzer_home are noindexed
-        # and must NOT appear here (contradicts the noindex directive).
+        # Exclude internal-facing pages (revenue_model, sponsorship_policy)
+        # and near-empty tool pages (analyzer_home) that dilute content ratio.
         return [
             'home',
             'about',
             'editorial',
             'salary_reality',
             'salary_calculator',
+            'escape_plan',
             'privacy_policy',
             'contact',
             'terms',
@@ -59,3 +65,14 @@ class StaticViewSitemap(Sitemap):
 
     def location(self, item):
         return reverse(item)
+
+
+class CompanySitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.7
+
+    def items(self):
+        return Company.objects.filter(is_verified=True).order_by("-salary_count", "name")
+
+    def lastmod(self, obj):
+        return obj.updated_at

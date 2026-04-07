@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ company.name }} — Salary, Reviews & Reality Check{% endblock %}
+{% block meta_description %}{{ og_description }}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{ company.name|escapejs }}",
+    "url": "{{ company.website|default:'' }}",
+    {% if company.logo_url %}"logo": "{{ company.logo_url }}",{% endif %}
+    "description": "{{ company.description|escapejs|truncatechars:200 }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="cp-hero">
+    <div class="container-wide">
+        <div class="cp-header">
+            <div class="cp-logo">
+                {% if company.logo_url %}
+                <img src="{{ company.logo_url }}" alt="{{ company.name }}">
+                {% else %}
+                {{ company.name|truncatechars:2|upper }}
+                {% endif %}
+            </div>
+            <div>
+                <h1>{{ company.name }}</h1>
+                <div class="cp-meta">
+                    <span>{{ company.get_sector_display }}</span>
+                    {% if company.size %}<span>{{ company.get_size_display }}</span>{% endif %}
+                    {% if company.headquarters %}<span>📍 {{ company.headquarters }}</span>{% endif %}
+                    {% if company.founded_year %}<span>Est. {{ company.founded_year }}</span>{% endif %}
+                </div>
+                <div class="cp-badges">
+                    {% if company.is_verified %}<span class="cp-badge verified">✓ Verified</span>{% endif %}
+                    {% if company.work_mode %}<span class="cp-badge">{{ company.get_work_mode_display }}</span>{% endif %}
+                    {% if company.website %}<a href="{{ company.website }}" target="_blank" rel="noopener" class="cp-badge">🔗 Website</a>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container-wide cp-grid">
+    <!-- Sidebar -->
+    <div class="cp-sidebar">
+        {% if review_stats.avg_overall %}
+        <div class="sidebar-card">
+            <h3>Overall Rating</h3>
+            <div class="score-big">{{ review_stats.avg_overall|floatformat:1 }}<span>/5</span></div>
+            <div class="score-label">Based on {{ review_stats.total }} review{{ review_stats.total|pluralize }}</div>
+            <div class="cp-score-ratings">
+                {% with ratings="salary,culture,growth,worklife,management" %}
+                {% for dimension in ratings|make_list %}{% endfor %}
+                {% endwith %}
+                <div class="score-row">
+                    <span>Salary</span>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_salary 5 100 %}%;background:#38bdf8;"></div></div>
+                    <span>{{ review_stats.avg_salary|floatformat:1 }}</span>
+                </div>
+                <div class="score-row">
+                    <span>Culture</span>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_culture 5 100 %}%;background:#a78bfa;"></div></div>
+                    <span>{{ review_stats.avg_culture|floatformat:1 }}</span>
+                </div>
+                <div class="score-row">
+                    <span>Growth</span>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_growth 5 100 %}%;background:#34d399;"></div></div>
+                    <span>{{ review_stats.avg_growth|floatformat:1 }}</span>
+                </div>
+                <div class="score-row">
+                    <span>Work-Life</span>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_worklife 5 100 %}%;background:#fb923c;"></div></div>
+                    <span>{{ review_stats.avg_worklife|floatformat:1 }}</span>
+                </div>
+                <div class="score-row">
+                    <span>Management</span>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_management 5 100 %}%;background:#f87171;"></div></div>
+                    <span>{{ review_stats.avg_management|floatformat:1 }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if review_stats.rejoin_pct is not None %}
+        <div class="sidebar-card">
+            <h3>Would Rejoin?</h3>
+            <div class="score-big {% if review_stats.rejoin_pct < 50 %}score-big--danger{% else %}score-big--success{% endif %}">{{ review_stats.rejoin_pct }}%</div>
+            <div class="score-label">of reviewers would join again</div>
+        </div>
+        {% endif %}
+
+        <div class="sidebar-card">
+            <h3>Quick Links</h3>
+            <div class="cp-quick-links">
+                <a href="#salaries">💰 Salary Data ({{ salary_stats.count|default:"0" }})</a>
+                <a href="#reviews">📝 Reviews ({{ review_stats.total|default:"0" }})</a>
+                <a href="#layoffs">⚠️ Layoff Reports ({{ layoff_reports|length }})</a>
+                <a href="#write-review">✍️ Write a Review</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="cp-main">
+        {% if company.description %}
+        <p class="cp-description">{{ company.description }}</p>
+        {% endif %}
+
+        <!-- Salary Section -->
+        <h2 id="salaries">💰 Salary Intelligence</h2>
+        {% if salary_stats %}
+        <div class="salary-stats-grid">
+            <div class="stat-card"><div class="val">₹{{ salary_stats.median|floatformat:0 }}</div><div class="label">Median CTC</div></div>
+            <div class="stat-card"><div class="val">₹{{ salary_stats.p25|floatformat:0 }}</div><div class="label">25th Percentile</div></div>
+            <div class="stat-card"><div class="val">₹{{ salary_stats.p75|floatformat:0 }}</div><div class="label">75th Percentile</div></div>
+            <div class="stat-card"><div class="val">{{ salary_stats.count }}</div><div class="label">Data Points</div></div>
+        </div>
+        {% endif %}
+
+        {% if salaries %}
+        <div class="cp-table-wrap">
+            <table class="salary-table">
+                <thead><tr><th>Role</th><th>Exp</th><th>CTC (₹)</th><th>City</th><th>Stack</th></tr></thead>
+                <tbody>
+                {% for s in salaries %}
+                <tr>
+                    <td><strong>{{ s.role }}</strong></td>
+                    <td>{{ s.experience_years }}y</td>
+                    <td>₹{{ s.ctc|floatformat:0 }}</td>
+                    <td>{{ s.city }}</td>
+                    <td class="cp-tech-stack">{{ s.tech_stack|truncatechars:40 }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="cp-empty">No salary data yet. <a href="{% url 'submit_salary' %}">Be the first to contribute.</a></p>
+        {% endif %}
+
+        <!-- Layoff Reports -->
+        <h2 id="layoffs">⚠️ Stability & Layoff Reports</h2>
+        {% if layoff_reports %}
+        <div class="cp-layoff-wrap">
+            {% for lr in layoff_reports %}
+            <div class="layoff-item">
+                <span class="layoff-badge {{ lr.status }}">{{ lr.get_status_display }}</span>
+                <div>
+                    {% if lr.role_affected %}<strong>{{ lr.role_affected }}</strong> · {% endif %}
+                    {% if lr.location %}{{ lr.location }} · {% endif %}
+                    <span class="cp-layoff-time">{{ lr.created_at|timesince }} ago</span>
+                    {% if lr.details %}<p class="cp-layoff-detail">{{ lr.details|truncatechars:200 }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="cp-empty">No reports yet. <a href="{% url 'report_layoff' %}">Report anonymously.</a></p>
+        {% endif %}
+
+        <!-- Reviews Section -->
+        <h2 id="reviews">📝 Employee Reviews</h2>
+        {% if reviews %}
+        {% for review in reviews %}
+        <div class="review-card">
+            <div class="rc-header">
+                <div>
+                    <div class="rc-role">{{ review.role_title }}</div>
+                    <div class="rc-meta">{{ review.get_role_level_display }} · {{ review.get_employment_status_display }} · {{ review.tenure_months }} months</div>
+                </div>
+                <div>
+                    <div class="rc-stars">{% for i in "12345" %}{% if forloop.counter <= review.rating_overall %}★{% else %}☆{% endif %}{% endfor %}</div>
+                    <span class="rc-rejoin {% if review.would_rejoin %}yes{% else %}no{% endif %}">
+                        {% if review.would_rejoin %}Would rejoin{% else %}Would NOT rejoin{% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="rc-section"><strong>Pros</strong>{{ review.pros }}</div>
+            <div class="rc-section"><strong>Cons</strong>{{ review.cons }}</div>
+            {% if review.biggest_lie %}
+            <div class="rc-section"><strong>Biggest Lie Told by Company</strong><span class="cp-lie">{{ review.biggest_lie }}</span></div>
+            {% endif %}
+            <div class="cp-review-time">{{ review.created_at|timesince }} ago</div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="cp-empty">No reviews yet. Be the first to share your experience.</p>
+        {% endif %}
+
+        <!-- Write Review Form -->
+        <div class="review-form" id="write-review">
+            <h3>✍️ Write an Anonymous Review</h3>
+            <p class="cp-review-form-note">No login required. Your identity stays private.</p>
+            <form method="post" action="{% url 'submit_review' company.slug %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Job Title *</label>
+                        {{ form.role_title }}
+                    </div>
+                    <div class="form-group">
+                        <label>Level *</label>
+                        <select name="role_level" class="cr-input">
+                            <option value="">Select…</option>
+                            {% for val, label in form.fields.role_level.choices %}
+                            {% if val %}<option value="{{ val }}">{{ label }}</option>{% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Employment *</label>
+                        <select name="employment_status" class="cr-input">
+                            <option value="">Select…</option>
+                            {% for val, label in form.fields.employment_status.choices %}
+                            {% if val %}<option value="{{ val }}">{{ label }}</option>{% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tenure (months) *</label>
+                        {{ form.tenure_months }}
+                    </div>
+                </div>
+
+                {% for field in form %}
+                {% if "rating_" in field.name %}
+                <div class="form-group">
+                    <label>{{ field.label }} *</label>
+                    <div class="rating-group">
+                        {% for choice in field.field.choices %}
+                        <label><input type="radio" name="{{ field.name }}" value="{{ choice.0 }}"><span>{{ choice.0 }}★</span></label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <div class="form-group"><label>Pros *</label>{{ form.pros }}</div>
+                <div class="form-group"><label>Cons *</label>{{ form.cons }}</div>
+                <div class="form-group"><label>Advice to Management</label>{{ form.advice_to_management }}</div>
+                <div class="form-group"><label>Biggest Lie Told by Company</label>{{ form.biggest_lie }}</div>
+                <div class="form-group">
+                    <label>Would you join this company again? *</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="would_rejoin" value="True"><span>✅ Yes</span></label>
+                        <label><input type="radio" name="would_rejoin" value="False"><span>❌ No</span></label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Submit Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

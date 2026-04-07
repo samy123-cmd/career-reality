@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AssessmentLog
+from .models import AssessmentLog, FunnelEventLog
 
 @admin.register(AssessmentLog)
 class AssessmentLogAdmin(admin.ModelAdmin):
@@ -10,3 +10,14 @@ class AssessmentLogAdmin(admin.ModelAdmin):
     
     def has_add_permission(self, request):
         return False  # Logs are read-only
+
+
+@admin.register(FunnelEventLog)
+class FunnelEventLogAdmin(admin.ModelAdmin):
+    list_display = ('created_at', 'event_name', 'session_id', 'page_path')
+    list_filter = ('event_name', 'created_at')
+    search_fields = ('session_id', 'page_path', 'metadata')
+    readonly_fields = ('created_at', 'event_name', 'session_id', 'page_path', 'user_agent', 'metadata')
+
+    def has_add_permission(self, request):
+        return False

@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
-from core.sitemaps import ArticleSitemap, StaticViewSitemap, CategorySitemap, AINewsSitemap
+from core.sitemaps import ArticleSitemap, StaticViewSitemap, CategorySitemap, AINewsSitemap, CompanySitemap
 from core import views as core_views
 
 handler404 = 'core.views.custom_404'
@@ -28,16 +28,28 @@ sitemaps = {
     'categories': CategorySitemap,
     'static': StaticViewSitemap,
     'ainews': AINewsSitemap,
+    'companies': CompanySitemap,
 }
 
-# All URLs — i18n_patterns removed because no Hindi translations exist.
-# Having /hi/ duplicates of all pages was creating ~78 duplicate URLs
-# with identical English content, triggering AdSense "low value content".
+from django.conf.urls.i18n import i18n_patterns
+
+# Non-translated URLs (payment endpoints must not be under i18n prefix for webhooks)
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('payments/', include('payments.urls', namespace='payments')),
+    path('accounts/', include('allauth.urls')),
+]
+
+# Translated URLs
+urlpatterns += i18n_patterns(
     path('', include('core.urls')),
     path('', include('content.urls')),
     path('ai/', include('ainews.urls')),
     path('resignation-risk/', include('analyzer.urls')),
-]
+    path('pro/', include('accounts.urls')),
+    path('companies/', include('companies.urls')),
+    path('search/', include('search.urls')),
+    prefix_default_language=False  # Only prefix non-default languages (e.g., /hi/)
+)

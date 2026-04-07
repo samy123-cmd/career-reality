@@ -1,4 +1,6 @@
 from datetime import timedelta
+from unittest.mock import patch
+import os
 
 from django.test import TestCase
 from django.urls import reverse
@@ -80,5 +82,20 @@ class CoreViewsTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse("home"))
+        self.assertRedirects(response, reverse("home"), fetch_redirect_response=False)
         self.assertTrue(NewsletterSubscriber.objects.filter(email="reader@example.com").exists())
+
+    def test_run_freshness_cron_rejects_invalid_token(self):
+        with patch.dict(os.environ, {"CRON_SECRET": "expected-token"}, clear=False):
+            response = self.client.get(reverse("run_freshness_cron"), {"token": "wrong-token"})
+
+        self.assertEqual(response.status_code, 403)
+
+    @patch("core.views.call_command")
+    def test_run_freshness_cron_allows_valid_token(self, mock_call_command):
+        with patch.dict(os.environ, {"CRON_SECRET": "expected-token"}, clear=False):
+            response = self.client.get(reverse("run_freshness_cron"), {"token": "expected-token"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "ok")
+        self.assertTrue(mock_call_command.called)

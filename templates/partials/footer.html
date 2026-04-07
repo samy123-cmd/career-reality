@@ -12,27 +12,26 @@
             </form>
         </div>
 
-        <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;">
+        <div class="footer-divider"></div>
 
-        <p>
-            Independently written. No sponsors. No courses.
-            AI used only for assistive editing.
-        </p>
+        <p class="footer-tagline">Independently written. No sponsors. No courses. AI used only for assistive editing.</p>
 
-        <p style="margin-top: 1.5rem; font-size: 14px; color: var(--c-grey-mid);">
-            <a href="{% url 'about' %}" style="text-decoration: none; color: inherit;">About</a> &middot;
-            <a href="{% url 'editorial' %}" style="text-decoration: none; color: inherit;">Editorial Standards</a> &middot;
-            <a href="{% url 'topic_clusters' %}" style="text-decoration: none; color: inherit;">Topic Clusters</a> &middot;
-            <a href="{% url 'career_reality_index' %}" style="text-decoration: none; color: inherit;">Index</a> &middot;
-            <a href="{% url 'revenue_model' %}" style="text-decoration: none; color: inherit;">Revenue Model</a> &middot;
-            <a href="{% url 'sponsorship_policy' %}" style="text-decoration: none; color: inherit;">Sponsorships</a> &middot;
-            <a href="{% url 'contact' %}" style="text-decoration: none; color: inherit;">Contact</a> &middot;
-            <a href="{% url 'terms' %}" style="text-decoration: none; color: inherit;">Terms</a> &middot;
-            <a href="{% url 'privacy_policy' %}" style="text-decoration: none; color: inherit;">Privacy</a>
-        </p>
+        <nav class="footer-nav">
+            <a href="{% url 'company_directory' %}">Companies</a>
+            <a href="{% url 'ai_news_hub' %}">AI Pulse</a>
+            <a href="{% url 'payments:pricing' %}">Pro</a>
+            <a href="{% url 'search' %}">Search</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'editorial' %}">Editorial Standards</a>
+            <a href="{% url 'topic_clusters' %}">Topic Clusters</a>
+            <a href="{% url 'career_reality_index' %}">Index</a>
+            <a href="{% url 'revenue_model' %}">Revenue Model</a>
+            <a href="{% url 'sponsorship_policy' %}">Sponsorships</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'terms' %}">Terms</a>
+            <a href="{% url 'privacy_policy' %}">Privacy</a>
+        </nav>
 
-        <p style="margin-top: 1.5rem; color: var(--c-grey-mid);">
-            &copy; {% now "Y" %} CareerReality
-        </p>
+        <p class="footer-copy">&copy; {% now "Y" %} CareerReality</p>
     </div>
 </footer>

@@ -16,4 +16,8 @@ audit_reports/
 *.log
 *.tmp
 .vercel
-.env*.local
+
+# Environment files — never commit secrets
+.env
+.env.*
+!.env.example

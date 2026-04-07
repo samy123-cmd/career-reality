@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="en-IN">
+{% load static i18n %}
+{% get_current_language as CURRENT_LANG %}
+<html lang="{% if CURRENT_LANG == 'hi' %}hi-IN{% else %}en-IN{% endif %}">
 
 <head>
     <title>{% block title %}Career Reality India - Salary Truths and Career Reality Checks{% endblock %}</title>
     <meta name="description"
         content="{% block meta_description %}Unfiltered insights on Indian tech careers, salary stagnation, and real-world career trade-offs.{% endblock %}">
     {% include "partials/meta.html" %}
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 
@@ -23,9 +26,71 @@
 
     {% include "partials/footer.html" %}
 
+    <script>
+        (function () {
+            var eventEndpoint = "{% url 'track_event_api' %}";
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            function getSessionId() {
+                var key = 'cr_session_id';
+                var existing = localStorage.getItem(key);
+                if (existing) {
+                    return existing;
+                }
+                var generated = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+                localStorage.setItem(key, generated);
+                return generated;
+            }
+
+            window.crGetSessionId = getSessionId;
+            window.crTrack = function (eventName, metadata) {
+                try {
+                    var payload = {
+                        event_name: eventName,
+                        session_id: getSessionId(),
+                        page_path: window.location.pathname,
+                        metadata: metadata || {}
+                    };
+
+                    fetch(eventEndpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken') || ''
+                        },
+                        body: JSON.stringify(payload),
+                        credentials: 'same-origin',
+                        keepalive: true
+                    }).catch(function () { });
+                } catch (err) {
+                    // No-op: analytics should never break UX.
+                }
+            };
+        })();
+    </script>
 
 
     <script defer src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js', { scope: '/' }).catch(function() {});
+        }
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 

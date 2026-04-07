@@ -35,11 +35,13 @@ RSS_FEEDS = [
         'name': 'HuggingFace Trending',
         'url': 'https://zernel.github.io/huggingface-trending-feed/feed.xml',
         'default_tags': ['Open Source', 'Model Release'],
+        'bundle': True,
     },
     {
         'name': 'HuggingFace Papers',
         'url': 'https://papers.takara.ai/api/feed',
         'default_tags': ['Research Paper'],
+        'bundle': True,
     },
     {
         'name': 'MIT AI News',
@@ -116,6 +118,62 @@ class Command(BaseCommand):
 
             entries = feed.entries[:limit]
             self.stdout.write(f"  Found {len(feed.entries)} entries, processing {len(entries)}")
+
+            bundle = feed_config.get('bundle', False)
+            if bundle:
+                bundled_items = []
+                today_str = timezone.now().strftime('%Y-%m-%d')
+                bundle_external_id = f"{source_name}-bundle-{today_str}"
+                
+                if AINewsItem.objects.filter(external_id=bundle_external_id).exists():
+                    self.stdout.write(f"  Bundle for {source_name} already exists today. Skipping {len(entries)} items.")
+                    total_skipped += len(entries)
+                    continue
+                
+                for entry in entries:
+                    title = getattr(entry, 'title', 'Untitled')[:300]
+                    link = getattr(entry, 'link', '')
+                    if link:
+                        bundled_items.append(f"<li><a href='{link}' target='_blank' rel='noopener noreferrer'>{title}</a></li>")
+                    else:
+                        bundled_items.append(f"<li>{title}</li>")
+                
+                if bundled_items:
+                    summary = "<p>Here are the latest model releases and trending repositories:</p><ul>" + "".join(bundled_items) + "</ul>"
+                    title = f"{source_name} Daily Model Roundup"
+                    
+                    is_trusted = source_name in TRUSTED_SOURCES
+                    status = 'published' if (auto_publish and is_trusted) else 'draft'
+                    slug = slugify(f"{title} {today_str}")[:300]
+                    counter = 1
+                    base_slug = slug
+                    while AINewsItem.objects.filter(slug=slug).exists():
+                        slug = f"{base_slug[:290]}-{counter}"
+                        counter += 1
+                    
+                    try:
+                        item = AINewsItem.objects.create(
+                            title=title,
+                            slug=slug,
+                            summary=summary,
+                            source_name=source_name,
+                            source_url=feed_url,
+                            status=status,
+                            fact_check_status='pending',
+                            event_date=timezone.now(),
+                            reviewed_at=timezone.now() if status == 'published' else None,
+                            published_at=timezone.now(),
+                            external_id=bundle_external_id,
+                        )
+                        for tag_name in default_tag_names:
+                            if tag_name in tag_cache:
+                                item.tags.add(tag_cache[tag_name])
+                        total_created += 1
+                        self.stdout.write(f"  + Bundled {len(bundled_items)} items into one roundup [{status}]")
+                    except Exception as exc:
+                        self.stderr.write(self.style.ERROR(f"  Error saving bundle: {exc}"))
+                        total_errors += 1
+                continue
 
             for entry in entries:
                 external_id = getattr(entry, 'id', None) or getattr(entry, 'link', None)

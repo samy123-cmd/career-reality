@@ -4,6 +4,26 @@
 {% block meta_description %}Real, uninflated salary data for Indian tech roles. No '1 Crore' outliers. Just the median
 reality.{% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Indian Tech Salary Reality Data",
+  "description": "Median salary ranges for Indian tech roles including AI/GenAI, backend, frontend, data engineering, DevOps, and mobile development.",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
+  "creator": {
+    "@type": "Organization",
+    "name": "Career Reality",
+    "url": "{{ site_base_url }}"
+  },
+  "spatialCoverage": "India",
+  "temporalCoverage": "2025/..",
+  "keywords": ["indian tech salary", "median salary india", "software engineer salary", "data engineer salary", "AI engineer salary"]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 
 <!-- HEADER -->
@@ -14,23 +34,24 @@ reality.{% endblock %}
         Most "Average Salary" reports are inflated by unicorns and US-remote roles.
         This is what the actual Indian market pays.
     </p>
-    <p class="meta-info" style="font-size: 13px; color: var(--c-grey-light); display: inline-block;">
+    <p class="sal-meta">
         Last Updated: {% now "F Y" %}
     </p>
 </section>
 
 <section class="container-medium" style="margin-bottom: var(--space-lg);">
     <span class="section-label">MARKET SUMMARY</span>
-    <div style="border: 1px solid var(--c-divider); padding: 1.5rem; background: #fafafa;">
-        <p style="margin: 0 0 0.75rem 0; font-weight: 600; color: var(--c-black);">
+    <div class="sal-summary-box">
+        <p>
             Quick read for this month:
         </p>
-        <ul style="margin: 0; padding-left: 20px;">
-            <li>Median offers are steady in core engineering roles; junior roles remain flat.</li>
-            <li>Design and product ranges show the widest gap between hype and reality.</li>
-            <li>Data roles remain competitive but are flattening at the entry level.</li>
+        <ul>
+            <li>Appraisal season (March-April) is compressing offers; counter-offers are rising in mid-senior engineering.</li>
+            <li>AI/GenAI roles continue to pull away from general engineering pay bands; RAG and agent-building skills command premiums.</li>
+            <li>Junior roles remain flat; service-company freshers still anchored at 3.2-4.5 LPA despite inflation.</li>
+            <li>Design and product roles show the widest gap between hype and reality, especially at the agency level.</li>
         </ul>
-        <p style="font-size: 12px; color: var(--c-grey-light); margin-top: 0.75rem;">
+        <p class="sal-summary-date">
             Updated: {% now "F Y" %}
         </p>
     </div>
@@ -60,32 +81,31 @@ reality.{% endblock %}
     </p>
 
     <h3 style="font-size: 16px; margin-top: var(--space-lg); margin-bottom: var(--space-sm);">Sources & Methodology</h3>
-    <p style="font-size: 15px; color: var(--c-grey-mid);">
+    <p class="sal-methodology">
         Data is aggregated from job postings on LinkedIn, Naukri, and company career pages; verified
         offer letters shared with Career Reality; industry salary surveys from AmbitionBox and Glassdoor;
         and direct conversations with hiring managers across 50+ companies. We exclude remote-US roles,
         contractor positions, and outlier packages from well-funded unicorns.
     </p>
-    <ul style="padding-left: 20px; margin-top: 1rem;">
-        <li><a href="https://www.ambitionbox.com/salaries" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">AmbitionBox Salary Data</a> (checked {% now "F j, Y" %})</li>
-        <li><a href="https://www.glassdoor.co.in/Salaries/index.htm" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">Glassdoor India Salary Reports</a> (checked {% now "F j, Y" %})</li>
-        <li><a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">LinkedIn Jobs India</a> (checked {% now "F j, Y" %})</li>
-        <li><a href="https://www.naukri.com/" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">Naukri Job Listings</a> (checked {% now "F j, Y" %})</li>
+    <ul class="sal-sources">
+        <li><a href="https://www.ambitionbox.com/salaries" target="_blank" rel="noopener noreferrer">AmbitionBox Salary Data</a> (checked {% now "F j, Y" %})</li>
+        <li><a href="https://www.glassdoor.co.in/Salaries/index.htm" target="_blank" rel="noopener noreferrer">Glassdoor India Salary Reports</a> (checked {% now "F j, Y" %})</li>
+        <li><a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer">LinkedIn Jobs India</a> (checked {% now "F j, Y" %})</li>
+        <li><a href="https://www.naukri.com/" target="_blank" rel="noopener noreferrer">Naukri Job Listings</a> (checked {% now "F j, Y" %})</li>
     </ul>
 </section>
 
 <section class="container-reading" style="margin-bottom: var(--space-xl);">
     <h3 style="font-size: 16px; margin-bottom: var(--space-sm);">Coverage and Limits</h3>
-    <ul style="padding-left: 20px; margin: 0;">
+    <ul class="sal-coverage">
         <li>India-only, full-time roles; US-remote and contractor roles are excluded.</li>
         <li>Ranges are median-heavy and calibrated for typical offers, not unicorn outliers.</li>
         <li>Data is refreshed monthly; volatile roles may shift faster than the table.</li>
     </ul>
-    <p style="font-size: 14px; color: var(--c-grey-mid); margin-top: 1rem;">
+    <p class="sal-coverage-note">
         Have better data or corrections? Use the Salary Drop to improve the ranges.
     </p>
-    <a href="{% url 'submit_salary' %}"
-        style="display: inline-block; margin-top: 0.75rem; padding: 10px 18px; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">
+    <a href="{% url 'submit_salary' %}" class="sal-submit-btn">
         Submit a Salary Data Point
     </a>
 </section>
@@ -108,74 +128,74 @@ reality.{% endblock %}
                 <tr>
                     <td>
                         <strong>Junior Dev (Service Co.)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">TCS, Wipro, Infy, etc.</span>
+                        <span class="sal-role-context">TCS, Wipro, Infy, etc.</span>
                     </td>
                     <td>0-2y</td>
                     <td>3.2 - 4.5</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">10.0</span></td>
+                    <td><span class="sal-hype">10.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Junior Dev (Startups)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Series A/B funded</span>
+                        <span class="sal-role-context">Series A/B funded</span>
                     </td>
                     <td>0-2y</td>
                     <td>6.0 - 12.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">20.0</span></td>
+                    <td><span class="sal-hype">20.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Senior Backend Dev</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Java/Spring/Node</span>
+                        <span class="sal-role-context">Java/Spring/Node</span>
                     </td>
                     <td>5-8y</td>
-                    <td>18.0 - 28.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">60.0</span></td>
+                    <td>18.0 - 30.0</td>
+                    <td><span class="sal-hype">60.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>QA / Automation Engineer</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Selenium/Python</span>
+                        <span class="sal-role-context">Selenium/Python</span>
                     </td>
                     <td>3-5y</td>
                     <td>6.0 - 10.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">20.0</span></td>
+                    <td><span class="sal-hype">20.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Data Scientist (Junior)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Mostly SQL/Cleaning</span>
+                        <span class="sal-role-context">Mostly SQL/Cleaning</span>
                     </td>
                     <td>0-2y</td>
                     <td>5.0 - 9.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">18.0</span></td>
+                    <td><span class="sal-hype">18.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>DevOps / SRE</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">AWS/Terraform/CI-CD</span>
+                        <span class="sal-role-context">AWS/Terraform/CI-CD</span>
                     </td>
                     <td>3-6y</td>
-                    <td>12.0 - 20.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">40.0</span></td>
+                    <td>13.0 - 22.0</td>
+                    <td><span class="sal-hype">40.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Mobile Dev (Android/iOS)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Native or Flutter</span>
+                        <span class="sal-role-context">Native or Flutter</span>
                     </td>
                     <td>2-4y</td>
-                    <td>8.0 - 15.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">30.0</span></td>
+                    <td>8.5 - 16.0</td>
+                    <td><span class="sal-hype">30.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Frontend Specialist</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">React/Next.js/Perf</span>
+                        <span class="sal-role-context">React/Next.js/Perf</span>
                     </td>
                     <td>2-5y</td>
-                    <td>7.0 - 14.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">25.0</span></td>
+                    <td>7.5 - 15.0</td>
+                    <td><span class="sal-hype">25.0</span></td>
                 </tr>
             </tbody>
         </table>
@@ -200,38 +220,38 @@ reality.{% endblock %}
                 <tr>
                     <td>
                         <strong>UX Designer (Agency)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">High volume, low strategy</span>
+                        <span class="sal-role-context">High volume, low strategy</span>
                     </td>
                     <td>1-3y</td>
                     <td>3.6 - 6.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">15.0</span></td>
+                    <td><span class="sal-hype">15.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Product Designer (Tech)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Product-led companies</span>
+                        <span class="sal-role-context">Product-led companies</span>
                     </td>
                     <td>2-4y</td>
                     <td>9.0 - 16.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">30.0</span></td>
+                    <td><span class="sal-hype">30.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Graphic Designer</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Social Media/Marketing</span>
+                        <span class="sal-role-context">Social Media/Marketing</span>
                     </td>
                     <td>1-3y</td>
                     <td>2.4 - 4.5</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">10.0</span></td>
+                    <td><span class="sal-hype">10.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Product Manager</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Generalist / Feature Owner</span>
+                        <span class="sal-role-context">Generalist / Feature Owner</span>
                     </td>
                     <td>3-5y</td>
                     <td>15.0 - 25.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">50.0</span></td>
+                    <td><span class="sal-hype">50.0</span></td>
                 </tr>
             </tbody>
         </table>
@@ -256,38 +276,38 @@ reality.{% endblock %}
                 <tr>
                     <td>
                         <strong>Digital Marketer</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">PPC/SEO Execution</span>
+                        <span class="sal-role-context">PPC/SEO Execution</span>
                     </td>
                     <td>1-3y</td>
                     <td>3.0 - 5.5</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">12.0</span></td>
+                    <td><span class="sal-hype">12.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Content Writer</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Blogs/Social Copy</span>
+                        <span class="sal-role-context">Blogs/Social Copy</span>
                     </td>
                     <td>1-3y</td>
                     <td>2.4 - 4.8</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">10.0</span></td>
+                    <td><span class="sal-hype">10.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>B2B Sales (SaaS)</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Base Salary (Excl. Comm)</span>
+                        <span class="sal-role-context">Base Salary (Excl. Comm)</span>
                     </td>
                     <td>2-4y</td>
                     <td>6.0 - 10.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">25.0</span></td>
+                    <td><span class="sal-hype">25.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>HR Recruiter</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Agency or Corporate</span>
+                        <span class="sal-role-context">Agency or Corporate</span>
                     </td>
                     <td>2-4y</td>
                     <td>3.5 - 6.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">12.0</span></td>
+                    <td><span class="sal-hype">12.0</span></td>
                 </tr>
             </tbody>
         </table>
@@ -312,39 +332,39 @@ reality.{% endblock %}
                 <tr>
                     <td>
                         <strong>Data Analyst</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Excel/SQL/Tableau</span>
+                        <span class="sal-role-context">Excel/SQL/Tableau</span>
                     </td>
                     <td>1-3y</td>
                     <td>4.5 - 7.5</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">15.0</span></td>
+                    <td><span class="sal-hype">15.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Data Engineer</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Pipelines/Spark/Cloud</span>
+                        <span class="sal-role-context">Pipelines/Spark/Cloud</span>
                     </td>
                     <td>3-5y</td>
-                    <td>12.0 - 22.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">35.0</span></td>
+                    <td>14.0 - 24.0</td>
+                    <td><span class="sal-hype">35.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>ML Engineer</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Actual deployment, not
+                        <span class="sal-role-context">Actual deployment, not
                             notebooks</span>
                     </td>
                     <td>2-5y</td>
-                    <td>10.0 - 18.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">45.0</span></td>
+                    <td>12.0 - 20.0</td>
+                    <td><span class="sal-hype">45.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>AI/GenAI Dev</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">RAG/LLM Integration</span>
+                        <span class="sal-role-context">RAG/LLM/Agent Integration</span>
                     </td>
                     <td>1-3y</td>
-                    <td>8.0 - 15.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">30.0</span></td>
+                    <td>10.0 - 18.0</td>
+                    <td><span class="sal-hype">35.0</span></td>
                 </tr>
             </tbody>
         </table>
@@ -369,29 +389,29 @@ reality.{% endblock %}
                 <tr>
                     <td>
                         <strong>Engineering Manager</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">People + Tech</span>
+                        <span class="sal-role-context">People + Tech</span>
                     </td>
                     <td>10-14y</td>
                     <td>28.0 - 45.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">80.0</span></td>
+                    <td><span class="sal-hype">80.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Project Manager</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Service Co. / IT Ops</span>
+                        <span class="sal-role-context">Service Co. / IT Ops</span>
                     </td>
                     <td>8-12y</td>
                     <td>14.0 - 22.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">35.0</span></td>
+                    <td><span class="sal-hype">35.0</span></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Founder's Office / CoS</strong><br>
-                        <span style="font-size: 12px; color: var(--c-grey-light);">Generalist / Strategy</span>
+                        <span class="sal-role-context">Generalist / Strategy</span>
                     </td>
                     <td>2-5y</td>
                     <td>12.0 - 20.0</td>
-                    <td><span style="color: #d93025; text-decoration: line-through;">50.0</span></td>
+                    <td><span class="sal-hype">50.0</span></td>
                 </tr>
             </tbody>
         </table>
@@ -399,11 +419,11 @@ reality.{% endblock %}
 </section>
 
 <!-- EXPLANATION -->
-<section class="container-reading"
-    style="margin-bottom: var(--space-xl); background-color: #f9f9f9; padding: var(--space-md); border-left: 2px solid var(--c-black);">
-    <h3 style="margin-top: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;"> How to read this
+<section class="container-reading sal-explainer"
+    style="margin-bottom: var(--space-xl);">
+    <h3> How to read this
     </h3>
-    <p style="font-size: 15px; margin-bottom: 0;">
+    <p>
         The <strong>"Hype"</strong> number is what influencers, bootcamps, and viral LinkedIn posts tell you to expect.
         <br><br>
         The <strong>"Real Range"</strong> is what 80% of companies actually offer. This includes Service-based giants
@@ -415,12 +435,14 @@ reality.{% endblock %}
 
 <section class="container-reading" style="margin-bottom: var(--space-xl);">
     <h3 style="font-size: 16px; margin-bottom: var(--space-sm);">What Changed In This Update</h3>
-    <ul style="padding-left: 20px; margin: 0;">
+    <ul class="sal-changelog">
         <li><strong>{% now "F j, Y" %}:</strong> Refreshed market notes, validated role bands, and rechecked methodology sources.</li>
+        <li><strong>March 2026:</strong> AI/GenAI and ML Engineer ranges revised upward; senior backend top-end nudged to 30 LPA reflecting appraisal-cycle offers. Mobile dev range adjusted.</li>
+        <li><strong>February 2026:</strong> Rechecked all five tables against AmbitionBox Q4 salary surveys and Naukri demand indices.</li>
         <li><strong>January 2026:</strong> Expanded management and strategy salary coverage.</li>
         <li><strong>December 2025:</strong> Added explicit hype-vs-reality comparisons by role cluster.</li>
     </ul>
-    <p style="font-size: 13px; color: var(--c-grey-light); margin-top: 1rem;">
+    <p class="sal-changelog-note">
         Update cadence: monthly scheduled review, plus ad-hoc corrections when major salary shifts occur.
     </p>
 </section>

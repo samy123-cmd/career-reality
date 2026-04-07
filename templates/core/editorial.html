@@ -3,6 +3,33 @@
 {% block title %}Editorial Standards - Career Reality India{% endblock %}
 {% block meta_description %}The editorial rules, correction protocol, evidence requirements, and tone guidelines behind Career Reality.{% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Editorial Standards",
+  "description": "The editorial rules, correction protocol, evidence requirements, and tone guidelines behind Career Reality.",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Career Reality",
+    "url": "{{ site_base_url }}"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site_base_url }}/"},
+    {"@type": "ListItem", "position": 2, "name": "Editorial Standards"}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <section class="container-wide">
     <div class="hero-statement">

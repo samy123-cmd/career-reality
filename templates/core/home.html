@@ -89,621 +89,305 @@ real trade-offs you need to plan for.{% endblock %}
 
 {% block content %}
 
-<!-- HERO: REALITY SPLIT SECTION -->
-<section class="container-wide" style="padding: 0; margin-bottom: 4rem;">
-    <style>
-        .hero-cta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        .cta-primary,
-        .cta-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 48px;
-            padding: 0 24px;
-            border: 1px solid var(--c-black);
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .cta-primary {
-            background: var(--c-black);
-            color: var(--c-white);
-        }
-
-        .cta-primary:hover {
-            background: transparent;
-            color: var(--c-black);
-        }
-
-        .cta-secondary {
-            background: transparent;
-            color: var(--c-black);
-        }
-
-        .cta-secondary:hover {
-            background: var(--c-black);
-            color: var(--c-white);
-        }
-
-        .hero-proof {
-            margin-top: 16px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--c-grey-light);
-        }
-
-        .reality-split-container {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 4rem;
-            align-items: center;
-            min-height: 55vh;
-            /* CLS FIX: Ensure strict layering & containment */
-            contain: layout paint;
-            /* content-visibility: auto; REMOVED to prevent thrashing */
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            /* Rule #1: Same Base Background */
-            background-color: #fafafa;
-            /* Rule #2: SVG Noise Removed for Performance (3.0s Main Thread Fix) */
-            /* background-image: ...; */
-        }
-
-        /* Optional Vignette */
-        .reality-split-container::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.03) 100%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .split-side {
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            height: 100%;
-            z-index: 2;
-        }
-
-        /* LEFT SIDE: COMFORTABLE LIES */
-        .side-lies {
-            text-align: right;
-            /* Rule #3: Use blur/opacity for contrast */
-            opacity: 0.75;
-            filter: none;
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .side-lies:hover {
-            opacity: 1;
-            filter: none;
-        }
-
-        .side-lies h2 {
-            font-size: 2.2rem;
-            font-weight: 300;
-            /* Lighter weight */
-            color: #666;
-            /* Grey */
-            margin-bottom: 2rem;
-            letter-spacing: 0.05em;
-        }
-
-        .side-lies ul {
-            list-style: none;
-            padding: 0;
-            color: #666;
-        }
-
-        .side-lies li {
-            margin-bottom: 1.5rem;
-            font-size: 1.15rem;
-            font-weight: 300;
-            letter-spacing: 0.02em;
-        }
-
-        /* RIGHT SIDE: CAREER REALITY */
-        .side-reality {
-            text-align: left;
-        }
-
-        .side-reality h2 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            /* Heavy */
-            color: #111;
-            /* Razor sharp black */
-            margin-bottom: 2rem;
-            letter-spacing: -0.03em;
-            line-height: 1;
-        }
-
-        .side-reality ul {
-            list-style: none;
-            padding: 0;
-            color: #000;
-        }
-
-        .side-reality li {
-            margin-bottom: 1.5rem;
-            font-size: 1.25rem;
-            /* Slightly larger */
-            font-weight: 600;
-            /* Sharp */
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            letter-spacing: -0.01em;
-        }
-
-        /* Custom checkmark for Reality */
-        .reality-check {
-            /* Rule #3: Muted Red Icons */
-            color: #cc3333;
-            font-weight: 900;
-            font-size: 1.1em;
-        }
-
-        /* DIVIDER */
-        /* Rule #4: The Drama Lives Here */
-        .split-divider {
-            width: 1px;
-            height: 40vh;
-            background: rgba(0, 0, 0, 0.1);
-            /* Graphite base */
-            position: relative;
-            overflow: visible;
-        }
-
-        .split-divider::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -1px;
-            /* Center it */
-            width: 3px;
-            height: 150px;
-            /* The pulse length */
-            background: linear-gradient(to bottom, transparent, #cc3333, transparent);
-            opacity: 0.8;
-            filter: blur(2px);
-            animation: pulse-travel 6s ease-in-out infinite;
-        }
-
-        @keyframes pulse-travel {
-            0% {
-                top: -20%;
-                opacity: 0;
-            }
-
-            20% {
-                opacity: 1;
-            }
-
-            80% {
-                opacity: 1;
-            }
-
-            100% {
-                top: 120%;
-                opacity: 0;
-            }
-        }
-
-        /* MOBILE RESPONSIVE FIX */
-        @media (max-width: 768px) {
-            .reality-split-container {
-                display: flex !important;
-                flex-direction: column-reverse !important;
-                gap: 3rem;
-                padding: 3rem 1.5rem;
-                /* CLS FIX: Reserve explicit height on mobile to prevent shift */
-                min-height: 90vh !important;
-                /* Removed height: auto to enforce reservation */
-            }
-
-            .split-side {
-                text-align: center;
-                width: 100%;
-                padding: 0;
-                height: auto !important;
-            }
-
-            .side-lies {
-                text-align: center;
-                opacity: 0.9;
-                filter: none;
-                /* Remove blur for mobile readability */
-                margin-top: 1rem;
-            }
-
-            .side-reality {
-                text-align: center;
-            }
-
-            .side-reality li {
-                justify-content: center;
-                display: flex;
-                width: 100%;
-            }
-
-            .side-reality h2,
-            .side-lies h2 {
-                font-size: 2rem;
-            }
-
-            /* Horizontal Divider for Mobile */
-            .split-divider {
-                width: 80%;
-                height: 1px;
-                background: rgba(0, 0, 0, 0.1);
-                margin: 0 auto;
-            }
-
-            .split-divider::after {
-                width: 100px;
-                height: 3px;
-                background: linear-gradient(to right, transparent, #cc3333, transparent);
-                top: -1px;
-                left: 0;
-                animation: pulse-travel-mobile 4s ease-in-out infinite;
-            }
-        }
-
-        @keyframes pulse-travel-mobile {
-            0% {
-                left: -20%;
-                opacity: 0;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                left: 120%;
-                opacity: 0;
-            }
-        }
-    </style>
-
-    <div class="container-wide" style="padding: 4rem var(--space-sm) 2rem;">
-        <div class="hero-statement">
-            <h1>Career Reality: Salary Truths and Career Trade-offs in India</h1>
-            <p class="hero-subtitle">Data-backed reality checks on pay, growth, and risk so you can make better moves in
-                Indian tech.</p>
-            <div class="hero-cta">
-                <a class="cta-primary" href="{% url 'salary_reality' %}">Start With Salary Reality</a>
-                <a class="cta-secondary" href="{% url 'salary_calculator' %}">Use CTC Decoder</a>
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hp-hero">
+    <div class="hp-hero-inner container-wide">
+        <div class="hp-hero-content">
+            <div class="hp-hero-badge">India's Most Honest Career Platform</div>
+            <h1 class="hp-hero-title">
+                Stop guessing.<br>
+                <span class="hp-hero-accent">Know the reality.</span>
+            </h1>
+            <p class="hp-hero-sub">
+                Data-backed salary truths, company intelligence, and career
+                risk analysis for Indian tech professionals.
+            </p>
+            <div class="hp-hero-actions">
+                <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">
+                    <span>🧮</span> Decode Your CTC
+                </a>
+                <a href="{% url 'wizard_start' %}" class="hp-btn hp-btn--ghost">
+                    <span>🎯</span> Analyze Risk
+                </a>
             </div>
-            <div class="hero-proof">Updated monthly. No sponsors. No courses.</div>
-        </div>
-    </div>
-
-    <div class="reality-split-container">
-        <!-- LEFT: LIES (Bottom on Mobile) -->
-        <div class="split-side side-lies">
-            <!-- Background handled via CSS -->
-            <div style="position: relative; z-index: 1;">
-                <h2>Comfortable Lies</h2>
-                <ul>
-                    <li>Hustle culture fixes everything</li>
-                    <li>Loyalty will be rewarded</li>
-                    <li>Stay positive, things will work out</li>
-                    <li>Just manifest success</li>
-                </ul>
+            <div class="hp-hero-proof">
+                <span>✓ Updated monthly</span>
+                <span>✓ No sponsors</span>
+                <span>✓ Open corrections</span>
             </div>
         </div>
-
-        <!-- DIVIDER (Hidden on mobile) -->
-        <div class="split-divider"></div>
-
-        <!-- RIGHT: REALITY (Top on Mobile) -->
-        <div class="split-side side-reality">
-            <!-- Background handled via CSS -->
-            <div style="position: relative; z-index: 1;">
-                <h2>Career Reality.</h2>
-                <ul>
-                    <li><span class="reality-check">&#10003;</span> Salary stagnation is structural</li>
-                    <li><span class="reality-check">&#10003;</span> Skills expire faster than titles</li>
-                    <li><span class="reality-check">&#10003;</span> Competition is relentless</li>
-                    <li><span class="reality-check">&#10003;</span> Switching late is brutally hard</li>
-                </ul>
+        <div class="hp-hero-visual">
+            <div class="hp-index-card">
+                <div class="hp-index-header">
+                    <span class="hp-index-dot"></span>
+                    Career Reality Index
+                    <span class="hp-index-live">LIVE</span>
+                </div>
+                <div class="hp-index-month">{{ latest_index_row.month }}</div>
+                <div class="hp-index-score">{{ latest_index_row.overall }}<small>/100</small></div>
+                <div class="hp-index-band hp-index-band--{{ latest_band|slugify }}">{{ latest_band }}</div>
+                <div class="hp-index-meters">
+                    <div class="hp-meter">
+                        <div class="hp-meter-label">Salary Pressure</div>
+                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
+                        <div class="hp-meter-val">{{ latest_index_row.salary_pressure }}</div>
+                    </div>
+                    <div class="hp-meter">
+                        <div class="hp-meter-label">Switch Difficulty</div>
+                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
+                        <div class="hp-meter-val">{{ latest_index_row.switch_difficulty }}</div>
+                    </div>
+                    <div class="hp-meter">
+                        <div class="hp-meter-label">Layoff Risk</div>
+                        <div class="hp-meter-bar"><div class="hp-meter-fill hp-meter-fill--warn" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
+                        <div class="hp-meter-val">{{ latest_index_row.layoff_risk }}</div>
+                    </div>
+                </div>
+                <a href="{% url 'career_reality_index' %}" class="hp-index-link">View full methodology →</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- DIVIDER -->
-<div class="container-medium" style="margin-top: 2.5rem;">
-    <hr class="editorial-divider reveal-on-scroll">
+<!-- ═══════════════ LIVE SALARY TICKER ═══════════════ -->
+<div class="hp-ticker" id="salary-ticker-container">
+    <div class="hp-ticker-label">Live Salaries</div>
+    <div class="hp-ticker-track" id="salary-ticker-content">
+        <span class="hp-ticker-placeholder">Loading anonymous salary submissions…</span>
+    </div>
 </div>
-<div style="height: 40px;"></div>
 
-<!-- SITE INTRODUCTION -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <p style="font-size: 18px; line-height: 1.75; margin: 0 0 1rem 0; max-width: 720px;">
-        Career Reality India publishes data-backed analysis of the Indian tech job market. Every page covers the
-        trade-offs you need to plan your career &mdash; not the optimistic framing most career content uses to sell
-        courses.
-    </p>
-    <p style="font-size: 16px; line-height: 1.75; color: var(--c-grey-mid); margin: 0 0 1rem 0; max-width: 720px;">
-        Who it is for: software engineers, product managers, and data professionals at any stage who want to
-        understand what Indian tech salaries actually look like, how much competition has increased, when
-        job-switching makes financial sense, and which skills are losing market value faster than hiring trends
-        suggest.
-    </p>
-    <p style="font-size: 16px; line-height: 1.75; color: var(--c-grey-mid); margin: 0; max-width: 720px;">
-        All salary ranges, difficulty estimates, and market signals are reviewed monthly. Sources and review
-        dates are listed on every page. We take corrections publicly.
-    </p>
-</section>
-
-<!-- EDITORIAL BASELINE -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">EDITORIAL BASELINE</span>
-    <div style="border: 1px solid var(--c-divider); padding: 1.5rem; background: #fafafa;">
-        <p style="margin-top: 0; margin-bottom: 0.75rem; color: var(--c-black);">
-            Career Reality is an editorial publication, not a lead-gen funnel. We prioritize:
-        </p>
-        <ul style="margin: 0; padding-left: 20px;">
-            <li>Original analysis over rewritten trend content.</li>
-            <li>Source-backed salary and hiring claims with review dates.</li>
-            <li>Transparent corrections and monthly content refresh cycles.</li>
-        </ul>
-        <p style="margin-bottom: 0; margin-top: 0.75rem; font-size: 14px;">
-            Read our <a href="{% url 'editorial' %}" style="text-decoration: underline;">Editorial Standards</a>,
-            <a href="{% url 'about' %}" style="text-decoration: underline;">About</a>, and
-            <a href="{% url 'contact' %}" style="text-decoration: underline;">Corrections Policy</a>.
-        </p>
+<!-- ═══════════════ TOOLS GRID ═══════════════ -->
+<section class="hp-section container-wide">
+    <div class="hp-section-header">
+        <h2 class="hp-section-title">Powerful tools. Zero fluff.</h2>
+        <p class="hp-section-sub">Everything you need to make smarter career decisions.</p>
     </div>
-</section>
-
-<!-- START HERE -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">START HERE</span>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
-        <a href="{% url 'salary_reality' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
-                Data</div>
-            <h3 style="margin: 0.5rem 0;">Salary Reality Check</h3>
-            <p style="margin: 0; color: var(--c-grey-mid);">See where the market really pays.</p>
+    <div class="hp-tools-grid">
+        <a href="{% url 'salary_calculator' %}" class="hp-tool-card">
+            <div class="hp-tool-icon">🧮</div>
+            <div class="hp-tool-body">
+                <h3>CTC Decoder</h3>
+                <p>Convert your CTC into real in-hand salary with PF, gratuity & tax logic.</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
         </a>
-        <a href="{% url 'salary_calculator' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
-                Tool</div>
-            <h3 style="margin: 0.5rem 0;">CTC Decoder</h3>
-            <p style="margin: 0; color: var(--c-grey-mid);">Convert CTC into actual in-hand.</p>
+        <a href="{% url 'wizard_start' %}" class="hp-tool-card">
+            <div class="hp-tool-icon">🎯</div>
+            <div class="hp-tool-body">
+                <h3>Risk Analyzer</h3>
+                <p>Should you resign? Get a data-backed answer in 3 minutes.</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
         </a>
-        <a href="{% url 'layoff_radar' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
-                Signal</div>
-            <h3 style="margin: 0.5rem 0;">Layoff Radar</h3>
-            <p style="margin: 0; color: var(--c-grey-mid);">Track risk signals by company.</p>
+        <a href="{% url 'company_directory' %}" class="hp-tool-card hp-tool-card--featured">
+            <div class="hp-tool-icon">🏢</div>
+            <div class="hp-tool-body">
+                <h3>Company Intelligence <span class="hp-tool-badge">NEW</span></h3>
+                <p>Real reviews, salary data & culture ratings for 35+ Indian companies.</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
         </a>
-        <a href="{% url 'ai_news_hub' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.5rem; text-decoration: none;">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">
-                Signal</div>
-            <h3 style="margin: 0.5rem 0;">AI Pulse</h3>
-            <p style="margin: 0; color: var(--c-grey-mid);">Latest AI developments that affect your career.</p>
+        <a href="{% url 'layoff_radar' %}" class="hp-tool-card">
+            <div class="hp-tool-icon">🚨</div>
+            <div class="hp-tool-body">
+                <h3>Layoff Radar</h3>
+                <p>Track hiring freezes, layoff signals and stability scores.</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
+        </a>
+        <a href="{% url 'ai_news_hub' %}" class="hp-tool-card">
+            <div class="hp-tool-icon">⚡</div>
+            <div class="hp-tool-body">
+                <h3>AI Pulse</h3>
+                <p>AI developments that actually impact your career trajectory.</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
+        </a>
+        <a href="{% url 'salary_reality' %}" class="hp-tool-card">
+            <div class="hp-tool-icon">💰</div>
+            <div class="hp-tool-body">
+                <h3>Salary Reality</h3>
+                <p>What Indian tech actually pays — by role, city and experience.</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
         </a>
     </div>
 </section>
 
-<!-- FEATURED + LATEST: MEDIUM CONTAINER (RHYTHM) -->
-<section class="container-medium" id="latest">
-    {% if articles %}
-    <span class="section-label reveal-on-scroll">FEATURED</span>
+<!-- ═══════════════ SALARY DROP CTA ═══════════════ -->
+<section class="hp-drop-banner">
+    <div class="container-wide hp-drop-inner">
+        <div>
+            <h2 class="hp-drop-title">Help fix Indian salary opacity</h2>
+            <p class="hp-drop-sub">Drop your real salary. Anonymous. Takes 30 seconds. Helps thousands make better decisions.</p>
+        </div>
+        <a href="{% url 'submit_salary' %}" class="hp-btn hp-btn--white">+ Drop a Salary</a>
+    </div>
+</section>
+
+<!-- ═══════════════ FEATURED ARTICLE ═══════════════ -->
+{% if articles %}
+<section class="hp-section container-medium">
+    <div class="hp-section-header">
+        <h2 class="hp-section-title">Latest reality checks</h2>
+        <p class="hp-section-sub">Deep dives on the career topics that matter to Indian professionals.</p>
+    </div>
+
     {% with featured=articles.0 %}
-    <div class="article-list-item"
-        style="border: 1px solid var(--c-divider); padding: 2rem; margin-bottom: var(--space-lg);">
-        <div class="article-list-meta">{{ featured.category.name }} &middot; {{ featured.updated_at|date:"F Y" }}</div>
-        <h2 style="margin: 0.75rem 0 1rem 0; font-size: 36px;">
+    <div class="hp-featured-article">
+        <div class="hp-featured-meta">{{ featured.category.name }} · Updated {{ featured.updated_at|date:"F Y" }}</div>
+        <h2 class="hp-featured-title">
             <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
         </h2>
-        <p class="article-list-summary" style="max-width: 700px; font-size: 18px;">
-            {{ featured.common_expectation|striptags|truncatewords:28 }}
-        </p>
-        <a href="{% url 'article_detail' featured.slug %}"
-            style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">
-            Read the reality check
-        </a>
+        <p class="hp-featured-excerpt">{{ featured.common_expectation|striptags|truncatewords:35 }}</p>
+        <a href="{% url 'article_detail' featured.slug %}" class="hp-featured-link">Read the reality check →</a>
     </div>
     {% endwith %}
 
-    <span class="section-label reveal-on-scroll">LATEST</span>
-
-    <div class="article-list reveal-on-scroll">
+    <div class="hp-article-grid">
         {% for article in articles %}
-        {% if not forloop.first %}
-        <div class="article-list-item">
-            <div class="article-list-meta">{{ article.category.name }} &middot; {{ article.updated_at|date:"F Y" }}
-            </div>
+        {% if not forloop.first and forloop.counter <= 7 %}
+        <a href="{% url 'article_detail' article.slug %}" class="hp-article-card">
+            <div class="hp-article-card-meta">{{ article.category.name }} · {{ article.updated_at|date:"M Y" }}</div>
+            <h3 class="hp-article-card-title">{{ article.title }}</h3>
+            <p class="hp-article-card-excerpt">{{ article.common_expectation|striptags|truncatewords:16 }}</p>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 
-            <h3 class="article-list-title">
-                <a href="{% url 'article_detail' article.slug %}">
-                    {{ article.title }}
+<!-- ═══════════════ UPDATES STRIP ═══════════════ -->
+{% if recent_updates %}
+<section class="hp-updates container-medium">
+    <div class="hp-updates-header">
+        <span class="hp-updates-dot"></span>
+        Recently Updated
+    </div>
+    <div class="hp-updates-list">
+        {% for updated in recent_updates %}
+        <a href="{% url 'article_detail' updated.slug %}" class="hp-update-item">
+            <span>{{ updated.title }}</span>
+            <span class="hp-update-date">{{ updated.updated_at|date:"M j" }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════ PRO UPSELL ═══════════════ -->
+<section class="hp-pro">
+    <div class="container-medium hp-pro-inner">
+        <div class="hp-pro-content">
+            <div class="hp-pro-badge">Career Reality Pro</div>
+            <h2 class="hp-pro-title">Get the full intelligence stack</h2>
+            <ul class="hp-pro-features">
+                <li>📊 Percentile salary benchmarks by role & city</li>
+                <li>🏢 Full company review access & comparisons</li>
+                <li>🎯 Priority tool access & saved analyses</li>
+                <li>📬 Weekly intel digest to your inbox</li>
+            </ul>
+            <div class="hp-pro-actions">
+                <a href="{% url 'pricing' %}" class="hp-btn hp-btn--primary">
+                    Start at ₹299/mo
                 </a>
-            </h3>
-
-            <p class="article-list-summary">
-                {{ article.common_expectation|striptags|truncatewords:20 }}
-            </p>
+                <span class="hp-pro-note">Cancel anytime. No lock-in.</span>
+            </div>
         </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-
-    {% else %}
-    <span class="section-label reveal-on-scroll">LATEST</span>
-    <p style="color: var(--c-grey-mid); font-size: 15px; margin: 0.5rem 0 1.5rem 0;">
-        Detailed reality checks are being published. Use the tools below to analyse your own situation while they go
-        live.
-    </p>
-    {% endif %}
-</section>
-
-<!-- THIS MONTH'S UPDATES -->
-<section class="container-medium" style="margin-top: var(--space-md); margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">THIS MONTH'S UPDATES</span>
-    <div style="border: 1px solid var(--c-divider); padding: 1.5rem;">
-        {% if recent_updates %}
-        <ul style="margin: 0; padding-left: 20px;">
-            {% for updated in recent_updates %}
-            <li style="margin-bottom: 0.75rem;">
-                <a href="{% url 'article_detail' updated.slug %}" style="text-decoration: underline;">{{ updated.title }}</a>
-                <span style="color: var(--c-grey-light);">updated {{ updated.updated_at|date:"F j, Y" }}</span>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p style="margin: 0; color: var(--c-grey-mid);">Fresh updates will appear here as articles are revised.</p>
-        {% endif %}
+        <div class="hp-pro-visual">
+            <div class="hp-pro-mockup">
+                <div class="hp-pro-mockup-bar">
+                    <span class="hp-pro-mockup-dot" style="background:#ff5f57"></span>
+                    <span class="hp-pro-mockup-dot" style="background:#ffbd2e"></span>
+                    <span class="hp-pro-mockup-dot" style="background:#28c840"></span>
+                </div>
+                <div class="hp-pro-mockup-body">
+                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Your Percentile</span><span class="hp-pro-mockup-val">P72</span></div>
+                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Market Median</span><span class="hp-pro-mockup-val">₹18.5L</span></div>
+                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Growth Potential</span><span class="hp-pro-mockup-val hp-pro-mockup-val--green">+34%</span></div>
+                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Risk Score</span><span class="hp-pro-mockup-val hp-pro-mockup-val--amber">Medium</span></div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- ABOUT THIS SITE -->
-<section class="container-medium" style="margin-bottom: var(--space-xl);">
-    <span class="section-label reveal-on-scroll">ABOUT THIS SITE</span>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-        <a href="{% url 'about' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">Who Writes This</h3>
-            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Editorial scope, audience, and independence
-                policy.</p>
-        </a>
-        <a href="{% url 'editorial' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">How We Publish</h3>
-            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Standards, correction workflow, and update
-                methodology.</p>
-        </a>
-        <a href="{% url 'privacy_policy' %}"
-            style="border: 1px solid var(--c-divider); padding: 1.25rem; text-decoration: none;">
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">Data & Privacy</h3>
-            <p style="margin: 0; color: var(--c-grey-mid); font-size: 14px;">Exactly what we collect and how it is
-                handled.</p>
-        </a>
+<!-- ═══════════════ TOPIC CLUSTERS ═══════════════ -->
+<section class="hp-section container-medium">
+    <div class="hp-section-header">
+        <h2 class="hp-section-title">Browse by cluster</h2>
+        <p class="hp-section-sub">Deep-dive topic areas we cover with pillar and supporting content.</p>
     </div>
-</section>
-
-<!-- TOPICAL AUTHORITY CLUSTERS -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">TOPICAL AUTHORITY CLUSTERS</span>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+    <div class="hp-clusters-grid">
         {% for cluster in topic_clusters %}
-        <article style="border: 1px solid var(--c-divider); padding: 1.25rem;">
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 18px;">{{ cluster.name }}</h3>
-            <p style="margin: 0 0 0.75rem 0; color: var(--c-grey-mid); font-size: 14px;">{{ cluster.description }}</p>
-            <a href="{% url cluster.pillar_url_name %}" style="text-decoration: underline; font-size: 13px;">Explore
-                cluster pillar</a>
-        </article>
+        <a href="{% url cluster.pillar_url_name %}" class="hp-cluster-card">
+            <h3>{{ cluster.name }}</h3>
+            <p>{{ cluster.description }}</p>
+            <span class="hp-cluster-link">Explore →</span>
+        </a>
         {% endfor %}
     </div>
-    <p style="margin-top: 0.75rem; font-size: 13px; color: var(--c-grey-light);">
-        Full map: <a href="{% url 'topic_clusters' %}" style="text-decoration: underline;">Topic Clusters</a>.
-    </p>
 </section>
 
-<!-- BRAND DIFFERENTIATOR: INDEX -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">CAREER REALITY INDEX</span>
-    <div style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa;">
-        <p style="margin-top: 0; margin-bottom: 0.5rem;">
-            <strong>{{ latest_band }}</strong> &mdash; {{ latest_index_row.month }} overall score
-            {{ latest_index_row.overall }}/100.
-        </p>
-        <p style="margin: 0 0 0.5rem 0;">
-            Salary pressure <strong>{{ latest_index_row.salary_pressure }}</strong> &middot; switch difficulty
-            <strong>{{ latest_index_row.switch_difficulty }}</strong> &middot; layoff risk
-            <strong>{{ latest_index_row.layoff_risk }}</strong>.
-        </p>
-        <p style="margin: 0 0 0.75rem 0; color: var(--c-grey-mid); font-size: 14px;">
-            Scores run 0&ndash;100. High Pressure (65+) means the market actively disadvantages career moves;
-            plan accordingly.
-        </p>
-        <a href="{% url 'career_reality_index' %}" style="text-decoration: underline;">Read full methodology and monthly
-            table</a>
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="hp-section container-medium">
+    <div class="hp-section-header">
+        <h2 class="hp-section-title">Frequently asked</h2>
     </div>
-</section>
-
-<!-- FAQ -->
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
-    <span class="section-label reveal-on-scroll">FAQ</span>
     {% for item in home_faq %}
-    <details class="collapsible" {% if forloop.first %}open{% endif %}>
-        <summary>{{ item.q }}</summary>
-        <div class="content">
-            <p style="margin: 0;">{{ item.a }}</p>
-        </div>
+    <details class="hp-faq" {% if forloop.first %}open{% endif %}>
+        <summary class="hp-faq-q">{{ item.q }}</summary>
+        <div class="hp-faq-a"><p>{{ item.a }}</p></div>
     </details>
     {% endfor %}
 </section>
 
-<!-- INLINE MARKET FEED -->
-<div class="container-medium" id="salary-ticker-container"
-    style="margin-bottom: var(--space-xl); border: 1px solid #333; background: var(--c-black); color: white; display: flex; align-items: center; overflow: hidden; white-space: nowrap;">
-    <div
-        style="background: #d93025; height: 40px; padding: 0 12px; display: flex; align-items: center; font-size: 10px; font-weight: 800; text-transform: uppercase; position: relative; z-index: 10;">
-        Market Feed
+<!-- ═══════════════ EDITORIAL TRUST STRIP ═══════════════ -->
+<section class="hp-trust">
+    <div class="container-medium hp-trust-inner">
+        <div class="hp-trust-item">
+            <div class="hp-trust-icon">📝</div>
+            <div>
+                <strong>Editorial-first</strong>
+                <p>Original analysis, not rewritten trends. <a href="{% url 'editorial' %}">Standards →</a></p>
+            </div>
+        </div>
+        <div class="hp-trust-item">
+            <div class="hp-trust-icon">🔍</div>
+            <div>
+                <strong>Source-backed</strong>
+                <p>Every claim cited. Monthly review cycles. <a href="{% url 'about' %}">About →</a></p>
+            </div>
+        </div>
+        <div class="hp-trust-item">
+            <div class="hp-trust-icon">🛡️</div>
+            <div>
+                <strong>No sponsors</strong>
+                <p>Zero advertising influence on content. <a href="{% url 'contact' %}">Corrections →</a></p>
+            </div>
+        </div>
     </div>
-    <div id="salary-ticker-content" style="display: inline-block; padding-left: 24px;">
-        <span style="font-size: 11px; font-family: monospace; opacity: 0.8;">Loading recent anonymous salary
-            submissions...</span>
-    </div>
-</div>
-<style>
-    @media (max-width: 768px) {
-        #salary-ticker-container {
-            display: none;
-        }
-    }
-</style>
+</section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        if (window.matchMedia('(max-width: 768px)').matches) {
-            return;
-        }
-
         const loadFeed = () => fetch('/api/salary-feed/')
-            .then(response => response.json())
+            .then(r => r.json())
             .then(data => {
-                const submissions = data.submissions;
-                if (submissions.length > 0) {
-                    const tickerContent = document.getElementById('salary-ticker-content');
-                    let html = '';
-                    submissions.forEach(sub => {
-                        html += `<span style="margin-right: 24px; font-family: monospace; font-size: 12px; line-height: 40px;">
-                                <span style="color: #d6d6d6;">${sub.role}</span> 
-                                <span style="color: #a8a8a8;">(${sub.exp})</span> 
-                                <span style="font-weight: 700; color: #fff;">${sub.ctc}</span> 
-                                <span style="color: #a8a8a8; font-size: 10px;">${sub.city}</span>
-                            </span>`;
-                    });
-                    tickerContent.innerHTML = html;
-                }
+                const subs = data.submissions;
+                if (!subs.length) return;
+                const el = document.getElementById('salary-ticker-content');
+                el.innerHTML = subs.map(s =>
+                    `<span class="hp-ticker-item">
+                        <span class="hp-ticker-role">${s.role}</span>
+                        <span class="hp-ticker-exp">${s.exp}</span>
+                        <span class="hp-ticker-ctc">${s.ctc}</span>
+                        <span class="hp-ticker-city">${s.city}</span>
+                    </span>`
+                ).join('');
             })
-            .catch(() => { });
+            .catch(() => {});
 
         if ('requestIdleCallback' in window) {
             requestIdleCallback(loadFeed, { timeout: 1500 });
@@ -716,6 +400,29 @@ real trade-offs you need to plan for.{% endblock %}
 
 {% block scripts %}
 <script>
+    (function () {
+        if (!window.crTrack) return;
+
+        window.crTrack('landing_view', {
+            funnel: 'site_home',
+            page: 'home'
+        });
+
+        var key = 'cr_home_last_visit_at';
+        var now = Date.now();
+        var lastVisit = parseInt(localStorage.getItem(key) || '0', 10);
+        if (lastVisit > 0) {
+            var sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+            if ((now - lastVisit) >= sevenDaysMs) {
+                window.crTrack('return_visit_d7', {
+                    funnel: 'site_home',
+                    days_since_last_visit: Math.floor((now - lastVisit) / (24 * 60 * 60 * 1000))
+                });
+            }
+        }
+        localStorage.setItem(key, String(now));
+    })();
+
     (function () {
         var elements = document.querySelectorAll('.reveal-on-scroll');
         if (!elements.length) return;

@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
+from django.views.decorators.http import require_GET
 from django.urls import reverse
 from content.models import Article, Category
 from django.utils import timezone
 from django.conf import settings
+from datetime import date
+import os
+import io
+from django.core.management import call_command
 
 
 def _topic_clusters():
@@ -47,11 +53,20 @@ def _topic_clusters():
 
 
 def _career_reality_index_rows():
+    def _shift_month(d, months_back):
+        year = d.year
+        month = d.month - months_back
+        while month <= 0:
+            month += 12
+            year -= 1
+        return date(year, month, 1)
+
+    base = timezone.localdate()
     return [
-        {"month": "February 2026", "salary_pressure": 72, "switch_difficulty": 68, "layoff_risk": 54, "overall": 65},
-        {"month": "January 2026", "salary_pressure": 71, "switch_difficulty": 66, "layoff_risk": 56, "overall": 64},
-        {"month": "December 2025", "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 58, "overall": 63},
-        {"month": "November 2025", "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 57, "overall": 62},
+        {"month": _shift_month(base, 0).strftime("%B %Y"), "salary_pressure": 72, "switch_difficulty": 68, "layoff_risk": 54, "overall": 65},
+        {"month": _shift_month(base, 1).strftime("%B %Y"), "salary_pressure": 71, "switch_difficulty": 66, "layoff_risk": 56, "overall": 64},
+        {"month": _shift_month(base, 2).strftime("%B %Y"), "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 58, "overall": 63},
+        {"month": _shift_month(base, 3).strftime("%B %Y"), "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 57, "overall": 62},
     ]
 
 
@@ -73,20 +88,55 @@ def robots_txt(request):
     lines = [
         "User-agent: *",
         "Allow: /",
-        "Disallow: /admin/",
         "Disallow: /resignation-risk/step/",
         "Disallow: /resignation-risk/result/",
         "Disallow: /salary-drop/",
         "Disallow: /salary-drop/success/",
         "Disallow: /layoff-radar/",
-        "Disallow: /layoff-radar/report/",
-        "Disallow: /escape-plan/",
-        "Disallow: /newsletter/signup/",
-        "Disallow: /hi/",
         "",
         f"Sitemap: {settings.CANONICAL_BASE_URL}/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def healthz(request):
+    """Lightweight health endpoint for uptime checks and deploy verification."""
+    from django.db import connection
+    from django.core.cache import cache
+
+    db_ok = True
+    cache_ok = True
+    db_error = ""
+    cache_error = ""
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+    except Exception as exc:
+        db_ok = False
+        db_error = str(exc)
+
+    try:
+        cache_key = "healthz_probe"
+        cache.set(cache_key, "ok", timeout=30)
+        cache_ok = cache.get(cache_key) == "ok"
+    except Exception as exc:
+        cache_ok = False
+        cache_error = str(exc)
+
+    status_code = 200 if db_ok and cache_ok else 503
+    return JsonResponse(
+        {
+            "status": "ok" if status_code == 200 else "degraded",
+            "timestamp": timezone.now().isoformat(),
+            "checks": {
+                "database": {"ok": db_ok, "error": db_error},
+                "cache": {"ok": cache_ok, "error": cache_error},
+            },
+        },
+        status=status_code,
+    )
 
 @cache_page(60 * 15)
 def home(request):
@@ -97,7 +147,7 @@ def home(request):
     """
     article_qs = Article.objects.filter(status='published').select_related('author', 'category').order_by('-published_at')
     articles = article_qs[:10]
-    categories = Category.objects.all()
+    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     recent_updates = article_qs.order_by('-updated_at')[:5]
     index_rows = _career_reality_index_rows()
     
@@ -158,11 +208,13 @@ def salary_reality(request):
 @cache_page(60 * 60)
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
-    categories = Category.objects.all()
+    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     title = "CTC Decoder: Calculate In-Hand Salary India (2026)"
     description = "Decode CTC into real in-hand salary with PF, gratuity, variable pay, and tax regime logic."
-    context = {'categories': categories}
-    context.update(_seo(title, description))
+    context = {
+        'categories': categories,
+        **_seo(title, description),
+    }
     return render(request, 'core/salary_calculator.html', context)
 
 @cache_page(60 * 60)
@@ -170,11 +222,8 @@ def escape_plan(request):
     """
     The Service Company Escape Plan.
     Contains the "Rot Check" quiz and the roadmap.
-    Interactive tool page — noindexed to avoid AdSense "low value" flag.
     """
-    return render(request, 'content/escape_plan.html', {
-        'meta_robots': 'noindex, follow',
-    })
+    return render(request, 'content/escape_plan.html')
 
 def privacy_policy(request):
     title = "Privacy Policy - Career Reality India"
@@ -311,6 +360,43 @@ def sponsorship_policy(request):
         'meta_robots': 'noindex, follow',
     })
 
+def pricing_redirect(request):
+    """Redirect /pro/ to the payments pricing page."""
+    from django.shortcuts import redirect
+    return redirect('payments:pricing')
+
+
+@require_GET
+def run_weekly_digest_cron(request):
+    """Secure internal endpoint to trigger the weekly newsletter digest."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse({"status": "error", "message": "cron token not configured"}, status=503)
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    from datetime import timedelta
+    from analyzer.models import SalarySubmission, LayoffReport
+    from core.models import NewsletterSubscriber
+    from core.email import send_weekly_digest
+
+    week_ago = timezone.now() - timedelta(days=7)
+    salary_count = SalarySubmission.objects.filter(created_at__gte=week_ago).count()
+    layoff_count = LayoffReport.objects.filter(created_at__gte=week_ago).count()
+    subscribers = list(
+        NewsletterSubscriber.objects.filter(is_active=True).values_list("email", flat=True)
+    )
+    sent = send_weekly_digest(subscribers, salary_count, layoff_count)
+    return JsonResponse({"status": "ok", "sent": sent, "total_subscribers": len(subscribers)})
+
 def newsletter_signup(request):
     """Handle newsletter signup form submission."""
     if request.method != 'POST':
@@ -330,8 +416,16 @@ def newsletter_signup(request):
     if email:
         from core.models import NewsletterSubscriber
         try:
-            NewsletterSubscriber.objects.get_or_create(email=email)
-            messages.success(request, 'Thanks for subscribing! You\'ll get our weekly reality checks.')
+            subscriber, created = NewsletterSubscriber.objects.get_or_create(email=email)
+            if created:
+                # Send welcome email via Resend
+                try:
+                    from core.email import send_newsletter_welcome
+                    send_newsletter_welcome(email)
+                except Exception:
+                    pass
+            # Same message regardless of new/existing to prevent email enumeration
+            messages.success(request, 'You\'re subscribed. Check your inbox soon.')
         except Exception as exc:
             import logging
             logging.getLogger(__name__).exception("Newsletter signup failed for %s: %s", email, exc)
@@ -340,6 +434,65 @@ def newsletter_signup(request):
         messages.error(request, 'Please enter a valid email address.')
 
     return redirect(request.META.get('HTTP_REFERER') or reverse('home'))
+
+
+@require_GET
+def run_freshness_cron(request):
+    """Secure internal endpoint for scheduled freshness maintenance jobs."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse(
+            {"status": "error", "message": "cron token is not configured"},
+            status=503,
+        )
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    limit = int(request.GET.get("limit", os.environ.get("CRON_FETCH_LIMIT", "12")))
+    commit_refresh = request.GET.get("commit_refresh", os.environ.get("CRON_REFRESH_COMMIT", "False")) == "True"
+    strict_freshness = request.GET.get("strict_freshness", os.environ.get("CRON_STRICT_FRESHNESS", "False")) == "True"
+    warm_cache = request.GET.get("warm_cache", os.environ.get("CRON_WARM_CACHE", "True")) == "True"
+
+    started_at = timezone.now()
+    output = io.StringIO()
+    exit_status = "ok"
+
+    try:
+        call_command(
+            "run_production_maintenance",
+            fetch_limit=limit,
+            commit_refresh=commit_refresh,
+            strict_freshness=strict_freshness,
+            warm_cache=warm_cache,
+            stdout=output,
+        )
+    except Exception as exc:
+        exit_status = "error"
+        import logging as _logging
+        _logging.getLogger(__name__).exception("Cron maintenance failed")
+        output.write("\nERROR: Maintenance job failed. Check server logs.")
+
+    finished_at = timezone.now()
+    elapsed_ms = round((finished_at - started_at).total_seconds() * 1000, 2)
+    status_code = 200 if exit_status == "ok" else 500
+    return JsonResponse(
+        {
+            "status": exit_status,
+            "started_at": started_at.isoformat(),
+            "finished_at": finished_at.isoformat(),
+            "elapsed_ms": elapsed_ms,
+            "log": output.getvalue()[-4000:],
+        },
+        status=status_code,
+    )
 
 
 def custom_404(request, exception):
@@ -352,7 +505,24 @@ def custom_500(request):
     return render(request, '500.html', status=500)
 
 
-def ads_txt(request):
-    """Serve ads.txt for AdSense verification — required for approval."""
-    content = "google.com, pub-3766621537317806, DIRECT, f08c47fec0942fa0\n"
-    return HttpResponse(content, content_type="text/plain")
+def newsletter_unsubscribe(request):
+    """Handle newsletter unsubscribe via GET link from emails."""
+    email = request.GET.get('email', '').strip().lower()
+    if email:
+        from core.models import NewsletterSubscriber
+        updated = NewsletterSubscriber.objects.filter(email=email, is_active=True).update(is_active=False)
+        if updated:
+            messages.success(request, 'You have been unsubscribed from the newsletter.')
+        else:
+            messages.info(request, 'This email is not currently subscribed.')
+    else:
+        messages.error(request, 'No email address provided.')
+    return render(request, 'core/unsubscribe.html', {
+        'meta_robots': 'noindex, follow',
+        'og_title': 'Unsubscribe — Career Reality India',
+    })
+
+
+def offline_view(request):
+    """Offline fallback page for PWA service worker."""
+    return render(request, 'offline.html', {'meta_robots': 'noindex, follow'})

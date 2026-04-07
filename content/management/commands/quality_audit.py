@@ -1,7 +1,7 @@
 import re
 from datetime import timedelta
 
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from content.models import Article, Author
@@ -18,7 +18,21 @@ def _extract_links(value):
 class Command(BaseCommand):
     help = "Runs an editorial quality audit for published content."
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--strict",
+            action="store_true",
+            help="Exit with non-zero status if findings exceed configured thresholds.",
+        )
+        parser.add_argument("--max-low-word", type=int, default=0)
+        parser.add_argument("--max-low-internal", type=int, default=0)
+        parser.add_argument("--max-stale-check", type=int, default=0)
+        parser.add_argument("--max-stale-update", type=int, default=0)
+        parser.add_argument("--max-short-meta", type=int, default=0)
+        parser.add_argument("--max-weak-authors", type=int, default=0)
+
     def handle(self, *args, **options):
+        strict = options["strict"]
         today = timezone.localdate()
         articles = Article.objects.filter(status="published").select_related("author", "category").order_by("-updated_at")
 
@@ -99,3 +113,20 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Quality audit passed with no major findings."))
         else:
             self.stdout.write(self.style.WARNING("Quality audit completed with findings. Prioritize low-word articles and freshness."))
+
+        if strict:
+            threshold_pairs = [
+                ("low_word", len(low_word), options["max_low_word"]),
+                ("low_internal", len(low_internal), options["max_low_internal"]),
+                ("stale_check", len(stale_check), options["max_stale_check"]),
+                ("stale_update", len(stale_update), options["max_stale_update"]),
+                ("short_meta", len(short_meta), options["max_short_meta"]),
+                ("weak_authors", len(weak_authors), options["max_weak_authors"]),
+            ]
+            breaches = [
+                f"{name}: {actual} > {limit}"
+                for name, actual, limit in threshold_pairs
+                if actual > limit
+            ]
+            if breaches:
+                raise CommandError("Quality audit strict mode failed: " + "; ".join(breaches))

@@ -3,6 +3,34 @@
 {% block title %}Contact Career Reality - Editorial Inquiries{% endblock %}
 {% block meta_description %}How to contact Career Reality for corrections, editorial clarifications, and professional feedback.{% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact Career Reality",
+  "description": "How to contact Career Reality for corrections, editorial clarifications, and professional feedback.",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "Career Reality",
+    "email": "samfischer14aug@gmail.com",
+    "url": "{{ site_base_url }}"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site_base_url }}/"},
+    {"@type": "ListItem", "position": 2, "name": "Contact"}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1>Contact</h1>
@@ -18,7 +46,35 @@
         </p>
     </div>
 
-    <div style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
+    <div style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">
+        <span class="section-label">WHAT WE ACCEPT</span>
+        <div style="margin-top: 1rem;">
+            <p>Career Reality accepts the following types of communication:</p>
+            <ul style="padding-left: 20px;">
+                <li><strong>Factual corrections:</strong> If you find an error in salary data, market claims, or sourcing, share the article URL and supporting evidence. Corrections with verifiable data get priority treatment.</li>
+                <li><strong>Methodology questions:</strong> If you disagree with how we framed a trade-off or weighted a risk factor, explain what you think we missed. We publish methodology notes for transparency.</li>
+                <li><strong>Topic suggestions:</strong> If you have experienced a career pattern or trade-off that deserves editorial coverage, describe the situation with enough detail for us to assess editorial value.</li>
+                <li><strong>Data contributions:</strong> Anonymous salary data, layoff reports, and hiring freeze signals can be submitted through our <a href="{% url 'submit_salary' %}" style="text-decoration: underline;">Salary Drop</a> and <a href="{% url 'layoff_radar' %}" style="text-decoration: underline;">Layoff Radar</a> tools.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: var(--space-md); margin-bottom: var(--space-lg);">
+        <span class="section-label">CORRECTIONS POLICY</span>
+        <div style="margin-top: 1rem;">
+            <p>
+                When a factual error is confirmed, we correct the article within 48 hours and add a dated correction note
+                to the article's update log. The original claim is struck through (not deleted) so that readers can see
+                what changed and why. Corrections are permanent and visible.
+            </p>
+            <p>
+                If a correction materially changes the article's conclusion, we update the verdict section and note the
+                revision in the Career Reality Index changelog where applicable.
+            </p>
+        </div>
+    </div>
+
+    <div style="margin-top: var(--space-md); margin-bottom: var(--space-lg);">
         <span class="section-label">RESPONSE POLICY</span>
 
         <details class="collapsible" open>
@@ -32,7 +88,7 @@
             </div>
         </details>
 
-        <details class="collapsible">
+        <details class="collapsible" open>
             <summary>Expected timeline</summary>
             <div class="content">
                 <p>
@@ -42,7 +98,7 @@
             </div>
         </details>
 
-        <details class="collapsible">
+        <details class="collapsible" open>
             <summary>What we do not offer</summary>
             <div class="content">
                 <ul style="margin: 0; padding-left: 20px;">
@@ -54,7 +110,7 @@
             </div>
         </details>
 
-        <details class="collapsible">
+        <details class="collapsible" open>
             <summary>How to submit a correction</summary>
             <div class="content">
                 <ol style="margin: 0; padding-left: 20px;">

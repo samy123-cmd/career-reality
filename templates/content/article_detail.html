@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
-{% block title %}{{ article.meta_title }}{% endblock %}
-{% block meta_description %}{{ article.meta_description }}{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'hi' and article.meta_title_hi %}{{ article.meta_title_hi }}{% else %}{{ article.meta_title }}{% endif %}{% endblock %}
+{% block meta_description %}{% if LANGUAGE_CODE == 'hi' and article.meta_description_hi %}{{ article.meta_description_hi }}{% else %}{{ article.meta_description }}{% endif %}{% endblock %}
 
 {% block content %}
 
@@ -69,96 +70,85 @@
 
 <article class="article-body">
     <header class="container-reading article-header">
-        <h1>{{ article.title }}</h1>
-        <div style="font-size: 20px; color: var(--c-grey-dark); line-height: 1.5; margin-bottom: 24px;">{{ article.target_persona|safe }}</div>
-        <div style="font-size: 13px; color: var(--c-grey-light); text-transform: uppercase; letter-spacing: 0.1em;"><a
+        <h1>{% if LANGUAGE_CODE == 'hi' and article.title_hi %}{{ article.title_hi }}{% else %}{{ article.title }}{% endif %}</h1>
+        <div class="art-persona">{% if LANGUAGE_CODE == 'hi' and article.target_persona_hi %}{{ article.target_persona_hi|safe }}{% else %}{{ article.target_persona|safe }}{% endif %}</div>
+        <div class="art-byline"><a
         href="{% url 'author_detail' article.author.id %}"
-        style="color: inherit; text-decoration: underline;">{{ article.author.display_name }}</a> &middot; {{ article.published_at|date:"F Y" }} &middot; <a href="{% url 'category_detail' article.category.slug %}"
-        style="color: inherit;">{{ article.category.name }}</a></div>
-        <div style="font-size: 12px; color: var(--c-grey-light); margin-top: 8px;">
+        class="art-byline-link">{{ article.author.display_name }}</a> &middot; {{ article.published_at|date:"F Y" }} &middot; <a href="{% url 'category_detail' article.category.slug %}"
+        class="art-byline-link">{% if LANGUAGE_CODE == 'hi' and article.category.name_hi %}{{ article.category.name_hi }}{% else %}{{ article.category.name }}{% endif %}</a></div>
+        <div class="art-review-meta">
             {{ reading_time }} min read &middot; Reviewed by Editorial Desk &middot; Correction path:
-            <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Contact</a>
+            <a href="{% url 'contact' %}" class="art-byline-link">Contact</a>
         </div>
         {% if article.last_reality_check %}
-        <div class="freshness-badge" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px;">
-            {% if article.last_reality_check >= fresh_cutoff %}
-            <span class="freshness-dot freshness-green" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;"></span>
-            {% elif article.last_reality_check >= stale_cutoff %}
-            <span class="freshness-dot freshness-amber" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></span>
-            {% else %}
-            <span class="freshness-dot freshness-red" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span>
-            {% endif %}
-            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-grey-mid);">
-                Last Reality Check: <strong>{{ article.last_reality_check|date:"F j, Y" }}</strong>
-            </span>
+        <div class="art-review-meta">
+            Last Reality Check: {{ article.last_reality_check|date:"F j, Y" }}
         </div>
         {% endif %}
     </header>
 
-
-
     <div class="container-reading">
-        <section style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0;">Key Takeaways</h2>
-            <ul style="margin: 0; padding-left: 18px;">
+        <section class="art-callout art-callout--muted">
+            <h2 class="art-callout-title">Key Takeaways</h2>
+            <ul class="art-callout-list">
                 {% for takeaway in key_takeaways %}
                 <li>{{ takeaway }}</li>
                 {% endfor %}
             </ul>
         </section>
 
-        <section style="border: 1px solid var(--c-divider); padding: 1.25rem; margin-bottom: 2rem;">
-            <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0;">On This Page</h2>
-            <ul style="margin: 0; padding-left: 18px;">
-                <li><a href="#expectation" style="text-decoration: underline;">The Expectation</a></li>
-                <li><a href="#reality" style="text-decoration: underline;">The Reality</a></li>
-                <li><a href="#salary-growth" style="text-decoration: underline;">Salary and Growth Reality</a></li>
-                <li><a href="#stuck-point" style="text-decoration: underline;">Where Most People Get Stuck</a></li>
-                <li><a href="#avoid-path" style="text-decoration: underline;">Who Should Avoid This Path</a></li>
-                <li><a href="#decision-framework" style="text-decoration: underline;">Decision Framework</a></li>
-                <li><a href="#originality-lens" style="text-decoration: underline;">Originality Lens</a></li>
-                <li><a href="#verdict" style="text-decoration: underline;">Final Verdict</a></li>
+        <section class="art-toc">
+            <h2 class="art-callout-title">On This Page</h2>
+            <ul class="art-callout-list">
+                <li><a href="#expectation">The Expectation</a></li>
+                <li><a href="#reality">The Reality</a></li>
+                <li><a href="#salary-growth">Salary and Growth Reality</a></li>
+                <li><a href="#stuck-point">Where Most People Get Stuck</a></li>
+                <li><a href="#avoid-path">Who Should Avoid This Path</a></li>
+                <li><a href="#decision-framework">Decision Framework</a></li>
+                <li><a href="#originality-lens">Originality Lens</a></li>
+                <li><a href="#verdict">Final Verdict</a></li>
             </ul>
         </section>
 
         <section id="expectation">
             <h2>The Expectation</h2>
-            {{ article.common_expectation|safe }}
+            {% if LANGUAGE_CODE == 'hi' and article.common_expectation_hi %}{{ article.common_expectation_hi|safe }}{% else %}{{ article.common_expectation|safe }}{% endif %}
         </section>
 
         <section id="reality">
             <h2>The Reality</h2>
-            {{ article.actual_reality|safe }}
-            <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
+            {% if LANGUAGE_CODE == 'hi' and article.actual_reality_hi %}{{ article.actual_reality_hi|safe }}{% else %}{{ article.actual_reality|safe }}{% endif %}
+            <p class="art-context-note">
                 Related context:
-                <a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality Check</a>,
-                <a href="{% url 'salary_calculator' %}" style="text-decoration: underline;">CTC Decoder</a>,
-                <a href="{% url 'category_detail' article.category.slug %}" style="text-decoration: underline;">more in {{ article.category.name }}</a>.
+                <a href="{% url 'salary_reality' %}">Salary Reality Check</a>,
+                <a href="{% url 'salary_calculator' %}">CTC Decoder</a>,
+                <a href="{% url 'category_detail' article.category.slug %}">more in {% if LANGUAGE_CODE == 'hi' and article.category.name_hi %}{{ article.category.name_hi }}{% else %}{{ article.category.name }}{% endif %}</a>.
             </p>
         </section>
 
         <section id="salary-growth">
             <h2>Salary and Growth Reality</h2>
-            <div class="table-scroll">{{ article.salary_reality|safe }}</div>
-            <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
-                Cross-check your take-home with the <a href="{% url 'salary_calculator' %}" style="text-decoration: underline;">CTC Decoder</a>
-                and compare ranges in <a href="{% url 'salary_reality' %}" style="text-decoration: underline;">Salary Reality</a>.
+            <div class="table-scroll">{% if LANGUAGE_CODE == 'hi' and article.salary_reality_hi %}{{ article.salary_reality_hi|safe }}{% else %}{{ article.salary_reality|safe }}{% endif %}</div>
+            <p class="art-context-note">
+                Cross-check your take-home with the <a href="{% url 'salary_calculator' %}">CTC Decoder</a>
+                and compare ranges in <a href="{% url 'salary_reality' %}">Salary Reality</a>.
             </p>
         </section>
 
         <section id="stuck-point">
             <h2>Where Most People Get Stuck</h2>
-            {{ article.stuck_point|safe }}
-            <p style="margin-top: 1rem; font-size: 14px; color: var(--c-grey-mid);">
+            {% if LANGUAGE_CODE == 'hi' and article.stuck_point_hi %}{{ article.stuck_point_hi|safe }}{% else %}{{ article.stuck_point|safe }}{% endif %}
+            <p class="art-context-note">
                 If this matches your current situation, run the
-                <a href="{% url 'wizard_start' %}" style="text-decoration: underline;">Resignation Risk Analyzer</a>
+                <a href="{% url 'wizard_start' %}">Resignation Risk Analyzer</a>
                 before making your next move.
             </p>
         </section>
 
         <section id="avoid-path">
             <h2>Who Should Avoid This Path</h2>
-            {{ article.who_should_avoid|safe }}
+            {% if LANGUAGE_CODE == 'hi' and article.who_should_avoid_hi %}{{ article.who_should_avoid_hi|safe }}{% else %}{{ article.who_should_avoid|safe }}{% endif %}
         </section>
 
         <section id="decision-framework">
@@ -185,21 +175,21 @@
             <p>{{ scenario_snapshot }}</p>
         </section>
 
-        <section id="originality-lens" style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa;">
-            <h2 style="margin-top: 0;">Originality Lens</h2>
+        <section id="originality-lens" class="art-callout art-callout--muted">
+            <h2 class="art-callout-heading">Originality Lens</h2>
             <p><strong>Contrarian thesis:</strong> {{ originality.contrarian_thesis }}</p>
-            <p style="margin-bottom: 0;"><strong>Non-obvious signal:</strong> {{ originality.non_obvious_signal }}</p>
+            <p class="art-callout-last"><strong>Non-obvious signal:</strong> {{ originality.non_obvious_signal }}</p>
         </section>
 
-        <section style="margin-top: 2rem; border: 1px solid var(--c-divider); padding: 1.25rem;">
-            <h2 style="font-size: 16px; margin-top: 0;">Evidence By Section</h2>
+        <section class="art-callout">
+            <h2 class="art-callout-heading">Evidence By Section</h2>
             {% for item in evidence_map %}
-            <div style="margin-bottom: 1rem;">
-                <p style="margin: 0 0 0.35rem 0;"><strong>Claim:</strong> {{ item.claim }}</p>
-                <p style="margin: 0; font-size: 13px; color: var(--c-grey-mid);">
+            <div class="art-evidence-item">
+                <p class="art-evidence-claim"><strong>Claim:</strong> {{ item.claim }}</p>
+                <p class="art-evidence-sources">
                     Evidence:
                     {% for src in item.sources %}
-                    <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">{{ src.name }}</a>{% if not forloop.last %}, {% endif %}
+                    <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer">{{ src.name }}</a>{% if not forloop.last %}, {% endif %}
                     {% empty %}
                     Source list unavailable.
                     {% endfor %}
@@ -208,52 +198,44 @@
             {% endfor %}
         </section>
 
-        <div style="margin-top: 5rem;">
+        <div class="art-verdict-section">
             <div id="verdict"></div>
-            <h3
-                style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; border-top: 2px solid var(--c-black); padding-top: 1rem; margin-bottom: 2rem; display: inline-block;">
-                Final Verdict</h3>
-            <div style="font-size: 20px; line-height: 1.5; color: var(--c-black);">{{ article.verdict|safe }}</div>
+            <h3 class="art-verdict-label">Final Verdict</h3>
+            <div class="art-verdict-text">{% if LANGUAGE_CODE == 'hi' and article.verdict_hi %}{{ article.verdict_hi|safe }}{% else %}{{ article.verdict|safe }}{% endif %}</div>
 
-            <div class="share-section"
-                style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--c-black);">
-                <span
-                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--c-black); display: block; font-weight: 700; margin-bottom: 2rem;">Share
-                    Reality Check</span>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="art-share">
+                <span class="art-share-label">Share Reality Check</span>
+                <div class="art-share-buttons">
                     <a href="https://api.whatsapp.com/send?text={{ article.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}"
-                        target="_blank"
-                        style="display: inline-block; padding: 1rem 2rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-black);">WhatsApp</a>
+                        target="_blank" class="art-share-btn">WhatsApp</a>
                     <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}"
-                        target="_blank"
-                        style="display: inline-block; padding: 1rem 2rem; border: 1px solid var(--c-black); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c-black);">LinkedIn</a>
+                        target="_blank" class="art-share-btn">LinkedIn</a>
                 </div>
             </div>
 
-            <div style="margin-top: 3rem; font-size: 13px; color: var(--c-grey-light); font-family: monospace;">Last
-                Updated: {{ article.updated_at|date:"F j, Y" }}</div>
-            <div style="margin-top: 0.5rem; font-size: 13px; color: var(--c-grey-light);">
-                Found a factual error? <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Request a correction</a>.
+            <div class="art-last-updated">Last Updated: {{ article.updated_at|date:"F j, Y" }}</div>
+            <div class="art-correction-note">
+                Found a factual error? <a href="{% url 'contact' %}">Request a correction</a>.
             </div>
 
-            <div style="margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa;">
-                <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 1rem 0;">What Changed</h3>
-                <ul style="margin: 0; padding-left: 18px;">
+            <div class="art-changelog">
+                <h3 class="art-callout-title">What Changed</h3>
+                <ul class="art-callout-list">
                     {% for log in update_log_items %}
-                    <li style="margin-bottom: 0.75rem;">
+                    <li class="art-changelog-item">
                         <strong>{{ log.date|date:"F j, Y" }}</strong>: {{ log.summary }}
                     </li>
                     {% endfor %}
                 </ul>
             </div>
 
-            <div style="margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--c-divider);">
-                <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 1rem 0;">Sources</h3>
-                <ul style="margin: 0; padding-left: 18px;">
+            <div class="art-sources">
+                <h3 class="art-callout-title">Sources</h3>
+                <ul class="art-callout-list">
                     {% for source in source_references %}
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">{{ source.name }}</a>
-                        <span style="color: var(--c-grey-light);"> (checked {{ source.checked_on|date:"F j, Y" }})</span>
+                    <li class="art-source-item">
+                        <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a>
+                        <span class="art-source-checked"> (checked {{ source.checked_on|date:"F j, Y" }})</span>
                     </li>
                     {% endfor %}
                 </ul>
@@ -261,35 +243,30 @@
         </div>
     </div>
 
-    <!-- Related Articles (Internal Links) -->
+    <!-- Related Articles -->
     {% if related_articles %}
-    <div class="container-medium"
-        style="margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid #e5e5e5;">
+    <div class="container-medium art-related-section">
         <span class="section-label">RELATED REALITY CHECKS</span>
-        <div class="related-grid"
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem;">
+        <div class="art-related-grid">
             {% for related in related_articles %}
-            <div style="border: 1px solid var(--c-divider); padding: 1.5rem;">
-                <span
-                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-grey-light);">{{ related.category.name }}</span>
-                <h3 style="font-size: 18px; margin: 0.5rem 0;"><a href="{% url 'article_detail' related.slug %}"
-                        style="text-decoration: none;">{{ related.title }}</a></h3>
-                <p style="font-size: 14px; color: var(--c-grey-mid); margin: 0;">{{ related.common_expectation|striptags|truncatewords:12 }}</p>
-            </div>
+            <a href="{% url 'article_detail' related.slug %}" class="art-related-card">
+                <span class="art-related-cat">{{ related.category.name }}</span>
+                <h3 class="art-related-title">{{ related.title }}</h3>
+                <p class="art-related-excerpt">{{ related.common_expectation|striptags|truncatewords:12 }}</p>
+            </a>
             {% endfor %}
         </div>
     </div>
     {% endif %}
 
-    <!-- Browse More Topics (Internal Links for SEO) -->
+    <!-- Browse More Topics -->
     {% if categories %}
-    <div class="container-medium"
-        style="margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid #e5e5e5;">
+    <div class="container-medium art-topics-section">
         <span class="section-label">EXPLORE MORE TOPICS</span>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
+        <div class="art-topic-pills">
             {% for cat in categories %}
             <a href="{% url 'category_detail' cat.slug %}"
-                style="display: inline-block; padding: 0.5rem 1rem; background: {% if cat.id == article.category.id %}var(--c-black){% else %}transparent{% endif %}; color: {% if cat.id == article.category.id %}white{% else %}var(--c-black){% endif %}; border: 1px solid var(--c-black); text-decoration: none; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{{ cat.name }}</a>
+                class="art-topic-pill {% if cat.id == article.category.id %}art-topic-pill--active{% endif %}">{{ cat.name }}</a>
             {% endfor %}
         </div>
     </div>

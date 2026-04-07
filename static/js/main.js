@@ -4,6 +4,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.querySelector('.mobile-menu-overlay');
     const body = document.body;
 
+    // ── Header scroll shadow ──
+    const header = document.querySelector('.site-header');
+    if (header) {
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    header.classList.toggle('scrolled', window.scrollY > 10);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    // ── Desktop search toggle ──
+    const searchToggle = document.querySelector('.nav-search-wrapper .nav-search-toggle');
+    const searchForm = document.getElementById('nav-search-form');
+    if (searchToggle && searchForm) {
+        searchToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchForm.classList.toggle('active');
+            if (searchForm.classList.contains('active')) {
+                searchForm.querySelector('input').focus();
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (!searchForm.contains(e.target) && !searchToggle.contains(e.target)) {
+                searchForm.classList.remove('active');
+            }
+        });
+    }
+
+    // ── Mobile search toggle ──
+    const mobileSearchToggle = document.querySelector('.nav-search-toggle--mobile');
+    const mobileSearchPanel = document.getElementById('mobile-search-panel');
+    if (mobileSearchToggle && mobileSearchPanel) {
+        mobileSearchToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileSearchPanel.classList.toggle('active');
+            if (mobileSearchPanel.classList.contains('active')) {
+                mobileSearchPanel.querySelector('input').focus();
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (!mobileSearchPanel.contains(e.target) && !mobileSearchToggle.contains(e.target)) {
+                mobileSearchPanel.classList.remove('active');
+            }
+        });
+    }
+
     function toggleMenu() {
         const isActive = mobileToggle.classList.contains('active');
 
@@ -39,13 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (overlay) {
         overlay.addEventListener('click', closeMenu);
     }
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-            closeMenu();
-        }
-    });
 
     // Generic Dropdown Handler (Supports multiple)
     const dropdowns = document.querySelectorAll('.nav-dropdown');
@@ -112,18 +156,97 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Close on escape key
+    // Close mobile menu + dropdowns on Escape key (single handler)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                closeMenu();
+            }
             dropdowns.forEach(dropdown => {
                 const content = dropdown.querySelector('.nav-dropdown-content');
                 const trigger = dropdown.querySelector('.nav-dropdown-trigger');
                 if (content) content.style.display = 'none';
-                if (trigger) {
-                    trigger.setAttribute('aria-expanded', 'false');
-                    // Optionally focus back? trigger.focus();
-                }
+                if (trigger) trigger.setAttribute('aria-expanded', 'false');
             });
+            // Close search suggestions on Escape
+            const sugBox = document.getElementById('search-suggestions');
+            if (sugBox) sugBox.style.display = 'none';
         }
     });
+
+    // --- Global Search Autocomplete ---
+    const searchInput = document.getElementById('global-search-input');
+    const suggestionsBox = document.getElementById('search-suggestions');
+
+    if (searchInput && suggestionsBox) {
+        let debounceTimer = null;
+
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            const q = searchInput.value.trim();
+            if (q.length < 2) {
+                suggestionsBox.style.display = 'none';
+                suggestionsBox.innerHTML = '';
+                return;
+            }
+            debounceTimer = setTimeout(() => {
+                fetch('/search/suggest/?q=' + encodeURIComponent(q))
+                    .then(r => r.json())
+                    .then(data => {
+                        if (!data.results || data.results.length === 0) {
+                            suggestionsBox.style.display = 'none';
+                            suggestionsBox.innerHTML = '';
+                            return;
+                        }
+                        suggestionsBox.innerHTML = data.results.map(item => {
+                            const typeClass = {
+                                article: 'badge-info',
+                                company: 'badge-success',
+                                news: 'badge-warning'
+                            }[item.type] || 'badge-neutral';
+                            return '<a href="' + item.url + '" class="search-suggestion-item">'
+                                + '<span class="badge badge-sm ' + typeClass + '">' + item.type + '</span> '
+                                + '<span>' + item.text + '</span></a>';
+                        }).join('');
+                        suggestionsBox.style.display = 'block';
+                    })
+                    .catch(() => {
+                        suggestionsBox.style.display = 'none';
+                    });
+            }, 250);
+        });
+
+        // Close suggestions on outside click
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        // Allow keyboard navigation in suggestions
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' && suggestionsBox.style.display === 'block') {
+                e.preventDefault();
+                const first = suggestionsBox.querySelector('.search-suggestion-item');
+                if (first) first.focus();
+            }
+        });
+
+        suggestionsBox.addEventListener('keydown', (e) => {
+            const focused = document.activeElement;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const next = focused.nextElementSibling;
+                if (next) next.focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const prev = focused.previousElementSibling;
+                if (prev) prev.focus();
+                else searchInput.focus();
+            } else if (e.key === 'Escape') {
+                suggestionsBox.style.display = 'none';
+                searchInput.focus();
+            }
+        });
+    }
 });

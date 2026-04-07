@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if query %}Search: {{ query }}{% else %}Search{% endif %} — Career Reality India{% endblock %}
+
+
+
+{% block content %}
+<section class="search-hero">
+    <form method="get" action="{% url 'search' %}" class="search-bar">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search companies, salaries, articles, AI news…" autofocus autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+</section>
+
+<div class="container-wide">
+    {% if query %}
+    <p class="sr-meta" style="margin-top:1rem;">{{ total }} result{{ total|pluralize }} for "<strong>{{ query }}</strong>"</p>
+
+    <div class="search-tabs">
+        <a href="?q={{ query }}&tab=all" class="{% if tab == 'all' %}active{% endif %}">All <span class="count">{{ total }}</span></a>
+        <a href="?q={{ query }}&tab=articles" class="{% if tab == 'articles' %}active{% endif %}">Articles <span class="count">{{ counts.articles }}</span></a>
+        <a href="?q={{ query }}&tab=companies" class="{% if tab == 'companies' %}active{% endif %}">Companies <span class="count">{{ counts.companies }}</span></a>
+        <a href="?q={{ query }}&tab=news" class="{% if tab == 'news' %}active{% endif %}">AI News <span class="count">{{ counts.news }}</span></a>
+        <a href="?q={{ query }}&tab=salaries" class="{% if tab == 'salaries' %}active{% endif %}">Salaries <span class="count">{{ counts.salaries }}</span></a>
+    </div>
+
+    {% if tab == "all" or tab == "articles" %}
+    {% for article in results.articles %}
+    <div class="sr-item">
+        <span class="sr-type article">Article</span>
+        <div class="sr-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></div>
+        <div class="sr-desc">{{ article.target_persona|truncatechars:200 }}</div>
+        <div class="sr-meta">{{ article.category.name }} · {{ article.author.display_name }} · {{ article.published_at|date:"M d, Y" }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if tab == "all" or tab == "companies" %}
+    {% for company in results.companies %}
+    <div class="sr-item">
+        <span class="sr-type company">Company</span>
+        <div class="sr-title"><a href="{{ company.get_absolute_url }}">{{ company.name }}</a></div>
+        <div class="sr-desc">{{ company.get_sector_display }}{% if company.headquarters %} · {{ company.headquarters }}{% endif %} · {{ company.salary_count }} salary points · {{ company.review_count }} reviews</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if tab == "all" or tab == "news" %}
+    {% for item in results.news %}
+    <div class="sr-item">
+        <span class="sr-type news">AI News</span>
+        <div class="sr-title"><a href="{% url 'ai_news_detail' item.slug %}">{{ item.title }}</a></div>
+        {% if item.career_angle %}<div class="sr-desc">{{ item.career_angle|truncatechars:200 }}</div>{% endif %}
+        <div class="sr-meta">{{ item.published_at|date:"M d, Y" }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if tab == "all" or tab == "salaries" %}
+    {% for s in results.salaries %}
+    <div class="sr-item">
+        <span class="sr-type salary">Salary</span>
+        <div class="sr-title">{{ s.role }} — ₹{{ s.ctc|floatformat:0 }} CTC</div>
+        <div class="sr-desc">{{ s.experience_years }}y exp · {{ s.get_company_type_display }} · {{ s.city }}{% if s.tech_stack %} · {{ s.tech_stack|truncatechars:60 }}{% endif %}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if total == 0 %}
+    <div class="sr-empty">
+        <h3>No results found</h3>
+        <p>Try different keywords, or browse our <a href="{% url 'company_directory' %}">company directory</a>.</p>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="sr-empty sr-empty--landing">
+        <h3>Search Career Reality</h3>
+        <p>Find companies, salary data, articles, and AI news across India's most honest career platform.</p>
+        <div class="sr-suggestions">
+            <a href="?q=TCS" class="sr-suggestion">TCS</a>
+            <a href="?q=product+manager" class="sr-suggestion">Product Manager</a>
+            <a href="?q=Bangalore" class="sr-suggestion">Bangalore</a>
+            <a href="?q=layoffs" class="sr-suggestion">Layoffs</a>
+            <a href="?q=React" class="sr-suggestion">React</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

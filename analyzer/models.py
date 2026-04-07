@@ -69,3 +69,33 @@ class LayoffReport(models.Model):
 
     def __str__(self):
         return f"{self.company_name} - {self.get_status_display()}"
+
+
+class FunnelEventLog(models.Model):
+    """
+    Privacy-safe product analytics event log.
+    Stores only event metadata needed for funnel and replay diagnostics.
+    """
+
+    EVENT_CHOICES = [
+        ('landing_view', 'Landing View'),
+        ('analyze_submit', 'Analyze Submit'),
+        ('analysis_rendered', 'Analysis Rendered'),
+        ('paywall_view', 'Paywall View'),
+        ('upgrade_click', 'Upgrade Click'),
+        ('upgrade_success', 'Upgrade Success'),
+        ('return_visit_d7', 'Return Visit D7'),
+    ]
+
+    event_name = models.CharField(max_length=40, choices=EVENT_CHOICES, db_index=True)
+    session_id = models.CharField(max_length=64, blank=True)
+    page_path = models.CharField(max_length=255, blank=True)
+    user_agent = models.CharField(max_length=255, blank=True)
+    metadata = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.event_name} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"

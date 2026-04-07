@@ -1,7 +1,12 @@
+import json
+
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
+from django.views.decorators.http import require_POST
 from django.utils.cache import patch_cache_control
+from django.utils import timezone
 from . import forms, logic, models
 
 COMPANY_TYPE_LABELS = dict(models.SalarySubmission.COMPANY_TYPES)
@@ -20,11 +25,13 @@ def intro_view(request):
     """
     title = "Career Risk Analyzer - Career Reality India"
     description = "Answer 6 questions to estimate career risk and get a reality-first action plan."
+    methodology_last_updated = timezone.localdate().strftime('%B %d, %Y')
     return render(request, 'analyzer/intro.html', {
         'og_title': title,
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
+        'methodology_last_updated': methodology_last_updated,
     })
 
 def wizard_start_session(request):
@@ -110,6 +117,18 @@ def result_view(request):
     # Calculate Risk
     calculator = logic.RiskCalculator()
     result = calculator.calculate(data)
+
+    role_label = dict(forms.copy.ROLE_LEVELS).get(data.get('role_level'), 'Unknown')
+    company_label = dict(forms.copy.COMPANY_TYPES).get(data.get('company_type'), 'Unknown')
+    notice_label = dict(forms.copy.NOTICE_PERIODS).get(data.get('notice_period'), 'Unknown')
+
+    primary_action_map = {
+        'high': "Document all communication and line up legal-safe exit options in the next 24 hours.",
+        'medium': "Stabilize leverage first: gather documents, clarify terms in writing, and avoid verbal-only commitments.",
+        'low': "Proceed with structured resignation steps and keep process evidence organized.",
+    }
+
+    methodology_last_updated = timezone.localdate().strftime('%B %d, %Y')
     
     # Analytics Logging (Privacy Safe)
     # Check if already logged to prevent duplicates on refresh
@@ -121,17 +140,79 @@ def result_view(request):
             tool_version="1.0"
         )
         request.session['analyzer_logged'] = True
-    
+
+        # Increment engagement counter on user profile
+        if request.user.is_authenticated:
+            try:
+                profile = request.user.profile
+                profile.assessments_count += 1
+                profile.last_risk_level = result['level']
+                profile.last_company_type = data.get('company_type', '')
+                profile.save(update_fields=['assessments_count', 'last_risk_level', 'last_company_type'])
+            except Exception:
+                pass
+
+    # LLM-powered personalized narrative (graceful fallback if no API key)
+    from .llm import generate_risk_narrative
+    llm_narrative = generate_risk_narrative(data, result)
+
+    from django.conf import settings
+    razorpay_key_id = getattr(settings, 'RAZORPAY_KEY_ID', '')
+
     title = f"Risk Result: {result.get('label', 'Assessment')} - Career Reality India"
     description = "Your resignation risk level with context and next steps based on common Indian employment patterns."
     return render(request, 'analyzer/result.html', {
         'result': result,
+        'role_label': role_label,
+        'company_label': company_label,
+        'notice_label': notice_label,
+        'llm_narrative': llm_narrative,
+        'razorpay_key_id': razorpay_key_id,
+        'primary_action': primary_action_map.get(result['level'], primary_action_map['medium']),
+        'methodology_last_updated': methodology_last_updated,
         'og_title': title,
         'og_description': description,
         'twitter_title': title,
         'twitter_description': description,
         'meta_robots': 'noindex, follow',
     })
+
+
+@require_POST
+def track_event_api(request):
+    """Store privacy-safe funnel events for conversion and replay diagnostics."""
+    allowed_events = {
+        'landing_view',
+        'analyze_submit',
+        'analysis_rendered',
+        'paywall_view',
+        'upgrade_click',
+        'upgrade_success',
+        'return_visit_d7',
+    }
+
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'error': 'invalid_json'}, status=400)
+
+    event_name = payload.get('event_name')
+    if event_name not in allowed_events:
+        return JsonResponse({'ok': False, 'error': 'invalid_event'}, status=400)
+
+    metadata = payload.get('metadata', {})
+    if not isinstance(metadata, dict):
+        metadata = {}
+
+    models.FunnelEventLog.objects.create(
+        event_name=event_name,
+        session_id=(payload.get('session_id') or '')[:64],
+        page_path=(payload.get('page_path') or request.path)[:255],
+        user_agent=(request.META.get('HTTP_USER_AGENT') or '')[:255],
+        metadata=metadata,
+    )
+
+    return JsonResponse({'ok': True})
 
 def submit_salary(request):
     """
@@ -149,6 +230,14 @@ def submit_salary(request):
                 city=d['city'],
                 tech_stack=d.get('tech_stack', ''),
             )
+            # Increment engagement counter
+            if request.user.is_authenticated:
+                try:
+                    profile = request.user.profile
+                    profile.salary_submissions_count += 1
+                    profile.save(update_fields=['salary_submissions_count'])
+                except Exception:
+                    pass
             return redirect(reverse('salary_submit_success'))
         # Re-render with validation errors
     else:

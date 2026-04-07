@@ -1,19 +1,103 @@
 <header class="site-header">
     <div class="container-wide nav-flex">
-        <!-- Premium Logo/Brand -->
+        <!-- Brand -->
         <a href="/" class="site-brand">
-            <span class="brand-icon">&diams;</span>
-            <span class="brand-text">CAREER<span class="brand-highlight">REALITY</span></span>
+            <span class="brand-mark">CR</span>
+            <span class="brand-wordmark">Career<span class="brand-accent">Reality</span></span>
         </a>
 
         <!-- Primary Navigation -->
-        <nav class="site-nav">
-            <!-- Topics Dropdown with enhanced styling -->
+        <nav class="site-nav" role="navigation" aria-label="Main">
+            <!-- Explore Mega-Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                    Explore
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="nav-dropdown-content nav-mega" style="display:none;">
+                    <div class="mega-col">
+                        <div class="dropdown-header">Intelligence</div>
+                        <a href="{% url 'company_directory' %}">
+                            <span class="mega-icon">🏢</span>
+                            <span class="mega-label">
+                                <strong>Companies</strong>
+                                <small>Ratings, salaries & reviews for 35+ cos</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'ai_news_hub' %}">
+                            <span class="mega-icon">⚡</span>
+                            <span class="mega-label">
+                                <strong>AI Pulse</strong>
+                                <small>AI news that actually affects your career</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'career_reality_index' %}">
+                            <span class="mega-icon">📊</span>
+                            <span class="mega-label">
+                                <strong>Career Index</strong>
+                                <small>Monthly pressure tracker for Indian tech</small>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="mega-col">
+                        <div class="dropdown-header">Tools</div>
+                        <a href="{% url 'salary_calculator' %}">
+                            <span class="mega-icon">🧮</span>
+                            <span class="mega-label">
+                                <strong>CTC Decoder</strong>
+                                <small>Convert CTC to real in-hand salary</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'wizard_start' %}">
+                            <span class="mega-icon">🎯</span>
+                            <span class="mega-label">
+                                <strong>Risk Analyzer</strong>
+                                <small>Should you resign? Data-backed answer</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'layoff_radar' %}">
+                            <span class="mega-icon">🚨</span>
+                            <span class="mega-label">
+                                <strong>Layoff Radar</strong>
+                                <small>Track layoff signals by company</small>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="mega-col">
+                        <div class="dropdown-header">Data</div>
+                        <a href="{% url 'salary_reality' %}">
+                            <span class="mega-icon">💰</span>
+                            <span class="mega-label">
+                                <strong>Salary Reality</strong>
+                                <small>What Indian tech actually pays</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'submit_salary' %}" class="mega-highlight">
+                            <span class="mega-icon">+</span>
+                            <span class="mega-label">
+                                <strong>Drop a Salary</strong>
+                                <small>Anonymous. Takes 30 seconds.</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'escape_plan' %}">
+                            <span class="mega-icon">🚀</span>
+                            <span class="mega-label">
+                                <strong>Escape Plan</strong>
+                                <small>Leave your service company</small>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topics -->
             <div class="nav-dropdown">
                 <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
                     Topics
                     <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </button>
                 <div class="nav-dropdown-content" style="display:none;">
@@ -31,99 +115,131 @@
                 </div>
             </div>
 
-            <!-- Salaries Dropdown -->
-            <div class="nav-dropdown">
-                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
-                    Salaries
-                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                </button>
-                <div class="nav-dropdown-content" style="display:none;">
-                    <div class="dropdown-header">Tools & Data</div>
-                    <a href="{% url 'salary_reality' %}">
-                        <span class="dropdown-icon">&rarr;</span> Reality Check
-                    </a>
-                    <a href="{% url 'salary_calculator' %}">
-                        <span class="dropdown-icon">&rarr;</span> CTC Decoder <span class="nav-badge"
-                            style="margin-left:5px;">NEW</span>
-                    </a>
-                    <a href="{% url 'layoff_radar' %}">
-                        <span class="dropdown-icon">&#9888;</span> Layoff Radar <span class="nav-badge"
-                            style="background:#d93025; margin-left:5px; color:white;">BETA</span>
-                    </a>
-                    <a href="{% url 'submit_salary' %}" style="color: #d93025; font-weight: 700;">
-                        <span class="dropdown-icon" style="color: #d93025;">+</span> Drop a Salary
-                    </a>
+            <a href="{% url 'company_directory' %}" class="nav-link">Companies</a>
+            <a href="{% url 'about' %}" class="nav-link">About</a>
 
-                    <div class="dropdown-header" style="margin-top: 10px; border-top: 1px dashed #eee;">Strategy</div>
-                    <a href="{% url 'escape_plan' %}">
-                        <span class="dropdown-icon">&rarr;</span> Service Co. Escape
-                    </a>
-                </div>
+            <!-- Compact Search -->
+            <div class="nav-search-wrapper">
+                <button class="nav-search-toggle" aria-label="Search" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+                <form action="{% url 'search' %}" method="get" class="nav-search-form" id="nav-search-form">
+                    <input type="text" name="q" placeholder="Search companies, salaries, articles…" autocomplete="off" id="global-search-input">
+                    <button type="submit" aria-label="Search">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </button>
+                    <div class="search-suggestions" id="search-suggestions"></div>
+                </form>
             </div>
 
-            <a href="{% url 'wizard_start' %}" class="nav-link">Analyzer</a>
-            <a href="{% url 'ai_news_hub' %}" class="nav-link">AI Pulse</a>
-            <a href="{% url 'about' %}" class="nav-link">About</a>
-            <a href="{% url 'editorial' %}" class="nav-link">Editorial</a>
-            <a href="{% url 'contact' %}" class="nav-link">Contact</a>
-            <a href="{% url 'career_reality_index' %}" class="nav-link">Index</a>
+            <!-- Pro CTA -->
+            {% if user.is_authenticated and user.profile.is_pro %}
+            <a href="{% url 'pro_dashboard' %}" class="nav-cta nav-cta--active">
+                <span class="nav-cta-icon">◆</span> Dashboard
+            </a>
+            {% else %}
+            <a href="{% url 'payments:pricing' %}" class="nav-cta">
+                Go Pro <span class="nav-cta-price">₹299</span>
+            </a>
+            {% endif %}
         </nav>
 
-        <!-- Mobile Menu Toggle (hidden on desktop) -->
-        <button class="mobile-menu-toggle" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <!-- Mobile Toggle -->
+        <div class="mobile-actions">
+            <button class="nav-search-toggle nav-search-toggle--mobile" aria-label="Search" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <button class="mobile-menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Search Panel -->
+        <div class="mobile-search-panel" id="mobile-search-panel">
+            <form action="{% url 'search' %}" method="get">
+                <input type="text" name="q" placeholder="Search companies, salaries, articles…" autocomplete="off">
+                <button type="submit" aria-label="Search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+            </form>
+        </div>
 
         <!-- Mobile Menu Overlay -->
         <div class="mobile-menu-overlay"></div>
 
-        <!-- Mobile Slide-out Navigation -->
+        <!-- Mobile Slide-out -->
         <nav class="mobile-nav">
-            <div class="mobile-nav-header">MENU</div>
-
-            <div class="mobile-nav-group" style="padding: 1rem 0; border-bottom: 1px solid #eee;">
-                <div class="mobile-nav-header" style="opacity: 0.5; font-size: 10px; margin-bottom: 0.5rem;">SALARIES
+            <div class="mobile-nav-inner">
+                <div class="mobile-nav-section">
+                    <div class="mobile-nav-section-title">Intelligence</div>
+                    <a href="{% url 'company_directory' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">🏢</span> Companies
+                    </a>
+                    <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">⚡</span> AI Pulse
+                    </a>
+                    <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">📊</span> Career Index
+                    </a>
                 </div>
-                <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Reality Check</a>
-                <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
-                    CTC Decoder <span class="nav-badge">NEW</span>
-                </a>
-                <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
-                    Layoff Radar <span class="nav-badge" style="background:#d93025;">BETA</span>
-                </a>
-                <a href="{% url 'submit_salary' %}" class="mobile-nav-link" style="color: #d93025; font-weight: 700;">
-                    + Drop a Salary
-                </a>
-                <a href="{% url 'escape_plan' %}" class="mobile-nav-link" style="font-size: 14px; opacity: 0.8;">&rarr; Escape Plan</a>
-            </div>
-            <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Salary Data</a>
-            <a href="{% url 'wizard_start' %}" class="mobile-nav-link">Risk Analyzer</a>
-            <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">AI Pulse</a>
-            <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
-            <a href="{% url 'editorial' %}" class="mobile-nav-link">Editorial</a>
-            <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
-            <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">Index</a>
 
-            <div class="mobile-nav-categories">
-                <div class="mobile-nav-header">BROWSE TOPICS</div>
-                {% for category in categories %}
-                <a href="{% url 'category_detail' category.slug %}" class="mobile-category-link">
-                    {{ category.name }}
-                </a>
-                {% empty %}
-                <a href="{% url 'salary_reality' %}" class="mobile-category-link">Career Strategy</a>
-                <a href="{% url 'salary_reality' %}" class="mobile-category-link">Software Engineering</a>
-                <a href="{% url 'salary_reality' %}" class="mobile-category-link">Money Reality</a>
-                {% endfor %}
-            </div>
+                <div class="mobile-nav-section">
+                    <div class="mobile-nav-section-title">Tools</div>
+                    <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">🧮</span> CTC Decoder
+                    </a>
+                    <a href="{% url 'wizard_start' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">🎯</span> Risk Analyzer
+                    </a>
+                    <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">🚨</span> Layoff Radar
+                    </a>
+                </div>
 
-            <div class="mobile-nav-footer">
-                <a href="{% url 'contact' %}">Contact</a>
-                <a href="{% url 'terms' %}">Terms</a>
+                <div class="mobile-nav-section">
+                    <div class="mobile-nav-section-title">Data</div>
+                    <a href="{% url 'salary_reality' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">💰</span> Salary Reality
+                    </a>
+                    <a href="{% url 'submit_salary' %}" class="mobile-nav-link mobile-nav-link--highlight">
+                        <span class="mnl-icon">+</span> Drop a Salary
+                    </a>
+                    <a href="{% url 'escape_plan' %}" class="mobile-nav-link">
+                        <span class="mnl-icon">🚀</span> Escape Plan
+                    </a>
+                </div>
+
+                <div class="mobile-nav-section">
+                    <div class="mobile-nav-section-title">Browse</div>
+                    {% for category in categories %}
+                    <a href="{% url 'category_detail' category.slug %}" class="mobile-nav-link">
+                        {{ category.name }}
+                    </a>
+                    {% empty %}
+                    <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Career Strategy</a>
+                    {% endfor %}
+                </div>
+
+                <div class="mobile-nav-section" style="border-bottom:none;">
+                    <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
+                    <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
+                    <a href="{% url 'terms' %}" class="mobile-nav-link" style="opacity:0.6;">Terms & Privacy</a>
+                </div>
+
+                <!-- Mobile Pro CTA -->
+                <div class="mobile-nav-cta">
+                    {% if user.is_authenticated and user.profile.is_pro %}
+                    <a href="{% url 'pro_dashboard' %}" class="mobile-pro-btn mobile-pro-btn--active">
+                        ◆ Pro Dashboard
+                    </a>
+                    {% else %}
+                    <a href="{% url 'payments:pricing' %}" class="mobile-pro-btn">
+                        Go Pro — ₹299/mo
+                    </a>
+                    {% endif %}
+                </div>
             </div>
         </nav>
     </div>

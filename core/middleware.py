@@ -1,7 +1,13 @@
 import os
+import time
+import uuid
+import logging
 
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect
+
+
+logger = logging.getLogger(__name__)
 
 
 class CanonicalHostRedirectMiddleware:
@@ -52,13 +58,48 @@ class SecurityHeadersMiddleware:
                 "default-src 'self'; "
                 "img-src 'self' data: https:; "
                 "style-src 'self' 'unsafe-inline' https:; "
-                "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagservices.com https://adservice.google.com https://www.google-analytics.com https://tpc.googlesyndication.com; "
+                "script-src 'self' https:; "
                 "font-src 'self' data: https:; "
                 "connect-src 'self' https:; "
-                "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com; "
                 "frame-ancestors 'none'; "
                 "base-uri 'self'; "
                 "form-action 'self';"
+            )
+
+        return response
+
+
+class RequestObservabilityMiddleware:
+    """
+    Adds lightweight request observability for production troubleshooting.
+    - Assigns/propagates X-Request-ID.
+    - Emits X-Response-Time-ms.
+    - Logs slow requests above threshold.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.slow_request_threshold_ms = int(os.environ.get("SLOW_REQUEST_THRESHOLD_MS", "800"))
+
+    def __call__(self, request):
+        request_id = request.headers.get("X-Request-ID") or uuid.uuid4().hex
+        request.request_id = request_id
+
+        start = time.perf_counter()
+        response = self.get_response(request)
+        elapsed_ms = round((time.perf_counter() - start) * 1000, 2)
+
+        response["X-Request-ID"] = request_id
+        response["X-Response-Time-ms"] = str(elapsed_ms)
+
+        if elapsed_ms >= self.slow_request_threshold_ms:
+            logger.warning(
+                "Slow request | id=%s method=%s path=%s status=%s elapsed_ms=%s",
+                request_id,
+                request.method,
+                request.path,
+                getattr(response, "status_code", "?"),
+                elapsed_ms,
             )
 
         return response

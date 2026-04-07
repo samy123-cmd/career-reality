@@ -13,9 +13,19 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from urllib.parse import urlsplit
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load .env for local development. In production (Vercel) env vars are injected
+# directly by the platform so this is a no-op there (file won't exist).
+# Never overrides variables already set in the shell environment.
+try:
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / '.env', override=False)
+except ImportError:
+    pass  # python-dotenv not installed — rely on env vars being set externally
 
 
 def _csv_env(name: str, default: str = "") -> list[str]:
@@ -26,13 +36,13 @@ def _csv_env(name: str, default: str = "") -> list[str]:
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-DEV_FALLBACK_SECRET = 'cr-local-fallback-9N2vL6qP3xR8mT1cW5yK7dF4hB0zQ9eA2sU6jM8nC3'
-SECRET_KEY = os.environ.get('SECRET_KEY', DEV_FALLBACK_SECRET)
-
 # SECURITY WARNING: don't run with debug turned on in production!
 # Defaults to False for safety. Explicitly set DEBUG=True in local .env.
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+if DEBUG:
+    SECRET_KEY = os.environ.get('SECRET_KEY') or get_random_secret_key()
+else:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "https://www.careerreality.in").strip().rstrip("/")
 CANONICAL_HOST = urlsplit(CANONICAL_BASE_URL).netloc.lower()
 
@@ -44,8 +54,8 @@ else:
     if vercel_url:
         ALLOWED_HOSTS.append(vercel_url)
 
-# Always allow the canonical domains.
-for host in [".vercel.app", ".careerreality.in", "careerreality.in", "www.careerreality.in"]:
+# Always allow the canonical domains (but NOT wildcard *.vercel.app).
+for host in [".careerreality.in", "careerreality.in", "www.careerreality.in"]:
     if host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(host)
 
@@ -82,6 +92,17 @@ INSTALLED_APPS = [
     'content',
     'analyzer',
     'ainews',
+    # --- Revenue Layer ---
+    'accounts',
+    'payments',
+    # --- Intelligence Layer ---
+    'companies',
+    'search',
+    # --- Auth ---
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 SITE_ID = 1
@@ -92,11 +113,13 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware', # Added for HTML compression
     'whitenoise.middleware.WhiteNoiseMiddleware', # Added WhiteNoise
     'core.middleware.SecurityHeadersMiddleware',
+    'core.middleware.RequestObservabilityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # LocaleMiddleware removed — i18n URL routing disabled (no Hindi translations exist).
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -133,7 +156,7 @@ TEMPLATES = [
 
 # Security hardening defaults for production-like environments.
 if not DEBUG:
-    if SECRET_KEY == DEV_FALLBACK_SECRET:
+    if not SECRET_KEY:
         raise RuntimeError("SECRET_KEY must be set in production.")
     if not ALLOWED_HOSTS:
         raise RuntimeError("ALLOWED_HOSTS must be set in production.")
@@ -312,3 +335,50 @@ LOGGING = {
         },
     },
 }
+
+# ---------------------------------------------------------------------------
+# Revenue Layer — API Keys (all optional, graceful fallback if missing)
+# ---------------------------------------------------------------------------
+
+# Razorpay — https://dashboard.razorpay.com/app/keys
+RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "")
+RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_WEBHOOK_SECRET = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "")
+
+# Resend — https://resend.com/api-keys
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+FROM_EMAIL = os.environ.get("FROM_EMAIL", "Career Reality <hello@careerreality.in>")
+
+# OpenAI — https://platform.openai.com/api-keys
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+
+# ---------------------------------------------------------------------------
+# django-allauth — Google OAuth
+# ---------------------------------------------------------------------------
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+# allauth v0.63+ API
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/pro/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+        "OAUTH_PKCE_ENABLED": True,
+        "APP": {
+            "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
+            "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
+            "key": "",
+        },
+    }
+}
+
+SOCIALACCOUNT_AUTO_SIGNUP = True

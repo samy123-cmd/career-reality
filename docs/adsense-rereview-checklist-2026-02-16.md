@@ -5,6 +5,8 @@ Site: `https://www.careerreality.in`
 ## 1. Pre-Submit Technical Checks
 - Run: `python manage.py check`
 - Run: `python manage.py quality_audit`
+- Recommended gate: `python manage.py quality_audit --strict`
+- If needed, tune strict thresholds (example): `python manage.py quality_audit --strict --max-low-word 2 --max-low-internal 2 --max-short-meta 2 --max-weak-authors 0`
 - Confirm `robots.txt` is reachable at `/robots.txt` and includes sitemap URL.
 - Confirm `/sitemap.xml` loads and includes article, category, and static URLs.
 - Confirm noindex pages are not in sitemap and include `<meta name="robots" content="noindex, follow">`.

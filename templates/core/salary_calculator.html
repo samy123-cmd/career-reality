@@ -59,9 +59,9 @@
 </script>
 <section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
 
-    <div style="text-align: center; margin-bottom: var(--space-lg);">
-        <h1 style="font-size: 36px;">CTC Decoder</h1>
-        <p class="hero-subtitle" style="max-width: 600px; margin: 1rem auto;">
+    <div class="az-calc-hero">
+        <h1 class="az-calc-title">CTC Decoder</h1>
+        <p class="az-calc-subtitle">
             See where your "20 LPA" actually goes. We deduct the "Ghost Components" (Employer PF, Gratuity, Variable
             Pay)
             that HR adds to inflate the number.
@@ -69,54 +69,49 @@
     </div>
 
     <!-- Calculator Form -->
-    <div class="calculator-card"
-        style="background: #fafafa; border: 1px solid var(--c-divider); padding: 2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <div class="az-calc-card">
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="az-calc-grid">
             <!-- CTC -->
             <div>
-                <label
-                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                <label class="az-calc-label">
                     Annual CTC (Rs)
                 </label>
                 <input type="number" id="ctc-input" placeholder="e.g. 1200000"
-                    style="width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--c-black); background: white;">
+                    class="az-calc-input">
             </div>
 
             <!-- Variable Pay -->
             <div>
-                <label
-                    style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                <label class="az-calc-label">
                     Variable Pay / Bonus (%)
                 </label>
                 <input type="number" id="variable-input" value="10"
-                    style="width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--c-black); background: white;">
-                <p style="font-size: 11px; color: var(--c-grey-mid); margin-top: 4px;">Money you *might* get annually,
+                    class="az-calc-input">
+                <p class="az-calc-hint">Money you *might* get annually,
                     not monthly.</p>
             </div>
         </div>
 
-        <div style="margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px dashed #ddd;">
-            <p style="font-size: 14px; font-weight: 600; margin-bottom: 1rem;">For Old Regime Optimization (HRA):</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="az-calc-divider">
+            <p class="az-calc-heading">For Old Regime Optimization (HRA):</p>
+            <div class="az-calc-grid">
                 <!-- Rent -->
                 <div>
-                    <label
-                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                    <label class="az-calc-label">
                         Monthly Rent Paid (Rs)
                     </label>
                     <input type="number" id="rent-input" value="0"
-                        style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc;">
+                        class="az-calc-input az-calc-input--light">
                 </div>
 
                 <!-- City Type -->
                 <div>
-                    <label
-                        style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-weight: 700;">
+                    <label class="az-calc-label">
                         City Type
                     </label>
                     <select id="city-input"
-                        style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc;">
+                        class="az-calc-input az-calc-input--light">
                         <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
                         <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
                     </select>
@@ -124,88 +119,103 @@
             </div>
         </div>
 
-        <button onclick="calculateSalary()"
-            style="width: 100%; padding: 16px; background: var(--c-black); color: white; border: none; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;">
+        <button onclick="calculateSalary()" class="az-calc-btn">
             Decode My Salary
         </button>
     </div>
 
-    <!-- Results Section -->
-    <div id="results" style="display: none; max-width: 800px; margin: 0 auto;">
+    <!-- Noscript Fallback for crawlers & no-JS users -->
+    <noscript>
+    <div class="az-calc-noscript">
+        <h2>How This Calculator Works</h2>
+        <p>This CTC Decoder breaks down your Indian Cost-to-Company (CTC) into actual monthly take-home salary. Here is what it computes:</p>
+        <ul>
+            <li><strong>Basic Pay:</strong> Typically 40-50% of CTC. This is your tax-computation base.</li>
+            <li><strong>Employer PF:</strong> 12% of Basic (capped at Rs 1,800/month for most companies). Not part of your monthly cash.</li>
+            <li><strong>Gratuity:</strong> 4.81% of Basic. Paid only after 5 years of service.</li>
+            <li><strong>Variable Pay:</strong> Performance-linked bonus, usually 10-20% of CTC. Not guaranteed monthly.</li>
+            <li><strong>HRA (Old Tax Regime):</strong> Exemption calculated using rent paid, basic pay, and city type (metro vs non-metro).</li>
+        </ul>
+        <h3>New Tax Regime (FY 2025-26)</h3>
+        <p>Standard deduction: Rs 75,000. Tax slabs: 0-4L nil, 4-8L at 5%, 8-12L at 10%, 12-16L at 15%, 16-20L at 20%, 20-24L at 25%, above 24L at 30%. Rebate u/s 87A for income up to Rs 12 lakh.</p>
+        <h3>Example: Rs 12 LPA CTC</h3>
+        <p>Basic: ~Rs 5.4L | Employer PF: ~Rs 21,600/yr | Gratuity: ~Rs 26,000/yr | Variable: ~Rs 1.2L/yr | Taxable income (new regime): ~Rs 4.03L | Tax: nil (under rebate) | <strong>Approximate in-hand: Rs 72,000-75,000/month</strong></p>
+        <p>Enable JavaScript for interactive calculations with your exact CTC structure.</p>
+    </div>
+    </noscript>
 
-        <div style="text-align: center; margin-bottom: 2rem;">
-            <h2
-                style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--c-grey-mid); margin-bottom: 0.5rem;">
-                The Real Monthly In-Hand</h2>
-            <div style="font-size: 48px; font-weight: 800; line-height: 1;">
+    <!-- Results Section -->
+    <div id="results" style="display: none;" class="az-calc-results">
+
+        <div class="az-calc-result-hero">
+            <h2 class="az-calc-result-label">The Real Monthly In-Hand</h2>
+            <div class="az-calc-result-value">
                 <span id="final-monthly">Rs 0</span>
             </div>
-            <p style="margin-top: 0.5rem; font-size: 14px; color: var(--c-grey-light);">
-                (Using <span id="best-regime" style="font-weight: 700; color: #000;">New Regime</span>)
+            <p class="az-calc-regime-note">
+                (Using <span id="best-regime"><strong>New Regime</strong></span>)
             </p>
         </div>
 
         <!-- The Breakdown (Waterfall) -->
-        <div style="background: white; border: 1px solid #eee; padding: 2rem; border-radius: 8px;">
-            <h3 style="font-size: 16px; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                Where did the money go?</h3>
+        <div class="az-calc-breakdown">
+            <h3>Where did the money go?</h3>
 
             <div class="table-scroll">
                 <table class="editorial-table" style="font-family: var(--font-mono, monospace);">
                     <tbody>
                         <!-- CTC -->
-                        <tr style="background: #fdfdfd;">
-                            <td style="font-weight: 700;">Annual CTC (Offer)</td>
-                            <td id="res-ctc" style="text-align: right; font-weight: 700;">Rs 0</td>
+                        <tr class="az-calc-row--offer">
+                            <td>Annual CTC (Offer)</td>
+                            <td id="res-ctc" class="az-calc-td-right">Rs 0</td>
                         </tr>
 
                         <!-- Ghost Components -->
-                        <tr style="color: #d93025;">
-                            <td style="padding-left: 1.5rem;">(-) Variable Pay / Bonus <span
-                                    style="font-size: 11px; opacity: 0.7;">(Not guaranteed monthly)</span></td>
-                            <td id="res-variable" style="text-align: right;">-Rs 0</td>
+                        <tr class="az-calc-row--ghost">
+                            <td>(-) Variable Pay / Bonus <span
+                                    class="az-calc-inline-note">(Not guaranteed monthly)</span></td>
+                            <td id="res-variable" class="az-calc-td-right">-Rs 0</td>
                         </tr>
-                        <tr style="color: #d93025;">
-                            <td style="padding-left: 1.5rem;">(-) Employer PF <span
-                                    style="font-size: 11px; opacity: 0.7;">(12% of Basic, Locked)</span></td>
-                            <td id="res-emplyr-pf" style="text-align: right;">-Rs 0</td>
+                        <tr class="az-calc-row--ghost">
+                            <td>(-) Employer PF <span
+                                    class="az-calc-inline-note">(12% of Basic, Locked)</span></td>
+                            <td id="res-emplyr-pf" class="az-calc-td-right">-Rs 0</td>
                         </tr>
-                        <tr style="color: #d93025;">
-                            <td style="padding-left: 1.5rem;">(-) Gratuity <span
-                                    style="font-size: 11px; opacity: 0.7;">(4.8% of Basic, Locked 5yrs)</span></td>
-                            <td id="res-gratuity" style="text-align: right;">-Rs 0</td>
+                        <tr class="az-calc-row--ghost">
+                            <td>(-) Gratuity <span
+                                    class="az-calc-inline-note">(4.8% of Basic, Locked 5yrs)</span></td>
+                            <td id="res-gratuity" class="az-calc-td-right">-Rs 0</td>
                         </tr>
 
                         <!-- Gross -->
-                        <tr style="border-top: 1px dashed #ccc; background: #fafafa;">
-                            <td style="font-weight: 600;">= Actual Gross Salary</td>
-                            <td id="res-gross" style="text-align: right; font-weight: 600;">Rs 0</td>
+                        <tr class="az-calc-row--subtotal">
+                            <td>= Actual Gross Salary</td>
+                            <td id="res-gross" class="az-calc-td-right">Rs 0</td>
                         </tr>
 
                         <!-- Deductions -->
-                        <tr style="color: #e67c00;">
-                            <td style="padding-left: 1.5rem;">(-) Employee PF <span
-                                    style="font-size: 11px; opacity: 0.7;">(Your contribution)</span></td>
-                            <td id="res-emplye-pf" style="text-align: right;">-Rs 0</td>
+                        <tr class="az-calc-row--deduct">
+                            <td>(-) Employee PF <span
+                                    class="az-calc-inline-note">(Your contribution)</span></td>
+                            <td id="res-emplye-pf" class="az-calc-td-right">-Rs 0</td>
                         </tr>
-                        <tr style="color: #e67c00;">
-                            <td style="padding-left: 1.5rem;">(-) Professional Tax</td>
-                            <td id="res-pt" style="text-align: right;">-Rs 2,400</td>
+                        <tr class="az-calc-row--deduct">
+                            <td>(-) Professional Tax</td>
+                            <td id="res-pt" class="az-calc-td-right">-Rs 2,400</td>
                         </tr>
-                        <tr style="color: #e67c00;">
-                            <td style="padding-left: 1.5rem;">(-) Income Tax <span id="tax-regime-label"
-                                    style="font-size: 10px; background: #eee; padding: 2px 4px; border-radius: 4px;">NEW
+                        <tr class="az-calc-row--deduct">
+                            <td>(-) Income Tax <span id="tax-regime-label"
+                                    class="az-calc-regime-badge">NEW
                                     REGIME</span></td>
-                            <td id="res-tax" style="text-align: right;">-Rs 0</td>
+                            <td id="res-tax" class="az-calc-td-right">-Rs 0</td>
                         </tr>
 
                         <!-- Final -->
-                        <tr style="background: var(--c-black); font-size: 16px;">
-                            <td style="font-weight: 700; padding: 1.5rem; color: #ffffff !important;">= Net Annual
+                        <tr class="az-calc-row--final">
+                            <td>= Net Annual
                                 In-Hand
                             </td>
-                            <td id="res-annual-inhand"
-                                style="text-align: right; font-weight: 700; padding: 1.5rem; color: #ffffff !important;">
+                            <td id="res-annual-inhand" class="az-calc-td-right">
                                 Rs 0
                             </td>
                         </tr>
@@ -213,7 +223,7 @@
                 </table>
             </div>
 
-            <p style="font-size: 12px; color: #999; margin-top: 1rem; text-align: center;">
+            <p class="az-calc-note">
                 * This assumes 'Basic Salary' is 40% of Fixed Pay (common structure).
                 Variable pay is excluded from monthly flow as it's discretionary/annual.
             </p>
@@ -222,16 +232,15 @@
     </div>
 
     <!-- CTA -->
-    <div style="text-align: center; margin-top: var(--space-xl);">
-        <p style="font-size: 14px; color: var(--c-grey-mid);">
+    <div class="az-calc-cta">
+        <p>
             Shocked? That's the point.
         </p>
-        <a href="{% url 'salary_reality' %}"
-            style="display: inline-block; margin-top: 1rem; padding: 12px 24px; background: var(--c-black); color: white; text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">
+        <a href="{% url 'salary_reality' %}" class="az-calc-cta-btn">
             Compare with Market Standards &rarr;
         </a>
     </div>
-    <div style="max-width: 800px; margin: var(--space-xl) auto 0;">
+    <div class="az-calc-bottom">
         <div class="key-takeaway" style="margin-bottom: var(--space-md);">
             <h4>What This Calculator Covers</h4>
             <p>
@@ -243,7 +252,7 @@
         <details class="collapsible" open>
             <summary>Assumptions and Limits</summary>
             <div class="content">
-                <ul style="padding-left: 20px; margin: 0;">
+                <ul>
                     <li>Basic salary assumed as 40 percent of fixed pay.</li>
                     <li>Employer PF capped at the standard monthly ceiling when basic exceeds 15k.</li>
                     <li>Only PF is considered for 80C; other deductions are not included.</li>
@@ -255,7 +264,7 @@
         <details class="collapsible">
             <summary>Common Scenarios</summary>
             <div class="content">
-                <ul style="padding-left: 20px; margin: 0;">
+                <ul>
                     <li>Service companies often have higher variable pay and lower fixed take-home.</li>
                     <li>Startups may show higher fixed pay but smaller employer PF contributions.</li>
                     <li>Metro HRA benefits apply only when rent is paid and declared.</li>
@@ -275,7 +284,7 @@
         <details class="collapsible">
             <summary>Edge Cases We Do Not Model Yet</summary>
             <div class="content">
-                <ul style="padding-left: 20px; margin: 0;">
+                <ul>
                     <li>NPS employer contribution and other retirement benefits.</li>
                     <li>Special allowances tied to location or shift timing.</li>
                     <li>ESOPs, stock grants, and retention bonuses.</li>
@@ -284,7 +293,7 @@
             </div>
         </details>
 
-        <p style="font-size: 12px; color: var(--c-grey-light); text-align: center; margin-top: 1.5rem;">
+        <p class="az-calc-footer-note">
             Last updated: {% now "F Y" %}
         </p>
     </div>
@@ -401,31 +410,34 @@
     }
 
     function calcNewRegimeTax(income) {
-        // FY 2025-26 Slabs
-        if (income <= 300000) return 0;
+        // FY 2025-26 Slabs (Union Budget 2025)
+        if (income <= 400000) return 0;
         /*
-        0-3L: Nil
-        3-7L: 5%
-        7-10L: 10%
-        10-12L: 15%
-        12-15L: 20%
-        >15L: 30%
+        0-4L: Nil
+        4-8L: 5%
+        8-12L: 10%
+        12-16L: 15%
+        16-20L: 20%
+        20-24L: 25%
+        >24L: 30%
         */
         let tax = 0;
-        if (income <= 700000) {
-            tax = (income - 300000) * 0.05;
-        } else if (income <= 1000000) {
-            tax = 20000 + (income - 700000) * 0.10;
+        if (income <= 800000) {
+            tax = (income - 400000) * 0.05;
         } else if (income <= 1200000) {
-            tax = 50000 + (income - 1000000) * 0.15;
-        } else if (income <= 1500000) {
-            tax = 80000 + (income - 1200000) * 0.20;
+            tax = 20000 + (income - 800000) * 0.10;
+        } else if (income <= 1600000) {
+            tax = 60000 + (income - 1200000) * 0.15;
+        } else if (income <= 2000000) {
+            tax = 120000 + (income - 1600000) * 0.20;
+        } else if (income <= 2400000) {
+            tax = 200000 + (income - 2000000) * 0.25;
         } else {
-            tax = 140000 + (income - 1500000) * 0.30;
+            tax = 300000 + (income - 2400000) * 0.30;
         }
 
-        // Rebate 87A (Income <= 7L -> No tax)
-        if (income <= 700000) tax = 0;
+        // Rebate 87A (Taxable income <= 12L -> No tax under new regime)
+        if (income <= 1200000) tax = 0;
 
         return tax * 1.04; // Cess
     }

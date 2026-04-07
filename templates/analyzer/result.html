@@ -3,130 +3,20 @@
 {% block title %}Risk Result: {{ result.label }} - Career Reality{% endblock %}
 {% block meta_description %}Your resignation risk level with context and next steps based on common Indian employment patterns.{% endblock %}
 
+{% block extra_head %}
+{% if razorpay_key_id %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
-<style>
-    .result-container {
-        max-width: 600px;
-        margin: 60px auto;
-        padding: 20px;
-    }
 
-    .risk-banner {
-        padding: 2rem;
-        border-radius: 12px;
-        text-align: center;
-        margin-bottom: 2rem;
-        color: #fff;
-    }
+<div class="az-result-container">
 
-    .risk-label {
-        font-size: 1rem;
-        opacity: 0.9;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .risk-h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin: 0.5rem 0;
-    }
-
-    .risk-summary {
-        font-size: 1.1rem;
-        opacity: 0.95;
-        line-height: 1.5;
-        max-width: 480px;
-        margin: 0 auto;
-    }
-
-    /* Dynamic Colors */
-    .bg-red {
-        background: #e53e3e;
-    }
-
-    .bg-yellow {
-        background: #d69e2e;
-        color: #000;
-    }
-
-    .bg-green {
-        background: #38a169;
-    }
-
-    .section-box {
-        background: #fff;
-        border: 1px solid #eee;
-        border-radius: 12px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .box-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    ul.risk-list {
-        padding-left: 1.2rem;
-    }
-
-    ul.risk-list li {
-        margin-bottom: 0.75rem;
-        line-height: 1.6;
-    }
-
-    .trust-block {
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        color: #666;
-        border-left: 4px solid #333;
-    }
-
-    .action-btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-        background: #000;
-        color: #fff;
-        padding: 1rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        margin-top: 1rem;
-    }
-
-    /* Expansion Styles */
-    .expansion-details {
-        font-size: 0.95rem;
-        color: #444;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 6px;
-        padding: 8px 12px;
-    }
-
-    .expansion-summary {
-        cursor: pointer;
-        font-weight: 600;
-        color: #222;
-        outline: none;
-    }
-
-    .expansion-content {
-        margin-top: 8px;
-        line-height: 1.5;
-        padding-top: 5px;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-</style>
-
-<div class="result-container">
+    <div class="trust-strip">
+        Methodology last updated: <strong>{{ methodology_last_updated }}</strong>. See
+        <a href="{% url 'career_reality_index' %}">how scoring and signals are reviewed</a>.
+    </div>
 
     <!-- 1. RISK RESULT -->
     <div class="risk-banner bg-{{ result.color }}">
@@ -138,7 +28,7 @@
 
         <!-- Layer 2: Optional Contextual Expansion -->
         {% if result.expansion_text %}
-        <div style="margin-top: 1.5rem; text-align: left;">
+        <div>
             <details class="expansion-details">
                 <summary class="expansion-summary">Why situations like this often escalate</summary>
                 <div class="expansion-content">
@@ -147,6 +37,75 @@
             </details>
         </div>
         {% endif %}
+    </div>
+
+    <!-- AI-Personalized Narrative (GPT-4o-mini) -->
+    {% if llm_narrative %}
+    <div class="az-narrative">
+        <p class="az-narrative-label">AI Advisory — Your Exact Situation</p>
+        <p class="az-narrative-text">{{ llm_narrative }}</p>
+    </div>
+    {% endif %}
+
+    <div class="decision-panel">
+        <h2>Recommended Next Action</h2>
+        <p>{{ primary_action }}</p>
+    </div>
+
+    <div class="share-card" id="share-card">
+        <p class="share-title">My Career Risk is {{ result.label }}</p>
+        <p class="share-meta">{{ role_label }} &middot; {{ company_label }} &middot; {{ notice_label }} notice</p>
+        <div class="share-actions">
+            <button class="share-btn" id="share-result-btn" type="button">Share Result</button>
+            <button class="share-btn" id="copy-result-btn" type="button">Copy Summary</button>
+        </div>
+    </div>
+
+    <div class="paywall-card" id="premium-plan-card">
+        <h2 class="box-title">Your Personalized 7-Day Exit Checklist</h2>
+        <p class="plan-desc">
+            Specific to your company type, notice period, and situation — not a generic template.
+            Includes full-and-final calculation sheet, PIP response scripts, and communication templates.
+        </p>
+
+        {% if razorpay_key_id %}
+        <!-- Real Razorpay Checkout -->
+        <div id="checkout-section">
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+                <span class="az-price">₹99</span>
+                <span class="az-price-old">₹499</span>
+                <span class="az-price-badge">Limited Launch Price</span>
+            </div>
+            <input type="email" id="checkout-email" placeholder="your@email.com" class="az-email-input">
+            <button id="pay-checklist-btn" class="az-pay-btn">Get Exit Checklist — ₹99 →</button>
+            <p id="pay-loading" class="az-pay-loading">Opening checkout…</p>
+        </div>
+
+        <div id="payment-success" class="az-payment-success">
+            <strong>✓ Payment confirmed!</strong>
+            <p>Your checklist is on its way to your inbox (check spam if not there in 5 minutes).</p>
+        </div>
+
+        {% else %}
+        <!-- Razorpay not configured — teaser -->
+        <div class="paywall-lock">
+            <p class="az-privacy-text">
+                7-day exit checklist — ₹99. Coming soon.
+            </p>
+            <a href="{% url 'pricing' %}" class="upgrade-btn">See All Plans →</a>
+        </div>
+        {% endif %}
+
+        <p class="az-form-note">
+            Secure payment via Razorpay. Instant email delivery. 24-hour refund if not satisfied.
+        </p>
+    </div>
+
+    <div class="interview-card">
+        <h2 class="box-title">Help Improve The Analyzer</h2>
+        <p class="plan-desc">Join a 10-minute interview and share your replay/session ID so we can identify drop-offs before result pages.</p>
+        <p class="salary-meta">Session ID: <strong id="session-id-text">loading...</strong></p>
+        <a href="{% url 'contact' %}" class="upgrade-btn">Join User Interview</a>
     </div>
 
     <!-- 2. WHAT CAN GO WRONG -->
@@ -162,29 +121,21 @@
     {% endif %}
 
     <!-- 3. NEXT 7 DAYS -->
-    <div class="section-box" style="border-left: 4px solid #000;">
+    <div class="section-box" style="border-left:4px solid #000;">
         <h2 class="box-title">What matters in the next 7 days</h2>
         <p>{{ result.next_steps_intro }}</p>
-        <ul class="risk-list" style="margin-top: 1rem;">
+        <ul class="risk-list">
             <li><strong>Documentation is leverage.</strong> Keep personal copies of all communication.</li>
             <li><strong>Silence is a tactic.</strong> If HR goes silent, do not assume they are approving.</li>
             <li><strong>Notice periods are contracts, not feelings.</strong> Re-read your appointment letter today.</li>
         </ul>
     </div>
 
-    <!-- 4. MONETIZATION / PDF REPORT -->
-    <div
-        style="margin-top: 2rem; margin-bottom: 2rem; padding: 1.5rem; border: 2px dashed #ccc; border-radius: 12px; text-align: center; background: #fafafa;">
-        <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; font-weight: 700;">Need a detailed breakdown?</h3>
-        <p style="font-size: 0.95rem; color: #666; margin-bottom: 1rem;">
-            Get a 5-page PDF report with scenario-specific escalation scripts and detailed legal context.
-        </p>
-        <button
-            style="background: #ccc; color: #666; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: not-allowed;"
-            title="Coming Soon">
-            Download Detailed Risk Report (Rs 199)
-        </button>
-        <div style="font-size: 0.75rem; color: #999; margin-top: 0.5rem;">Processing currently paused.</div>
+    <!-- ADDITIONAL RESOURCES -->
+    <div class="az-resources">
+        <h3>What to do next</h3>
+        <p>Review your employment contract, gather documentation, and make informed decisions.</p>
+        <a href="{% url 'salary_reality' %}" class="az-resources-btn">Check Salary Reality &rarr;</a>
     </div>
 
     <!-- 5. DISCLAIMER -->
@@ -193,19 +144,181 @@
         {{ result.disclaimer|linebreaksbr }}
     </div>
 
-    <div style="margin-top: 3rem; text-align: center;">
-        <p style="margin-bottom: 1rem;">Based on patterns from <a href="/"
-                style="color: #000; text-decoration: underline;">Career Reality</a>.</p>
-        <a href="{% url 'wizard_start' %}" style="color: #999; font-size: 0.9rem;">Start New Assessment</a>
+    <div class="az-result-footer">
+        <p>Based on patterns from <a href="/">Career Reality</a>.</p>
+        <a href="{% url 'wizard_start' %}">Start New Assessment</a>
     </div>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var resultLabel = "{{ result.label|escapejs }}";
+        var roleLabel = "{{ role_label|escapejs }}";
+        var companyLabel = "{{ company_label|escapejs }}";
+        var noticeLabel = "{{ notice_label|escapejs }}";
+
+        if (window.crTrack) {
+            window.crTrack('analysis_rendered', {
+                funnel: 'resignation_risk',
+                result_label: resultLabel,
+                role: roleLabel
+            });
+            window.crTrack('paywall_view', {
+                funnel: 'resignation_risk',
+                section: 'exit_checklist'
+            });
+        }
+
+        var shareText = 'Career Reality: My risk level is ' + resultLabel + '. Role: ' + roleLabel + ', Company: ' + companyLabel + ', Notice: ' + noticeLabel + '.';
+        var sessionId = (window.crGetSessionId && window.crGetSessionId()) || 'unavailable';
+        var shareBtn = document.getElementById('share-result-btn');
+        var copyBtn = document.getElementById('copy-result-btn');
+        var sessionIdText = document.getElementById('session-id-text');
+
+        if (sessionIdText) {
+            sessionIdText.textContent = sessionId;
+        }
+
+        if (shareBtn) {
+            shareBtn.addEventListener('click', function () {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Career Reality Risk Result',
+                        text: shareText,
+                        url: window.location.href
+                    }).catch(function () { });
+                } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareText).catch(function () { });
+                }
+            });
+        }
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function () {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareText).then(function () {
+                        copyBtn.textContent = 'Copied';
+                        setTimeout(function () { copyBtn.textContent = 'Copy Summary'; }, 1200);
+                    }).catch(function () { });
+                }
+            });
+        }
+
+        // --- Razorpay Exit Checklist Checkout ---
+        {% if razorpay_key_id %}
+        var payBtn = document.getElementById('pay-checklist-btn');
+        var payLoading = document.getElementById('pay-loading');
+        var paySuccess = document.getElementById('payment-success');
+        var checkoutSection = document.getElementById('checkout-section');
+        var emailInput = document.getElementById('checkout-email');
+
+        if (payBtn) {
+            payBtn.addEventListener('click', function () {
+                var email = emailInput ? emailInput.value.trim() : '';
+                if (!email || !email.includes('@')) {
+                    emailInput.style.borderColor = '#ef4444';
+                    emailInput.focus();
+                    return;
+                }
+                emailInput.style.borderColor = '#d1d5db';
+
+                payBtn.disabled = true;
+                if (payLoading) payLoading.style.display = 'block';
+
+                if (window.crTrack) {
+                    window.crTrack('upgrade_click', { funnel: 'resignation_risk', placement: 'exit_checklist' });
+                }
+
+                fetch('/payments/create-order/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': (function () {
+                            var c = '; ' + document.cookie;
+                            var p = c.split('; csrftoken=');
+                            return p.length === 2 ? p.pop().split(';').shift() : '';
+                        })()
+                    },
+                    body: JSON.stringify({
+                        product_slug: 'exit-checklist',
+                        session_id: sessionId,
+                        email: email
+                    })
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data.ok) {
+                        alert('Could not start checkout. Please try again.');
+                        payBtn.disabled = false;
+                        if (payLoading) payLoading.style.display = 'none';
+                        return;
+                    }
+
+                    var options = {
+                        key: '{{ razorpay_key_id|escapejs }}',
+                        amount: data.amount,
+                        currency: 'INR',
+                        name: 'Career Reality',
+                        description: 'Personalized 7-Day Exit Checklist',
+                        order_id: data.razorpay_order_id,
+                        prefill: { email: email },
+                        theme: { color: '#000000' },
+                        handler: function (response) {
+                            fetch('/payments/verify/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': (function () {
+                                        var c = '; ' + document.cookie;
+                                        var p = c.split('; csrftoken=');
+                                        return p.length === 2 ? p.pop().split(';').shift() : '';
+                                    })()
+                                },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    email: email
+                                })
+                            })
+                            .then(function (r) { return r.json(); })
+                            .then(function (v) {
+                                if (v.ok) {
+                                    if (checkoutSection) checkoutSection.style.display = 'none';
+                                    if (paySuccess) paySuccess.style.display = 'block';
+                                    if (window.crTrack) {
+                                        window.crTrack('upgrade_success', { funnel: 'resignation_risk', mode: 'razorpay' });
+                                    }
+                                } else {
+                                    alert('Payment received. Email hello@careerreality.in with payment ID: ' + response.razorpay_payment_id);
+                                    payBtn.disabled = false;
+                                    if (payLoading) payLoading.style.display = 'none';
+                                }
+                            });
+                        },
+                        modal: {
+                            ondismiss: function () {
+                                payBtn.disabled = false;
+                                if (payLoading) payLoading.style.display = 'none';
+                            }
+                        }
+                    };
+
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+                })
+                .catch(function () {
+                    alert('Network error. Please try again.');
+                    payBtn.disabled = false;
+                    if (payLoading) payLoading.style.display = 'none';
+                });
+            });
+        }
+        {% endif %}
+    });
+</script>
 {% endblock %}
-
-
-
-
-
 
 
 

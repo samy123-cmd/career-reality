@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pro Dashboard — Career Reality India{% endblock %}
+{% block meta_description %}Your career intelligence dashboard—salary benchmarks, layoff radar, and risk tools.{% endblock %}
+
+{% block content %}
+<div class="dash-header">
+  <h1>Welcome back{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}.</h1>
+  <p>{{ request.user.email }}</p>
+  {% if profile.is_pro %}
+    {% if days_until_expiry is not None %}
+      <span class="expiry-badge {% if days_until_expiry <= 7 %}expiring{% endif %}">
+        Pro — {{ days_until_expiry }} days remaining
+      </span>
+    {% else %}
+      <span class="expiry-badge">Pro — Active</span>
+    {% endif %}
+  {% endif %}
+</div>
+
+<div class="dash-grid">
+
+  <!-- Quick Actions -->
+  <div class="dash-card dash-card--full">
+    <p class="dash-card-title">Quick Actions</p>
+    <div class="quick-links">
+      <a href="{% url 'wizard_start' %}" class="quick-link primary">Run Risk Analyzer →</a>
+      <a href="{% url 'salary_calculator' %}" class="quick-link">CTC Decoder</a>
+      <a href="{% url 'submit_salary' %}" class="quick-link">Submit Salary Data</a>
+      <a href="{% url 'layoff_radar' %}" class="quick-link">Layoff Radar</a>
+      <a href="{% url 'layoff_radar' %}" class="quick-link">Report Company Status</a>
+    </div>
+  </div>
+
+  <!-- Salary Benchmarks -->
+  <div class="dash-card">
+    <p class="dash-card-title">Salary Benchmarks (Community Data)</p>
+    {% if role_benchmarks %}
+      {% for b in role_benchmarks %}
+        <div class="benchmark-row">
+          <div>
+            <div class="benchmark-role">{{ b.role }}</div>
+            <div class="benchmark-n">n={{ b.sample_size }}</div>
+          </div>
+          <div class="benchmark-range">
+            ₹{{ b.p25|floatformat:"-0" }} – ₹{{ b.p75|floatformat:"-0" }}<br>
+            <small class="salary-meta">median ₹{{ b.median_ctc|floatformat:"-0" }}</small>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="dash-empty-msg">No benchmark data yet. Be the first to
+        <a href="{% url 'submit_salary' %}">submit your salary</a>.</p>
+    {% endif %}
+  </div>
+
+  <!-- Recent Community Salary Submissions -->
+  <div class="dash-card">
+    <p class="dash-card-title">Recent Salary Data Points</p>
+    {% if recent_salaries %}
+      {% for s in recent_salaries %}
+        <div class="salary-item">
+          <strong>{{ s.role }}</strong> — ₹{{ s.ctc|floatformat:"-0" }}
+          <div class="salary-meta">
+            {{ s.experience_years }}y exp &middot; {{ s.get_company_type_display }} &middot; {{ s.city }}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="dash-empty-msg">No submissions yet. Help build the database —
+        <a href="{% url 'submit_salary' %}">submit yours anonymously</a>.</p>
+    {% endif %}
+  </div>
+
+  <!-- Account Info -->
+  <div class="dash-card">
+    <p class="dash-card-title">Account</p>
+    <p class="dash-account-info">
+      <strong>Plan:</strong> {{ profile.get_tier_display }}<br>
+      <strong>Assessments run:</strong> {{ profile.assessments_count }}<br>
+      <strong>Salary submissions:</strong> {{ profile.salary_submissions_count }}
+    </p>
+    {% if not profile.is_pro %}
+      <a href="{% url 'payments:pricing' %}" class="quick-link primary">Upgrade to Pro →</a>
+    {% else %}
+      <a href="{% url 'payments:pricing' %}" class="quick-link quick-link--muted">
+        Manage Subscription
+      </a>
+    {% endif %}
+    <div class="dash-signout">
+      <a href="{% url 'account_logout' %}" class="dash-signout-link">Sign out</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

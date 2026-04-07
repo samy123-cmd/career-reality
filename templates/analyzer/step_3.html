@@ -26,4 +26,19 @@
 
     <button type="submit" class="btn-analyzer">See Analysis</button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('form');
+        if (!form || !window.crTrack) {
+            return;
+        }
+        form.addEventListener('submit', function () {
+            window.crTrack('analyze_submit', {
+                funnel: 'resignation_risk',
+                page: 'analyzer_step_3'
+            });
+        });
+    });
+</script>
 {% endblock %}

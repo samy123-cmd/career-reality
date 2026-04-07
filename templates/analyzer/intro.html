@@ -6,199 +6,44 @@
 manager pressure to predict exit outcomes.{% endblock %}
 
 {% block content %}
-<style>
-  .intro-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding-top: 2rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
 
-  .intro-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+<div class="az-intro-container">
 
-  .intro-title {
-    font-size: 2rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    color: #111;
-    letter-spacing: -0.5px;
-  }
-
-  .intro-subtitle {
-    font-size: 1.1rem;
-    color: #666;
-    font-weight: 400;
-  }
-
-  .intro-card {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid #f0f0f0;
-    margin-bottom: 2rem;
-  }
-
-  .section-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #222;
-    margin-bottom: 0.75rem;
-    margin-top: 0;
-  }
-
-  .info-text {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-  }
-
-  .feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem 0;
-  }
-
-  .feature-list li {
-    position: relative;
-    padding-left: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: #444;
-    font-size: 0.95rem;
-  }
-
-  .feature-list li::before {
-    content: "\\2022";
-    color: #000;
-    font-weight: bold;
-    position: absolute;
-    left: 0.5rem;
-  }
-
-  .privacy-box {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: #4b5563;
-    margin-bottom: 1.5rem;
-    border-left: 3px solid #000;
-  }
-
-  .btn-intro {
-    display: block;
-    width: 100%;
-    background: #000;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .btn-intro:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    background: #222;
-  }
-
-  .faq-section {
-    margin-top: 2rem;
-  }
-
-  .faq-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #888;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    letter-spacing: 0.5px;
-  }
-
-  details {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    overflow: hidden;
-  }
-
-  summary {
-    padding: 1rem;
-    cursor: pointer;
-    font-weight: 500;
-    color: #333;
-    font-size: 0.95rem;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  summary::marker {
-    display: none;
-  }
-
-  details[open] summary {
-    border-bottom: 1px solid #eee;
-    background: #fcfcfc;
-  }
-
-  details p {
-    padding: 1rem;
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-</style>
-
-<div class="intro-container">
-
-  <header class="intro-header">
-    <h1 class="intro-title">Resignation Risk Analyzer</h1>
-    <p class="intro-subtitle">Neutral, privacy-first guidance for Indian professionals.</p>
+  <header class="az-intro-header">
+    <h1 class="az-intro-title">Resignation Risk Analyzer</h1>
+    <p class="az-intro-subtitle">Neutral, privacy-first guidance for Indian professionals.</p>
   </header>
 
-  <div class="intro-card">
-    <h2 class="section-title">Who This Is For</h2>
-    <p class="info-text">
+  <div class="az-intro-card">
+    <div class="az-methodology-strip">
+      Methodology and scoring assumptions reviewed: <strong>{{ methodology_last_updated }}</strong>. Read the
+      <a href="{% url 'career_reality_index' %}">methodology notes</a>.
+    </div>
+
+    <h2 class="az-section-title">Who This Is For</h2>
+    <p class="az-info-text">
       This tool is designed for private-sector employees in India (IT, Product, Services) facing uncertainty during
       their resignation.
       Whether you are dealing with unreasonable managers, confusing bond policies, or silent HR departments, this
       calculator helps you gauge where you stand.
     </p>
 
-    <h2 class="section-title">What It Does</h2>
-    <ul class="feature-list">
+    <h2 class="az-section-title">What It Does</h2>
+    <ul class="az-feature-list">
       <li>Assess risk based on notice period, bond status, and company culture.</li>
       <li>Predict potential escalation tactics used by Indian employers.</li>
       <li>Clarify your position for the next 7 days.</li>
     </ul>
 
-    <div class="privacy-box" style="border-color: #d93025; background: #fffcfc;">
-      <h3
-        style="margin-top: 0; margin-bottom: 8px; font-size: 0.95rem; color: #d93025; display: flex; align-items: center; gap: 6px;">
+    <div class="az-privacy-box">
+      <h3 class="az-privacy-heading">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
         Zero User Data Guarantee
       </h3>
-      <p style="margin: 0; line-height: 1.5; font-size: 0.85rem;">
+      <p class="az-privacy-text">
         Your inputs are analyzed programmatically. We <strong>do not store</strong> your raw inputs, and your scenario
         is <strong>NEVER used to train public LLM models</strong>. All session data is destroyed upon completion. No
         email or login required.
@@ -207,15 +52,40 @@ manager pressure to predict exit outcomes.{% endblock %}
 
     <form action="{% url 'wizard_start' %}" method="post">
       {% csrf_token %}
-      <button type="submit" class="btn-intro">
+      <button type="submit" class="az-btn-start">
         Start Risk Assessment &rarr;
       </button>
     </form>
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.crTrack) {
+        window.crTrack('landing_view', {
+          funnel: 'resignation_risk',
+          page: 'analyzer_intro'
+        });
+
+        var key = 'cr_intro_last_visit_at';
+        var now = Date.now();
+        var lastVisit = parseInt(localStorage.getItem(key) || '0', 10);
+        if (lastVisit > 0) {
+          var sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+          if ((now - lastVisit) >= sevenDaysMs) {
+            window.crTrack('return_visit_d7', {
+              funnel: 'resignation_risk',
+              days_since_last_visit: Math.floor((now - lastVisit) / (24 * 60 * 60 * 1000))
+            });
+          }
+        }
+        localStorage.setItem(key, String(now));
+      }
+    });
+  </script>
+
   <!-- FAQ Semantic Schema for SEO -->
-  <div class="faq-section">
-    <h3 class="faq-title">Frequently Asked Questions</h3>
+  <div class="az-faq-section">
+    <h3 class="az-faq-title">Frequently Asked Questions</h3>
 
     <details>
       <summary>Is this legal advice?</summary>

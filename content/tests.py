@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.core.management import call_command
+from django.core.management.base import CommandError
 
 from .models import Article, Author, Category
 
@@ -64,3 +66,83 @@ class ContentModelAndViewTests(TestCase):
         articles = list(response.context["articles"])
         self.assertEqual(len(articles), 1)
         self.assertEqual(articles[0].slug, "published-one")
+
+
+class QualityAuditCommandTests(TestCase):
+    def setUp(self):
+        self.author = Author.objects.create(
+            name="Trustworthy Author",
+            display_name="Trustworthy Author",
+            bio=("Evidence-based career analysis " * 30).strip(),
+            linkedin_url="https://www.linkedin.com/in/trustworthy-author/",
+            experience_summary="10+ years in tech hiring research and compensation benchmarking.",
+            is_active=True,
+        )
+        self.category = Category.objects.create(
+            name="Engineering",
+            slug="engineering",
+            description="Engineering roles",
+            order=1,
+        )
+
+    def _create_quality_article(self, slug="well-formed-article"):
+        repeated = "This section explains practical role trade-offs with evidence. " * 40
+        two_internal_links = (
+            "<a href='/about/'>About</a> "
+            "<a href='https://www.careerreality.in/editorial/'>Editorial</a>"
+        )
+        return Article.objects.create(
+            title="Well-Formed Article",
+            slug=slug,
+            author=self.author,
+            category=self.category,
+            status="published",
+            target_persona="Mid-career software engineer",
+            who_should_avoid=repeated + two_internal_links,
+            common_expectation=repeated,
+            actual_reality=repeated,
+            salary_reality=repeated,
+            stuck_point=repeated,
+            verdict=repeated,
+            meta_title="Well-Formed Article Meta",
+            meta_description=("Reliable career analysis with evidence and methodology transparency. " * 3)[:160],
+            published_at=timezone.now(),
+            last_reality_check=timezone.localdate(),
+        )
+
+    def test_quality_audit_strict_passes_with_no_findings(self):
+        self._create_quality_article()
+
+        call_command("quality_audit", "--strict")
+
+    def test_quality_audit_strict_fails_when_threshold_exceeded(self):
+        self._create_quality_article()
+        weak_author = Author.objects.create(
+            name="Weak Author",
+            display_name="Weak Author",
+            bio="Short bio",
+            linkedin_url="",
+            experience_summary="",
+            is_active=True,
+        )
+        Article.objects.create(
+            title="Low Quality Article",
+            slug="low-quality-article",
+            author=weak_author,
+            category=self.category,
+            status="published",
+            target_persona="Entry-level engineer",
+            who_should_avoid="avoid",
+            common_expectation="expectation",
+            actual_reality="reality",
+            salary_reality="salary",
+            stuck_point="stuck",
+            verdict="verdict",
+            meta_title="Low Quality Article Meta",
+            meta_description="too short",
+            published_at=timezone.now(),
+            last_reality_check=timezone.localdate(),
+        )
+
+        with self.assertRaises(CommandError):
+            call_command("quality_audit", "--strict")

@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career Reality Pro — India's Most Honest Career Intelligence{% endblock %}
+{% block meta_description %}Get access to the India salary database, layoff alerts, and personalized career tools. Built for working professionals who need real data, not hype.{% endblock %}
+
+{% block content %}
+<section class="pricing-hero">
+  <h1>Real Data. Real Decisions.</h1>
+  <p>India's only career platform built on crowdsourced, verified salary and layoff data. Not LinkedIn. Not Glassdoor. Real.</p>
+</section>
+
+<ul class="proof-items social-proof">
+  <li class="proof-item">847+<small>salary data points</small></li>
+  <li class="proof-item">120+<small>layoff reports</small></li>
+  <li class="proof-item">12K+<small>risk assessments run</small></li>
+  <li class="proof-item">&lt;2 min<small>to assess your risk</small></li>
+</ul>
+
+<div class="pricing-grid">
+
+  <!-- Free Tier -->
+  <div class="plan-card">
+    <p class="plan-name">Free</p>
+    <p class="plan-price">₹0 <span>/always</span></p>
+    <p class="plan-desc">Full access to the core tools. No credit card required.</p>
+    <ul class="plan-features">
+      <li>CTC Decoder calculator</li>
+      <li>Resignation Risk Analyzer</li>
+      <li>Layoff Radar (view only)</li>
+      <li>3 salary data previews/month</li>
+      <li>Weekly newsletter</li>
+    </ul>
+    <a href="{% url 'home' %}" class="btn-plan btn-plan-outline">Start Free</a>
+  </div>
+
+  <!-- Pro Tier -->
+  <div class="plan-card featured">
+    <div class="plan-badge">Most Popular</div>
+    <p class="plan-name">Pro</p>
+    <p class="plan-price">₹299 <span>/month</span></p>
+    <p class="plan-desc">Unlimited salary intelligence. Layoff alerts. AI-personalized result reports.</p>
+    <ul class="plan-features">
+      <li>Everything in Free</li>
+      <li>Full salary database (unlimited)</li>
+      <li>Layoff alerts by company/sector</li>
+      <li>AI-personalized risk narrative</li>
+      <li>Personalized Exit Checklist PDF</li>
+      <li>Role-level salary percentiles</li>
+      <li>Priority support</li>
+    </ul>
+    <button class="btn-plan btn-plan-primary"
+            id="btn-pro"
+            data-product="pro-monthly"
+            {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
+      Get Pro →
+    </button>
+    <p class="loading-msg" id="loading-pro">Opening checkout…</p>
+  </div>
+
+  <!-- One-time Exit Checklist -->
+  <div class="plan-card">
+    <p class="plan-name">Exit Checklist</p>
+    <p class="plan-price">₹99 <span>one-time</span></p>
+    <p class="plan-desc">Personalized 7-day exit plan for your exact situation. Instant delivery.</p>
+    <ul class="plan-features">
+      <li>AI-personalized action plan</li>
+      <li>Full-and-Final calculation sheet</li>
+      <li>PIP response templates</li>
+      <li>Bond clause breakdown</li>
+      <li>Communication scripts</li>
+    </ul>
+    <button class="btn-plan btn-plan-outline"
+            id="btn-checklist"
+            data-product="exit-checklist"
+            {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
+      Buy Now →
+    </button>
+    <p class="loading-msg" id="loading-checklist">Opening checkout…</p>
+  </div>
+
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <h2>Questions</h2>
+
+  <details>
+    <summary>Is this actually different from AmbitionBox or Glassdoor?</summary>
+    <p>Yes. AmbitionBox aggregates self-reported numbers that are often inflated. Our salary data comes from anonymous submissions with context — company type, city, tech stack, and verified by community pattern checks. We show medians, not modes.</p>
+  </details>
+
+  <details>
+    <summary>Can I cancel the Pro subscription anytime?</summary>
+    <p>Yes. Email us at hello@careerreality.in before renewal. There are no lock-ins. Monthly billing, cancel before the 30-day cycle ends.</p>
+  </details>
+
+  <details>
+    <summary>What is the Exit Checklist and how is it delivered?</summary>
+    <p>After completing the Resignation Risk Analyzer, you can purchase a personalized 7-day exit checklist. It includes action items specific to your company type, notice period, and situation. Delivered via email within 5 minutes of payment confirmed.</p>
+  </details>
+
+  <details>
+    <summary>Is my payment secure?</summary>
+    <p>Payments are processed by Razorpay — India's largest payment gateway. We never see or store your card details. Razorpay is PCI-DSS compliant.</p>
+  </details>
+
+  <details>
+    <summary>Do you offer refunds?</summary>
+    <p>Yes for the ₹99 checklist if you contact us within 24 hours and it wasn't opened. Pro subscriptions are refunded if cancelled within 3 days of renewal.</p>
+  </details>
+</div>
+
+{% if razorpay_key_id %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+(function () {
+  var RAZORPAY_KEY_ID = "{{ razorpay_key_id|escapejs }}";
+
+  function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return "";
+  }
+
+  function openCheckout(productSlug, btnId, loadingId) {
+    var btn = document.getElementById(btnId);
+    var loading = document.getElementById(loadingId);
+    if (btn) btn.disabled = true;
+    if (loading) loading.style.display = "block";
+
+    fetch("/payments/create-order/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: JSON.stringify({ product_slug: productSlug }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.ok) {
+          alert("Could not create order. Please try again.");
+          if (btn) btn.disabled = false;
+          if (loading) loading.style.display = "none";
+          return;
+        }
+
+        var emailInput = prompt("Enter your email to receive your purchase:");
+        if (!emailInput) {
+          if (btn) btn.disabled = false;
+          if (loading) loading.style.display = "none";
+          return;
+        }
+
+        var options = {
+          key: RAZORPAY_KEY_ID,
+          amount: data.amount,
+          currency: "INR",
+          name: "Career Reality",
+          description: data.product_description || data.product_name,
+          order_id: data.razorpay_order_id,
+          prefill: { email: emailInput },
+          theme: { color: "#000000" },
+          handler: function (response) {
+            fetch("/payments/verify/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                email: emailInput,
+              }),
+            })
+              .then(function (r) { return r.json(); })
+              .then(function (v) {
+                if (v.ok) {
+                  if (productSlug === "pro-monthly") {
+                    window.location.href = "/pro/dashboard/";
+                  } else {
+                    alert("✓ Payment confirmed! Check your inbox for the checklist.");
+                    if (btn) btn.disabled = false;
+                    if (loading) loading.style.display = "none";
+                  }
+                } else {
+                  alert("Payment received but verification had an issue. Email hello@careerreality.in with your payment ID.");
+                  if (btn) btn.disabled = false;
+                  if (loading) loading.style.display = "none";
+                }
+              });
+          },
+          modal: {
+            ondismiss: function () {
+              if (btn) btn.disabled = false;
+              if (loading) loading.style.display = "none";
+            },
+          },
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+      })
+      .catch(function () {
+        alert("Network error. Please try again.");
+        if (btn) btn.disabled = false;
+        if (loading) loading.style.display = "none";
+      });
+  }
+
+  var btnPro = document.getElementById("btn-pro");
+  if (btnPro) {
+    btnPro.addEventListener("click", function () {
+      openCheckout("pro-monthly", "btn-pro", "loading-pro");
+    });
+  }
+
+  var btnChecklist = document.getElementById("btn-checklist");
+  if (btnChecklist) {
+    btnChecklist.addEventListener("click", function () {
+      openCheckout("exit-checklist", "btn-checklist", "loading-checklist");
+    });
+  }
+})();
+</script>
+{% endif %}
+
+{% endblock %}
