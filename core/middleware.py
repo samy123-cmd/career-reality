@@ -47,6 +47,10 @@ class SecurityHeadersMiddleware:
         if host.endswith(".vercel.app") and vercel_env != "production":
             response["X-Robots-Tag"] = "noindex, nofollow"
 
+        # Block /hi/ duplicate pages — no Hindi translations exist.
+        if request.path.startswith("/hi/"):
+            response["X-Robots-Tag"] = "noindex, nofollow"
+
         response.setdefault("X-Content-Type-Options", "nosniff")
         response.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
         response.setdefault("X-Frame-Options", "DENY")

@@ -117,6 +117,10 @@ def company_detail(request, slug):
         company=company, is_flagged=False
     ).order_by("-created_at")[:5]
 
+    # Thin company pages (no reviews, no salaries) should not be indexed.
+    has_content = review_stats["total"] and review_stats["total"] > 0 or all_salaries
+    meta_robots = "index, follow" if has_content else "noindex, follow"
+
     return render(request, "companies/detail.html", {
         "company": company,
         "salaries": all_salaries[:15],
@@ -126,6 +130,7 @@ def company_detail(request, slug):
         "layoff_reports": layoff_reports,
         "form": form,
         "company_discussions": company_discussions,
+        "meta_robots": meta_robots,
         "og_title": f"{company.name} — Salary, Reviews & Reality Check",
         "og_description": f"Honest salary data, anonymous reviews, and layoff alerts for {company.name}. No login required.",
     })

@@ -74,7 +74,12 @@ class CompanySitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return Company.objects.filter(is_verified=True).order_by("-salary_count", "name")
+        # Only include companies with actual user-generated content (reviews)
+        # or substantial descriptions (>200 chars) to avoid thin pages.
+        return Company.objects.filter(
+            is_verified=True,
+            review_count__gte=1,
+        ).order_by("-salary_count", "name")
 
     def lastmod(self, obj):
         return obj.updated_at

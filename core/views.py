@@ -112,6 +112,8 @@ def robots_txt(request):
     lines = [
         "User-agent: *",
         "Allow: /",
+        # Hindi duplicate pages — no translations exist, identical to English
+        "Disallow: /hi/",
         # Tool steps & results — no SEO value, contains session state
         "Disallow: /resignation-risk/step/",
         "Disallow: /resignation-risk/result/",
@@ -121,9 +123,7 @@ def robots_txt(request):
         # Auth pages — no SEO value
         "Disallow: /accounts/",
         # Payment/checkout — no SEO value
-        "Disallow: /payments/create-order/",
-        "Disallow: /payments/verify/",
-        "Disallow: /payments/webhook/",
+        "Disallow: /payments/",
         # Pro dashboard — gated content
         "Disallow: /pro/dashboard/",
         # Internal cron endpoints

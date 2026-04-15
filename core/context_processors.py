@@ -37,6 +37,12 @@ def seo_defaults(request):
         except Exception:
             categories = []
 
+    # /hi/ pages have no actual Hindi content — mark noindex and
+    # point canonical to the English original so they never dilute SEO.
+    is_hindi_duplicate = path.startswith('/hi/') or path == '/hi'
+    meta_robots = "noindex, nofollow" if is_hindi_duplicate else "index, follow"
+    canonical_url = en_canonical_url  # Always canonical to English
+
     return {
         "article_meta_title": "",
         "article_meta_description": "",
@@ -47,7 +53,7 @@ def seo_defaults(request):
         "twitter_title": "",
         "twitter_description": "",
         "twitter_image": "",
-        "meta_robots": "index, follow",
+        "meta_robots": meta_robots,
         "site_base_url": settings.CANONICAL_BASE_URL,
         "canonical_url": canonical_url,
         "en_canonical_url": en_canonical_url,
