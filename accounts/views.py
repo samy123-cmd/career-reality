@@ -1,7 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from analyzer.models import SalarySubmission
 from accounts.decorators import pro_required
+
+
+@login_required
+def onboarding(request):
+    """Post-signup onboarding page for new free users."""
+    # If the user is already Pro, skip onboarding and go to dashboard
+    if request.user.profile.is_pro:
+        return redirect("pro_dashboard")
+    return render(request, "accounts/onboarding.html")
 
 
 @pro_required

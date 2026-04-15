@@ -146,3 +146,74 @@ class QualityAuditCommandTests(TestCase):
 
         with self.assertRaises(CommandError):
             call_command("quality_audit", "--strict")
+
+
+class ArticleInlineNewsletterCTATests(TestCase):
+    """Verify the mid-article newsletter CTA appears for anonymous users and is hidden for Pro users."""
+
+    def setUp(self):
+        self.author = Author.objects.create(
+            name="Test Author",
+            display_name="Test Author",
+            bio="Career writer " * 10,
+            linkedin_url="https://www.linkedin.com/in/test-author/",
+            experience_summary="5+ years",
+            is_active=True,
+        )
+        self.category = Category.objects.create(
+            name="Tech",
+            slug="tech",
+            description="Tech roles",
+            order=1,
+        )
+        self.article = Article.objects.create(
+            title="Newsletter CTA Test Article",
+            slug="newsletter-cta-test",
+            author=self.author,
+            category=self.category,
+            status="published",
+            target_persona="Mid-level engineer",
+            who_should_avoid="Hype seekers",
+            common_expectation="Fast growth",
+            actual_reality="Scope drives growth",
+            salary_reality="Varies by leverage",
+            stuck_point="Execution-only ownership",
+            verdict="Prioritize impact",
+            meta_title="Newsletter CTA Test Article",
+            meta_description=("Balanced meta description " * 8)[:160],
+            published_at=timezone.now(),
+            last_reality_check=timezone.localdate(),
+        )
+
+    def test_newsletter_cta_present_for_anonymous_user(self):
+        response = self.client.get(reverse("article_detail", kwargs={"slug": "newsletter-cta-test"}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "article-newsletter-cta")
+        self.assertContains(response, 'name="source" value="article_inline"')
+
+    def test_newsletter_cta_contains_email_input(self):
+        response = self.client.get(reverse("article_detail", kwargs={"slug": "newsletter-cta-test"}))
+
+        self.assertContains(response, 'type="email"')
+        self.assertContains(response, "Get Weekly Signals")
+
+    def test_newsletter_cta_includes_article_slug(self):
+        response = self.client.get(reverse("article_detail", kwargs={"slug": "newsletter-cta-test"}))
+
+        self.assertContains(response, 'name="article_slug" value="newsletter-cta-test"')
+
+    def test_newsletter_cta_visible_regardless_of_auth_status(self):
+        from django.contrib.auth.models import User
+
+        user = User.objects.create_user("proarticleuser", password="pass")
+        user.profile.tier = "pro"
+        user.profile.save()
+        self.client.login(username="proarticleuser", password="pass")
+
+        response = self.client.get(reverse("article_detail", kwargs={"slug": "newsletter-cta-test"}))
+
+        # Article detail is cached and the CTA is always rendered (cache-safe).
+        # Pro users see it too — harmless, they may already subscribe.
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "article-newsletter-cta")

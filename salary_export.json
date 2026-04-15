@@ -1,0 +1,1487 @@
+[
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 99,
+  "fields": {
+    "role": "Salesforce Developer",
+    "experience_years": 4.0,
+    "company_type": "service",
+    "ctc": 1300000,
+    "in_hand": null,
+    "city": "Chennai",
+    "tech_stack": "Salesforce, Apex, LWC",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.754Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 98,
+  "fields": {
+    "role": "SAP Consultant",
+    "experience_years": 8.0,
+    "company_type": "service",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "SAP FICO, ABAP",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.751Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 97,
+  "fields": {
+    "role": "QA Automation Engineer",
+    "experience_years": 4.0,
+    "company_type": "unicorn",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Selenium, Python, CI/CD",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.748Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 96,
+  "fields": {
+    "role": "Technical Writer",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 1300000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "API Docs, Markdown",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.745Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 95,
+  "fields": {
+    "role": "Customer Success",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 1200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "CRM, Account Mgmt",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.742Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 94,
+  "fields": {
+    "role": "Finance Analyst",
+    "experience_years": 2.0,
+    "company_type": "service",
+    "ctc": 700000,
+    "in_hand": null,
+    "city": "Chennai",
+    "tech_stack": "Excel, SAP, IFRS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.739Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 93,
+  "fields": {
+    "role": "Finance Analyst",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 1500000,
+    "in_hand": null,
+    "city": "Mumbai",
+    "tech_stack": "FP&A, SQL, Excel",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.736Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 92,
+  "fields": {
+    "role": "HR Business Partner",
+    "experience_years": 6.0,
+    "company_type": "product",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "HRBP, Performance Mgmt",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.733Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 91,
+  "fields": {
+    "role": "Content Strategist",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 900000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SEO, Writing, Analytics",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.730Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 90,
+  "fields": {
+    "role": "Digital Marketing Lead",
+    "experience_years": 4.0,
+    "company_type": "startup",
+    "ctc": 1400000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SEO, SEM, Analytics",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.727Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 89,
+  "fields": {
+    "role": "Scrum Master",
+    "experience_years": 5.0,
+    "company_type": "service",
+    "ctc": 1400000,
+    "in_hand": null,
+    "city": "Pune",
+    "tech_stack": "Agile, Jira, Confluence",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.724Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 88,
+  "fields": {
+    "role": "Solution Architect",
+    "experience_years": 9.0,
+    "company_type": "service",
+    "ctc": 2800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "AWS, Azure, Solutions",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.722Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 87,
+  "fields": {
+    "role": "Technical Program Manager",
+    "experience_years": 7.0,
+    "company_type": "product",
+    "ctc": 4000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Program Mgmt, Jira",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.719Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 86,
+  "fields": {
+    "role": "Business Intelligence",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 1800000,
+    "in_hand": null,
+    "city": "Gurugram",
+    "tech_stack": "SQL, Tableau, Looker",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.717Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 85,
+  "fields": {
+    "role": "Security Engineer",
+    "experience_years": 5.0,
+    "company_type": "unicorn",
+    "ctc": 4500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "AppSec, SAST, Pentesting",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.714Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 84,
+  "fields": {
+    "role": "Platform Engineer",
+    "experience_years": 5.0,
+    "company_type": "product",
+    "ctc": 3200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Terraform, AWS, Python",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.711Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 83,
+  "fields": {
+    "role": "Data Engineer",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 1800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, dbt, Snowflake",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.707Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 82,
+  "fields": {
+    "role": "Data Engineer",
+    "experience_years": 4.0,
+    "company_type": "product",
+    "ctc": 2800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Spark, Airflow, dbt",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.704Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 81,
+  "fields": {
+    "role": "iOS Engineer",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 1500000,
+    "in_hand": null,
+    "city": "Mumbai",
+    "tech_stack": "Swift, Objective-C",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.701Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 80,
+  "fields": {
+    "role": "Android Engineer",
+    "experience_years": 2.5,
+    "company_type": "startup",
+    "ctc": 1300000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Kotlin, XML",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.698Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 79,
+  "fields": {
+    "role": "iOS Engineer",
+    "experience_years": 4.0,
+    "company_type": "product",
+    "ctc": 2600000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Swift, SwiftUI, Xcode",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.695Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 78,
+  "fields": {
+    "role": "Android Engineer",
+    "experience_years": 4.0,
+    "company_type": "product",
+    "ctc": 2600000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Kotlin, Jetpack Compose",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.692Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 77,
+  "fields": {
+    "role": "Cybersecurity Analyst",
+    "experience_years": 3.5,
+    "company_type": "service",
+    "ctc": 1100000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SIEM, SOC, Python",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.690Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 76,
+  "fields": {
+    "role": "Network Engineer",
+    "experience_years": 4.0,
+    "company_type": "service",
+    "ctc": 900000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "CCNA, Cisco, BGP",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.687Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 75,
+  "fields": {
+    "role": "Mainframe Developer",
+    "experience_years": 6.0,
+    "company_type": "service",
+    "ctc": 1400000,
+    "in_hand": null,
+    "city": "Pune",
+    "tech_stack": "COBOL, JCL, VSAM",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.684Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 74,
+  "fields": {
+    "role": "UI Developer",
+    "experience_years": 2.0,
+    "company_type": "service",
+    "ctc": 650000,
+    "in_hand": null,
+    "city": "Chennai",
+    "tech_stack": "Angular, HTML, CSS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.682Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 73,
+  "fields": {
+    "role": "Senior Consultant",
+    "experience_years": 5.5,
+    "company_type": "service",
+    "ctc": 1500000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "ServiceNow, ITSM",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.679Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 72,
+  "fields": {
+    "role": "Consultant",
+    "experience_years": 3.0,
+    "company_type": "service",
+    "ctc": 1000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SAP, ABAP",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.676Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 71,
+  "fields": {
+    "role": "Associate Consultant",
+    "experience_years": 1.5,
+    "company_type": "service",
+    "ctc": 600000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SQL, Excel",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.674Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 70,
+  "fields": {
+    "role": "Backend Engineer",
+    "experience_years": 3.0,
+    "company_type": "unicorn",
+    "ctc": 3200000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "Java, gRPC, Kafka",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.671Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 69,
+  "fields": {
+    "role": "UX Designer",
+    "experience_years": 4.0,
+    "company_type": "unicorn",
+    "ctc": 2800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Figma, Research, Systems",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.668Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 68,
+  "fields": {
+    "role": "Director of Engineering",
+    "experience_years": 12.0,
+    "company_type": "unicorn",
+    "ctc": 15000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Org Scale, Vision",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.666Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 67,
+  "fields": {
+    "role": "Senior PM",
+    "experience_years": 8.0,
+    "company_type": "unicorn",
+    "ctc": 7000000,
+    "in_hand": null,
+    "city": "Gurugram",
+    "tech_stack": "Strategy, Data",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.663Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 66,
+  "fields": {
+    "role": "Product Manager (PM)",
+    "experience_years": 5.0,
+    "company_type": "unicorn",
+    "ctc": 5000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Monetization, Analytics",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.660Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 65,
+  "fields": {
+    "role": "Product Manager (APM)",
+    "experience_years": 2.0,
+    "company_type": "unicorn",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SQL, Analytics",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.658Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 64,
+  "fields": {
+    "role": "ML Scientist",
+    "experience_years": 6.0,
+    "company_type": "unicorn",
+    "ctc": 6000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Deep Learning, Research",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.655Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 63,
+  "fields": {
+    "role": "Data Scientist",
+    "experience_years": 5.0,
+    "company_type": "unicorn",
+    "ctc": 4500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "ML, Python, Hadoop",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.652Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 62,
+  "fields": {
+    "role": "Data Scientist",
+    "experience_years": 3.0,
+    "company_type": "unicorn",
+    "ctc": 3000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, Spark, MLflow",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.650Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 61,
+  "fields": {
+    "role": "Principal Engineer",
+    "experience_years": 11.0,
+    "company_type": "unicorn",
+    "ctc": 10000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Platform, Architecture",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.647Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 60,
+  "fields": {
+    "role": "Senior SDE (SDE-3)",
+    "experience_years": 8.0,
+    "company_type": "unicorn",
+    "ctc": 6500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, ML, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.645Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 59,
+  "fields": {
+    "role": "Senior SDE (SDE-3)",
+    "experience_years": 7.0,
+    "company_type": "unicorn",
+    "ctc": 5500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "System Design, Java",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.642Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 58,
+  "fields": {
+    "role": "Software Engineer (SDE-2)",
+    "experience_years": 5.0,
+    "company_type": "unicorn",
+    "ctc": 4000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Go, Kubernetes, GCP",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.640Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 57,
+  "fields": {
+    "role": "Software Engineer (SDE-2)",
+    "experience_years": 4.0,
+    "company_type": "unicorn",
+    "ctc": 3500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Java, Distributed Systems",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.637Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 56,
+  "fields": {
+    "role": "Software Engineer (SDE-1)",
+    "experience_years": 2.0,
+    "company_type": "unicorn",
+    "ctc": 2500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Java, Spring, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.634Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 55,
+  "fields": {
+    "role": "CTO / Tech Lead",
+    "experience_years": 7.0,
+    "company_type": "startup",
+    "ctc": 3000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Architecture, Hiring",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.632Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 54,
+  "fields": {
+    "role": "Frontend Engineer",
+    "experience_years": 2.5,
+    "company_type": "startup",
+    "ctc": 1200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "React, TypeScript",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.629Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 53,
+  "fields": {
+    "role": "ML Engineer",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 2000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, Hugging Face, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.627Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 52,
+  "fields": {
+    "role": "Growth Manager",
+    "experience_years": 5.0,
+    "company_type": "startup",
+    "ctc": 2500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Attribution, A/B Testing",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.624Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 51,
+  "fields": {
+    "role": "Growth Manager",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 1800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Performance Marketing, SQL",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.621Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 50,
+  "fields": {
+    "role": "Data Analyst",
+    "experience_years": 3.5,
+    "company_type": "startup",
+    "ctc": 1500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SQL, dbt, Metabase",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.619Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 49,
+  "fields": {
+    "role": "Data Analyst",
+    "experience_years": 2.0,
+    "company_type": "startup",
+    "ctc": 1000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SQL, Python, Looker",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.617Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 48,
+  "fields": {
+    "role": "Product Manager",
+    "experience_years": 5.0,
+    "company_type": "startup",
+    "ctc": 3000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "0-to-1, Growth",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.614Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 47,
+  "fields": {
+    "role": "Product Manager",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 2000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Analytics, Product",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.611Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 46,
+  "fields": {
+    "role": "Backend Engineer",
+    "experience_years": 4.0,
+    "company_type": "startup",
+    "ctc": 2000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Go, Postgres, Kafka",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.609Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 45,
+  "fields": {
+    "role": "Backend Engineer",
+    "experience_years": 2.5,
+    "company_type": "startup",
+    "ctc": 1400000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, FastAPI, Redis",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.606Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 44,
+  "fields": {
+    "role": "Full Stack Engineer",
+    "experience_years": 4.0,
+    "company_type": "startup",
+    "ctc": 2000000,
+    "in_hand": null,
+    "city": "Mumbai",
+    "tech_stack": "React, Go, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.604Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 43,
+  "fields": {
+    "role": "Full Stack Engineer",
+    "experience_years": 3.0,
+    "company_type": "startup",
+    "ctc": 1600000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Next.js, Python, PostgreSQL",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.601Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 42,
+  "fields": {
+    "role": "Full Stack Engineer",
+    "experience_years": 2.0,
+    "company_type": "startup",
+    "ctc": 1200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "React, Node.js, MongoDB",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.598Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 41,
+  "fields": {
+    "role": "SRE",
+    "experience_years": 6.0,
+    "company_type": "product",
+    "ctc": 3500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "GCP, Kubernetes, SLO",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.596Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 40,
+  "fields": {
+    "role": "DevOps/SRE",
+    "experience_years": 4.0,
+    "company_type": "product",
+    "ctc": 2500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "AWS, Terraform, Prometheus",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.593Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 39,
+  "fields": {
+    "role": "UX Designer",
+    "experience_years": 5.0,
+    "company_type": "product",
+    "ctc": 2400000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Figma, Design Systems",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.591Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 38,
+  "fields": {
+    "role": "UX Designer",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 1600000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Figma, User Research",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.588Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 37,
+  "fields": {
+    "role": "Engineering Manager",
+    "experience_years": 10.0,
+    "company_type": "product",
+    "ctc": 7000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Org Design, Delivery",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.585Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 36,
+  "fields": {
+    "role": "Engineering Manager",
+    "experience_years": 8.0,
+    "company_type": "product",
+    "ctc": 5000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "People Management",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.583Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 35,
+  "fields": {
+    "role": "Backend Engineer",
+    "experience_years": 5.5,
+    "company_type": "product",
+    "ctc": 3200000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "Java, Kafka, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.580Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 34,
+  "fields": {
+    "role": "Backend Engineer",
+    "experience_years": 3.5,
+    "company_type": "product",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Node.js, PostgreSQL, Redis",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.578Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 33,
+  "fields": {
+    "role": "Frontend Engineer",
+    "experience_years": 5.0,
+    "company_type": "product",
+    "ctc": 2800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "React, Next.js, Performance",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.575Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 32,
+  "fields": {
+    "role": "Frontend Engineer",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 1800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "React, TypeScript, GraphQL",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.573Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 31,
+  "fields": {
+    "role": "ML Engineer",
+    "experience_years": 6.0,
+    "company_type": "product",
+    "ctc": 4000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "PyTorch, Kubernetes, MLOps",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.570Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 30,
+  "fields": {
+    "role": "ML Engineer",
+    "experience_years": 4.0,
+    "company_type": "product",
+    "ctc": 2800000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, TensorFlow, AWS SageMaker",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.567Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 29,
+  "fields": {
+    "role": "Data Scientist",
+    "experience_years": 5.0,
+    "company_type": "product",
+    "ctc": 3200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, Deep Learning, PyTorch",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.565Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 28,
+  "fields": {
+    "role": "Data Scientist",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, ML, Scikit-learn",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.562Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 27,
+  "fields": {
+    "role": "Senior Product Manager",
+    "experience_years": 8.0,
+    "company_type": "product",
+    "ctc": 5500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Product Strategy",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.560Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 26,
+  "fields": {
+    "role": "Product Manager",
+    "experience_years": 6.0,
+    "company_type": "product",
+    "ctc": 4000000,
+    "in_hand": null,
+    "city": "Gurugram",
+    "tech_stack": "SQL, A/B Testing",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.557Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 25,
+  "fields": {
+    "role": "Product Manager",
+    "experience_years": 4.0,
+    "company_type": "product",
+    "ctc": 3000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SQL, Analytics, PM",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.555Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 24,
+  "fields": {
+    "role": "Staff Engineer",
+    "experience_years": 10.0,
+    "company_type": "product",
+    "ctc": 5500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, ML Platform",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.552Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 23,
+  "fields": {
+    "role": "Staff Engineer",
+    "experience_years": 9.0,
+    "company_type": "product",
+    "ctc": 5000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Distributed Systems, Java",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.550Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 22,
+  "fields": {
+    "role": "Senior Software Engineer",
+    "experience_years": 7.0,
+    "company_type": "product",
+    "ctc": 3500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Go, Kubernetes, GCP",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.547Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 21,
+  "fields": {
+    "role": "Senior Software Engineer",
+    "experience_years": 6.0,
+    "company_type": "product",
+    "ctc": 3000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, ML, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.544Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 20,
+  "fields": {
+    "role": "Senior Software Engineer",
+    "experience_years": 5.0,
+    "company_type": "product",
+    "ctc": 2500000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Java, Kotlin, Microservices",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.542Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 19,
+  "fields": {
+    "role": "Software Engineer",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 1800000,
+    "in_hand": null,
+    "city": "Gurugram",
+    "tech_stack": "Python, FastAPI, PostgreSQL",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.539Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 18,
+  "fields": {
+    "role": "Software Engineer",
+    "experience_years": 2.5,
+    "company_type": "product",
+    "ctc": 1600000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Go, Kafka, Redis",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.537Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 17,
+  "fields": {
+    "role": "Software Engineer",
+    "experience_years": 2.0,
+    "company_type": "product",
+    "ctc": 1400000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "React, Node.js",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.534Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 16,
+  "fields": {
+    "role": "Cloud Engineer",
+    "experience_years": 5.0,
+    "company_type": "service",
+    "ctc": 1600000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "AWS, Terraform, Kubernetes",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.532Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 15,
+  "fields": {
+    "role": "DevOps Engineer",
+    "experience_years": 4.0,
+    "company_type": "service",
+    "ctc": 1300000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "AWS, Docker, Jenkins",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.529Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 14,
+  "fields": {
+    "role": "Business Analyst",
+    "experience_years": 4.0,
+    "company_type": "service",
+    "ctc": 1200000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "SQL, Excel, Agile",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.527Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 13,
+  "fields": {
+    "role": "QA Engineer",
+    "experience_years": 5.5,
+    "company_type": "service",
+    "ctc": 1100000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "Cypress, REST Assured, Python",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.524Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 12,
+  "fields": {
+    "role": "QA Engineer",
+    "experience_years": 3.0,
+    "company_type": "service",
+    "ctc": 700000,
+    "in_hand": null,
+    "city": "Chennai",
+    "tech_stack": "Selenium, Java, JIRA",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.521Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 11,
+  "fields": {
+    "role": "Data Analyst",
+    "experience_years": 4.0,
+    "company_type": "service",
+    "ctc": 1100000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Python, SQL, Power BI",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.519Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 10,
+  "fields": {
+    "role": "Data Analyst",
+    "experience_years": 2.5,
+    "company_type": "service",
+    "ctc": 750000,
+    "in_hand": null,
+    "city": "Pune",
+    "tech_stack": "SQL, Excel, Tableau",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.516Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 9,
+  "fields": {
+    "role": "Project Manager",
+    "experience_years": 10.0,
+    "company_type": "service",
+    "ctc": 2500000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "PMP, Agile",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.514Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 8,
+  "fields": {
+    "role": "Technical Lead",
+    "experience_years": 9.0,
+    "company_type": "service",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Chennai",
+    "tech_stack": "Python, ML, GCP",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.511Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 7,
+  "fields": {
+    "role": "Technical Lead",
+    "experience_years": 8.0,
+    "company_type": "service",
+    "ctc": 2000000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Java, AWS, Kubernetes",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.508Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 6,
+  "fields": {
+    "role": "Senior Software Engineer",
+    "experience_years": 6.0,
+    "company_type": "service",
+    "ctc": 1600000,
+    "in_hand": null,
+    "city": "Pune",
+    "tech_stack": "C#, .NET, Azure",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.506Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 5,
+  "fields": {
+    "role": "Senior Software Engineer",
+    "experience_years": 5.0,
+    "company_type": "service",
+    "ctc": 1400000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Java, Microservices, AWS",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.503Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 4,
+  "fields": {
+    "role": "Software Engineer",
+    "experience_years": 3.5,
+    "company_type": "service",
+    "ctc": 950000,
+    "in_hand": null,
+    "city": "Hyderabad",
+    "tech_stack": "Python, Django",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.501Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 3,
+  "fields": {
+    "role": "Software Engineer",
+    "experience_years": 2.0,
+    "company_type": "service",
+    "ctc": 700000,
+    "in_hand": null,
+    "city": "Bengaluru",
+    "tech_stack": "Java, Spring Boot",
+    "is_verified": true,
+    "created_at": "2026-04-06T15:34:41.496Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 2,
+  "fields": {
+    "role": "Java developer",
+    "experience_years": 3.0,
+    "company_type": "product",
+    "ctc": 2200000,
+    "in_hand": null,
+    "city": "Remote",
+    "tech_stack": "java",
+    "is_verified": false,
+    "created_at": "2026-01-28T14:39:49.992Z"
+  }
+},
+{
+  "model": "analyzer.salarysubmission",
+  "pk": 1,
+  "fields": {
+    "role": "Associate",
+    "experience_years": 7.5,
+    "company_type": "service",
+    "ctc": 1550000,
+    "in_hand": null,
+    "city": "pune",
+    "tech_stack": "ETL,SQL,UNIX",
+    "is_verified": false,
+    "created_at": "2026-01-26T18:03:48.745Z"
+  }
+}
+]

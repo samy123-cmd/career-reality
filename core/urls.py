@@ -7,6 +7,7 @@ urlpatterns = [
     path('healthz', views.healthz, name='healthz'),
     path('internal/cron/freshness/', views.run_freshness_cron, name='run_freshness_cron'),
     path('internal/cron/weekly-digest/', views.run_weekly_digest_cron, name='run_weekly_digest_cron'),
+    path('internal/cron/refresh-career-index/', views.run_career_index_cron, name='run_career_index_cron'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('about/', views.about, name='about'),
     path('editorial/', views.editorial_standards, name='editorial'),

@@ -15,6 +15,13 @@ class SalarySubmissionForm(forms.Form):
         validators=[MinValueValidator(0.0), MaxValueValidator(50.0)],
         label="Years of Experience",
     )
+    company_name = forms.CharField(
+        max_length=150,
+        required=False,
+        strip=True,
+        label="Company Name (optional)",
+        help_text="e.g. Infosys, Swiggy, your startup name",
+    )
     company_type = forms.ChoiceField(
         choices=SalarySubmission.COMPANY_TYPES,
         label="Company Type",
@@ -70,41 +77,51 @@ class LayoffReportForm(forms.Form):
 
 class Step1Form(forms.Form):
     company_type = forms.ChoiceField(
-        choices=copy.COMPANY_TYPES, 
-        widget=forms.RadioSelect, 
-        label="Company type"
+        choices=copy.COMPANY_TYPES,
+        widget=forms.RadioSelect,
+        label="Company type",
     )
     role_level = forms.ChoiceField(
-        choices=copy.ROLE_LEVELS, 
-        widget=forms.RadioSelect, 
-        label="Your role level"
+        choices=copy.ROLE_LEVELS,
+        widget=forms.RadioSelect,
+        label="Your role level",
     )
-    consent = forms.BooleanField(
-        required=True,
-        label="I consent to anonymous programmatic analysis. I understand my raw inputs will not be stored or used for AI training.",
-        widget=forms.CheckboxInput(attrs={'class': 'consent-checkbox'})
+    tenure_band = forms.ChoiceField(
+        choices=copy.TENURE_BANDS,
+        widget=forms.RadioSelect,
+        label="How long have you been at this company?",
     )
 
 class Step2Form(forms.Form):
     bond_status = forms.ChoiceField(
-        choices=copy.BOND_STATUS, 
-        widget=forms.RadioSelect, 
-        label="Bond status"
+        choices=copy.BOND_STATUS,
+        widget=forms.RadioSelect,
+        label="Bond / service agreement",
     )
     notice_period = forms.ChoiceField(
-        choices=copy.NOTICE_PERIODS, 
-        widget=forms.RadioSelect, 
-        label="Notice period"
+        choices=copy.NOTICE_PERIODS,
+        widget=forms.RadioSelect,
+        label="Notice period in your contract",
+    )
+    ctc_vs_market = forms.ChoiceField(
+        choices=copy.CTC_VS_MARKET,
+        widget=forms.RadioSelect,
+        label="Your CTC vs current market rate",
     )
 
 class Step3Form(forms.Form):
     current_situation = forms.ChoiceField(
-        choices=copy.CURRENT_SITUATION, 
-        widget=forms.RadioSelect, 
-        label="What is happening right now?"
+        choices=copy.CURRENT_SITUATION,
+        widget=forms.RadioSelect,
+        label="What is happening right now?",
+    )
+    performance_status = forms.ChoiceField(
+        choices=copy.PERFORMANCE_STATUS,
+        widget=forms.RadioSelect,
+        label="Your performance standing",
     )
     has_offer = forms.ChoiceField(
-        choices=copy.OFFER_STATUS, 
-        widget=forms.RadioSelect, 
-        label="Offer in hand?"
+        choices=copy.OFFER_STATUS,
+        widget=forms.RadioSelect,
+        label="Do you have an offer in hand?",
     )

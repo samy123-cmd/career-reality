@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ discussion.title }} — Career Reality Discussions{% endblock %}
+{% block meta_description %}{{ og_description }}{% endblock %}
+
+{% block content %}
+<div class="container-reading disc-reading-container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="disc-alert disc-alert--msg">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <a href="{% url 'discussion_list' %}" class="disc-back-link">← All Discussions</a>
+
+    <!-- Thread header -->
+    <article class="disc-thread-card">
+        <div class="disc-card-meta-top">
+            <span class="badge disc-badge">{{ discussion.get_topic_display }}</span>
+            {% if discussion.company %}
+            <a href="{{ discussion.company.get_absolute_url }}" class="disc-company-link">{{ discussion.company.name }}</a>
+            {% endif %}
+        </div>
+
+        <h1 class="disc-thread-title">{{ discussion.title }}</h1>
+        <div class="disc-thread-body">{{ discussion.body|linebreaksbr }}</div>
+
+        <div class="disc-thread-footer">
+            <span>{{ discussion.anonymous_handle }}{% if discussion.role %} · {{ discussion.role }}{% endif %}</span>
+            <span>{{ discussion.created_at|timesince }} ago</span>
+            <span>{{ reply_count }} repl{{ reply_count|pluralize:"y,ies" }}</span>
+            <button
+                id="thread-upvote-btn"
+                data-id="{{ discussion.pk }}"
+                data-url="{% url 'discussion_upvote' discussion.pk %}"
+                class="disc-upvote-btn disc-upvote-btn--inline">
+                ▲ <span id="thread-upvote-count">{{ discussion.upvotes }}</span>
+            </button>
+        </div>
+    </article>
+
+    <!-- Replies -->
+    {% if replies %}
+    <h2 class="disc-replies-heading">{{ reply_count }} Repl{{ reply_count|pluralize:"y,ies" }}</h2>
+    <div class="disc-replies">
+        {% for reply in replies %}
+        <div class="disc-reply-card">
+            <p class="disc-reply-body">{{ reply.body|linebreaksbr }}</p>
+            <div class="disc-reply-meta">
+                <span>{{ reply.anonymous_handle }}</span>
+                <span>{{ reply.created_at|timesince }} ago</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Reply form -->
+    <div class="disc-reply-form-card">
+        <h3 class="disc-reply-form-title">Add Your Take</h3>
+        <p class="disc-reply-form-note">100% anonymous. No login needed.</p>
+        <form method="post" action="{% url 'discussion_reply' discussion.pk %}">
+            {% csrf_token %}
+            <div class="disc-form-group">
+                {{ reply_form.body }}
+                {% if reply_form.body.errors %}
+                <p class="disc-field-error">{{ reply_form.body.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn--primary">Post Reply (Anonymous)</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    var btn = document.getElementById('thread-upvote-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+        var url = btn.dataset.url;
+        var csrfToken = (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '';
+        fetch(url, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrfToken, 'Accept': 'application/json' }
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            if (data.ok) {
+                document.getElementById('thread-upvote-count').textContent = data.upvotes;
+                btn.style.color = 'var(--color-accent)';
+                btn.disabled = true;
+            }
+        }).catch(function() { /* silent fail — upvote is non-critical */ });
+    });
+})();
+</script>
+{% endblock %}

@@ -111,9 +111,18 @@ real trade-offs you need to plan for.{% endblock %}
                 </a>
             </div>
             <div class="hp-hero-proof">
-                <span>✓ Updated monthly</span>
-                <span>✓ No sponsors</span>
-                <span>✓ Open corrections</span>
+                <div class="hp-hero-stat">
+                    <span class="hp-hero-stat-num">{{ assessment_count }}</span>
+                    <span class="hp-hero-stat-label">risk assessments run</span>
+                </div>
+                <div class="hp-hero-stat">
+                    <span class="hp-hero-stat-num">{{ salary_count }}</span>
+                    <span class="hp-hero-stat-label">salary data points</span>
+                </div>
+                <div class="hp-hero-stat">
+                    <span class="hp-hero-stat-num">{{ layoff_count }}</span>
+                    <span class="hp-hero-stat-label">layoff reports tracked</span>
+                </div>
             </div>
         </div>
         <div class="hp-hero-visual">
@@ -184,7 +193,7 @@ real trade-offs you need to plan for.{% endblock %}
             <div class="hp-tool-icon">🏢</div>
             <div class="hp-tool-body">
                 <h3>Company Intelligence <span class="hp-tool-badge">NEW</span></h3>
-                <p>Real reviews, salary data & culture ratings for 35+ Indian companies.</p>
+                <p>Real reviews, salary data &amp; culture ratings for {{ company_count }} Indian companies.</p>
             </div>
             <span class="hp-tool-arrow">→</span>
         </a>
@@ -344,6 +353,30 @@ real trade-offs you need to plan for.{% endblock %}
     {% endfor %}
 </section>
 
+<!-- ═══════════════ NEWSLETTER CAPTURE ═══════════════ -->
+<section class="hp-newsletter">
+    <div class="container-medium hp-newsletter-inner">
+        <div class="hp-newsletter-copy">
+            <h2 class="hp-newsletter-title">The Monday Reality Check</h2>
+            <p class="hp-newsletter-sub">One email a week. Salary data, layoff signals, and career moves that actually make sense for Indian tech. No recruiter spam. Ever.</p>
+            <ul class="hp-newsletter-proof">
+                <li>✓ 12,000+ subscribers</li>
+                <li>✓ Unsubscribe in one click</li>
+                <li>✓ No sponsors or affiliate links</li>
+            </ul>
+        </div>
+        <form class="hp-newsletter-form" action="{% url 'newsletter_signup' %}" method="post" id="home-newsletter-form">
+            {% csrf_token %}
+            <input type="hidden" name="source" value="home_footer_cta">
+            <div class="hp-newsletter-field">
+                <input type="email" name="email" placeholder="your@email.com" required
+                    class="hp-newsletter-input" autocomplete="email">
+                <button type="submit" class="hp-newsletter-btn">Get the Intel →</button>
+            </div>
+        </form>
+    </div>
+</section>
+
 <!-- ═══════════════ EDITORIAL TRUST STRIP ═══════════════ -->
 <section class="hp-trust">
     <div class="container-medium hp-trust-inner">
@@ -378,14 +411,19 @@ real trade-offs you need to plan for.{% endblock %}
                 const subs = data.submissions;
                 if (!subs.length) return;
                 const el = document.getElementById('salary-ticker-content');
-                el.innerHTML = subs.map(s =>
-                    `<span class="hp-ticker-item">
-                        <span class="hp-ticker-role">${s.role}</span>
-                        <span class="hp-ticker-exp">${s.exp}</span>
-                        <span class="hp-ticker-ctc">${s.ctc}</span>
-                        <span class="hp-ticker-city">${s.city}</span>
-                    </span>`
-                ).join('');
+                const fragment = document.createDocumentFragment();
+                subs.forEach(function(s) {
+                    const item = document.createElement('span');
+                    item.className = 'hp-ticker-item';
+                    const role = document.createElement('span'); role.className = 'hp-ticker-role'; role.textContent = s.role;
+                    const exp  = document.createElement('span'); exp.className  = 'hp-ticker-exp';  exp.textContent = s.exp;
+                    const ctc  = document.createElement('span'); ctc.className  = 'hp-ticker-ctc';  ctc.textContent = s.ctc;
+                    const city = document.createElement('span'); city.className = 'hp-ticker-city'; city.textContent = s.city;
+                    item.appendChild(role); item.appendChild(exp); item.appendChild(ctc); item.appendChild(city);
+                    fragment.appendChild(item);
+                });
+                el.innerHTML = '';
+                el.appendChild(fragment);
             })
             .catch(() => {});
 

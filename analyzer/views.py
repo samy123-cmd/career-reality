@@ -118,9 +118,12 @@ def result_view(request):
     calculator = logic.RiskCalculator()
     result = calculator.calculate(data)
 
-    role_label = dict(forms.copy.ROLE_LEVELS).get(data.get('role_level'), 'Unknown')
-    company_label = dict(forms.copy.COMPANY_TYPES).get(data.get('company_type'), 'Unknown')
-    notice_label = dict(forms.copy.NOTICE_PERIODS).get(data.get('notice_period'), 'Unknown')
+    role_label        = dict(forms.copy.ROLE_LEVELS).get(data.get('role_level'), 'Unknown')
+    company_label     = dict(forms.copy.COMPANY_TYPES).get(data.get('company_type'), 'Unknown')
+    notice_label      = dict(forms.copy.NOTICE_PERIODS).get(data.get('notice_period'), 'Unknown')
+    tenure_label      = dict(forms.copy.TENURE_BANDS).get(data.get('tenure_band'), 'Unknown')
+    ctc_label         = dict(forms.copy.CTC_VS_MARKET).get(data.get('ctc_vs_market'), 'Unknown')
+    performance_label = dict(forms.copy.PERFORMANCE_STATUS).get(data.get('performance_status'), 'Unknown')
 
     primary_action_map = {
         'high': "Document all communication and line up legal-safe exit options in the next 24 hours.",
@@ -166,6 +169,9 @@ def result_view(request):
         'role_label': role_label,
         'company_label': company_label,
         'notice_label': notice_label,
+        'tenure_label': tenure_label,
+        'ctc_label': ctc_label,
+        'performance_label': performance_label,
         'llm_narrative': llm_narrative,
         'razorpay_key_id': razorpay_key_id,
         'primary_action': primary_action_map.get(result['level'], primary_action_map['medium']),
@@ -189,6 +195,7 @@ def track_event_api(request):
         'upgrade_click',
         'upgrade_success',
         'return_visit_d7',
+        'newsletter_cta_shown',
     }
 
     try:
@@ -217,11 +224,24 @@ def track_event_api(request):
 def submit_salary(request):
     """
     Handle anonymous salary submissions.
+    Give-to-get: submitting a salary earns 3 unlock credits (or session unlock for anon users).
     """
+    CREDITS_PER_SUBMISSION = 3
+
     if request.method == 'POST':
         form = forms.SalarySubmissionForm(request.POST)
         if form.is_valid():
             d = form.cleaned_data
+
+            # Attempt to match to a Company profile by name
+            from companies.models import Company as CompanyModel
+            company_obj = None
+            raw_name = d.get('company_name', '').strip()
+            if raw_name:
+                company_obj = CompanyModel.objects.filter(
+                    name__iexact=raw_name
+                ).first()
+
             models.SalarySubmission.objects.create(
                 role=d['role'],
                 experience_years=d['experience_years'],
@@ -229,17 +249,28 @@ def submit_salary(request):
                 ctc=d['ctc'],
                 city=d['city'],
                 tech_stack=d.get('tech_stack', ''),
+                company=company_obj,
+                company_name=raw_name,
             )
-            # Increment engagement counter
+
+            # ── Give-to-get: award salary unlock credits ──────────────────
             if request.user.is_authenticated:
                 try:
                     profile = request.user.profile
                     profile.salary_submissions_count += 1
-                    profile.save(update_fields=['salary_submissions_count'])
+                    profile.salary_credits += CREDITS_PER_SUBMISSION
+                    profile.save(update_fields=[
+                        'salary_submissions_count', 'salary_credits'
+                    ])
                 except Exception:
                     pass
+            else:
+                # Anonymous users get a session-based unlock window
+                request.session['salary_unlocks'] = (
+                    request.session.get('salary_unlocks', 0) + CREDITS_PER_SUBMISSION
+                )
+
             return redirect(reverse('salary_submit_success'))
-        # Re-render with validation errors
     else:
         form = forms.SalarySubmissionForm()
 
@@ -300,7 +331,11 @@ def layoff_radar(request):
     Dashboard showing company stability status.
     Aggregates reports to show 'Danger' vs 'Safe'.
     """
-    # Simple aggregation for V1: Get recent reports
+    from django.utils import timezone as tz
+    from datetime import timedelta
+    now = tz.now()
+    yesterday = now - timedelta(hours=24)
+
     recent_reports = list(
         models.LayoffReport.objects.only(
             'company_name', 'status', 'role_affected', 'location', 'details', 'created_at'
@@ -308,8 +343,6 @@ def layoff_radar(request):
     )
 
     # Add a lightweight confidence score per report
-    from django.utils import timezone
-    now = timezone.now()
     for report in recent_reports:
         score = 30
         if report.details:
@@ -322,15 +355,35 @@ def layoff_radar(request):
         elif age_days <= 30:
             score += 20
         report.confidence_score = min(score, 100)
-    
-    # In V2, we would group by company_name and calculate a score.
-    # For now, just list them.
-    
+
+    # Dynamic stats
+    today_count  = sum(1 for r in recent_reports if r.created_at >= yesterday)
+    total_count  = models.LayoffReport.objects.count()
+    danger_total = models.LayoffReport.objects.filter(status__in=['freeze', 'rumor', 'layoff']).count()
+    danger_pct   = round(danger_total / total_count * 100) if total_count else 0
+
+    if danger_pct >= 60:
+        risk_band        = "HIGH"
+        risk_band_color  = "#d93025"
+        market_volatility = danger_pct
+    elif danger_pct >= 35:
+        risk_band        = "ELEVATED"
+        risk_band_color  = "#f59e0b"
+        market_volatility = danger_pct
+    else:
+        risk_band        = "MODERATE"
+        risk_band_color  = "#16a34a"
+        market_volatility = danger_pct
+
     title = "Indian Tech Layoff Radar (2026)"
     description = "Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously."
     return render(request, 'analyzer/layoff_radar.html', {
         'reports': recent_reports,
-        'meta_robots': 'noindex, follow',
+        'today_count': today_count,
+        'total_count': total_count,
+        'risk_band': risk_band,
+        'risk_band_color': risk_band_color,
+        'market_volatility': market_volatility,
         'og_title': title,
         'og_description': description,
         'twitter_title': title,
@@ -352,9 +405,11 @@ def report_layoff(request):
                 location=d.get('location', ''),
                 details=d.get('details', ''),
             )
-            return redirect('layoff_radar')
+            from django.contrib import messages
+            messages.success(request, f"Report for {d['company_name']} submitted. Thank you for helping the community.")
+            return redirect('report_layoff')
         # Re-render with validation errors
-            
+
     else:
         form = forms.LayoffReportForm()
 

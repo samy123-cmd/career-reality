@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 
 from django.db.models import Avg, Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,10 +7,11 @@ from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib import messages
+from django.utils.text import slugify
 
 from analyzer.models import SalarySubmission, LayoffReport
-from .models import Company, CompanyReview
-from .forms import CompanyReviewForm
+from .models import Company, CompanyReview, Discussion, DiscussionReply
+from .forms import CompanyReviewForm, DiscussionForm, DiscussionReplyForm
 
 logger = logging.getLogger(__name__)
 
@@ -58,16 +59,15 @@ def company_detail(request, slug):
     """Deep-dive company profile with aggregated intelligence."""
     company = get_object_or_404(Company, slug=slug)
 
-    # Salary data linked by company name
+    # Salary data — match strictly by company name to avoid showing wrong-company data
     salaries = SalarySubmission.objects.filter(
-        Q(company_type__iexact=company.sector) |
-        Q(role__icontains=company.name[:20])  # Fuzzy match for now
+        company_name__iexact=company.name
     ).order_by("-created_at")[:30]
 
-    # If we can match salaries by company name stored as keyword in tech_stack/role
+    # Secondary loose match: company name appears in free-text tech_stack/role fields
     direct_salaries = SalarySubmission.objects.filter(
         tech_stack__icontains=company.name
-    ).order_by("-created_at")[:20]
+    ).exclude(company_name__iexact=company.name).order_by("-created_at")[:20]
 
     all_salaries = list(salaries | direct_salaries)[:30]
 
@@ -112,6 +112,11 @@ def company_detail(request, slug):
     # Review form
     form = CompanyReviewForm()
 
+    # Recent discussions for this company
+    company_discussions = Discussion.objects.filter(
+        company=company, is_flagged=False
+    ).order_by("-created_at")[:5]
+
     return render(request, "companies/detail.html", {
         "company": company,
         "salaries": all_salaries[:15],
@@ -120,6 +125,7 @@ def company_detail(request, slug):
         "review_stats": review_stats,
         "layoff_reports": layoff_reports,
         "form": form,
+        "company_discussions": company_discussions,
         "og_title": f"{company.name} — Salary, Reviews & Reality Check",
         "og_description": f"Honest salary data, anonymous reviews, and layoff alerts for {company.name}. No login required.",
     })
@@ -180,4 +186,227 @@ def company_search_api(request):
             }
             for c in companies
         ]
+    })
+
+
+# ─── Discussion Views ────────────────────────────────────────────────────────
+
+_DISCUSSION_RATE_LIMIT = 5  # max posts per IP per hour
+
+
+def _get_ip(request):
+    return (
+        request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR", ""))
+        .split(",")[0]
+        .strip()
+    )
+
+
+def discussion_list(request):
+    """Browse all discussions — filterable by topic and company."""
+    from django.core.cache import cache
+
+    topic = request.GET.get("topic", "")
+    company_slug = request.GET.get("company", "")
+    sort = request.GET.get("sort", "recent")
+
+    qs = Discussion.objects.filter(is_flagged=False).select_related("company")
+
+    if topic:
+        qs = qs.filter(topic=topic)
+    if company_slug:
+        qs = qs.filter(company__slug=company_slug)
+
+    if sort == "top":
+        qs = qs.order_by("-upvotes", "-created_at")
+    else:
+        qs = qs.order_by("-created_at")
+
+    paginator = Paginator(qs, 20)
+    page = paginator.get_page(request.GET.get("page", 1))
+
+    return render(request, "companies/discussion_list.html", {
+        "page_obj": page,
+        "topic_choices": Discussion.TOPIC_CHOICES,
+        "current_topic": topic,
+        "current_company": company_slug,
+        "current_sort": sort,
+        "total_discussions": Discussion.objects.filter(is_flagged=False).count(),
+        "og_title": "Community Discussions — Career Reality India",
+        "og_description": "Anonymous career discussions from Indian tech professionals. No corporate spin.",
+    })
+
+
+def discussion_detail(request, pk):
+    """Single discussion thread with replies."""
+    discussion = get_object_or_404(Discussion, pk=pk, is_flagged=False)
+    replies = discussion.replies.filter(is_flagged=False).order_by("created_at")
+    reply_form = DiscussionReplyForm()
+
+    return render(request, "companies/discussion_detail.html", {
+        "discussion": discussion,
+        "replies": replies,
+        "reply_count": replies.count(),
+        "reply_form": reply_form,
+        "og_title": f"{discussion.title} — Career Reality Discussions",
+        "og_description": discussion.body[:160],
+    })
+
+
+def discussion_create(request, slug=None):
+    """Create a new discussion thread — optionally attached to a company."""
+    company = None
+    if slug:
+        company = get_object_or_404(Company, slug=slug)
+
+    if request.method == "POST":
+        from django.core.cache import cache
+
+        ip = _get_ip(request)
+        rate_key = f"disc_post_{ip}"
+        count = cache.get(rate_key, 0)
+        if count >= _DISCUSSION_RATE_LIMIT:
+            messages.error(request, "You're posting too fast. Please wait an hour before posting again.")
+            return redirect("discussion_list")
+
+        form = DiscussionForm(request.POST)
+        if form.is_valid():
+            disc = form.save(commit=False)
+            disc.company = company
+            if request.user.is_authenticated:
+                disc.user = request.user
+            disc.save()
+
+            cache.set(rate_key, count + 1, timeout=3600)
+            messages.success(request, "Discussion posted. Every honest voice counts.")
+            return redirect("discussion_detail", pk=disc.pk)
+    else:
+        form = DiscussionForm()
+
+    return render(request, "companies/discussion_create.html", {
+        "form": form,
+        "company": company,
+        "og_title": "Start a Discussion — Career Reality India",
+        "og_description": "Ask anonymously. Get honest answers from real professionals.",
+    })
+
+
+@require_POST
+def discussion_reply(request, pk):
+    """Submit a reply to a discussion thread."""
+    from django.core.cache import cache
+
+    discussion = get_object_or_404(Discussion, pk=pk, is_flagged=False)
+
+    ip = _get_ip(request)
+    rate_key = f"disc_reply_{ip}"
+    count = cache.get(rate_key, 0)
+    if count >= _DISCUSSION_RATE_LIMIT:
+        messages.error(request, "Too many replies. Please wait an hour.")
+        return redirect("discussion_detail", pk=pk)
+
+    form = DiscussionReplyForm(request.POST)
+    if form.is_valid():
+        reply = form.save(commit=False)
+        reply.discussion = discussion
+        if request.user.is_authenticated:
+            reply.user = request.user
+        reply.save()
+        cache.set(rate_key, count + 1, timeout=3600)
+        messages.success(request, "Reply posted.")
+
+    return redirect("discussion_detail", pk=pk)
+
+
+@require_POST
+def discussion_upvote(request, pk):
+    """Upvote a discussion thread — session-gated to prevent spam."""
+    discussion = get_object_or_404(Discussion, pk=pk, is_flagged=False)
+    voted_key = f"upvoted_disc_{pk}"
+
+    if request.session.get(voted_key):
+        return JsonResponse({"ok": False, "error": "already_voted", "upvotes": discussion.upvotes})
+
+    Discussion.objects.filter(pk=pk).update(upvotes=discussion.upvotes + 1)
+    request.session[voted_key] = True
+    return JsonResponse({"ok": True, "upvotes": discussion.upvotes + 1})
+
+
+
+def write_review(request):
+    """Standalone review page - works for any company, listed or not."""
+    from django.core.cache import cache
+
+    # Pre-fill company if coming from a company detail page
+    prefill_slug = request.GET.get("company", "")
+    prefill_company = None
+    if prefill_slug:
+        prefill_company = Company.objects.filter(slug=prefill_slug).first()
+
+    form = CompanyReviewForm()
+
+    if request.method == "POST":
+        company_name = request.POST.get("company_name", "").strip()
+        sector = request.POST.get("company_sector", "other")
+
+        if not company_name:
+            messages.error(request, "Please enter your company name.")
+            return render(request, "companies/write_review.html", {
+                "form": form,
+                "sector_choices": Company.SECTOR_CHOICES,
+                "og_title": "Write a Company Review � Career Reality India",
+            })
+
+        # Rate limit: 3 reviews per IP per hour
+        ip = request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR", "")).split(",")[0].strip()
+        rate_key = f"review_{ip}"
+        count = cache.get(rate_key, 0)
+        if count >= 3:
+            messages.error(request, "Too many submissions. Please try again later.")
+            return render(request, "companies/write_review.html", {
+                "form": form,
+                "sector_choices": Company.SECTOR_CHOICES,
+                "og_title": "Write a Company Review � Career Reality India",
+            })
+        cache.set(rate_key, count + 1, timeout=3600)
+
+        # Get or create the company
+        base_slug = slugify(company_name)
+        candidate_slug = base_slug
+        counter = 1
+        while Company.objects.filter(slug=candidate_slug).exclude(name__iexact=company_name).exists():
+            candidate_slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        company, created = Company.objects.get_or_create(
+            name__iexact=company_name,
+            defaults={
+                "name": company_name,
+                "slug": candidate_slug,
+                "sector": sector if sector in dict(Company.SECTOR_CHOICES) else "other",
+            }
+        )
+
+        form = CompanyReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.company = company
+            review.save()
+
+            company.review_count = company.reviews.filter(is_flagged=False).count()
+            avg = company.reviews.filter(is_flagged=False).aggregate(avg=Avg("rating_overall"))
+            company.overall_score = avg["avg"]
+            company.save(update_fields=["review_count", "overall_score", "updated_at"])
+
+            messages.success(request, "Review submitted. Thanks for keeping it real.")
+            return redirect("company_detail", slug=company.slug)
+
+        messages.error(request, "Please fix the errors below.")
+
+    return render(request, "companies/write_review.html", {
+        "form": form,
+        "prefill_company": prefill_company,
+        "sector_choices": Company.SECTOR_CHOICES,
+        "og_title": "Write a Company Review � Career Reality India",
+        "og_description": "Share your anonymous, honest experience. No login required. Any company � listed or not.",
     })

@@ -58,7 +58,7 @@ class SecurityHeadersMiddleware:
                 "default-src 'self'; "
                 "img-src 'self' data: https:; "
                 "style-src 'self' 'unsafe-inline' https:; "
-                "script-src 'self' https:; "
+                "script-src 'self' 'unsafe-inline' https:; "
                 "font-src 'self' data: https:; "
                 "connect-src 'self' https:; "
                 "frame-ancestors 'none'; "

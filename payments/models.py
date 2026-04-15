@@ -7,6 +7,7 @@ class Product(models.Model):
     PRODUCT_TYPES = [
         ("one_time", "One-Time Purchase"),
         ("subscription_monthly", "Monthly Subscription"),
+        ("subscription_annual", "Annual Subscription"),
     ]
 
     name = models.CharField(max_length=200)

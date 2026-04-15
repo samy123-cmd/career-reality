@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Welcome to Career Reality{% endblock %}
+{% block meta_description %}Get started with your free Career Reality account — tools, salary data, and weekly intel.{% endblock %}
+
+{% block content %}
+<div class="onboard-wrap">
+
+    <header class="onboard-header">
+        <div class="onboard-check">✓</div>
+        <h1 class="onboard-title">You're in.</h1>
+        <p class="onboard-sub">Free account active. Here's what's waiting for you.</p>
+    </header>
+
+    <!-- Free tools grid -->
+    <section class="onboard-section">
+        <h2 class="onboard-section-title">Start here — free</h2>
+        <div class="onboard-tools">
+            <a href="{% url 'wizard_start' %}" class="onboard-tool-card onboard-tool-card--primary">
+                <div class="onboard-tool-icon">🎯</div>
+                <div class="onboard-tool-body">
+                    <h3>Risk Analyzer</h3>
+                    <p>Should you resign? Get a data-backed answer in 3 minutes.</p>
+                </div>
+                <span class="onboard-tool-cta">Start →</span>
+            </a>
+            <a href="{% url 'salary_calculator' %}" class="onboard-tool-card">
+                <div class="onboard-tool-icon">🧮</div>
+                <div class="onboard-tool-body">
+                    <h3>CTC Decoder</h3>
+                    <p>Find out what your CTC actually means in-hand.</p>
+                </div>
+                <span class="onboard-tool-cta">Decode →</span>
+            </a>
+            <a href="{% url 'layoff_radar' %}" class="onboard-tool-card">
+                <div class="onboard-tool-icon">🚨</div>
+                <div class="onboard-tool-body">
+                    <h3>Layoff Radar</h3>
+                    <p>Track hiring freezes and stability scores by company.</p>
+                </div>
+                <span class="onboard-tool-cta">Check →</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Pro upsell -->
+    <section class="onboard-pro-banner">
+        <div class="onboard-pro-inner">
+            <div class="onboard-pro-copy">
+                <div class="onboard-pro-badge">Career Reality Pro</div>
+                <h2 class="onboard-pro-title">Unlock the full intelligence stack</h2>
+                <ul class="onboard-pro-list">
+                    <li>📊 Percentile salary benchmarks — see where you rank by role &amp; city</li>
+                    <li>🏢 Full company intelligence — real reviews, culture scores, exit data</li>
+                    <li>📬 Weekly insight digest sent to your inbox every Monday</li>
+                    <li>🎯 Priority tool access with saved analyses</li>
+                </ul>
+            </div>
+            <div class="onboard-pro-action">
+                <a href="{% url 'payments:pricing' %}" class="onboard-pro-btn">
+                    See Pro Plans — from ₹299/mo
+                </a>
+                <p class="onboard-pro-note">Cancel anytime. Instant access. No lock-in.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer action -->
+    <div class="onboard-footer-actions">
+        <a href="{% url 'home' %}" class="onboard-skip">Explore the site first →</a>
+    </div>
+
+</div>
+{% endblock %}

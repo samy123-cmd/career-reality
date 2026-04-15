@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Page Not Found - Career Reality India{% endblock %}
+{% block title %}Page Not Found — Career Reality India{% endblock %}
 {% block meta_description %}The page you're looking for doesn't exist. Browse Career Reality for salary data, career tools, and Indian tech career analysis.{% endblock %}
 
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl); text-align: center; padding: 0 var(--space-sm);">
-    <p style="font-size: 80px; font-weight: 900; color: var(--c-black); margin: 0; line-height: 1;">404</p>
-    <h1 style="font-size: 28px; color: var(--c-black); margin: 0.5rem 0 1rem;">This page doesn't exist.</h1>
-    <p style="color: var(--c-grey-mid); max-width: 480px; margin: 0 auto 2rem;">
-        It may have been moved, deleted, or the URL is incorrect. Use the links below to get back on track.
+<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl); text-align: center; padding: 3rem var(--space-sm);">
+    <p style="font-size: 96px; font-weight: 900; color: var(--c-black); margin: 0; line-height: 1; letter-spacing: -0.04em;">404</p>
+    <h1 style="font-size: 28px; color: var(--c-black); margin: 1rem 0 0.75rem; font-weight: 700;">This page doesn't exist.</h1>
+    <p style="color: var(--c-grey-mid); max-width: 440px; margin: 0 auto 2.5rem; font-size: 16px; line-height: 1.6;">
+        It may have been moved, deleted, or the URL is incorrect.
     </p>
-    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="/" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--c-black); color: var(--c-white); text-decoration: none; font-weight: 700;">&#8592; Back to Home</a>
-        <a href="/salary-reality/" style="display: inline-block; padding: 0.75rem 1.5rem; border: 1px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600;">Salary Reality</a>
-        <a href="/salary-calculator/" style="display: inline-block; padding: 0.75rem 1.5rem; border: 1px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600;">CTC Decoder</a>
+    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
+        <a href="/" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; background: var(--c-black); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; border-radius: 6px;">&#8592; Back to Home</a>
+        <a href="{% url 'salary_calculator' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🧮 CTC Decoder</a>
+        <a href="{% url 'wizard_start' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🎯 Risk Analyzer</a>
+        <a href="{% url 'company_directory' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🏢 Companies</a>
     </div>
-    <p style="margin-top: 3rem; font-size: 13px; color: var(--c-grey-light);">
-        Found a broken link?
-        <a href="/contact/" style="color: inherit; text-decoration: underline;">Let us know</a>.
+    <p style="margin: 0; font-size: 13px; color: var(--c-grey-light);">
+        Found a broken link? <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Let us know</a>.
     </p>
 </section>
 {% endblock %}

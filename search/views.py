@@ -48,9 +48,9 @@ def search_view(request):
         # AI News
         news = AINewsItem.objects.filter(
             Q(title__icontains=q) |
-            Q(summary_html__icontains=q) |
+            Q(summary__icontains=q) |
             Q(career_angle__icontains=q),
-            is_published=True,
+            status="published",
         ).order_by("-published_at")
         counts["news"] = news.count()
         results["news"] = news[:20]
@@ -95,7 +95,7 @@ def search_suggest_api(request):
         suggestions.append({"type": "company", "text": c["name"], "url": f"/companies/{c['slug']}/"})
 
     # AI News
-    for n in AINewsItem.objects.filter(title__icontains=q, is_published=True).values("title", "slug")[:2]:
+    for n in AINewsItem.objects.filter(title__icontains=q, status="published").values("title", "slug")[:2]:
         suggestions.append({"type": "news", "text": n["title"], "url": f"/ai/{n['slug']}/"})
 
     return JsonResponse({"suggestions": suggestions})

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Start a Discussion — Career Reality India{% endblock %}
+{% block meta_description %}{{ og_description }}{% endblock %}
+
+{% block content %}
+<div class="container-reading disc-reading-container">
+
+    <a href="{% url 'discussion_list' %}" class="disc-back-link">← All Discussions</a>
+
+    <div class="disc-create-card">
+
+        <h1 class="disc-thread-title">Start a Discussion</h1>
+        {% if company %}
+        <p class="disc-create-subtitle">About <strong>{{ company.name }}</strong></p>
+        {% else %}
+        <p class="disc-create-subtitle">100% anonymous. No login needed. No corporate filtering.</p>
+        {% endif %}
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="disc-alert disc-alert--msg">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="disc-ground-rules">
+            <strong>Ground rules:</strong> Be honest, not hateful. Share experience, not identity. No personal targets.
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="disc-form-group">
+                <label class="disc-label">{{ form.topic.label }}</label>
+                {{ form.topic }}
+            </div>
+
+            <div class="disc-form-group">
+                <label class="disc-label">{{ form.title.label }}</label>
+                {{ form.title }}
+                {% if form.title.errors %}<p class="disc-field-error">{{ form.title.errors|join:", " }}</p>{% endif %}
+            </div>
+
+            <div class="disc-form-group">
+                <label class="disc-label">{{ form.body.label }}</label>
+                {{ form.body }}
+                {% if form.body.errors %}<p class="disc-field-error">{{ form.body.errors|join:", " }}</p>{% endif %}
+            </div>
+
+            <div class="disc-form-group disc-form-group--last">
+                <label class="disc-label">{{ form.role.label }} <span class="disc-label-optional">(optional)</span></label>
+                {{ form.role }}
+                <p class="disc-field-hint">{{ form.role.help_text }}</p>
+            </div>
+
+            <button type="submit" class="btn btn--primary disc-submit-btn">Post Anonymously</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

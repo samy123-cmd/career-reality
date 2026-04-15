@@ -127,6 +127,33 @@
             </p>
         </section>
 
+        <div class="az-article-newsletter" id="article-newsletter-cta">
+            <div class="az-article-newsletter-inner">
+                <p class="az-article-newsletter-headline">The data behind this article — in your inbox every Monday.</p>
+                <p class="az-article-newsletter-sub">
+                    Salary benchmarks, layoff signals, and career reality checks for Indian tech professionals.
+                    Free. <strong>12,000+</strong> readers. No sponsors.
+                </p>
+                <form class="az-article-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="source" value="article_inline">
+                    <input type="hidden" name="article_slug" value="{{ article.slug }}">
+                    <div class="az-article-newsletter-row">
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="your@email.com"
+                            required
+                            autocomplete="email"
+                            class="az-article-newsletter-input"
+                            aria-label="Email address for newsletter">
+                        <button type="submit" class="az-article-newsletter-btn">Get Weekly Signals</button>
+                    </div>
+                </form>
+                <p class="az-article-newsletter-note">Unsubscribe any time.</p>
+            </div>
+        </div>
+
         <section id="salary-growth">
             <h2>Salary and Growth Reality</h2>
             <div class="table-scroll">{% if LANGUAGE_CODE == 'hi' and article.salary_reality_hi %}{{ article.salary_reality_hi|safe }}{% else %}{{ article.salary_reality|safe }}{% endif %}</div>

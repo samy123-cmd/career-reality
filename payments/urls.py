@@ -8,4 +8,5 @@ urlpatterns = [
     path("verify/", views.verify_payment, name="verify"),
     path("webhook/", views.razorpay_webhook, name="webhook"),
     path("pricing/", views.pricing, name="pricing"),
+    path("escape-roadmap/", views.escape_roadmap, name="escape_roadmap"),
 ]

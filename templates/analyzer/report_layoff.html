@@ -5,14 +5,23 @@
 {% block meta_description %}Report layoffs, hiring freezes, or safe hiring signals anonymously to help others assess risk.{% endblock %}
 
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+<section class="container-medium az-report-page">
 
     <div class="az-form-hero">
         <h1 class="az-form-title">Report Status</h1>
         <p class="az-form-subtitle">Anonymous. Secure. Help others avoid the trap.</p>
     </div>
 
-    <div class="az-form-card" style="max-width:500px;">
+    {% if messages %}
+    <div class="az-report-success">
+        {% for message in messages %}
+        <p>&#10003; {{ message }}</p>
+        {% endfor %}
+        <a href="{% url 'layoff_radar' %}" class="az-report-success-link">View Layoff Radar &rarr;</a>
+    </div>
+    {% endif %}
+
+    <div class="az-form-card">
         <form method="POST">
             {% csrf_token %}
 

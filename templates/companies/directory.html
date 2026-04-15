@@ -19,26 +19,38 @@
 {% block content %}
 <section class="dir-hero">
     <div class="container-wide">
-        <h1>Company Intelligence</h1>
-        <p>Honest salary data, anonymous reviews, and layoff alerts. No login required.</p>
-        <div class="dir-stats">
-            <div class="dir-stat"><strong>{{ total_companies }}</strong><span>Companies</span></div>
-            <div class="dir-stat"><strong>{{ total_salaries }}</strong><span>Salary Points</span></div>
-            <div class="dir-stat"><strong>{{ total_reviews }}</strong><span>Reviews</span></div>
+        <div class="dir-hero-inner">
+            <div>
+                <h1>Company Intelligence</h1>
+                <p>Honest salary data, anonymous reviews, and layoff alerts. No login required.</p>
+                <div class="dir-stats">
+                    <div class="dir-stat"><strong>{{ total_companies }}</strong><span>Companies</span></div>
+                    <div class="dir-stat"><strong>{{ total_salaries }}</strong><span>Salary Points</span></div>
+                    <div class="dir-stat"><strong>{{ total_reviews }}</strong><span>Reviews</span></div>
+                </div>
+            </div>
+            <div class="dir-hero-cta">
+                <a href="{% url 'submit_salary' %}" class="dir-cta-btn">+ Contribute Salary Data</a>
+                <a href="{% url 'write_review' %}" class="dir-cta-btn dir-cta-btn--secondary">✍️ Write a Review</a>
+                <p class="dir-cta-note">Anonymous &middot; 2 min &middot; Helps everyone</p>
+            </div>
         </div>
     </div>
 </section>
 
-<div class="container-wide" style="padding: 1.5rem 0;">
+<div class="container-wide dir-content">
     <form method="get" class="dir-controls">
-        <input type="text" name="q" value="{{ search_query }}" placeholder="Search companies…" autocomplete="off">
-        <select name="sector" onchange="this.form.submit()">
+        <div class="dir-search-wrap">
+            <span class="dir-search-icon">&#128269;</span>
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Search companies…" autocomplete="off">
+        </div>
+        <select name="sector" id="dir-sector-select">
             <option value="">All Sectors</option>
             {% for val, label in sector_choices %}
             <option value="{{ val }}" {% if current_sector == val %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
         </select>
-        <select name="sort" onchange="this.form.submit()">
+        <select name="sort" id="dir-sort-select">
             <option value="-salary_count" {% if current_sort == '-salary_count' %}selected{% endif %}>Most Salary Data</option>
             <option value="-review_count" {% if current_sort == '-review_count' %}selected{% endif %}>Most Reviews</option>
             <option value="-overall_score" {% if current_sort == '-overall_score' %}selected{% endif %}>Highest Rated</option>
@@ -47,34 +59,52 @@
         <button type="submit" class="dir-search-btn">Search</button>
     </form>
 
+    <script>
+    (function() {
+        var form = document.querySelector('.dir-controls');
+        ['dir-sector-select', 'dir-sort-select'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.addEventListener('change', function() { form.submit(); });
+        });
+    })();
+    </script>
+
     {% if page_obj.object_list %}
     <div class="company-grid">
         {% for company in page_obj %}
         <div class="company-card">
             <a href="{{ company.get_absolute_url }}">
                 <div class="cc-header">
-                    <div class="cc-logo">
+                    <div class="cc-logo" data-sector="{{ company.sector }}">
                         {% if company.logo_url %}
                         <img src="{{ company.logo_url }}" alt="{{ company.name }}" loading="lazy" width="48" height="48">
                         {% else %}
-                        {{ company.name|truncatechars:2|upper }}
+                        {{ company.name|slice:":2"|upper }}
                         {% endif %}
                     </div>
                     <div>
                         <div class="cc-name">{{ company.name }}</div>
-                        <div class="cc-sector">{{ company.get_sector_display }}{% if company.headquarters %} · {{ company.headquarters }}{% endif %}</div>
+                        <div class="cc-sector">{{ company.get_sector_display }}{% if company.headquarters %} &middot; {{ company.headquarters }}{% endif %}</div>
                     </div>
                     {% if company.overall_score %}
-                    <div class="cc-score {% if company.overall_score < 3 %}low{% elif company.overall_score < 4 %}mid{% endif %}" style="margin-left:auto;">
-                        {{ company.overall_score }}/5
+                    <div class="cc-score {% if company.overall_score < 3 %}low{% elif company.overall_score < 4 %}mid{% endif %}">
+                        &starf; {{ company.overall_score }}
                     </div>
+                    {% elif company.layoff_report_count %}
+                    <div class="cc-stability layoff">⚠ Reports</div>
                     {% endif %}
                 </div>
                 <div class="cc-stats">
-                    <div>💰 <span class="cc-stat-val">{{ company.salary_count }}</span> salaries</div>
-                    <div>📝 <span class="cc-stat-val">{{ company.review_count }}</span> reviews</div>
+                    {% if company.salary_count %}
+                    <div>💰 <strong class="cc-stat-val">{{ company.salary_count }}</strong> salaries</div>
+                    {% else %}
+                    <div class="cc-contribute">💰 Add salary →</div>
+                    {% endif %}
+                    {% if company.review_count %}
+                    <div>📝 <strong class="cc-stat-val">{{ company.review_count }}</strong> reviews</div>
+                    {% endif %}
                     {% if company.avg_ctc %}
-                    <div>📊 ~₹{{ company.avg_ctc|floatformat:0 }} avg CTC</div>
+                    <div class="cc-ctc">₹{{ company.avg_ctc|floatformat:0 }} avg</div>
                     {% endif %}
                 </div>
             </a>
@@ -85,25 +115,25 @@
     {% if page_obj.has_other_pages %}
     <div class="pagination">
         {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}&sector={{ current_sector }}&sort={{ current_sort }}&q={{ search_query }}">&larr; Prev</a>
+        <a href="?page={{ page_obj.previous_page_number }}&sector={{ current_sector }}&sort={{ current_sort }}&q={{ search_query|urlencode }}">&larr; Prev</a>
         {% endif %}
         {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
             <span class="current">{{ num }}</span>
             {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-            <a href="?page={{ num }}&sector={{ current_sector }}&sort={{ current_sort }}&q={{ search_query }}">{{ num }}</a>
+            <a href="?page={{ num }}&sector={{ current_sector }}&sort={{ current_sort }}&q={{ search_query|urlencode }}">{{ num }}</a>
             {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}&sector={{ current_sector }}&sort={{ current_sort }}&q={{ search_query }}">Next &rarr;</a>
+        <a href="?page={{ page_obj.next_page_number }}&sector={{ current_sector }}&sort={{ current_sort }}&q={{ search_query|urlencode }}">Next &rarr;</a>
         {% endif %}
     </div>
     {% endif %}
 
     {% else %}
-    <div style="text-align:center;padding:3rem 1rem;color:#64748b;">
-        <p style="font-size:1.2rem;">No companies found{% if search_query %} for "{{ search_query }}"{% endif %}.</p>
-        <p>Know a company? <a href="{% url 'submit_salary' %}" style="color:#0f172a;font-weight:600;">Submit salary data</a> and we'll add it.</p>
+    <div class="dir-empty">
+        <p class="dir-empty-msg">No companies found{% if search_query %} for "{{ search_query }}"{% endif %}.</p>
+        <p>Know a company? <a href="{% url 'submit_salary' %}" class="dir-empty-link">Submit salary data</a> and we'll add it.</p>
     </div>
     {% endif %}
 </div>

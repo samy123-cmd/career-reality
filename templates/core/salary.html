@@ -27,9 +27,9 @@ reality.{% endblock %}
 {% block content %}
 
 <!-- HEADER -->
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">
-    <h1 style="margin-bottom: 24px;">The Salary "Reality Check"</h1>
-    <p class="article-list-summary" style="margin-bottom: var(--space-md);">
+<section class="container-medium sal-page-header">
+    <h1 class="sal-page-h1">The Salary "Reality Check"</h1>
+    <p class="article-list-summary sal-page-intro">
         We track the <strong>median</strong> salaries, not the "top 1%" outliers.
         Most "Average Salary" reports are inflated by unicorns and US-remote roles.
         This is what the actual Indian market pays.
@@ -39,7 +39,7 @@ reality.{% endblock %}
     </p>
 </section>
 
-<section class="container-medium" style="margin-bottom: var(--space-lg);">
+<section class="container-medium sal-context">
     <span class="section-label">MARKET SUMMARY</span>
     <div class="sal-summary-box">
         <p>
@@ -58,8 +58,7 @@ reality.{% endblock %}
 </section>
 
 <!-- METHODOLOGY & CONTEXT -->
-<section class="container-reading" style="margin-bottom: var(--space-xl);">
-    <h2 style="font-size: 18px; margin-bottom: var(--space-md);">Why These Numbers Matter</h2>
+<section class="container-reading sal-methodology-section">
 
     <p>
         Salary conversations in India are distorted by survivorship bias. LinkedIn posts celebrate
@@ -80,7 +79,7 @@ reality.{% endblock %}
         specific pedigrees (IIT/IIM), prior experience at top-tier companies, or rare technical specializations.
     </p>
 
-    <h3 style="font-size: 16px; margin-top: var(--space-lg); margin-bottom: var(--space-sm);">Sources & Methodology</h3>
+    <h3 class="sal-subsection-title">Sources &amp; Methodology</h3>
     <p class="sal-methodology">
         Data is aggregated from job postings on LinkedIn, Naukri, and company career pages; verified
         offer letters shared with Career Reality; industry salary surveys from AmbitionBox and Glassdoor;
@@ -95,8 +94,8 @@ reality.{% endblock %}
     </ul>
 </section>
 
-<section class="container-reading" style="margin-bottom: var(--space-xl);">
-    <h3 style="font-size: 16px; margin-bottom: var(--space-sm);">Coverage and Limits</h3>
+<section class="container-reading sal-methodology-section">
+    <h3 class="sal-subsection-title">Coverage and Limits</h3>
     <ul class="sal-coverage">
         <li>India-only, full-time roles; US-remote and contractor roles are excluded.</li>
         <li>Ranges are median-heavy and calibrated for typical offers, not unicorn outliers.</li>
@@ -111,17 +110,17 @@ reality.{% endblock %}
 </section>
 
 <!-- SECTION 1: ENGINEERING -->
-<section class="container-medium" style="margin-bottom: var(--space-xl);">
+<section class="container-medium sal-table-section">
     <span class="section-label">01 // ENGINEERING</span>
 
     <div class="table-scroll">
         <table class="editorial-table">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Role & Context</th>
-                    <th style="width: 15%;">Exp</th>
-                    <th style="width: 25%;">Real Range (LPA)</th>
-                    <th style="width: 20%;">The "Hype"</th>
+                    <th class="sal-col-role">Role &amp; Context</th>
+                    <th class="sal-col-exp">Exp</th>
+                    <th class="sal-col-range">Real Range (LPA)</th>
+                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
                 </tr>
             </thead>
             <tbody>
@@ -203,17 +202,17 @@ reality.{% endblock %}
 </section>
 
 <!-- SECTION 2: DESIGN & PRODUCT -->
-<section class="container-medium" style="margin-bottom: var(--space-xl);">
-    <span class="section-label">02 // DESIGN & PRODUCT</span>
+<section class="container-medium sal-table-section">
+    <span class="section-label">02 // DESIGN &amp; PRODUCT</span>
 
     <div class="table-scroll">
         <table class="editorial-table">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Role & Context</th>
-                    <th style="width: 15%;">Exp</th>
-                    <th style="width: 25%;">Real Range (LPA)</th>
-                    <th style="width: 20%;">The "Hype"</th>
+                    <th class="sal-col-role">Role &amp; Context</th>
+                    <th class="sal-col-exp">Exp</th>
+                    <th class="sal-col-range">Real Range (LPA)</th>
+                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
                 </tr>
             </thead>
             <tbody>
@@ -259,17 +258,17 @@ reality.{% endblock %}
 </section>
 
 <!-- SECTION 3: BUSINESS & MARKETING -->
-<section class="container-medium" style="margin-bottom: var(--space-xl);">
-    <span class="section-label">03 // MARKETING & SALES</span>
+<section class="container-medium sal-table-section">
+    <span class="section-label">03 // MARKETING &amp; SALES</span>
 
     <div class="table-scroll">
         <table class="editorial-table">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Role & Context</th>
-                    <th style="width: 15%;">Exp</th>
-                    <th style="width: 25%;">Real Range (LPA)</th>
-                    <th style="width: 20%;">The "Hype"</th>
+                    <th class="sal-col-role">Role &amp; Context</th>
+                    <th class="sal-col-exp">Exp</th>
+                    <th class="sal-col-range">Real Range (LPA)</th>
+                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
                 </tr>
             </thead>
             <tbody>
@@ -315,17 +314,17 @@ reality.{% endblock %}
 </section>
 
 <!-- SECTION 4: DATA & AI -->
-<section class="container-medium" style="margin-bottom: var(--space-xl);">
-    <span class="section-label">04 // DATA & AI</span>
+<section class="container-medium sal-table-section">
+    <span class="section-label">04 // DATA &amp; AI</span>
 
     <div class="table-scroll">
         <table class="editorial-table">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Role & Context</th>
-                    <th style="width: 15%;">Exp</th>
-                    <th style="width: 25%;">Real Range (LPA)</th>
-                    <th style="width: 20%;">The "Hype"</th>
+                    <th class="sal-col-role">Role &amp; Context</th>
+                    <th class="sal-col-exp">Exp</th>
+                    <th class="sal-col-range">Real Range (LPA)</th>
+                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
                 </tr>
             </thead>
             <tbody>
@@ -372,17 +371,17 @@ reality.{% endblock %}
 </section>
 
 <!-- SECTION 5: MANAGEMENT & STRATEGY -->
-<section class="container-medium" style="margin-bottom: var(--space-xl);">
-    <span class="section-label">05 // MANAGEMENT & STRATEGY</span>
+<section class="container-medium sal-table-section">
+    <span class="section-label">05 // MANAGEMENT &amp; STRATEGY</span>
 
     <div class="table-scroll">
         <table class="editorial-table">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Role & Context</th>
-                    <th style="width: 15%;">Exp</th>
-                    <th style="width: 25%;">Real Range (LPA)</th>
-                    <th style="width: 20%;">The "Hype"</th>
+                    <th class="sal-col-role">Role &amp; Context</th>
+                    <th class="sal-col-exp">Exp</th>
+                    <th class="sal-col-range">Real Range (LPA)</th>
+                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
                 </tr>
             </thead>
             <tbody>
@@ -419,10 +418,8 @@ reality.{% endblock %}
 </section>
 
 <!-- EXPLANATION -->
-<section class="container-reading sal-explainer"
-    style="margin-bottom: var(--space-xl);">
-    <h3> How to read this
-    </h3>
+<section class="container-reading sal-explainer">
+    <h3>How to read this</h3>
     <p>
         The <strong>"Hype"</strong> number is what influencers, bootcamps, and viral LinkedIn posts tell you to expect.
         <br><br>
@@ -433,8 +430,8 @@ reality.{% endblock %}
     </p>
 </section>
 
-<section class="container-reading" style="margin-bottom: var(--space-xl);">
-    <h3 style="font-size: 16px; margin-bottom: var(--space-sm);">What Changed In This Update</h3>
+<section class="container-reading sal-methodology-section">
+    <h3 class="sal-subsection-title">What Changed In This Update</h3>
     <ul class="sal-changelog">
         <li><strong>{% now "F j, Y" %}:</strong> Refreshed market notes, validated role bands, and rechecked methodology sources.</li>
         <li><strong>March 2026:</strong> AI/GenAI and ML Engineer ranges revised upward; senior backend top-end nudged to 30 LPA reflecting appraisal-cycle offers. Mobile dev range adjusted.</li>

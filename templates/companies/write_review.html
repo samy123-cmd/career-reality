@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Write a Company Review — Career Reality India{% endblock %}
+{% block meta_description %}Share your anonymous, honest experience at any Indian company. No login required. Any company — listed or not.{% endblock %}
+
+{% block content %}
+<div class="container-medium" style="padding: 2rem 1rem 4rem;">
+    <nav class="cp-breadcrumb" aria-label="breadcrumb">
+        <a href="{% url 'company_directory' %}">Companies</a>
+        <span class="sep">&rsaquo;</span>
+        Write a Review
+    </nav>
+
+    <h1 class="wr-page-title">✍️ Write an Anonymous Review</h1>
+    <p class="wr-page-subtitle">No login required. Any company — even if it's not in our database yet. Your identity stays private.</p>
+
+    <div class="review-form">
+        <form method="post" action="{% url 'write_review' %}" id="wr-form" novalidate>
+            {% csrf_token %}
+
+            <!-- Company selection -->
+            <div class="wr-company-section">
+                <h3 class="wr-section-title">Your Company</h3>
+                <div class="form-row">
+                    <div class="form-group wr-company-group">
+                        <label for="wr-company-input">Company Name *</label>
+                        <input
+                            type="text"
+                            id="wr-company-input"
+                            name="company_name"
+                            class="cr-input"
+                            placeholder="Start typing your company name…"
+                            autocomplete="off"
+                            required
+                            value="{% if prefill_company %}{{ prefill_company.name }}{% endif %}"
+                        >
+                        <div id="wr-company-suggestions" class="wr-suggestions" role="listbox" aria-label="Company suggestions"></div>
+                        <p class="wr-company-hint">Can't find it? Just type the name — we'll add it.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="wr-sector">Sector *</label>
+                        <select name="company_sector" id="wr-sector" class="cr-input">
+                            {% if prefill_company %}
+                                {% for val, label in sector_choices %}
+                                <option value="{{ val }}" {% if prefill_company.sector == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="other">Select sector…</option>
+                                {% for val, label in sector_choices %}
+                                {% if val != "other" %}<option value="{{ val }}">{{ label }}</option>{% endif %}
+                                {% endfor %}
+                                <option value="other">Other</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="wr-divider">
+
+            <!-- Role details -->
+            <h3 class="wr-section-title">Your Role</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Job Title *</label>
+                    {{ form.role_title }}
+                </div>
+                <div class="form-group">
+                    <label>Level *</label>
+                    <select name="role_level" class="cr-input" required>
+                        <option value="">Select…</option>
+                        {% for val, label in form.fields.role_level.choices %}
+                        {% if val %}<option value="{{ val }}">{{ label }}</option>{% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Employment *</label>
+                    <select name="employment_status" class="cr-input" required>
+                        <option value="">Select…</option>
+                        {% for val, label in form.fields.employment_status.choices %}
+                        {% if val %}<option value="{{ val }}">{{ label }}</option>{% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tenure (months) *</label>
+                    {{ form.tenure_months }}
+                </div>
+            </div>
+
+            <hr class="wr-divider">
+
+            <!-- Ratings -->
+            <h3 class="wr-section-title">Ratings</h3>
+            {% for field in form %}
+            {% if "rating_" in field.name %}
+            <div class="form-group">
+                <label>{{ field.label }} *</label>
+                <div class="rating-group">
+                    {% for choice in field.field.choices %}
+                    {% if choice.0 %}
+                    <label><input type="radio" name="{{ field.name }}" value="{{ choice.0 }}" required><span>{{ choice.0 }}★</span></label>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <hr class="wr-divider">
+
+            <!-- Free text -->
+            <h3 class="wr-section-title">Your Experience</h3>
+            <div class="form-group"><label>Pros *</label>{{ form.pros }}</div>
+            <div class="form-group"><label>Cons *</label>{{ form.cons }}</div>
+            <div class="form-group"><label>Advice to Management</label>{{ form.advice_to_management }}</div>
+            <div class="form-group"><label>Biggest Lie Told by Company</label>{{ form.biggest_lie }}</div>
+
+            <div class="form-group">
+                <label>Would you join this company again? *</label>
+                <div class="rating-group">
+                    <label><input type="radio" name="would_rejoin" value="True" required><span>✅ Yes</span></label>
+                    <label><input type="radio" name="would_rejoin" value="False" required><span>❌ No</span></label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Submit Review</button>
+        </form>
+    </div>
+</div>
+
+<style>
+.wr-page-title { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.5rem; }
+.wr-page-subtitle { color: #64748b; margin: 0 0 2rem; font-size: 0.95rem; }
+.wr-section-title { font-size: 1rem; font-weight: 700; margin: 0 0 1rem; }
+.wr-company-section { margin-bottom: 0.5rem; }
+.wr-divider { border: none; border-top: 1px solid var(--c-divider, #e2e8f0); margin: 1.5rem 0; }
+.wr-company-group { position: relative; }
+.wr-company-hint { font-size: 0.78rem; color: #94a3b8; margin: 0.25rem 0 0; }
+.wr-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 100;
+    max-height: 220px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    display: none;
+}
+.wr-suggestions.open { display: block; }
+.wr-suggestion-item {
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.wr-suggestion-item:last-child { border-bottom: none; }
+.wr-suggestion-item:hover, .wr-suggestion-item.active { background: #f8fafc; }
+.wr-suggestion-sector { font-size: 0.75rem; color: #94a3b8; }
+</style>
+
+<script>
+(function () {
+    var input = document.getElementById('wr-company-input');
+    var suggestions = document.getElementById('wr-company-suggestions');
+    var sectorSelect = document.getElementById('wr-sector');
+    var searchUrl = '{% url "company_search_api" %}';
+    var debounceTimer;
+    var activeIndex = -1;
+    var currentItems = [];
+
+    function updateSector(sectorValue) {
+        for (var i = 0; i < sectorSelect.options.length; i++) {
+            if (sectorSelect.options[i].value === sectorValue) {
+                sectorSelect.selectedIndex = i;
+                break;
+            }
+        }
+    }
+
+    function renderSuggestions(results) {
+        suggestions.innerHTML = '';
+        currentItems = results;
+        activeIndex = -1;
+        if (!results.length) {
+            suggestions.classList.remove('open');
+            return;
+        }
+        for (var i = 0; i < results.length; i++) {
+            var item = document.createElement('div');
+            item.className = 'wr-suggestion-item';
+            item.setAttribute('role', 'option');
+            item.setAttribute('data-index', i);
+            item.innerHTML = '<span>' + results[i].name + '</span><span class="wr-suggestion-sector">' + (results[i].sector || '') + '</span>';
+            item.addEventListener('mousedown', (function(r) {
+                return function(e) {
+                    e.preventDefault();
+                    input.value = r.name;
+                    if (r.sector) updateSector(r.sector);
+                    suggestions.classList.remove('open');
+                };
+            })(results[i]));
+            suggestions.appendChild(item);
+        }
+        suggestions.classList.add('open');
+    }
+
+    input.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        var q = input.value.trim();
+        if (q.length < 2) {
+            suggestions.classList.remove('open');
+            return;
+        }
+        debounceTimer = setTimeout(function () {
+            fetch(searchUrl + '?q=' + encodeURIComponent(q))
+                .then(function(r) { return r.json(); })
+                .then(function(data) { renderSuggestions(data.results || []); })
+                .catch(function() { suggestions.classList.remove('open'); });
+        }, 220);
+    });
+
+    input.addEventListener('keydown', function (e) {
+        var items = suggestions.querySelectorAll('.wr-suggestion-item');
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            activeIndex = Math.max(activeIndex - 1, 0);
+        } else if (e.key === 'Enter' && activeIndex >= 0) {
+            e.preventDefault();
+            var r = currentItems[activeIndex];
+            input.value = r.name;
+            if (r.sector) updateSector(r.sector);
+            suggestions.classList.remove('open');
+            return;
+        } else if (e.key === 'Escape') {
+            suggestions.classList.remove('open');
+            return;
+        } else {
+            return;
+        }
+        items.forEach(function(el) { el.classList.remove('active'); });
+        if (activeIndex >= 0 && items[activeIndex]) items[activeIndex].classList.add('active');
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+            suggestions.classList.remove('open');
+        }
+    });
+})();
+</script>
+{% endblock %}

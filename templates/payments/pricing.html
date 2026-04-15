@@ -38,7 +38,22 @@
   <div class="plan-card featured">
     <div class="plan-badge">Most Popular</div>
     <p class="plan-name">Pro</p>
-    <p class="plan-price">₹299 <span>/month</span></p>
+
+    <!-- Billing toggle -->
+    <div class="billing-toggle" id="billing-toggle" role="group" aria-label="Billing period">
+      <button class="billing-toggle-btn active" id="btn-monthly-toggle" data-period="monthly" type="button">Monthly</button>
+      <button class="billing-toggle-btn" id="btn-annual-toggle" data-period="annual" type="button">Annual <span class="billing-save-badge">Save 30%</span></button>
+    </div>
+
+    <p class="plan-price" id="pro-price">₹299 <span id="pro-period">/month</span></p>
+    <p class="plan-price-annual-note" id="annual-note" style="display:none;">₹208/month · billed as ₹2,499/year</p>
+
+    <div class="plan-roi" id="plan-roi">
+      <span class="plan-roi-icon">💡</span>
+      One salary data point typically reveals a ₹40,000–₹2,00,000 gap.
+      At ₹299/month, that's up to <strong>667x ROI</strong>.
+    </div>
+
     <p class="plan-desc">Unlimited salary intelligence. Layoff alerts. AI-personalized result reports.</p>
     <ul class="plan-features">
       <li>Everything in Free</li>
@@ -55,6 +70,13 @@
             {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
       Get Pro →
     </button>
+    <div id="pro-email-wrap" style="display:none;margin-top:.75rem;">
+      <input type="email" id="pro-email-input" placeholder="your@email.com"
+             value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
+             style="width:100%;padding:.55rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem;margin-bottom:.5rem;">
+      <button type="button" id="btn-pro-confirm" class="btn-plan btn-plan-primary" style="width:100%;">Confirm &amp; Pay →</button>
+    </div>
+    <p class="plan-trust-line">Cancel anytime · Instant access · No lock-in</p>
     <p class="loading-msg" id="loading-pro">Opening checkout…</p>
   </div>
 
@@ -76,6 +98,12 @@
             {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
       Buy Now →
     </button>
+    <div id="checklist-email-wrap" style="display:none;margin-top:.75rem;">
+      <input type="email" id="checklist-email-input" placeholder="your@email.com"
+             value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
+             style="width:100%;padding:.55rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem;margin-bottom:.5rem;">
+      <button type="button" id="btn-checklist-confirm" class="btn-plan btn-plan-outline" style="width:100%;">Confirm &amp; Pay →</button>
+    </div>
     <p class="loading-msg" id="loading-checklist">Opening checkout…</p>
   </div>
 
@@ -115,6 +143,41 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 (function () {
+  // --- Billing toggle ---
+  var proPrice = document.getElementById("pro-price");
+  var proPeriod = document.getElementById("pro-period");
+  var annualNote = document.getElementById("annual-note");
+  var btnPro = document.getElementById("btn-pro");
+  var btnMonthlyToggle = document.getElementById("btn-monthly-toggle");
+  var btnAnnualToggle = document.getElementById("btn-annual-toggle");
+
+  var roiEl = document.getElementById("plan-roi");
+  var ROI_MONTHLY = '<span class="plan-roi-icon">💡</span> One salary data point typically reveals a ₹40,000–₹2,00,000 gap. At ₹299/month, that\'s up to <strong>667x ROI</strong>.';
+  var ROI_ANNUAL  = '<span class="plan-roi-icon">💡</span> One salary data point typically reveals a ₹40,000–₹2,00,000 gap. At ₹208/month (annual plan), that\'s up to <strong>961x ROI</strong>.';
+
+  function setMonthly() {
+    proPrice.childNodes[0].textContent = "₹299 ";
+    proPeriod.textContent = "/month";
+    annualNote.style.display = "none";
+    if (btnPro) btnPro.setAttribute("data-product", "pro-monthly");
+    if (roiEl) roiEl.innerHTML = ROI_MONTHLY;
+    btnMonthlyToggle.classList.add("active");
+    btnAnnualToggle.classList.remove("active");
+  }
+
+  function setAnnual() {
+    proPrice.childNodes[0].textContent = "₹2,499 ";
+    proPeriod.textContent = "/year";
+    annualNote.style.display = "block";
+    if (btnPro) btnPro.setAttribute("data-product", "pro-annual");
+    if (roiEl) roiEl.innerHTML = ROI_ANNUAL;
+    btnAnnualToggle.classList.add("active");
+    btnMonthlyToggle.classList.remove("active");
+  }
+
+  if (btnMonthlyToggle) btnMonthlyToggle.addEventListener("click", setMonthly);
+  if (btnAnnualToggle) btnAnnualToggle.addEventListener("click", setAnnual);
+
   var RAZORPAY_KEY_ID = "{{ razorpay_key_id|escapejs }}";
 
   function getCookie(name) {
@@ -124,7 +187,8 @@
     return "";
   }
 
-  function openCheckout(productSlug, btnId, loadingId) {
+  // openCheckout(productSlug, email, btnId, loadingId)
+  function openCheckout(productSlug, email, btnId, loadingId) {
     var btn = document.getElementById(btnId);
     var loading = document.getElementById(loadingId);
     if (btn) btn.disabled = true;
@@ -147,13 +211,6 @@
           return;
         }
 
-        var emailInput = prompt("Enter your email to receive your purchase:");
-        if (!emailInput) {
-          if (btn) btn.disabled = false;
-          if (loading) loading.style.display = "none";
-          return;
-        }
-
         var options = {
           key: RAZORPAY_KEY_ID,
           amount: data.amount,
@@ -161,7 +218,7 @@
           name: "Career Reality",
           description: data.product_description || data.product_name,
           order_id: data.razorpay_order_id,
-          prefill: { email: emailInput },
+          prefill: { email: email },
           theme: { color: "#000000" },
           handler: function (response) {
             fetch("/payments/verify/", {
@@ -174,13 +231,13 @@
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                email: emailInput,
+                email: email,
               }),
             })
               .then(function (r) { return r.json(); })
               .then(function (v) {
                 if (v.ok) {
-                  if (productSlug === "pro-monthly") {
+                  if (productSlug === "pro-monthly" || productSlug === "pro-annual") {
                     window.location.href = "/pro/dashboard/";
                   } else {
                     alert("✓ Payment confirmed! Check your inbox for the checklist.");
@@ -212,17 +269,57 @@
       });
   }
 
+  // Pro button: show inline email form, then confirm
   var btnPro = document.getElementById("btn-pro");
+  var proEmailWrap = document.getElementById("pro-email-wrap");
+  var proEmailInput = document.getElementById("pro-email-input");
+  var btnProConfirm = document.getElementById("btn-pro-confirm");
+
   if (btnPro) {
     btnPro.addEventListener("click", function () {
-      openCheckout("pro-monthly", "btn-pro", "loading-pro");
+      if (!proEmailWrap) return;
+      proEmailWrap.style.display = "block";
+      btnPro.style.display = "none";
+      if (proEmailInput && !proEmailInput.value) proEmailInput.focus();
+    });
+  }
+
+  if (btnProConfirm) {
+    btnProConfirm.addEventListener("click", function () {
+      var email = proEmailInput ? proEmailInput.value.trim() : "";
+      if (!email || !email.includes("@")) {
+        if (proEmailInput) { proEmailInput.style.borderColor = "#ef4444"; proEmailInput.focus(); }
+        return;
+      }
+      if (proEmailInput) proEmailInput.style.borderColor = "#d1d5db";
+      var productSlug = (btnPro ? btnPro.getAttribute("data-product") : null) || "pro-monthly";
+      openCheckout(productSlug, email, "btn-pro-confirm", "loading-pro");
     });
   }
 
   var btnChecklist = document.getElementById("btn-checklist");
+  var checklistEmailWrap = document.getElementById("checklist-email-wrap");
+  var checklistEmailInput = document.getElementById("checklist-email-input");
+  var btnChecklistConfirm = document.getElementById("btn-checklist-confirm");
+
   if (btnChecklist) {
     btnChecklist.addEventListener("click", function () {
-      openCheckout("exit-checklist", "btn-checklist", "loading-checklist");
+      if (!checklistEmailWrap) return;
+      checklistEmailWrap.style.display = "block";
+      btnChecklist.style.display = "none";
+      if (checklistEmailInput && !checklistEmailInput.value) checklistEmailInput.focus();
+    });
+  }
+
+  if (btnChecklistConfirm) {
+    btnChecklistConfirm.addEventListener("click", function () {
+      var email = checklistEmailInput ? checklistEmailInput.value.trim() : "";
+      if (!email || !email.includes("@")) {
+        if (checklistEmailInput) { checklistEmailInput.style.borderColor = "#ef4444"; checklistEmailInput.focus(); }
+        return;
+      }
+      if (checklistEmailInput) checklistEmailInput.style.borderColor = "#d1d5db";
+      openCheckout("exit-checklist", email, "btn-checklist-confirm", "loading-checklist");
     });
   }
 })();

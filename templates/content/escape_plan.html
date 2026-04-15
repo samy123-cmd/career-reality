@@ -33,89 +33,77 @@ to Product companies.{% endblock %}
   ]
 }
 </script>
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+<section class="container-medium ep-page">
 
     <!-- HEADER -->
-    <div style="text-align: center; margin-bottom: 3rem;">
-        <h1 style="font-size: 42px; line-height: 1.1;">The Service Company<br><span style="color: #d93025;">Escape
-                Plan</span></h1>
-        <p class="hero-subtitle" style="max-width: 600px; margin: 1rem auto;">
+    <div class="ep-hero">
+        <h1 class="ep-hero-title">The Service Company<br><span class="ep-hero-accent">Escape Plan</span></h1>
+        <p class="hero-subtitle ep-hero-sub">
             Stuck in TCS, Infosys, Wipro, or HCL?
             <br>The longer you stay, the harder it is to leave.
-            <br>Check your "Career Rot" level below.
+            <br>Check your &ldquo;Career Rot&rdquo; level below.
         </p>
     </div>
 
     <!-- THE ROT CHECK QUIZ -->
-    <div id="rot-quiz-container" class="calculator-card"
-        style="background: #fff; border: 2px solid var(--c-black); padding: 2rem; margin-bottom: 4rem;">
+    <div id="rot-quiz-container" class="calculator-card ep-quiz-card">
 
         <!-- STEP 0: ROLE -->
         <div class="quiz-step" id="step-role">
-            <h3 style="margin-top: 0;">First, what is your official role?</h3>
+            <h3 class="quiz-step-title">First, what is your official role?</h3>
             <div class="quiz-options">
-                <button onclick="setRole('dev')" class="quiz-btn">Developer / Engineer</button>
-                <button onclick="setRole('qa')" class="quiz-btn">QA / Tester (Manual or Auto)</button>
-                <button onclick="setRole('support')" class="quiz-btn">Support / Operations / Analyst</button>
+                <button class="quiz-btn" data-action="set-role" data-role="dev">Developer / Engineer</button>
+                <button class="quiz-btn" data-action="set-role" data-role="qa">QA / Tester (Manual or Auto)</button>
+                <button class="quiz-btn" data-action="set-role" data-role="support">Support / Operations / Analyst</button>
             </div>
         </div>
 
         <!-- STEP 1: CODING -->
-        <div class="quiz-step" id="step-1" style="display: none;">
-            <h3 style="margin-top: 0;">1. When was the last time you wrote code from scratch?</h3>
+        <div class="quiz-step ep-hidden" id="step-1">
+            <h3 class="quiz-step-title">1. When was the last time you wrote code from scratch?</h3>
             <div class="quiz-options">
-                <button onclick="nextStep(1, 0)" class="quiz-btn">Yesterday</button>
-                <button onclick="nextStep(1, 5)" class="quiz-btn">Last Month (Maintenance only)</button>
-                <button onclick="nextStep(1, 10)" class="quiz-btn">I just forward emails / manage Jira</button>
+                <button class="quiz-btn" data-action="next" data-step="1" data-points="0">Yesterday</button>
+                <button class="quiz-btn" data-action="next" data-step="1" data-points="5">Last Month (Maintenance only)</button>
+                <button class="quiz-btn" data-action="next" data-step="1" data-points="10">I just forward emails / manage Jira</button>
             </div>
         </div>
 
         <!-- STEP 2: STACK (DIVERSIFIED) -->
-        <div class="quiz-step" id="step-2" style="display: none;">
-            <h3 style="margin-top: 0;">2. What is your primary domain/stack?</h3>
+        <div class="quiz-step ep-hidden" id="step-2">
+            <h3 class="quiz-step-title">2. What is your primary domain/stack?</h3>
             <div class="quiz-options-grid">
-                <button onclick="setStack('web'); nextStep(2, 0)" class="quiz-btn">Web (React, Node, Py, Go)</button>
-                <button onclick="setStack('mobile'); nextStep(2, 0)" class="quiz-btn">Mobile (iOS, Android,
-                    Flutter)</button>
-                <button onclick="setStack('data'); nextStep(2, 0)" class="quiz-btn">Data / AI (Python, SQL, ML)</button>
-                <button onclick="setStack('devops'); nextStep(2, 0)" class="quiz-btn">Cloud / DevOps (AWS,
-                    Docker)</button>
-                <button onclick="setStack('legacy'); nextStep(2, 5)" class="quiz-btn">Legacy (JSP, Mainframe,
-                    .NET)</button>
-                <button onclick="setStack('proprietary'); nextStep(2, 10)" class="quiz-btn">Proprietary (SAP,
-                    Salesforce, CRM)</button>
+                <button class="quiz-btn" data-action="next" data-step="2" data-points="0" data-stack="web">Web (React, Node, Py, Go)</button>
+                <button class="quiz-btn" data-action="next" data-step="2" data-points="0" data-stack="mobile">Mobile (iOS, Android, Flutter)</button>
+                <button class="quiz-btn" data-action="next" data-step="2" data-points="0" data-stack="data">Data / AI (Python, SQL, ML)</button>
+                <button class="quiz-btn" data-action="next" data-step="2" data-points="0" data-stack="devops">Cloud / DevOps (AWS, Docker)</button>
+                <button class="quiz-btn" data-action="next" data-step="2" data-points="5" data-stack="legacy">Legacy (JSP, Mainframe, .NET)</button>
+                <button class="quiz-btn" data-action="next" data-step="2" data-points="10" data-stack="proprietary">Proprietary (SAP, Salesforce, CRM)</button>
             </div>
         </div>
 
         <!-- STEP 3: MEETINGS -->
-        <div class="quiz-step" id="step-3" style="display: none;">
-            <h3 style="margin-top: 0;">3. How much of your day is meetings?</h3>
+        <div class="quiz-step ep-hidden" id="step-3">
+            <h3 class="quiz-step-title">3. How much of your day is meetings?</h3>
             <div class="quiz-options">
-                <button onclick="nextStep(3, 0)" class="quiz-btn">Less than 1 hour</button>
-                <button onclick="nextStep(3, 5)" class="quiz-btn">2-4 Hours</button>
-                <button onclick="nextStep(3, 10)" class="quiz-btn">My entire calendar is blocked</button>
+                <button class="quiz-btn" data-action="next" data-step="3" data-points="0">Less than 1 hour</button>
+                <button class="quiz-btn" data-action="next" data-step="3" data-points="5">2&ndash;4 Hours</button>
+                <button class="quiz-btn" data-action="next" data-step="3" data-points="10">My entire calendar is blocked</button>
             </div>
         </div>
 
         <!-- RESULTS CARD -->
-        <div id="quiz-result" style="display: none; text-align: center;">
-            <div id="result-badge"
-                style="display: inline-block; padding: 8px 16px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: white; margin-bottom: 1rem;">
-                RESULT
-            </div>
-            <h2 id="result-title" style="margin: 0 0 1rem 0; font-size: 32px;"></h2>
-            <p id="result-desc" style="max-width: 500px; margin: 0 auto 2rem;"></p>
-
-            <button onclick="revealRoadmap()" class="btn-primary" style="margin-top: 1rem;">View Your Personalized
-                Roadmap ↓</button>
+        <div id="quiz-result" class="ep-hidden ep-result">
+            <div id="result-badge" class="ep-result-badge">RESULT</div>
+            <h2 id="result-title" class="ep-result-title"></h2>
+            <p id="result-desc" class="ep-result-desc"></p>
+            <button class="ep-reveal-btn" data-action="reveal-roadmap">View Your Personalised Roadmap &darr;</button>
         </div>
     </div>
 
     <!-- DYNAMIC ROADMAPS CONTAINER -->
-    <div id="roadmap-container" style="padding-top: 2rem;">
-        <h2 style="font-size: 28px; border-bottom: 2px solid black; padding-bottom: 1rem; margin-bottom: 2rem;">Your
-            Personalized Escape Protocol</h2>
-        <p style="color: var(--c-grey-mid); margin-bottom: 2rem;">Take the quiz above to see your recommended path highlighted. All roadmaps are shown below for reference.</p>
+    <div id="roadmap-container" class="ep-roadmap-section">
+        <h2 class="ep-roadmap-title">Your Personalised Escape Protocol</h2>
+        <p class="ep-roadmap-intro">Take the quiz above to see your recommended path highlighted. All roadmaps are shown below for reference.</p>
 
         <!-- 1. SUPPORT / OPS -->
         <details id="roadmap-support" class="roadmap-scenario collapsible">
@@ -223,168 +211,88 @@ to Product companies.{% endblock %}
 
     </div>
 
-    <style>
-        .quiz-options {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .quiz-options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .quiz-btn {
-            padding: 1rem;
-            border: 1px solid #ccc;
-            background: white;
-            text-align: left;
-            cursor: pointer;
-            font-family: var(--font-main);
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .quiz-btn:hover {
-            border-color: black;
-            background: #fafafa;
-        }
-
-        .btn-primary {
-            display: inline-block;
-            padding: 12px 24px;
-            background: var(--c-black);
-            color: white;
-            text-decoration: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            border: none;
-        }
-
-        .roadmap-step {
-            margin-bottom: 2.5rem;
-            background: #fafafa;
-            padding: 1.5rem;
-            border-left: 4px solid var(--c-black);
-        }
-
-        .step-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-list {
-            padding-left: 1.5rem;
-            margin-top: 1rem;
-            list-style-type: disc;
-        }
-
-        .step-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        @media (max-width: 600px) {
-            .quiz-options-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+{% comment %}Escape plan styles live in static/css/style.css under .ep-* classes{% endcomment %}
 
     <script>
-        let score = 0;
-        let userRole = 'dev';
-        let userStack = 'web';
+        (function () {
+            var score = 0;
+            var userRole = 'dev';
+            var userStack = 'web';
 
-        function setRole(role) {
-            userRole = role;
-            document.getElementById('step-role').style.display = 'none';
-            // If Support, skip tech stack? No, let them answer "Proprietary" or similar.
-            document.getElementById('step-1').style.display = 'block';
-        }
+            function hide(el) { el.classList.add('ep-hidden'); }
+            function show(el) { el.classList.remove('ep-hidden'); }
 
-        function setStack(stack) {
-            userStack = stack;
-        }
-
-        function nextStep(step, points) {
-            score += points;
-            document.getElementById(`step-${step}`).style.display = 'none';
-            if (step < 3) {
-                document.getElementById(`step-${step + 1}`).style.display = 'block';
-            } else {
-                showResult();
+            function showResult() {
+                var res   = document.getElementById('quiz-result');
+                var title = document.getElementById('result-title');
+                var desc  = document.getElementById('result-desc');
+                var badge = document.getElementById('result-badge');
+                show(res);
+                var risk = score > 15 ? 'critical' : score > 5 ? 'warning' : 'safe';
+                var map = {
+                    safe:     { bg: '#16a34a', status: 'STATUS: SAFE',     h: 'You are an Engineer.',         d: 'You are writing code. Time to level up.' },
+                    warning:  { bg: '#f59e0b', status: 'STATUS: WARNING',   h: 'Skill Rot Detected.',          d: 'You are doing too much maintenance work.' },
+                    critical: { bg: '#d93025', status: 'STATUS: CRITICAL',  h: 'Professional Bench Warmer.',   d: 'If you get laid off, you are in trouble.' },
+                };
+                var r = map[risk];
+                badge.style.background = r.bg;
+                badge.textContent = r.status;
+                title.textContent = r.h;
+                desc.textContent  = r.d;
             }
-        }
 
-        function showResult() {
-            const res = document.getElementById('quiz-result');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
-            const badge = document.getElementById('result-badge');
-
-            res.style.display = 'block';
-
-            let risk = 'safe';
-            if (score > 15) risk = 'critical';
-            else if (score > 5) risk = 'warning';
-
-            if (risk === 'safe') {
-                badge.style.background = '#2e7d32';
-                badge.innerText = "STATUS: SAFE";
-                title.innerText = "You are an Engineer.";
-                desc.innerText = "You are writing code. Time to level up.";
-            } else if (risk === 'warning') {
-                badge.style.background = '#f57f17';
-                badge.innerText = "STATUS: WARNING";
-                title.innerText = "Skill Rot Detected.";
-                desc.innerText = "You are doing too much maintenance work.";
-            } else {
-                badge.style.background = '#d93025';
-                badge.innerText = "STATUS: CRITICAL";
-                title.innerText = "Professional Bench Warmer.";
-                desc.innerText = "If you get laid off, you are in trouble.";
-            }
-        }
-
-        function revealRoadmap() {
-            // Close all roadmaps first
-            document.querySelectorAll('.roadmap-scenario').forEach(el => el.removeAttribute('open'));
-
-            // Open the relevant one based on quiz answers
-            let targetId = 'roadmap-dev-web'; // default
-            if (userRole === 'support') {
-                targetId = 'roadmap-support';
-            }
-            else if (userRole === 'qa') {
-                targetId = 'roadmap-qa';
-            }
-            else {
-                // Developers
-                if (userStack === 'legacy' || userStack === 'proprietary' || score > 15) {
-                    targetId = 'roadmap-dev-legacy';
-                } else if (userStack === 'mobile') {
-                    targetId = 'roadmap-dev-mobile';
-                } else if (userStack === 'data') {
-                    targetId = 'roadmap-dev-data';
-                } else {
-                    targetId = 'roadmap-dev-web';
+            function revealRoadmap() {
+                document.querySelectorAll('.roadmap-scenario').forEach(function (el) { el.removeAttribute('open'); });
+                var targetId = 'roadmap-dev-web';
+                if (userRole === 'support')      targetId = 'roadmap-support';
+                else if (userRole === 'qa')      targetId = 'roadmap-qa';
+                else if (userStack === 'legacy' || userStack === 'proprietary' || score > 15) targetId = 'roadmap-dev-legacy';
+                else if (userStack === 'mobile') targetId = 'roadmap-dev-mobile';
+                else if (userStack === 'data')   targetId = 'roadmap-dev-data';
+                var target = document.getElementById(targetId);
+                if (target) {
+                    target.setAttribute('open', '');
+                    target.classList.add('ep-roadmap-highlight');
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             }
 
-            const target = document.getElementById(targetId);
-            if (target) {
-                target.setAttribute('open', '');
-                target.style.border = '2px solid var(--c-black)';
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
+            document.addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-action]');
+                if (!btn) return;
+                var action = btn.dataset.action;
+
+                if (action === 'set-role') {
+                    userRole = btn.dataset.role;
+                    hide(document.getElementById('step-role'));
+                    show(document.getElementById('step-1'));
+                    return;
+                }
+
+                if (action === 'next') {
+                    var step   = parseInt(btn.dataset.step, 10);
+                    var points = parseInt(btn.dataset.points, 10);
+                    if (btn.dataset.stack) userStack = btn.dataset.stack;
+                    score += points;
+                    hide(document.getElementById('step-' + step));
+                    if (step < 3) {
+                        show(document.getElementById('step-' + (step + 1)));
+                    } else {
+                        showResult();
+                    }
+                    return;
+                }
+
+                if (action === 'reveal-roadmap') {
+                    var params = new URLSearchParams({
+                        role: userRole || 'dev',
+                        stack: userStack || 'web',
+                        score: score
+                    });
+                    window.location.href = '{% url "payments:escape_roadmap" %}?' + params.toString();
+                }
+            });
+        }());
     </script>
 </section>
 {% endblock %}

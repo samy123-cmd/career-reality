@@ -50,6 +50,24 @@ manager pressure to predict exit outcomes.{% endblock %}
       </p>
     </div>
 
+    {% if not user.is_authenticated %}
+    <!-- Pre-start newsletter nudge — shown to anonymous visitors only -->
+    <div class="az-intro-newsletter" id="az-intro-newsletter">
+        <div class="az-intro-newsletter-copy">
+            <strong>Join 12,000+ professionals getting weekly career intel</strong>
+            <span>Optional. No spam. Unsubscribe any time.</span>
+        </div>
+        <form class="az-intro-newsletter-form" action="{% url 'newsletter_signup' %}" method="post"
+              id="az-intro-newsletter-form">
+            {% csrf_token %}
+            <input type="hidden" name="source" value="analyzer_intro_nudge">
+            <input type="email" name="email" placeholder="your@email.com"
+                   class="az-intro-newsletter-input" autocomplete="email">
+            <button type="submit" class="az-intro-newsletter-btn">Subscribe</button>
+        </form>
+    </div>
+    {% endif %}
+
     <form action="{% url 'wizard_start' %}" method="post">
       {% csrf_token %}
       <button type="submit" class="az-btn-start">

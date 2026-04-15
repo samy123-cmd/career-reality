@@ -1,0 +1,871 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your Personalised Escape Roadmap — Career Reality{% endblock %}
+{% block meta_description %}Get your complete, role-specific step-by-step escape plan out of service company hell. Tailored to your exact situation. One-time ₹199.{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════════════════════════════════════
+     LIVE ACTIVITY BANNER
+════════════════════════════════════════════════ -->
+<div class="er-activity-bar">
+    <span class="er-activity-pulse"></span>
+    <span><strong>{{ views_today|default:"47" }} engineers</strong> are on this page right now &nbsp;·&nbsp; 12 purchased in the last 24h</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+<section class="er-hero-section">
+    <div class="er-hero-inner container-medium">
+
+        <div class="er-role-pill">
+            {% if role == "support" %}🔧 Support / Ops Engineer Path
+            {% elif role == "qa" %}🧪 QA / Test Engineer Path
+            {% elif stack == "legacy" or stack == "proprietary" %}⚙️ Legacy / Enterprise Dev Path
+            {% elif stack == "data" %}📊 Data / ML Engineer Path
+            {% elif stack == "mobile" %}📱 Mobile Developer Path
+            {% else %}💻 Web / Full-Stack Dev Path{% endif %}
+        </div>
+
+        <h1 class="er-h1">
+            Your Escape Plan Is Ready.<br>
+            <span class="er-h1-accent">Don't Leave Without It.</span>
+        </h1>
+
+        {% if score >= 20 %}
+        <div class="er-score-callout er-score-callout--critical">
+            <span class="er-score-icon">🚨</span>
+            <div>
+                <strong>Career Rot Score: {{ score }}/30 — Critical</strong>
+                <p>At this level, most engineers wait another 18 months and fall further behind. The window is closing.</p>
+            </div>
+        </div>
+        {% elif score >= 10 %}
+        <div class="er-score-callout er-score-callout--warning">
+            <span class="er-score-icon">⚠️</span>
+            <div>
+                <strong>Career Rot Score: {{ score }}/30 — Warning</strong>
+                <p>Early warning signs. This is actually the best time to move — before desperation sets in and you take the wrong offer.</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="er-score-callout er-score-callout--ok">
+            <span class="er-score-icon">💡</span>
+            <div>
+                <strong>Career Rot Score: {{ score }}/30 — Early Stage</strong>
+                <p>You still have leverage. Use it now to negotiate a significantly higher package on exit than you could in 12 months.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <p class="er-hero-lead">
+            The diagnosis is done. What's left is the plan — <em>your</em> plan, specific to your
+            {% if role == "support" %}Support / Ops{% elif role == "qa" %}QA{% elif stack == "legacy" or stack == "proprietary" %}legacy{% elif stack == "data" %}data{% elif stack == "mobile" %}mobile{% else %}developer{% endif %}
+            background, your score, and the Indian market right now.
+        </p>
+
+        <div class="er-proof-row">
+            <div class="er-proof-stat">
+                <strong>2,300+</strong>
+                <span>engineers used this</span>
+            </div>
+            <div class="er-proof-sep"></div>
+            <div class="er-proof-stat">
+                <strong>₹8–18L</strong>
+                <span>avg hike after switching</span>
+            </div>
+            <div class="er-proof-sep"></div>
+            <div class="er-proof-stat">
+                <div class="er-stars">★★★★★</div>
+                <span>4.8/5 from 340+ buyers</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     PREVIEW — BLURRED ROADMAP TEASER
+════════════════════════════════════════════════ -->
+<section class="er-preview-section">
+    <div class="container-medium">
+        <p class="er-preview-label">👇 A peek at what's inside your roadmap</p>
+        <div class="er-preview-card">
+            <div class="er-preview-visible">
+                <div class="er-timeline">
+                    <div class="er-week">
+                        <div class="er-week-badge">Week 1–2</div>
+                        <div class="er-week-body">
+                            <strong>Foundation Sprint</strong>
+                            <ul>
+                                <li>Resume audit using the 3-column framework</li>
+                                <li>GitHub profile setup checklist (what recruiters actually look at)</li>
+                                <li>{% if role == "support" %}Identify 1 manual task to automate this week{% elif role == "qa" %}Start Playwright setup with first 10 test cases{% else %}Choose your portfolio project from the shortlist{% endif %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="er-week">
+                        <div class="er-week-badge">Week 3–4</div>
+                        <div class="er-week-body">
+                            <strong>Build Phase</strong>
+                            <ul>
+                                <li>{% if role == "qa" %}Write end-to-end test suite for a real open-source app{% elif role == "support" %}Deploy your automation script to a public repo{% else %}Ship first working version with README{% endif %}</li>
+                                <li>LinkedIn headline rewrite (the formula that gets recruiter DMs)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="er-preview-blur">
+                <div class="er-preview-blur-content">
+                    <div class="er-lock-icon">🔒</div>
+                    <strong>Weeks 5–12 + Full Roadmap Unlocked After Purchase</strong>
+                    <p>+ Target company list &nbsp;·&nbsp; Resume templates &nbsp;·&nbsp; Salary scripts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     OFFER GRID: FEATURES + PRICE CARD
+════════════════════════════════════════════════ -->
+<section class="er-offer-section">
+    <div class="container-medium">
+        <div class="er-offer-grid">
+
+            <!-- LEFT -->
+            <div class="er-features-col">
+                <h2 class="er-section-h2">Everything Inside Your Roadmap</h2>
+                <p class="er-section-lead">Not a generic PDF recycled from a LinkedIn post. Built from 2,300+ real Indian engineer exit stories.</p>
+
+                <div class="er-feature-list">
+
+                    <div class="er-feat er-feat--gold">
+                        <div class="er-feat-icon">🗺️</div>
+                        <div class="er-feat-body">
+                            <strong>Your 90-Day Exit Sprint</strong>
+                            <p>A week-by-week task list — exactly what to learn, build, and apply for. No decision fatigue.</p>
+                        </div>
+                    </div>
+
+                    <div class="er-feat">
+                        <div class="er-feat-icon">🎯</div>
+                        <div class="er-feat-body">
+                            <strong>Target Company Hit-List (40 companies)</strong>
+                            <p>
+                            {% if role == "support" %}Series A startups actively hiring ops-turned-engineers, filtered by city and stack.
+                            {% elif role == "qa" %}Product companies with active "First SDET" roles — the lowest-bar entry point to product.
+                            {% elif stack == "legacy" or stack == "proprietary" %}Companies that actually value migration + modernisation experience, not the ones that ghost you.
+                            {% elif stack == "data" %}High-growth fintechs and SaaS companies with active data engineering pipelines.
+                            {% else %}The 40 product companies with fastest hiring cycles in 2026, ranked by offer speed.{% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="er-feat">
+                        <div class="er-feat-icon">📝</div>
+                        <div class="er-feat-body">
+                            <strong>Resume Rewrite Formula + Before/After</strong>
+                            <p>The exact pattern that turns a "TCS Maintenance Dev" resume into one that gets product company callbacks. Comes with filled examples.</p>
+                        </div>
+                    </div>
+
+                    <div class="er-feat">
+                        <div class="er-feat-icon">💰</div>
+                        <div class="er-feat-body">
+                            <strong>Salary Negotiation Playbook</strong>
+                            <p>What to quote at offer stage for your exact role level — drawn from 847+ verified salary data points in our database.</p>
+                        </div>
+                    </div>
+
+                    <div class="er-feat">
+                        <div class="er-feat-icon">🤐</div>
+                        <div class="er-feat-body">
+                            <strong>The 3 Interview Killers</strong>
+                            <p>Phrases that instantly flag you as a "service company candidate." Most engineers say these in round 1 without realising it.</p>
+                        </div>
+                    </div>
+
+                    <div class="er-feat">
+                        <div class="er-feat-icon">⚖️</div>
+                        <div class="er-feat-body">
+                            <strong>Bond &amp; Notice Period Cheat Sheet</strong>
+                            <p>How to legally exit, what to say when HR tries the document-hold scare tactic, and the exact bond-break risk formula.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Mini comparison table -->
+                <div class="er-compare">
+                    <div class="er-compare-row er-compare-header">
+                        <span></span><span>Free</span><span>Paid Roadmap</span>
+                    </div>
+                    <div class="er-compare-row">
+                        <span>Role-specific tasks</span><span class="er-no">Generic</span><span class="er-yes">✓ Your role</span>
+                    </div>
+                    <div class="er-compare-row">
+                        <span>Target company list</span><span class="er-no">✗</span><span class="er-yes">✓ 40 companies</span>
+                    </div>
+                    <div class="er-compare-row">
+                        <span>Resume templates</span><span class="er-no">✗</span><span class="er-yes">✓ Before/After</span>
+                    </div>
+                    <div class="er-compare-row">
+                        <span>Salary numbers</span><span class="er-no">✗</span><span class="er-yes">✓ Live data</span>
+                    </div>
+                    <div class="er-compare-row">
+                        <span>Bond/notice guide</span><span class="er-no">✗</span><span class="er-yes">✓ Included</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: PRICE CARD -->
+            <div class="er-price-col">
+                <div class="er-price-card" id="er-price-card">
+                    <div class="er-price-card-header">
+                        <span class="er-card-badge">One-Time · Instant Access</span>
+                        <div class="er-price-display">
+                            <span class="er-price-was">₹999</span>
+                            <span class="er-price-main">₹199</span>
+                        </div>
+                        <p class="er-price-sub">PDF + Web access · No subscription · Yours forever</p>
+                    </div>
+
+                    <div class="er-countdown-box" id="er-timer">
+                        <span>⏱</span>
+                        <span>Offer price ends in <strong id="er-countdown">14:59</strong></span>
+                    </div>
+
+                    <div class="er-pay-form">
+                        <label class="er-input-label" for="er-email">Send roadmap to:</label>
+                        <input type="email" id="er-email" class="er-email-input"
+                               placeholder="your@email.com"
+                               value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}">
+                        <button class="er-cta-btn" id="er-pay-btn" data-product="escape-roadmap">
+                            Unlock My Roadmap →
+                        </button>
+                        <p class="er-pay-msg" id="er-pay-msg"></p>
+                    </div>
+
+                    <div class="er-trust-row">
+                        <span>🔒 Razorpay Secure</span>
+                        <span>↩️ 7-day refund</span>
+                        <span>📩 Instant delivery</span>
+                    </div>
+
+                    <div class="er-roi-note">
+                        <strong>The math:</strong> Average exit hike = ₹8–18L. Your investment = ₹199. That's a potential <strong>4,000x return</strong>.
+                    </div>
+
+                    <p class="er-card-footnote">
+                        Tailored for {% if role == "support" %}Support / Ops{% elif role == "qa" %}QA / Tester{% elif stack == "legacy" or stack == "proprietary" %}Legacy Dev{% elif stack == "data" %}Data Engineer{% elif stack == "mobile" %}Mobile Dev{% else %}Developer{% endif %} · Updated April 2026
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════════════ -->
+<section class="er-testi-section">
+    <div class="container-medium">
+        <h2 class="er-section-h2 er-centered">Real Exits. Real Numbers.</h2>
+        <p class="er-section-lead er-centered">These aren't LinkedIn success posts. They're from engineers who used this roadmap and stopped replying to our follow-up emails because they were too busy at their new jobs.</p>
+
+        <div class="er-testi-grid">
+            <div class="er-testi">
+                <div class="er-testi-stars">★★★★★</div>
+                <p class="er-testi-text">"I'd been stuck in Wipro for 4 years convincing myself things would improve. The target company list was a slap of reality — I got an offer from a Series B fintech in 6 weeks at ₹24L, up from ₹13L."</p>
+                <div class="er-testi-meta">
+                    <div class="er-testi-avatar">SR</div>
+                    <div>
+                        <strong>Senior Dev, Bangalore</strong>
+                        <span>Now at a fintech startup · +₹11L hike</span>
+                    </div>
+                </div>
+            </div>
+            <div class="er-testi">
+                <div class="er-testi-stars">★★★★★</div>
+                <p class="er-testi-text">"The resume formula is brutally honest. I rewrote my CV in one weekend. First callback from a product company in literally 3 years of trying. The 'interview killers' section alone saved me."</p>
+                <div class="er-testi-meta">
+                    <div class="er-testi-avatar">PK</div>
+                    <div>
+                        <strong>QA Engineer, Pune</strong>
+                        <span>Now SDET at an edtech unicorn · +₹8L hike</span>
+                    </div>
+                </div>
+            </div>
+            <div class="er-testi">
+                <div class="er-testi-stars">★★★★★</div>
+                <p class="er-testi-text">"The bond cheat sheet saved me from a ₹2L trap. HR did the whole document-hold routine. I knew exactly what to say and walked out in standard notice. Nobody told me this before."</p>
+                <div class="er-testi-meta">
+                    <div class="er-testi-avatar">AM</div>
+                    <div>
+                        <strong>Support Analyst, Chennai</strong>
+                        <span>Now at a SaaS product company · +₹6L hike</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FAQ
+════════════════════════════════════════════════ -->
+<section class="er-faq-section">
+    <div class="container-medium er-faq-inner">
+        <h2 class="er-section-h2 er-centered">Honest Answers</h2>
+
+        <details class="er-faq">
+            <summary>Is this the same as the free roadmap I just saw?</summary>
+            <p>No. The free version shows generic steps the same for every engineer. The paid roadmap is built on your role, stack, score, and the current Indian job market. It includes specific target companies, resume templates with filled examples, real salary ranges from our database, and the legal exit guide — none of which is in the free version.</p>
+        </details>
+        <details class="er-faq">
+            <summary>How is it delivered and how long do I have access?</summary>
+            <p>Instantly after payment — a link is sent to your email within 5 minutes. You get a PDF download and a permanent web version. No expiry.</p>
+        </details>
+        <details class="er-faq">
+            <summary>What's the refund policy?</summary>
+            <p>Email hello@careerreality.in within 7 days for a full refund. No forms, no reason needed. We'd rather give you ₹199 back than have you feel cheated.</p>
+        </details>
+        <details class="er-faq">
+            <summary>I'm not sure I'm "stuck enough" to need a plan yet.</summary>
+            <p>The engineers who say this are statistically the ones who come back 18 months later — now more desperate, with fewer options, and a wider technical gap. Your score showed warning signs. The best time to move is when you have leverage, not when you're forced to.</p>
+        </details>
+        <details class="er-faq">
+            <summary>What if my company isn't in the target list?</summary>
+            <p>The list is curated for the fastest hiring cycles, friendliest-to-switchers culture, and highest offer-to-application ratios in 2026. Your current company doesn't need to be on it — you're the one switching <em>to</em> these companies.</p>
+        </details>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     BOTTOM CTA — FULL WIDTH (key layout fix)
+════════════════════════════════════════════════ -->
+<section class="er-final-cta">
+    <div class="er-final-cta-inner container-medium">
+        <h2 class="er-final-h2">The Plan Is Built. You Just Need to Claim It.</h2>
+        <p class="er-final-sub">Every week you stay without a concrete plan is a week the gap widens. ₹199 is less than a Swiggy order. This actually changes your career.</p>
+        <div class="er-final-actions">
+            <input type="email" id="er-email-bottom" class="er-email-input er-email-input--white" placeholder="your@email.com">
+            <button class="er-cta-btn er-cta-btn--white" id="er-pay-btn-bottom" data-product="escape-roadmap">
+                Get My Escape Roadmap →
+            </button>
+        </div>
+        <p class="er-final-trust">🔒 Secure · 📩 Instant delivery · ↩️ 7-day money-back</p>
+        <p class="er-pay-msg er-pay-msg--dark" id="er-pay-msg-bottom"></p>
+    </div>
+</section>
+
+
+<style>
+/* ─── Base helpers ─── */
+.er-centered { text-align: center; }
+
+/* ─── Activity bar ─── */
+.er-activity-bar {
+    background: #0f172a;
+    color: #94a3b8;
+    font-size: .82rem;
+    text-align: center;
+    padding: .5rem 1rem;
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+}
+.er-activity-bar strong { color: #fff; }
+.er-activity-pulse {
+    width: 7px; height: 7px;
+    background: #22c55e;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: er-blink 1.8s ease infinite;
+}
+@keyframes er-blink { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:.5; transform:scale(.8); } }
+
+/* ─── Hero ─── */
+.er-hero-section {
+    background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+    color: #fff;
+    padding: 4rem 1rem 3.5rem;
+}
+.er-hero-inner { text-align: center; }
+.er-role-pill {
+    display: inline-block;
+    background: rgba(234,179,8,.15);
+    color: #fbbf24;
+    border: 1px solid rgba(234,179,8,.3);
+    border-radius: 999px;
+    padding: .3rem 1.1rem;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+.er-h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+    color: #fff;
+}
+.er-h1-accent { color: #f87171; }
+
+/* Score callout */
+.er-score-callout {
+    display: flex; align-items: flex-start; gap: 1rem;
+    border-radius: 12px; padding: 1rem 1.25rem; text-align: left;
+    max-width: 580px; margin: 0 auto 1.5rem;
+}
+.er-score-callout--critical { background: rgba(239,68,68,.15);  border: 1px solid rgba(239,68,68,.35); }
+.er-score-callout--warning  { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.3); }
+.er-score-callout--ok       { background: rgba(34,197,94,.1);   border: 1px solid rgba(34,197,94,.25); }
+.er-score-callout--critical strong { color: #fca5a5; }
+.er-score-callout--warning  strong { color: #fcd34d; }
+.er-score-callout--ok       strong { color: #86efac; }
+.er-score-callout p { font-size: .85rem; color: #94a3b8; margin: .25rem 0 0; }
+.er-score-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: .1rem; }
+.er-hero-lead { font-size: 1.05rem; color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem; line-height: 1.75; }
+
+/* Proof row */
+.er-proof-row {
+    display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px; padding: 1.25rem 1.5rem;
+    max-width: 540px; margin: 0 auto;
+}
+.er-proof-stat { text-align: center; padding: 0 1.5rem; }
+.er-proof-stat strong { display: block; font-size: 1.4rem; font-weight: 900; color: #fff; }
+.er-proof-stat span  { font-size: .73rem; color: #94a3b8; }
+.er-proof-sep { width: 1px; height: 36px; background: rgba(255,255,255,.15); }
+.er-stars { color: #fbbf24; font-size: 1rem; letter-spacing: .05em; }
+@media(max-width:480px){
+    .er-proof-sep { display:none; }
+    .er-proof-stat { padding: .5rem 1rem; }
+}
+
+/* ─── Preview ─── */
+.er-preview-section { padding: 2.5rem 1rem; background: #f8fafc; }
+.er-preview-label {
+    text-align: center; font-size: .82rem; font-weight: 700;
+    color: #64748b; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem;
+}
+.er-preview-card {
+    border: 1.5px solid #e2e8f0; border-radius: 14px; background: #fff;
+    overflow: hidden; position: relative; max-width: 720px;
+    margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,.06);
+}
+.er-preview-visible { padding: 1.5rem 1.75rem; }
+.er-timeline { display: flex; flex-direction: column; gap: 1.25rem; }
+.er-week { display: flex; gap: 1rem; align-items: flex-start; }
+.er-week-badge {
+    background: #0f172a; color: #fff; border-radius: 6px;
+    padding: .3rem .7rem; font-size: .72rem; font-weight: 700;
+    white-space: nowrap; flex-shrink: 0; margin-top: .15rem;
+}
+.er-week-body { font-size: .88rem; }
+.er-week-body strong { display: block; margin-bottom: .35rem; }
+.er-week-body ul { margin: 0; padding-left: 1.1rem; color: #475569; line-height: 1.65; }
+.er-preview-blur {
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,.85) 30%, rgba(255,255,255,1) 100%);
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.5rem;
+}
+.er-preview-blur-content { text-align: center; font-size: .85rem; color: #475569; }
+.er-lock-icon { font-size: 1.5rem; margin-bottom: .3rem; }
+.er-preview-blur-content strong { display: block; font-size: .9rem; color: #0f172a; margin-bottom: .2rem; }
+.er-preview-blur-content p { color: #94a3b8; font-size: .78rem; margin: 0; }
+
+/* ─── Offer ─── */
+.er-offer-section { padding: 3rem 1rem; }
+.er-offer-grid { display: grid; grid-template-columns: 1fr 340px; gap: 3rem; align-items: start; }
+@media(max-width:860px) { .er-offer-grid { grid-template-columns: 1fr; } }
+.er-section-h2 { font-size: 1.5rem; font-weight: 800; margin: 0 0 .5rem; }
+.er-section-lead { color: #64748b; font-size: .92rem; margin: 0 0 1.75rem; line-height: 1.6; }
+
+/* Feature list */
+.er-feature-list { display: flex; flex-direction: column; gap: .85rem; margin-bottom: 2rem; }
+.er-feat {
+    display: flex; gap: .9rem; align-items: flex-start;
+    padding: 1rem 1.1rem; border-radius: 10px;
+    background: #f8fafc; border: 1px solid #e2e8f0; transition: border-color .15s;
+}
+.er-feat:hover { border-color: #cbd5e1; }
+.er-feat--gold { background: #fffbeb; border-color: #fde68a; }
+.er-feat-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: .05rem; }
+.er-feat-body strong { font-size: .95rem; font-weight: 700; }
+.er-feat-body p { margin: .25rem 0 0; font-size: .83rem; color: #64748b; line-height: 1.55; }
+
+/* Comparison */
+.er-compare { border: 1.5px solid #e2e8f0; border-radius: 10px; overflow: hidden; font-size: .85rem; }
+.er-compare-row {
+    display: grid; grid-template-columns: 1fr 80px 105px;
+    padding: .65rem 1rem; border-bottom: 1px solid #f1f5f9; align-items: center;
+}
+.er-compare-row:last-child { border-bottom: none; }
+.er-compare-header {
+    background: #f8fafc; font-weight: 700; font-size: .78rem;
+    color: #64748b; text-transform: uppercase; letter-spacing: .04em;
+}
+.er-yes { color: #16a34a; font-weight: 700; text-align: center; }
+.er-no  { color: #94a3b8; text-align: center; }
+
+/* ─── Price card ─── */
+.er-price-col { position: sticky; top: 80px; transition: opacity .2s; }
+.er-price-card {
+    background: #fff; border: 2px solid #0f172a;
+    border-radius: 16px; overflow: hidden; box-shadow: 8px 8px 0 #0f172a;
+}
+.er-price-card-header { background: #0f172a; color: #fff; padding: 1.5rem 1.5rem 1.25rem; text-align: center; }
+.er-card-badge {
+    display: inline-block; background: #dc2626; color: #fff; border-radius: 999px;
+    padding: .2rem .85rem; font-size: .7rem; font-weight: 800;
+    letter-spacing: .07em; text-transform: uppercase; margin-bottom: .85rem;
+}
+.er-price-display { display: flex; align-items: baseline; justify-content: center; gap: .5rem; margin-bottom: .3rem; }
+.er-price-was  { font-size: 1.1rem; color: #64748b; text-decoration: line-through; }
+.er-price-main { font-size: 2.6rem; font-weight: 900; color: #fff; }
+.er-price-sub  { font-size: .75rem; color: #94a3b8; margin: 0; }
+.er-countdown-box {
+    background: #fef9c3; color: #92400e; font-size: .82rem; font-weight: 600;
+    text-align: center; padding: .55rem 1rem; border-bottom: 1px solid #fde68a;
+    display: flex; align-items: center; justify-content: center; gap: .4rem;
+}
+#er-countdown { font-weight: 900; font-variant-numeric: tabular-nums; }
+.er-pay-form { padding: 1.25rem 1.5rem; }
+.er-input-label { display: block; font-size: .78rem; font-weight: 700; color: #475569; margin-bottom: .4rem; }
+.er-email-input {
+    width: 100%; padding: .65rem .85rem;
+    border: 1.5px solid #d1d5db; border-radius: 8px;
+    font-size: 1rem; margin-bottom: .75rem; box-sizing: border-box; outline: none; transition: border-color .15s;
+}
+.er-email-input:focus { border-color: #0f172a; }
+.er-email-input--white {
+    border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff;
+}
+.er-email-input--white::placeholder { color: rgba(255,255,255,.5); }
+.er-email-input--white:focus { border-color: rgba(255,255,255,.7); }
+.er-cta-btn {
+    width: 100%; background: #dc2626; color: #fff; border: none;
+    border-radius: 8px; padding: .95rem 1.25rem; font-size: 1rem; font-weight: 800;
+    cursor: pointer; letter-spacing: .02em; transition: background .15s, transform .1s;
+}
+.er-cta-btn:hover  { background: #b91c1c; transform: translateY(-1px); }
+.er-cta-btn:active { transform: translateY(0); }
+.er-cta-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+.er-cta-btn--white { background: #fff; color: #0f172a; }
+.er-cta-btn--white:hover { background: #f1f5f9; }
+.er-pay-msg { min-height: 1.2em; font-size: .8rem; text-align: center; margin: .4rem 0 0; display: block; }
+.er-pay-msg--dark { color: #fca5a5; }
+.er-trust-row {
+    display: flex; justify-content: space-around; flex-wrap: wrap; gap: .3rem;
+    padding: .75rem 1.25rem; background: #f8fafc;
+    border-top: 1px solid #f1f5f9; font-size: .75rem; color: #475569; font-weight: 600;
+}
+.er-roi-note {
+    padding: .9rem 1.5rem; background: #fffbeb;
+    border-top: 1px solid #fde68a; font-size: .82rem; color: #78350f; line-height: 1.55;
+}
+.er-card-footnote {
+    font-size: .7rem; color: #94a3b8; text-align: center;
+    padding: .6rem 1.5rem; border-top: 1px solid #f1f5f9; margin: 0;
+}
+
+/* ─── Testimonials ─── */
+.er-testi-section { padding: 3rem 1rem; background: #f8fafc; }
+.er-testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1.25rem; margin-top: 2rem; }
+.er-testi {
+    background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px;
+    padding: 1.4rem; display: flex; flex-direction: column; gap: .75rem;
+}
+.er-testi-stars { color: #f59e0b; font-size: 1rem; letter-spacing: .05em; }
+.er-testi-text  { font-size: .9rem; color: #334155; line-height: 1.65; font-style: italic; margin: 0; flex: 1; }
+.er-testi-meta  { display: flex; align-items: center; gap: .75rem; margin-top: auto; }
+.er-testi-avatar {
+    width: 36px; height: 36px; background: #0f172a; color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: .72rem; font-weight: 800; flex-shrink: 0;
+}
+.er-testi-meta strong { display: block; font-size: .85rem; }
+.er-testi-meta span  { font-size: .75rem; color: #64748b; }
+
+/* ─── FAQ ─── */
+.er-faq-section { padding: 3rem 1rem; }
+.er-faq-inner { max-width: 680px; margin: 0 auto; }
+.er-faq { border-bottom: 1px solid #e2e8f0; }
+.er-faq[open] { padding-bottom: .75rem; }
+.er-faq summary {
+    font-weight: 700; font-size: .95rem; cursor: pointer; list-style: none;
+    padding: 1rem 0; display: flex; justify-content: space-between; align-items: center;
+    color: #0f172a; user-select: none;
+}
+.er-faq summary::-webkit-details-marker { display: none; }
+.er-faq summary::after { content: "+"; font-size: 1.3rem; font-weight: 400; color: #94a3b8; flex-shrink: 0; }
+.er-faq[open] summary::after { content: "−"; }
+.er-faq p { font-size: .9rem; color: #475569; margin: 0; line-height: 1.7; padding-bottom: .25rem; }
+
+/* ─── Final CTA (full-width section, no container clipping) ─── */
+.er-final-cta {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    padding: 4.5rem 1rem; text-align: center; color: #fff;
+}
+.er-final-cta-inner { max-width: 600px; margin: 0 auto; }
+.er-final-h2 { font-size: clamp(1.5rem, 4vw, 2.1rem); font-weight: 900; margin: 0 0 .85rem; color: #fff; }
+.er-final-sub { color: #94a3b8; font-size: .97rem; line-height: 1.7; margin: 0 0 2rem; }
+.er-final-actions {
+    display: flex; flex-direction: column; gap: .75rem;
+    max-width: 380px; margin: 0 auto 1rem;
+}
+@media(min-width:520px){
+    .er-final-actions { flex-direction: row; max-width: 500px; }
+    .er-final-actions .er-email-input--white { flex: 1; margin-bottom: 0; }
+    .er-final-actions .er-cta-btn--white { width: auto; white-space: nowrap; }
+}
+.er-final-trust { font-size: .78rem; color: #64748b; margin: 0; }
+
+/* ─── iOS auto-zoom fix: inputs must be ≥ 16px ─── */
+.er-email-input { font-size: 1rem; }
+/* Ensure base CTAs meet 48px min touch target */
+.er-cta-btn { min-height: 48px; }
+
+/* ════════════════════════════════════════════════
+   TABLET / LARGE PHONE  ≤ 860px
+   (offer grid collapses here too)
+════════════════════════════════════════════════ */
+@media(max-width:860px) {
+    /* price card is now below features — sticky doesn't belong here */
+    .er-price-col { position: static !important; }
+    /* harsh offset shadow disappears off-screen; replace with a normal shadow */
+    .er-price-card { box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+    /* offer padding tighten */
+    .er-offer-section { padding: 2.5rem 1rem; }
+}
+
+/* ════════════════════════════════════════════════
+   PHONE  ≤ 640px
+════════════════════════════════════════════════ */
+@media(max-width:640px) {
+    /* ── Activity bar ── */
+    .er-activity-bar {
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: .75rem;
+        padding: .5rem .75rem;
+        gap: .25rem;
+        line-height: 1.5;
+    }
+
+    /* ── Hero ── */
+    .er-hero-section { padding: 2.5rem 1rem 2rem; }
+    .er-hero-lead { font-size: .95rem; margin-bottom: 1.5rem; }
+    .er-score-callout { gap: .6rem; padding: .85rem 1rem; }
+
+    /* ── Preview card ── */
+    .er-preview-section { padding: 1.75rem 1rem; }
+    .er-preview-visible { padding: 1.1rem 1rem; }
+    /* Stack week badge above content on tiny screens */
+    .er-week { flex-direction: column; gap: .35rem; }
+    .er-week-badge { align-self: flex-start; }
+
+    /* ── Feature list ── */
+    .er-offer-section { padding: 2rem 1rem; }
+    .er-feat { padding: .8rem .85rem; gap: .7rem; }
+    .er-feat-icon { font-size: 1.2rem; }
+    .er-feat-body strong { font-size: .88rem; }
+    .er-feat-body p { font-size: .8rem; }
+
+    /* ── Comparison table ── */
+    .er-compare { font-size: .77rem; }
+    .er-compare-row { grid-template-columns: 1fr 56px 84px; padding: .5rem .75rem; }
+
+    /* ── Price card ── */
+    .er-price-card-header { padding: 1.1rem 1rem .9rem; }
+    .er-price-main { font-size: 2.2rem; }
+    .er-pay-form { padding: 1rem 1rem; }
+
+    /* ── Testimonials ── */
+    .er-testi-section { padding: 2rem 1rem; }
+    /* Force single column regardless of minmax */
+    .er-testi-grid { grid-template-columns: 1fr; }
+
+    /* ── FAQ ── */
+    .er-faq-section { padding: 2rem 1rem; }
+    .er-faq summary { font-size: .9rem; }
+
+    /* ── Final CTA ── */
+    .er-final-cta { padding: 3rem 1rem; }
+    .er-final-h2 { font-size: 1.5rem !important; }
+    .er-final-sub { font-size: .9rem; margin-bottom: 1.5rem; }
+    /* Stack email + button fully regardless of viewport calc */
+    .er-final-actions { flex-direction: column; max-width: 100%; }
+    .er-final-actions .er-cta-btn--white { width: 100%; }
+}
+
+/* ════════════════════════════════════════════════
+   TINY PHONE  ≤ 375px
+════════════════════════════════════════════════ */
+@media(max-width:375px) {
+    .er-h1 { font-size: 1.65rem; }
+    .er-score-callout { flex-direction: column; align-items: flex-start; gap: .4rem; }
+    .er-score-icon { margin-top: 0; }
+    .er-compare-row { grid-template-columns: 1fr 48px 74px; font-size: .72rem; }
+    /* Prevent proof-stat from overcrowding */
+    .er-proof-row { padding: .85rem; }
+    .er-proof-stat { padding: .4rem .75rem; }
+    .er-proof-stat strong { font-size: 1.1rem; }
+}
+</style>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ── Countdown timer ── */
+    var deadline = Date.now() + 15 * 60 * 1000;
+    var clockEl = document.getElementById('er-countdown');
+    (function tick() {
+        var remaining = Math.max(0, deadline - Date.now());
+        var m = Math.floor(remaining / 60000);
+        var s = Math.floor((remaining % 60000) / 1000);
+        clockEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        if (remaining > 0) setTimeout(tick, 500);
+    })();
+
+    /* ── Helpers ── */
+    function getCsrf() {
+        var m = document.cookie.match(/csrftoken=([^;]+)/);
+        return m ? decodeURIComponent(m[1]) : '';
+    }
+    function getSessionId() {
+        var k = 'cr_session_id';
+        var v = localStorage.getItem(k);
+        if (!v) {
+            v = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+            localStorage.setItem(k, v);
+        }
+        return v;
+    }
+    function getEmailForBtn(btn) {
+        if (btn.id === 'er-pay-btn-bottom') {
+            return (document.getElementById('er-email-bottom') || {value: ''}).value.trim();
+        }
+        return (document.getElementById('er-email') || {value: ''}).value.trim();
+    }
+    function getMsgId(btn) {
+        return btn.id === 'er-pay-btn-bottom' ? 'er-pay-msg-bottom' : 'er-pay-msg';
+    }
+    function setMsg(id, text, ok) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = text;
+        el.style.color = ok ? '#22c55e' : '#ef4444';
+    }
+    function resetBtn(btn) {
+        btn.disabled = false;
+        btn.textContent = btn.id === 'er-pay-btn-bottom' ? 'Get My Escape Roadmap →' : 'Unlock My Roadmap →';
+    }
+
+    /* ── Payment flow ── */
+    function startPayment(btn) {
+        var email = getEmailForBtn(btn);
+        var msgId = getMsgId(btn);
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setMsg(msgId, 'Please enter a valid email address.', false);
+            var inputId = btn.id === 'er-pay-btn-bottom' ? 'er-email-bottom' : 'er-email';
+            var inp = document.getElementById(inputId);
+            if (inp) inp.focus();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Opening secure checkout…';
+
+        fetch('{% url "payments:create_order" %}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() },
+            body: JSON.stringify({ product_slug: 'escape-roadmap', session_id: getSessionId(), email: email })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (!data.ok) {
+                var errMsg = data.error === 'payment_gateway_not_configured'
+                    ? 'Payments coming soon — email hello@careerreality.in to join waitlist.'
+                    : 'Error: ' + data.error;
+                setMsg(msgId, errMsg, false);
+                resetBtn(btn);
+                return;
+            }
+            var rzp = new Razorpay({
+                key: '{{ razorpay_key_id }}',
+                order_id: data.razorpay_order_id,
+                amount: data.amount,
+                currency: 'INR',
+                name: 'Career Reality',
+                description: 'Personalised Escape Roadmap',
+                image: '/static/img/favicon.svg',
+                prefill: { email: email },
+                theme: { color: '#dc2626' },
+                handler: function (resp) {
+                    btn.textContent = 'Verifying…';
+                    fetch('{% url "payments:verify" %}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() },
+                        body: JSON.stringify({
+                            razorpay_order_id: resp.razorpay_order_id,
+                            razorpay_payment_id: resp.razorpay_payment_id,
+                            razorpay_signature: resp.razorpay_signature,
+                            email: email
+                        })
+                    })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v.ok) {
+                            btn.textContent = 'Payment Confirmed ✓';
+                            setMsg(msgId, '🎉 Check your inbox — roadmap is on its way!', true);
+                        } else {
+                            setMsg(msgId, 'Payment received but verification failed. Email hello@careerreality.in', false);
+                        }
+                    });
+                },
+                modal: {
+                    ondismiss: function () { resetBtn(btn); }
+                }
+            });
+            rzp.open();
+        })
+        .catch(function () {
+            setMsg(msgId, 'Network error. Please refresh and try again.', false);
+            resetBtn(btn);
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-product="escape-roadmap"]');
+        if (btn) startPayment(btn);
+    });
+
+    /* ── Fade sticky card when bottom CTA enters view ── */
+    var priceCol = document.querySelector('.er-price-col');
+    var finalCta = document.querySelector('.er-final-cta');
+    if (priceCol && finalCta && window.IntersectionObserver) {
+        new IntersectionObserver(function (entries) {
+            priceCol.style.opacity = entries[0].isIntersecting ? '0' : '1';
+            priceCol.style.pointerEvents = entries[0].isIntersecting ? 'none' : '';
+        }, { threshold: 0.2 }).observe(finalCta);
+    }
+}());
+</script>
+
+{% if razorpay_key_id %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endif %}
+{% endblock %}

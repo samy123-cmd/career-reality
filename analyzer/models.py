@@ -27,6 +27,19 @@ class SalarySubmission(models.Model):
         ('unicorn', 'Unicorn / Big Tech'),
     ]
 
+    # Structured link to Company profile (optional — allows fuzzy/new companies too)
+    company = models.ForeignKey(
+        'companies.Company',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='salary_submissions',
+        help_text="Linked company profile (if matched)",
+    )
+    company_name = models.CharField(
+        max_length=150, blank=True,
+        help_text="Raw company name as entered by user",
+    )
+
     role = models.CharField(max_length=100, help_text="e.g. Senior Backend Engineer")
     experience_years = models.FloatField(help_text="Years of Experience")
     company_type = models.CharField(max_length=20, choices=COMPANY_TYPES)
@@ -40,6 +53,11 @@ class SalarySubmission(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['company', '-created_at']),
+            models.Index(fields=['role', '-ctc']),
+            models.Index(fields=['city', '-ctc']),
+        ]
 
     def __str__(self):
         return f"{self.role} ({self.experience_years}y) - ₹{self.ctc}"
@@ -55,6 +73,14 @@ class LayoffReport(models.Model):
         ('layoff', 'Active Layoffs (Danger)'),
     ]
 
+    # Structured link to Company profile
+    company = models.ForeignKey(
+        'companies.Company',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='layoff_reports',
+        help_text="Linked company profile (if matched)",
+    )
     company_name = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     role_affected = models.CharField(max_length=100, blank=True, help_text="e.g. Sales, Engineering")
@@ -66,6 +92,10 @@ class LayoffReport(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['company', '-created_at']),
+            models.Index(fields=['status', '-created_at']),
+        ]
 
     def __str__(self):
         return f"{self.company_name} - {self.get_status_display()}"

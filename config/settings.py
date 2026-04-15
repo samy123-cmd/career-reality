@@ -110,8 +110,8 @@ SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'core.middleware.CanonicalHostRedirectMiddleware',
-    'django.middleware.gzip.GZipMiddleware', # Added for HTML compression
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Added WhiteNoise
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Serve static files before GZip (avoids double-compression)
+    'django.middleware.gzip.GZipMiddleware', # Compress HTML/JSON responses from Django views
     'core.middleware.SecurityHeadersMiddleware',
     'core.middleware.RequestObservabilityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -175,8 +175,7 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
     X_FRAME_OPTIONS = 'DENY'
-    SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
-    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -287,7 +286,6 @@ if not DEBUG:
     # Production: Use Manifest for hashing and long-term caching
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     WHITENOISE_MAX_AGE = int(os.environ.get('WHITENOISE_MAX_AGE', '31536000'))
-    WHITENOISE_IMMUTABLE_FILE_TEST = lambda path, url: url.startswith('/static/')
 else:
     # Development: No manifest needed, just serving
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
@@ -364,6 +362,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_ADAPTER = "accounts.adapter.AccountAdapter"
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/pro/dashboard/"
 LOGOUT_REDIRECT_URL = "/"

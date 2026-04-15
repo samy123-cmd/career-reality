@@ -47,7 +47,7 @@ article, created = Article.objects.get_or_create(
         "salary_reality": "| Level | Realistic Salary (India) |\n|---|---|\n| Fresher (Service Base) | 3.5 - 5 LPA |\n| Fresher (Product Base) | 8 - 12 LPA |\n| Senior (5+ Years) | 25 - 40 LPA |\n\nThe gap between entry-level and senior is massive. Entry level is saturated.",
         "stuck_point": "The 'SQL Filter'.\n\nMost innovative work happens in Python, but most *business* work happens in SQL. Juniors who refuse to master advanced SQL get stuck as 'notebook maintainers' and never move up.",
         "verdict": "Data Science is a powerful, long-term career, but it is NOT a lottery ticket. The 'bootcamp to 20 LPA' path is dead. Enter only if you genuinely enjoy math and data cleaning.",
-        "meta_title": "Data Scientist Reality India: Salary, Work, and Burnout (2025)",
+        "meta_title": "Data Scientist Reality India: Salary & Burnout (2025)",
         "meta_description": "Honest reality check on Data Science careers in India. What they don't tell you about the 80% data cleaning grind.",
         "published_at": timezone.now(),
         "last_reality_check": datetime.date.today(),

@@ -21,21 +21,15 @@
     <!-- 1. RISK RESULT -->
     <div class="risk-banner bg-{{ result.color }}">
         <div class="risk-label">YOUR RESIGNATION RISK LEVEL:</div>
-        <div class="risk-h1">{{ result.label }}</div>
+        <div class="risk-h1"><h1 class="risk-h1-text">{{ result.label }}</h1></div>
+        {% if result.score %}
+        <div class="risk-score-badge">Risk Score: {{ result.score }}/100</div>
+        {% endif %}
         <div class="risk-summary">
             {{ result.risk_reason }}
         </div>
-
-        <!-- Layer 2: Optional Contextual Expansion -->
-        {% if result.expansion_text %}
-        <div>
-            <details class="expansion-details">
-                <summary class="expansion-summary">Why situations like this often escalate</summary>
-                <div class="expansion-content">
-                    {{ result.expansion_text }}
-                </div>
-            </details>
-        </div>
+        {% if result.profile_summary %}
+        <div class="az-profile-summary">{{ result.profile_summary }}</div>
         {% endif %}
     </div>
 
@@ -54,7 +48,7 @@
 
     <div class="share-card" id="share-card">
         <p class="share-title">My Career Risk is {{ result.label }}</p>
-        <p class="share-meta">{{ role_label }} &middot; {{ company_label }} &middot; {{ notice_label }} notice</p>
+        <p class="share-meta">{{ role_label }} &middot; {{ company_label }} &middot; {{ notice_label }} notice &middot; {{ tenure_label }}</p>
         <div class="share-actions">
             <button class="share-btn" id="share-result-btn" type="button">Share Result</button>
             <button class="share-btn" id="copy-result-btn" type="button">Copy Summary</button>
@@ -62,11 +56,28 @@
     </div>
 
     <div class="paywall-card" id="premium-plan-card">
-        <h2 class="box-title">Your Personalized 7-Day Exit Checklist</h2>
+        {% if result.level == "high" %}
+        <h2 class="box-title">Your {{ result.label }} situation needs a specific exit plan — not a template.</h2>
         <p class="plan-desc">
-            Specific to your company type, notice period, and situation — not a generic template.
-            Includes full-and-final calculation sheet, PIP response scripts, and communication templates.
+            You're a <strong>{{ role_label }}</strong> at a <strong>{{ company_label }}</strong> company with a <strong>{{ notice_label }}</strong> notice period.
+            Get a 7-day checklist built precisely for this profile: full-and-final calculations, PIP response scripts,
+            and communication templates tuned to the leverage points that actually matter given your risk level.
         </p>
+        {% elif result.level == "medium" %}
+        <h2 class="box-title">Your {{ result.label }} situation has specific friction points. Get a step-by-step plan.</h2>
+        <p class="plan-desc">
+            For a <strong>{{ role_label }}</strong> at a <strong>{{ company_label }}</strong> company — with <strong>{{ notice_label }}</strong> notice —
+            the grey areas in your exit can turn into leverage against you if you don't move in the right sequence.
+            This 7-day checklist gives you the exact steps for your profile, including documentation and communication scripts.
+        </p>
+        {% else %}
+        <h2 class="box-title">Lock in your low-risk exit before anything shifts.</h2>
+        <p class="plan-desc">
+            As a <strong>{{ role_label }}</strong> at a <strong>{{ company_label }}</strong> company, your exit profile is currently clean.
+            The 7-day checklist secures it: correct sequencing, documentation backup, and full-and-final verification
+            so your low-risk category stays low-risk all the way to your relieving letter.
+        </p>
+        {% endif %}
 
         {% if razorpay_key_id %}
         <!-- Real Razorpay Checkout -->
@@ -101,6 +112,47 @@
         </p>
     </div>
 
+    <!-- Post-Result Newsletter CTA (shown to all users regardless of purchase) -->
+    {% if not user.is_authenticated or not user.profile.is_pro|default:False %}
+    <div class="az-result-newsletter" id="result-newsletter-cta">
+        <div class="az-result-newsletter-inner">
+            {% if result.level == "high" %}
+            <p class="az-result-newsletter-headline">Your risk is {{ result.label }}. Stay informed.</p>
+            <p class="az-result-newsletter-sub">
+                Get weekly layoff signals, company stability scores, and salary data for your sector.
+                <strong>12,000+</strong> Indian tech professionals read this every Monday.
+            </p>
+            {% elif result.level == "medium" %}
+            <p class="az-result-newsletter-headline">Situations like yours can shift quickly.</p>
+            <p class="az-result-newsletter-sub">
+                Catch early warning signals before they become urgent. Weekly reality checks on
+                layoffs, salary data, and market pressure — free, no spam.
+            </p>
+            {% else %}
+            <p class="az-result-newsletter-headline">Low risk now doesn't mean low risk forever.</p>
+            <p class="az-result-newsletter-sub">
+                Stay ahead with weekly salary benchmarks, layoff signals, and career reality checks.
+                <strong>12,000+</strong> Indian tech professionals get it every Monday.
+            </p>
+            {% endif %}
+            <form class="az-result-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="source" value="risk_analyzer_result">
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    required
+                    autocomplete="email"
+                    class="az-result-newsletter-input"
+                    aria-label="Email address for newsletter">
+                <button type="submit" class="az-result-newsletter-btn">Send Me Weekly Signals</button>
+            </form>
+            <p class="az-result-newsletter-note">Free. Unsubscribe any time. No sponsors or courses.</p>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="interview-card">
         <h2 class="box-title">Help Improve The Analyzer</h2>
         <p class="plan-desc">Join a 10-minute interview and share your replay/session ID so we can identify drop-offs before result pages.</p>
@@ -121,14 +173,21 @@
     {% endif %}
 
     <!-- 3. NEXT 7 DAYS -->
-    <div class="section-box" style="border-left:4px solid #000;">
-        <h2 class="box-title">What matters in the next 7 days</h2>
-        <p>{{ result.next_steps_intro }}</p>
+    <div class="section-box section-box--bordered">
+        <h2 class="box-title">What Matters in the Next 7 Days</h2>
+        {% if result.specific_next_steps %}
+        <ul class="risk-list">
+            {% for step in result.specific_next_steps %}
+            <li>{{ step }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
         <ul class="risk-list">
             <li><strong>Documentation is leverage.</strong> Keep personal copies of all communication.</li>
             <li><strong>Silence is a tactic.</strong> If HR goes silent, do not assume they are approving.</li>
             <li><strong>Notice periods are contracts, not feelings.</strong> Re-read your appointment letter today.</li>
         </ul>
+        {% endif %}
     </div>
 
     <!-- ADDITIONAL RESOURCES -->

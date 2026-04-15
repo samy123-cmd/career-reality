@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Indian Tech Layoff Radar (2026): Live Hiring Tracker -- Career Reality{% endblock %}
+{% block title %}Indian Tech Layoff Radar (2026): Live Hiring Tracker — Career Reality{% endblock %}
 
 {% block meta_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
 
@@ -55,11 +55,11 @@
   ]
 }
 </script>
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+<section class="container-medium az-radar-section">
 
     <div class="az-radar-hero">
         <h1 class="az-radar-title">Layoff <span>Radar</span></h1>
-        <p class="hero-subtitle" style="max-width: 500px; margin: 0 auto;">
+        <p class="hero-subtitle az-radar-subtitle">
             Real-time market weather. Is your company safe?
             <br>Crowdsourced from insiders.
         </p>
@@ -69,23 +69,23 @@
     <!-- STATS BAR -->
     <div class="az-stats-bar">
         <div class="stat-card">
-            <span class="stat-value">VAR</span>
+            <span class="stat-value">{{ market_volatility }}%</span>
             <span class="stat-label">Market Volatility</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value">{{ reports|length }}</span>
-            <span class="stat-label">Reports Today</span>
+            <span class="stat-value">{{ today_count }}</span>
+            <span class="stat-label">Reports (24h)</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value" style="color: #d93025;">HIGH</span>
+            <span class="stat-value stat-value--risk-{{ risk_band|lower }}">{{ risk_band }}</span>
             <span class="stat-label">Risk Level</span>
         </div>
     </div>
 
     <!-- SEARCH -->
     <div class="az-search-box">
-        <input type="text" id="companySearch" placeholder="Search Company (e.g. Infosys)..." onkeyup="filterCompanies()"
-            class="az-search-input">
+        <input type="text" id="companySearch" placeholder="Search Company (e.g. Infosys)..."
+            class="az-search-input" aria-label="Search companies">
     </div>
 
     <!-- RADAR FEED -->
@@ -136,19 +136,19 @@
 
     <script>
         function filterCompanies() {
-            const input = document.getElementById('companySearch');
-            const filter = input.value.toLowerCase();
-            const cards = document.getElementsByClassName('radar-card');
-
-            for (let i = 0; i < cards.length; i++) {
-                const companyName = cards[i].getAttribute('data-company');
-                if (companyName.indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
+            var input = document.getElementById('companySearch');
+            var filter = input.value.toLowerCase();
+            var cards = document.getElementsByClassName('radar-card');
+            for (var i = 0; i < cards.length; i++) {
+                var companyName = cards[i].getAttribute('data-company');
+                cards[i].style.display = (companyName.indexOf(filter) > -1) ? '' : 'none';
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var searchInput = document.getElementById('companySearch');
+            if (searchInput) searchInput.addEventListener('input', filterCompanies);
+        });
     </script>
 
 </section>

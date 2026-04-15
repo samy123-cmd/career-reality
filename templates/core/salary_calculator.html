@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}CTC Decoder: Calculate In-Hand Salary India (2026) -- Career Reality{% endblock %}
+{% block title %}CTC Decoder: Calculate In-Hand Salary India (2026) — Career Reality{% endblock %}
 
 {% block meta_description %}Decode Indian CTC into real in-hand salary after PF, taxes, gratuity, and variable pay. Built for service firms, startups, and product roles.{% endblock %}
 
@@ -78,7 +78,8 @@
                     Annual CTC (Rs)
                 </label>
                 <input type="number" id="ctc-input" placeholder="e.g. 1200000"
-                    class="az-calc-input">
+                    class="az-calc-input" aria-describedby="ctc-input-error">
+                <p id="ctc-input-error" class="az-calc-field-error" style="display:none;"></p>
             </div>
 
             <!-- Variable Pay -->
@@ -119,7 +120,7 @@
             </div>
         </div>
 
-        <button onclick="calculateSalary()" class="az-calc-btn">
+        <button id="decode-btn" class="az-calc-btn">
             Decode My Salary
         </button>
     </div>
@@ -240,6 +241,32 @@
             Compare with Market Standards &rarr;
         </a>
     </div>
+
+    <!-- Post-Calculation Newsletter CTA -->
+    <div class="az-calc-newsletter" id="calc-newsletter-cta" aria-live="polite" style="display:none;">
+        <div class="az-calc-newsletter-inner">
+            <p class="az-calc-newsletter-headline">Is your in-hand above or below market?</p>
+            <p class="az-calc-newsletter-sub">
+                Join <strong>12,000+</strong> Indian tech professionals getting weekly salary data,
+                layoff signals, and career reality checks. Free. No spam.
+            </p>
+            <form class="az-calc-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="source" value="ctc_decoder">
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    required
+                    autocomplete="email"
+                    class="az-calc-newsletter-input"
+                    aria-label="Email address for newsletter">
+                <button type="submit" class="az-calc-newsletter-btn">Get Weekly Reality Check</button>
+            </form>
+            <p class="az-calc-newsletter-note">Unsubscribe any time. No sponsors.</p>
+        </div>
+    </div>
+
     <div class="az-calc-bottom">
         <div class="key-takeaway" style="margin-bottom: var(--space-md);">
             <h4>What This Calculator Covers</h4>
@@ -308,9 +335,14 @@
         const isMetro = document.getElementById('city-input').value === 'metro';
 
         if (ctc <= 0) {
-            alert('Please enter a valid CTC amount');
+            var ctcInput = document.getElementById('ctc-input');
+            var errEl = document.getElementById('ctc-input-error');
+            if (errEl) { errEl.textContent = 'Please enter a valid CTC amount.'; errEl.style.display = 'block'; }
+            if (ctcInput) ctcInput.focus();
             return;
         }
+        var errEl = document.getElementById('ctc-input-error');
+        if (errEl) { errEl.style.display = 'none'; }
 
         // --- 1. Deconstruct CTC ---
         // Variable Pay
@@ -407,6 +439,16 @@
         document.getElementById('res-annual-inhand').textContent = fmt(annualInHand);
 
         document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Reveal newsletter CTA after first calculation
+        var nlCta = document.getElementById('calc-newsletter-cta');
+        if (nlCta && nlCta.getAttribute('data-shown') !== '1') {
+            nlCta.style.display = 'block';
+            nlCta.setAttribute('data-shown', '1');
+            if (window.crTrack) {
+                window.crTrack('newsletter_cta_shown', { source: 'ctc_decoder' });
+            }
+        }
     }
 
     function calcNewRegimeTax(income) {
@@ -464,6 +506,11 @@
 
         return tax * 1.04; // Cess
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('decode-btn');
+        if (btn) btn.addEventListener('click', calculateSalary);
+    });
 </script>
 
 {% endblock %}

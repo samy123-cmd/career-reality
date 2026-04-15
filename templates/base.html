@@ -16,6 +16,17 @@
 <body>
     {% include "partials/header.html" %}
 
+    {% if messages %}
+    <div class="cr-toast-stack" role="alert" aria-live="polite">
+        {% for message in messages %}
+        <div class="cr-toast cr-toast--{{ message.tags }}">
+            {{ message }}
+            <button class="cr-toast-close" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- Removed global main.container constraint. 
        Templates must define their own containers (wide/med/reading) -->
     <main>

@@ -24,6 +24,16 @@
         {% endfor %}
     </div>
 
+    <!-- Field 3: Tenure -->
+    <div class="form-group">
+        <label class="form-label">{{ form.tenure_band.label }}</label>
+        {% for radio in form.tenure_band %}
+        <label class="option-card">
+            {{ radio.tag }} {{ radio.choice_label }}
+        </label>
+        {% endfor %}
+    </div>
+
     <button type="submit" class="btn-analyzer">Next &rarr;</button>
 </form>
 {% endblock %}

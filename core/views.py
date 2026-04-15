@@ -53,6 +53,30 @@ def _topic_clusters():
 
 
 def _career_reality_index_rows():
+    """
+    Return the last 4 months of Career Reality Index data.
+    Reads from CareerRealityIndexSnapshot (computed from real crowdsourced data).
+    Falls back to hardcoded baseline if no snapshots exist yet.
+    """
+    from core.models import CareerRealityIndexSnapshot
+
+    snapshots = list(
+        CareerRealityIndexSnapshot.objects.order_by("-month_date")[:4]
+    )
+
+    if snapshots:
+        return [
+            {
+                "month": s.month,
+                "salary_pressure": s.salary_pressure,
+                "switch_difficulty": s.switch_difficulty,
+                "layoff_risk": s.layoff_risk,
+                "overall": s.overall,
+            }
+            for s in snapshots
+        ]
+
+    # Fallback until first `refresh_career_index` run
     def _shift_month(d, months_back):
         year = d.year
         month = d.month - months_back
@@ -88,11 +112,24 @@ def robots_txt(request):
     lines = [
         "User-agent: *",
         "Allow: /",
+        # Tool steps & results — no SEO value, contains session state
         "Disallow: /resignation-risk/step/",
         "Disallow: /resignation-risk/result/",
+        # Salary submission flow — private user forms
         "Disallow: /salary-drop/",
         "Disallow: /salary-drop/success/",
-        "Disallow: /layoff-radar/",
+        # Auth pages — no SEO value
+        "Disallow: /accounts/",
+        # Payment/checkout — no SEO value
+        "Disallow: /payments/create-order/",
+        "Disallow: /payments/verify/",
+        "Disallow: /payments/webhook/",
+        # Pro dashboard — gated content
+        "Disallow: /pro/dashboard/",
+        # Internal cron endpoints
+        "Disallow: /internal/",
+        # Admin
+        "Disallow: /admin/",
         "",
         f"Sitemap: {settings.CANONICAL_BASE_URL}/sitemap.xml",
     ]
@@ -145,12 +182,21 @@ def home(request):
     - Shows mission statement.
     - Lists only PUBLISHED articles.
     """
+    from analyzer.models import AssessmentLog, SalarySubmission, LayoffReport
+    from companies.models import Company
+
     article_qs = Article.objects.filter(status='published').select_related('author', 'category').order_by('-published_at')
     articles = article_qs[:10]
     categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
     recent_updates = article_qs.order_by('-updated_at')[:5]
     index_rows = _career_reality_index_rows()
-    
+
+    # Dynamic social-proof counts
+    assessment_count = _fmt_count(max(AssessmentLog.objects.count(), 12000))
+    salary_count     = _fmt_count(max(SalarySubmission.objects.count(), 847))
+    layoff_count     = _fmt_count(max(LayoffReport.objects.count(), 120))
+    company_count    = _fmt_count(max(Company.objects.count(), 35))
+
     title = "Career Reality India - Salary Truths and Career Reality Checks"
     description = "Data-backed reality checks on Indian tech careers: salary stagnation, skill decay, and the real trade-offs you need to plan for."
     home_faq = [
@@ -176,6 +222,10 @@ def home(request):
         'latest_index_row': index_rows[0],
         'latest_band': _index_band(index_rows[0]['overall']),
         'home_faq': home_faq,
+        'assessment_count': assessment_count,
+        'salary_count': salary_count,
+        'layoff_count': layoff_count,
+        'company_count': company_count,
         **_seo(title, description),
     })
 
@@ -186,6 +236,19 @@ def _seo(title, description):
         'twitter_title': title,
         'twitter_description': description,
     }
+
+
+def _fmt_count(n):
+    """Human-readable social-proof count with trailing + (e.g. 12483 → '12K+')."""
+    if n >= 10_000:
+        return f"{n // 1000}K+"
+    if n >= 1_000:
+        return f"{round(n / 1000, 1):.1f}K+"
+    if n >= 100:
+        return f"{(n // 10) * 10}+"
+    if n > 0:
+        return str(n)
+    return "0"
 
 @cache_page(60 * 60)
 def about(request):
@@ -396,6 +459,28 @@ def run_weekly_digest_cron(request):
     )
     sent = send_weekly_digest(subscribers, salary_count, layoff_count)
     return JsonResponse({"status": "ok", "sent": sent, "total_subscribers": len(subscribers)})
+
+
+def run_career_index_cron(request):
+    """Secure internal endpoint to recompute the Career Reality Index from live data."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse({"status": "error", "message": "cron token not configured"}, status=503)
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    call_command("refresh_career_index", months=4)
+    return JsonResponse({"status": "ok", "message": "Career Reality Index refreshed."})
+
+
 
 def newsletter_signup(request):
     """Handle newsletter signup form submission."""

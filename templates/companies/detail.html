@@ -44,35 +44,31 @@
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "JobPosting",
-    "hiringOrganization": {
-        "@type": "Organization",
-        "name": "{{ company.name|escapejs }}"{% if company.website %},
-        "url": "{{ company.website|escapejs }}"{% endif %}
+    "@type": "Occupation",
+    "name": "Software Engineer at {{ company.name|escapejs }}",
+    "occupationLocation": {
+        "@type": "Country",
+        "name": "India"
     },
-    "jobLocation": {
-        "@type": "Place",
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "{{ company.headquarters|escapejs }}",
-            "addressCountry": "IN"
-        }
-    },
-    "baseSalary": {
-        "@type": "MonetaryAmount",
+    "estimatedSalary": {
+        "@type": "MonetaryAmountDistribution",
+        "name": "base",
         "currency": "INR",
-        "value": {
-            "@type": "QuantitativeValue",
-            "value": {{ company.avg_ctc }},
-            "unitText": "YEAR"
-        }
-    }
+        "duration": "P1Y",
+        "median": {{ company.avg_ctc }}
+    },
+    "description": "Average CTC at {{ company.name|escapejs }} based on {{ company.salary_count }} reported salaries."
 }
 </script>
 {% endif %}
 {% endblock %}
 
 {% block content %}
+<nav class="cp-breadcrumb" aria-label="breadcrumb">
+    <a href="{% url 'company_directory' %}">Companies</a>
+    <span class="sep">&rsaquo;</span>
+    {{ company.name }}
+</nav>
 <section class="cp-hero">
     <div class="container-wide">
         <div class="cp-header">
@@ -115,27 +111,27 @@
                 {% endwith %}
                 <div class="score-row">
                     <span>Salary</span>
-                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_salary 5 100 %}%;background:#38bdf8;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_salary 5 100 %}%" style="background:#38bdf8;"></div></div>
                     <span>{{ review_stats.avg_salary|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
                     <span>Culture</span>
-                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_culture 5 100 %}%;background:#a78bfa;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_culture 5 100 %}%" style="background:#a78bfa;"></div></div>
                     <span>{{ review_stats.avg_culture|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
                     <span>Growth</span>
-                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_growth 5 100 %}%;background:#34d399;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_growth 5 100 %}%" style="background:#34d399;"></div></div>
                     <span>{{ review_stats.avg_growth|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
                     <span>Work-Life</span>
-                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_worklife 5 100 %}%;background:#fb923c;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_worklife 5 100 %}%" style="background:#fb923c;"></div></div>
                     <span>{{ review_stats.avg_worklife|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
                     <span>Management</span>
-                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio review_stats.avg_management 5 100 %}%;background:#f87171;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_management 5 100 %}%" style="background:#f87171;"></div></div>
                     <span>{{ review_stats.avg_management|floatformat:1 }}</span>
                 </div>
             </div>
@@ -156,6 +152,7 @@
                 <a href="#salaries">💰 Salary Data ({{ salary_stats.count|default:"0" }})</a>
                 <a href="#reviews">📝 Reviews ({{ review_stats.total|default:"0" }})</a>
                 <a href="#layoffs">⚠️ Layoff Reports ({{ layoff_reports|length }})</a>
+                <a href="#discussions">💬 Discussions</a>
                 <a href="#write-review">✍️ Write a Review</a>
             </div>
         </div>
@@ -236,7 +233,7 @@
                     </span>
                 </div>
             </div>
-            <div class="rc-section"><strong>Pros</strong>{{ review.pros }}</div>
+            <div class="rc-section"><strong>Pros</strong>{{ review.pros|linebreaksbr }}</div>
             <div class="rc-section"><strong>Cons</strong>{{ review.cons }}</div>
             {% if review.biggest_lie %}
             <div class="rc-section"><strong>Biggest Lie Told by Company</strong><span class="cp-lie">{{ review.biggest_lie }}</span></div>
@@ -251,7 +248,7 @@
         <!-- Write Review Form -->
         <div class="review-form" id="write-review">
             <h3>✍️ Write an Anonymous Review</h3>
-            <p class="cp-review-form-note">No login required. Your identity stays private.</p>
+            <p class="cp-review-form-note">No login required. Your identity stays private. &nbsp;·&nbsp; <a href="{% url 'write_review' %}">Not at {{ company.name }}? Review a different company →</a></p>
             <form method="post" action="{% url 'submit_review' company.slug %}">
                 {% csrf_token %}
                 <div class="form-row">
@@ -291,7 +288,9 @@
                     <label>{{ field.label }} *</label>
                     <div class="rating-group">
                         {% for choice in field.field.choices %}
+                        {% if choice.0 %}
                         <label><input type="radio" name="{{ field.name }}" value="{{ choice.0 }}"><span>{{ choice.0 }}★</span></label>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -312,6 +311,49 @@
                 <button type="submit" class="btn-submit">Submit Review</button>
             </form>
         </div>
+
+        <!-- Discussions Section -->
+        <div class="cp-disc-section" id="discussions">
+            <div class="cp-disc-header">
+                <h2>💬 Community Discussions</h2>
+                <a href="{% url 'company_discussion_create' company.slug %}" class="btn btn--primary btn--sm">Start Discussion</a>
+            </div>
+            {% if company_discussions %}
+            <div class="cp-disc-list">
+                {% for disc in company_discussions %}
+                <a href="{{ disc.get_absolute_url }}" class="cp-disc-item">
+                    <div class="cp-disc-meta-top">
+                        <span class="cp-disc-topic">{{ disc.get_topic_display }}</span>
+                    </div>
+                    <p class="cp-disc-title">{{ disc.title }}</p>
+                    <p class="cp-disc-meta">{{ disc.anonymous_handle }} &middot; {{ disc.created_at|timesince }} ago &middot; {{ disc.replies.count }} repl{{ disc.replies.count|pluralize:"y,ies" }} &middot; &uarr; {{ disc.upvotes }}</p>
+                </a>
+                {% endfor %}
+            </div>
+            <div class="cp-disc-footer">
+                <a href="{% url 'discussion_list' %}?company={{ company.slug }}" class="cp-disc-view-all">View all discussions &rarr;</a>
+            </div>
+            {% else %}
+            <div class="cp-disc-empty">
+                <p>No discussions yet about {{ company.name }}.</p>
+                <a href="{% url 'company_discussion_create' company.slug %}" class="btn btn--ghost">Ask the first question &rarr;</a>
+            </div>
+            {% endif %}
+        </div>
+
     </div>
 </div>
+<script>
+(function() {
+    var fills = document.querySelectorAll('.score-bar-fill[data-width]');
+    if (!fills.length) return;
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+            for (var i = 0; i < fills.length; i++) {
+                fills[i].style.width = fills[i].dataset.width;
+            }
+        });
+    });
+})();
+</script>
 {% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Community Discussions — Career Reality India{% endblock %}
+{% block meta_description %}{{ og_description }}{% endblock %}
+
+{% block content %}
+<section class="dir-hero">
+    <div class="container-wide">
+        <h1>Community Discussions</h1>
+        <p>Anonymous career conversations from real Indian tech professionals. No corporate spin. No judgment.</p>
+        <div class="dir-stats">
+            <div class="dir-stat"><strong>{{ total_discussions }}</strong><span>Threads</span></div>
+        </div>
+    </div>
+</section>
+
+<div class="container-wide disc-container">
+
+    {% if messages %}
+    <div class="disc-messages">
+        {% for message in messages %}
+        <div class="alert alert--{{ message.tags }} disc-alert">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="disc-controls">
+        <form method="get" class="disc-filters">
+            <select name="topic" onchange="this.form.submit()" class="cr-input disc-filter-select">
+                <option value="">All Topics</option>
+                {% for val, label in topic_choices %}
+                <option value="{{ val }}" {% if current_topic == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <select name="sort" onchange="this.form.submit()" class="cr-input">
+                <option value="recent" {% if current_sort == "recent" %}selected{% endif %}>Most Recent</option>
+                <option value="top" {% if current_sort == "top" %}selected{% endif %}>Most Upvoted</option>
+            </select>
+            {% if current_topic %}<input type="hidden" name="topic" value="{{ current_topic }}">{% endif %}
+        </form>
+        <a href="{% url 'discussion_create' %}" class="btn btn--primary disc-start-btn">+ Start Discussion</a>
+    </div>
+
+    {% if page_obj.object_list %}
+    <div class="disc-list">
+        {% for disc in page_obj %}
+        <article class="disc-card">
+            <div class="disc-card-inner">
+                <div class="disc-card-body">
+                    <div class="disc-card-meta-top">
+                        <span class="badge disc-badge">{{ disc.get_topic_display }}</span>
+                        {% if disc.company %}<a href="{{ disc.company.get_absolute_url }}" class="disc-company-link">{{ disc.company.name }}</a>{% endif %}
+                    </div>
+                    <h3 class="disc-card-title"><a href="{{ disc.get_absolute_url }}" class="disc-card-link">{{ disc.title }}</a></h3>
+                    <p class="disc-card-excerpt">{{ disc.body|truncatechars:140 }}</p>
+                    <div class="disc-card-meta">
+                        <span>by {{ disc.anonymous_handle }}{% if disc.role %} · {{ disc.role }}{% endif %}</span>
+                        <span>{{ disc.created_at|timesince }} ago</span>
+                        <span>{{ disc.replies.count }} repl{{ disc.replies.count|pluralize:"y,ies" }}</span>
+                    </div>
+                </div>
+                <div class="disc-vote-col">
+                    <button
+                        class="disc-upvote-btn"
+                        data-id="{{ disc.pk }}"
+                        data-url="{% url 'discussion_upvote' disc.pk %}">
+                        <span>▲</span>
+                        <span class="upvote-count">{{ disc.upvotes }}</span>
+                    </button>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <div class="disc-pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&topic={{ current_topic }}&sort={{ current_sort }}" class="btn btn--ghost">← Previous</a>
+        {% endif %}
+        <span class="disc-page-indicator">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&topic={{ current_topic }}&sort={{ current_sort }}" class="btn btn--ghost">Next →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="disc-empty">
+        <p class="disc-empty-msg">No discussions yet{% if current_topic %} for this topic{% endif %}.</p>
+        <a href="{% url 'discussion_create' %}" class="btn btn--primary disc-empty-cta">Be the first — start one</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+document.querySelectorAll('.disc-upvote-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var url = btn.dataset.url;
+        var csrfToken = document.cookie.match(/csrftoken=([^;]+)/);
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken ? csrfToken[1] : '',
+                'Accept': 'application/json',
+            }
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            if (data.ok) {
+                btn.querySelector('.upvote-count').textContent = data.upvotes;
+                btn.style.color = 'var(--color-accent)';
+                btn.disabled = true;
+            }
+        }).catch(function() { /* silent fail — upvote is non-critical */ });
+    });
+});
+</script>
+{% endblock %}

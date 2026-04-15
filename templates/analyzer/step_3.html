@@ -14,7 +14,17 @@
         {% endfor %}
     </div>
 
-    <!-- Field 2: Offer -->
+    <!-- Field 2: Performance -->
+    <div class="form-group">
+        <label class="form-label">{{ form.performance_status.label }}</label>
+        {% for radio in form.performance_status %}
+        <label class="option-card">
+            {{ radio.tag }} {{ radio.choice_label }}
+        </label>
+        {% endfor %}
+    </div>
+
+    <!-- Field 3: Offer -->
     <div class="form-group">
         <label class="form-label">{{ form.has_offer.label }}</label>
         {% for radio in form.has_offer %}

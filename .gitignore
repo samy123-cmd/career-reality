@@ -21,3 +21,7 @@ audit_reports/
 .env
 .env.*
 !.env.example
+
+# Local data exports / backups
+data_backup.json
+data_export.json

@@ -150,7 +150,7 @@ def verify_payment(request):
             order.save(update_fields=["razorpay_payment_id", "razorpay_signature", "status", "email", "delivered_at"])
 
             # If this is a subscription product, create the Subscription + update profile
-            if order.product.product_type == "subscription_monthly":
+            if order.product.product_type in ("subscription_monthly", "subscription_annual"):
                 _activate_subscription(order)
     except Order.DoesNotExist:
         return JsonResponse({"ok": False, "error": "order_not_found"}, status=404)
@@ -168,7 +168,7 @@ def verify_payment(request):
 
 
 def _activate_subscription(order):
-    """Create a 30-day subscription and update the user's profile tier."""
+    """Create a subscription and update the user's profile tier."""
     from datetime import timedelta
 
     user = order.user
@@ -176,7 +176,10 @@ def _activate_subscription(order):
         return
 
     now = timezone.now()
-    expires_at = now + timedelta(days=30)
+    if order.product.product_type == "subscription_annual":
+        expires_at = now + timedelta(days=365)
+    else:
+        expires_at = now + timedelta(days=30)
 
     tier = "pro"
     if "team" in order.product.slug:
@@ -269,3 +272,22 @@ def pricing(request):
             "og_description": "Get access to India's most honest salary database, layoff alerts, and personalized exit checklists.",
         },
     )
+
+
+def escape_roadmap(request):
+    """Dedicated paywall landing page for the Personalised Escape Roadmap product."""
+    role = request.GET.get("role", "dev")
+    stack = request.GET.get("stack", "web")
+    try:
+        score = int(request.GET.get("score", "0"))
+    except (ValueError, TypeError):
+        score = 0
+
+    return render(request, "payments/escape_roadmap.html", {
+        "role": role,
+        "stack": stack,
+        "score": score,
+        "razorpay_key_id": getattr(settings, "RAZORPAY_KEY_ID", ""),
+        "og_title": "Your Personalised Escape Roadmap — Career Reality",
+        "og_description": "Get your complete, role-specific step-by-step escape plan out of service company hell. One-time ₹199.",
+    })

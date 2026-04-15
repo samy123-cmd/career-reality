@@ -1,5 +1,22 @@
 from django.contrib import admin
-from .models import AssessmentLog, FunnelEventLog
+from .models import AssessmentLog, FunnelEventLog, SalarySubmission, LayoffReport
+
+
+@admin.register(SalarySubmission)
+class SalarySubmissionAdmin(admin.ModelAdmin):
+    list_display = ['role', 'company_name', 'company', 'company_type', 'ctc', 'city', 'experience_years', 'is_verified', 'created_at']
+    list_filter = ['company_type', 'is_verified', 'city']
+    search_fields = ['role', 'company_name', 'city', 'tech_stack']
+    raw_id_fields = ['company']
+
+
+@admin.register(LayoffReport)
+class LayoffReportAdmin(admin.ModelAdmin):
+    list_display = ['company_name', 'company', 'status', 'role_affected', 'location', 'is_verified', 'created_at']
+    list_filter = ['status', 'is_verified']
+    search_fields = ['company_name', 'role_affected', 'location']
+    raw_id_fields = ['company']
+
 
 @admin.register(AssessmentLog)
 class AssessmentLogAdmin(admin.ModelAdmin):

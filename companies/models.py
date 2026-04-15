@@ -166,3 +166,104 @@ class CompanyReview(models.Model):
             self.rating_worklife, self.rating_management,
         ]
         return round(sum(ratings) / len(ratings), 1)
+
+
+class Discussion(models.Model):
+    """
+    Anonymous peer discussion thread — the Fishbowl/Blind killer.
+    No account required. Authenticated users can attach a verified badge.
+    Company is optional: discussions can be company-specific or general career topics.
+    """
+    TOPIC_CHOICES = [
+        ("salary", "Salary & Compensation"),
+        ("culture", "Work Culture"),
+        ("layoff", "Layoffs & Stability"),
+        ("switching", "Job Switching"),
+        ("career", "Career Growth"),
+        ("interview", "Interview Experience"),
+        ("wlb", "Work-Life Balance"),
+        ("other", "Other"),
+    ]
+
+    company = models.ForeignKey(
+        Company, null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name="discussions",
+        help_text="Company this discussion is about (optional)",
+    )
+    # Anonymous identity — auto-generated handle like "Engineer#4821"
+    anonymous_handle = models.CharField(max_length=50, blank=True)
+    # Optional verified user link (null for truly anonymous posts)
+    user = models.ForeignKey(
+        "auth.User", null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name="discussions",
+    )
+
+    topic = models.CharField(max_length=20, choices=TOPIC_CHOICES, default="other", db_index=True)
+    title = models.CharField(max_length=200)
+    body = models.TextField(help_text="The full question or discussion post")
+    role = models.CharField(max_length=100, blank=True, help_text="e.g. Senior Engineer at a product company")
+
+    upvotes = models.PositiveIntegerField(default=0, db_index=True)
+    is_pinned = models.BooleanField(default=False)
+    is_flagged = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["company", "-created_at"]),
+            models.Index(fields=["topic", "-upvotes"]),
+            models.Index(fields=["-upvotes", "-created_at"]),
+        ]
+
+    def __str__(self):
+        return f"{self.title[:60]} [{self.topic}]"
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse("discussion_detail", kwargs={"pk": self.pk})
+
+    def save(self, *args, **kwargs):
+        if not self.anonymous_handle:
+            import random
+            handles = ["Engineer", "Manager", "Designer", "Analyst", "Developer", "PM", "SDE", "Lead"]
+            self.anonymous_handle = f"{random.choice(handles)}#{random.randint(1000, 9999)}"
+        super().save(*args, **kwargs)
+
+
+class DiscussionReply(models.Model):
+    """A reply to a Discussion thread."""
+
+    discussion = models.ForeignKey(
+        Discussion, on_delete=models.CASCADE, related_name="replies"
+    )
+    anonymous_handle = models.CharField(max_length=50, blank=True)
+    user = models.ForeignKey(
+        "auth.User", null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name="discussion_replies",
+    )
+    body = models.TextField()
+    upvotes = models.PositiveIntegerField(default=0)
+    is_flagged = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        indexes = [
+            models.Index(fields=["discussion", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"Reply to '{self.discussion.title[:40]}' by {self.anonymous_handle}"
+
+    def save(self, *args, **kwargs):
+        if not self.anonymous_handle:
+            import random
+            handles = ["Engineer", "Manager", "Designer", "Analyst", "Developer", "PM", "SDE", "Lead"]
+            self.anonymous_handle = f"{random.choice(handles)}#{random.randint(1000, 9999)}"
+        super().save(*args, **kwargs)

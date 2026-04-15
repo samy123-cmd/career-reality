@@ -20,6 +20,13 @@ class UserProfile(models.Model):
     last_risk_level = models.CharField(max_length=20, blank=True)  # low/medium/high
     last_company_type = models.CharField(max_length=50, blank=True)
 
+    # Give-to-get salary unlock credits
+    # Free users earn 3 credits per salary submission; each credit unlocks 1 full salary record.
+    salary_credits = models.PositiveIntegerField(
+        default=0,
+        help_text="Credits earned by submitting salary data. 1 credit = unlock 1 salary record.",
+    )
+
     # Newsletter
     newsletter_subscribed = models.BooleanField(default=False)
 
