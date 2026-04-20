@@ -136,6 +136,16 @@ def robots_txt(request):
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
+def ads_txt(request):
+    """
+    Serves /ads.txt — required by Google AdSense (Authorized Digital Sellers).
+    Without this file Google will show "Earnings at risk" and may reject approval.
+    Format: <SSP domain>, <publisher-id>, DIRECT|RESELLER, <TAG certification authority ID>
+    """
+    content = "google.com, pub-3766621537317806, DIRECT, f08c47fec0942fa0\n"
+    return HttpResponse(content, content_type="text/plain")
+
+
 def healthz(request):
     """Lightweight health endpoint for uptime checks and deploy verification."""
     from django.db import connection

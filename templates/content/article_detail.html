@@ -30,16 +30,37 @@
             "url": "{{ site_base_url }}{% static 'img/og-default.png' %}"
         }
     },
-    "datePublished": "{{ article.published_at|date:'c' }}",
+    "datePublished": "{{ article.published_at|default:article.updated_at|date:'c' }}",
     "dateModified": "{{ article.updated_at|date:'c' }}",
     "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "{{ canonical_url }}"
     },
     "articleSection": "{{ article.category.name|escapejs }}",
-    "keywords": "career advice, india, {{ article.category.name|lower }}, salary reality"
+    "keywords": "{% for kw in article_keywords %}{{ kw|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}"
 }
 </script>
+
+{% if faqs %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for faq in faqs %}
+        {
+            "@type": "Question",
+            "name": "{{ faq.q|escapejs }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ faq.a|escapejs }}"
+            }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
 
 <script type="application/ld+json">
 {
@@ -107,6 +128,7 @@
                 <li><a href="#avoid-path">Who Should Avoid This Path</a></li>
                 <li><a href="#decision-framework">Decision Framework</a></li>
                 <li><a href="#originality-lens">Originality Lens</a></li>
+                {% if faqs %}<li><a href="#faq">Frequently Asked Questions</a></li>{% endif %}
                 <li><a href="#verdict">Final Verdict</a></li>
             </ul>
         </section>
@@ -224,6 +246,20 @@
             </div>
             {% endfor %}
         </section>
+
+        {% if faqs %}
+        <section id="faq" class="art-faq">
+            <h2>Frequently Asked Questions</h2>
+            <dl class="art-faq-list">
+                {% for faq in faqs %}
+                <div class="art-faq-item">
+                    <dt class="art-faq-question">{{ faq.q }}</dt>
+                    <dd class="art-faq-answer">{{ faq.a|linebreaksbr }}</dd>
+                </div>
+                {% endfor %}
+            </dl>
+        </section>
+        {% endif %}
 
         <div class="art-verdict-section">
             <div id="verdict"></div>

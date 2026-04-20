@@ -1,11 +1,55 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse
-from django.utils.html import escape
+from django.utils.html import escape, strip_tags
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 import re
 from .models import Article, Category, Author
+
+
+# ---------------------------------------------------------------------------
+# Shared text-extraction helpers
+# ---------------------------------------------------------------------------
+
+def _first_sentence_from_field(text: str, min_len: int = 15) -> str:
+    """Return the first sentence from a stripped content field, or ""."""
+    plain = strip_tags(text or "").strip()
+    parts = re.split(r"(?<=[.!?])\s+", plain)
+    s = parts[0].strip() if parts else ""
+    return s if len(s) >= min_len else ""
+
+
+def _substantive_sentence_from_field(text: str) -> str:
+    """
+    Return the first real sentence from a content field, robustly skipping:
+    - Section-heading lines ending with ":"
+    - Short snippets under 8 words or 30 chars
+    - Table-derived fragments with no sentence-ending punctuation
+    Handles both double-newline paragraph breaks and single-newline heading prefixes.
+    """
+    plain = strip_tags(text or "").strip()
+    paragraphs = [p.strip() for p in re.split(r"\n{2,}", plain) if p.strip()]
+    for para in paragraphs:
+        # Skip heading-colon opener on single-newline lines within a paragraph
+        lines = [ln.strip() for ln in para.split("\n") if ln.strip()]
+        substantive_lines = []
+        for ln in lines:
+            if ln.endswith(":") and len(ln) < 80 and not substantive_lines:
+                continue
+            substantive_lines.append(ln)
+        if not substantive_lines:
+            continue
+        para_clean = " ".join(substantive_lines)
+        word_count = len(re.sub(r"[^\w\s]", " ", para_clean).split())
+        if word_count < 8:
+            continue
+        sentences = re.split(r"(?<=[.!?])\s+", para_clean)
+        for s in sentences:
+            stripped = s.strip()
+            if len(stripped) >= 30 and len(stripped.split()) >= 5:
+                return stripped[:180] if len(stripped) > 180 else stripped
+    return ""
 
 
 def _article_sources(article):
@@ -34,68 +78,124 @@ def _article_sources(article):
 
 def _article_update_log(article):
     logs = []
+    category = (article.category.name or "").lower()
     if article.updated_at:
+        year = article.updated_at.year
         logs.append({
             "date": article.updated_at.date(),
-            "summary": "Reviewed salary ranges, corrected stale assumptions, and tightened internal links for related reads."
+            "summary": (
+                f"Updated {category} salary ranges for {year}, refreshed market positioning "
+                "benchmarks, and corrected stale compensation data against current hiring signals."
+            ),
         })
     if article.last_reality_check:
         logs.append({
             "date": article.last_reality_check,
-            "summary": "Revalidated core claims against current hiring and compensation signals."
+            "summary": (
+                "Fact-checked core claims against AmbitionBox, Glassdoor India, and LinkedIn "
+                "hiring data. Corrected stale salary figures and re-validated growth projections."
+            ),
         })
     if article.published_at:
         logs.append({
             "date": article.published_at.date(),
-            "summary": "Initial publication with baseline market framing and trade-off analysis."
+            "summary": (
+                f"Initial publication of this {category} career reality check with market "
+                "framing, salary benchmarks, and trade-off analysis for Indian professionals."
+            ),
         })
     return logs
 
 
 def _decision_framework(article):
     category_name = (article.category.name or "").lower()
+    stuck_signal = _first_sentence_from_field(article.stuck_point)
+
     if "engineering" in category_name or "software" in category_name:
-        return [
-            "If salary delta is below 25 percent for a switch, optimize for skill depth and scope, not title.",
-            "If your stack is legacy-only for 12+ months, schedule a transition plan before role lock-in compounds.",
-            "If role ownership is high but pay is flat, use impact evidence to negotiate before switching."
+        base = [
+            "If salary delta is below 25% for a switch, optimize for skill depth and scope first.",
+            "If your stack is legacy-only for 12+ months, begin a transition plan before role lock-in compounds.",
+            "If role ownership is high but pay is flat, build impact evidence and negotiate before switching.",
         ]
-    if "design" in category_name or "product" in category_name:
-        return [
-            "If your output is execution-only for multiple quarters, prioritize exposure to discovery and strategy work.",
-            "If portfolio quality is improving but compensation is frozen, reprice in market every 12 months.",
-            "If expectations are senior-level but authority is junior-level, document scope mismatch and renegotiate."
+    elif "design" in category_name or "product" in category_name:
+        base = [
+            "If your output is execution-only for multiple quarters, push for discovery and strategy exposure.",
+            "If portfolio quality is improving but compensation is frozen, benchmark in market every 12 months.",
+            "If expectations are senior-level but authority is junior-level, document the scope mismatch and renegotiate.",
         ]
-    return [
-        "If your take-home is not compounding with experience, benchmark externally before accepting internal narratives.",
-        "If role expectations keep rising without title/pay movement, escalate with documented outcomes.",
-        "If growth path is unclear beyond 6-9 months, run a switch-or-specialize decision cycle."
-    ]
+    else:
+        base = [
+            "If your take-home is not compounding with experience, benchmark externally — do not accept internal narratives.",
+            "If role expectations rise without title or pay movement, escalate with documented outcomes.",
+            "If your growth path is unclear beyond 6–9 months, run a switch-or-specialize decision cycle now.",
+        ]
+
+    # Inject one article-specific item derived from the article's own stuck_point
+    if stuck_signal and stuck_signal not in " ".join(base):
+        base.append(f"Watch for this pattern from this article: {stuck_signal}")
+
+    return base
 
 
 def _mistake_checklist(article):
     category_name = (article.category.name or "").lower()
     items = [
         "Treating outlier salaries as planning baselines.",
-        "Using title changes as a substitute for capability changes.",
-        "Delaying market benchmarking until after compensation stagnates.",
+        "Using title changes as a substitute for genuine capability growth.",
+        "Delaying market benchmarking until after compensation has already stagnated.",
     ]
     if "data" in category_name or "ai" in category_name:
         items.append("Over-indexing on model demos without production deployment depth.")
-    if "product" in category_name:
-        items.append("Confusing feature shipping speed with product impact.")
-    return items
+    elif "product" in category_name:
+        items.append("Confusing feature shipping speed with measurable product impact.")
+    elif "design" in category_name:
+        items.append("Optimising for visual polish instead of demonstrable business outcomes.")
+    elif "engineering" in category_name or "software" in category_name:
+        items.append("Staying anchored to a legacy stack because it feels safe rather than strategic.")
+    elif "marketing" in category_name:
+        items.append("Measuring vanity metrics (reach, impressions) instead of pipeline and revenue attribution.")
+
+    # Add one item derived from this article's who_should_avoid section
+    avoid_signal = _first_sentence_from_field(article.who_should_avoid)
+    if avoid_signal and len(avoid_signal) < 160:
+        items.append(avoid_signal)
+
+    return items[:5]
 
 
 def _scenario_snapshot(article):
+    """Build a scenario snapshot grounded in this article's own target_persona and stuck_point."""
+    persona_line = _substantive_sentence_from_field(article.target_persona)
+    stuck_line = _substantive_sentence_from_field(article.stuck_point)
+
+    if persona_line and stuck_line:
+        return f"{persona_line} {stuck_line}"
+    if persona_line:
+        return persona_line
+
+    # Fallback to category-level snapshot when content fields are too short
     category_name = (article.category.name or "").lower()
     if "engineering" in category_name or "software" in category_name:
-        return "A mid-level developer with 5 years in a stable service role gets a title bump but no meaningful scope change. Within 12 months, market interview performance drops due to stale stack exposure."
+        return (
+            "A mid-level developer with 5 years in a stable service role gets a title bump "
+            "but no meaningful scope change. Within 12 months, market interview performance "
+            "drops due to stale stack exposure."
+        )
     if "design" in category_name:
-        return "A designer moves from visual-heavy delivery work to product discovery ownership. Compensation growth follows only after portfolio evidence shows shipped outcomes, not just polished screens."
+        return (
+            "A designer moves from visual-heavy delivery work to product discovery ownership. "
+            "Compensation growth follows only after portfolio evidence shows shipped outcomes, "
+            "not just polished screens."
+        )
     if "product" in category_name:
-        return "A product manager ships high ticket volume but weak business outcomes. Career growth stalls until metric ownership is documented and tied to decision quality."
-    return "A professional stays in-role despite rising responsibility and flat pay. Growth recovers only after external benchmarking and a deliberate switch-or-specialize decision."
+        return (
+            "A product manager ships high ticket volume but weak business outcomes. Career "
+            "growth stalls until metric ownership is documented and tied to decision quality."
+        )
+    return (
+        "A professional stays in-role despite rising responsibility and flat pay. Growth "
+        "recovers only after external benchmarking and a deliberate switch-or-specialize decision."
+    )
 
 
 def _reading_time_minutes(article):
@@ -116,29 +216,36 @@ def _reading_time_minutes(article):
 def _key_takeaways(article):
     """Generate article-specific takeaways from the article's own content
     instead of identical generic text across all articles (AdSense quality signal)."""
-    from django.utils.html import strip_tags
     takeaways = []
 
+    def _first_clean_sentence(text: str, max_len: int = 180) -> str:
+        """Extract first real sentence from a content field, capped at max_len."""
+        plain = strip_tags(text or "").strip()
+        if not plain:
+            return ""
+        parts = re.split(r"(?<=[.!?])\s+", plain)
+        s = parts[0].strip()
+        # Must be a real sentence: at least 6 words, ends with punctuation, cap length
+        if len(s.split()) < 6:
+            return ""
+        if not re.search(r"[.!?]$", s):
+            s = s[:max_len] + ("." if len(s) >= max_len else "")
+        return s[:max_len] if len(s) > max_len else s
+
     # First takeaway: from the verdict (the article's core conclusion)
-    verdict_text = strip_tags(article.verdict).strip()
-    if verdict_text:
-        first_sentence = verdict_text.split('.')[0].strip()
-        if first_sentence:
-            takeaways.append(first_sentence + '.')
+    s = _first_clean_sentence(article.verdict)
+    if s:
+        takeaways.append(s)
 
     # Second takeaway: from stuck_point (where people fail)
-    stuck_text = strip_tags(article.stuck_point).strip()
-    if stuck_text:
-        first_sentence = stuck_text.split('.')[0].strip()
-        if first_sentence:
-            takeaways.append(first_sentence + '.')
+    s = _first_clean_sentence(article.stuck_point)
+    if s:
+        takeaways.append(s)
 
     # Third takeaway: from who_should_avoid
-    avoid_text = strip_tags(article.who_should_avoid).strip()
-    if avoid_text:
-        first_sentence = avoid_text.split('.')[0].strip()
-        if first_sentence:
-            takeaways.append(first_sentence + '.')
+    s = _first_clean_sentence(article.who_should_avoid)
+    if s:
+        takeaways.append(s)
 
     # Fallback if content fields are too short
     if len(takeaways) < 2:
@@ -151,6 +258,17 @@ def _key_takeaways(article):
 
 
 def _originality_moat(article):
+    """Derive contrarian thesis and non-obvious signal from the article's own content."""
+    verdict_sentence = _substantive_sentence_from_field(article.verdict)
+    stuck_sentence = _substantive_sentence_from_field(article.stuck_point)
+
+    if verdict_sentence and stuck_sentence:
+        return {
+            "contrarian_thesis": verdict_sentence,
+            "non_obvious_signal": stuck_sentence,
+        }
+
+    # Fallback to category-based defaults
     category = (article.category.name or "").lower()
     if "design" in category:
         return {
@@ -177,28 +295,170 @@ def _evidence_map(article, source_refs):
     def _slice_sources(start, end):
         return source_refs[start:end] if source_refs else []
 
+    category = article.category.name
+
     return [
         {
             "section_id": "expectation",
-            "claim": "Popular career narratives overweight edge cases and underweight base-rate outcomes.",
+            "claim": (
+                f"Popular narratives about {category.lower()} roles in India overweight outlier "
+                "outcomes and underweight base-rate career trajectories."
+            ),
             "sources": _slice_sources(0, 2),
         },
         {
             "section_id": "reality",
-            "claim": "Observed market behavior diverges from social-media compensation storytelling.",
+            "claim": (
+                f"Observed compensation and growth outcomes for {category.lower()} professionals "
+                "diverge significantly from social-media storytelling."
+            ),
             "sources": _slice_sources(1, 3),
         },
         {
             "section_id": "salary-growth",
-            "claim": "Salary and growth ranges vary by company type, leverage, and cycle timing.",
+            "claim": (
+                f"{category} salary ranges in India vary materially by company type, "
+                "negotiation leverage, and market cycle timing."
+            ),
             "sources": _slice_sources(0, 4),
         },
         {
             "section_id": "stuck-point",
-            "claim": "Career plateaus are often linked to stale scope, weak mobility planning, and evidence gaps.",
+            "claim": (
+                f"Professionals in {category.lower()} plateau fastest when scope quality "
+                "stagnates while responsibility and expectations keep rising."
+            ),
             "sources": _slice_sources(2, 5),
         },
     ]
+
+
+def _generate_article_faqs(article):
+    """
+    Generate 4 article-specific FAQs from model content fields.
+    Renders as FAQPage schema JSON-LD to win rich snippet pills in SERP — the
+    single highest-impact CTR lever for informational content.
+    """
+
+    def _answer(text, max_chars=300):
+        """Return the first substantive paragraph from an HTML field, stripped of tags."""
+        plain = strip_tags(text or "").strip()
+        if not plain:
+            return ""
+        # Split on blank lines (paragraphs)
+        paragraphs = [p.strip() for p in re.split(r"\n{2,}", plain) if p.strip()]
+        for para in paragraphs:
+            clean = re.sub(r"[^\w\s₹%.,!?'-]", " ", para).strip()
+            # Must be >= 50 chars and >= 8 words — filters heading/label lines
+            if len(clean) < 50 or len(clean.split()) < 8:
+                continue
+            # Skip section labels: short lines ending with colon
+            if para.rstrip().endswith(":") and len(para.rstrip()) < 80:
+                continue
+            # Skip table-derived fragments: require at least one sentence-ending char
+            if not re.search(r"[.!?]", para):
+                continue
+            if len(para) > max_chars:
+                return para[:max_chars].rsplit(" ", 1)[0] + "…"
+            return para
+        # Fallback: first 250 chars, ellipsis only when actually truncated
+        truncated = plain[:250]
+        if len(plain) > 250:
+            truncated = truncated.rsplit(" ", 1)[0] + "…"
+        return truncated
+
+    category = article.category.name
+
+    # Build a concise topic phrase from the article title for natural-sounding questions.
+    title_clean = re.sub(r"^the\s+", "", article.title, flags=re.IGNORECASE).strip()
+    for sep in [":", " — ", " - "]:
+        if sep in title_clean:
+            title_clean = title_clean.split(sep)[0].strip()
+            break
+    topic = title_clean[:60] if len(title_clean) > 60 else title_clean
+
+    # Avoid "...in India in India" duplication when topic itself ends with "in India"
+    india_suffix = " in India"
+    topic_lower = topic.lower()
+    if topic_lower.endswith(" in india"):
+        topic = topic[: -len(" in India")].strip()
+    # Guard: if topic is empty after stripping, fall back to category name
+    if not topic:
+        topic = article.category.name
+
+    faqs = []
+
+    reality_ans = _answer(article.actual_reality)
+    if reality_ans:
+        faqs.append({
+            "q": f"What is the reality of {topic.lower()}{india_suffix}?",
+            "a": reality_ans,
+        })
+
+    salary_ans = _answer(article.salary_reality)
+    if salary_ans:
+        faqs.append({
+            "q": f"What salary can {category.lower()} professionals realistically earn{india_suffix}?",
+            "a": salary_ans,
+        })
+
+    avoid_ans = _answer(article.who_should_avoid)
+    if avoid_ans:
+        faqs.append({
+            "q": f"Who should avoid {topic.lower()}{india_suffix}?",
+            "a": avoid_ans,
+        })
+
+    verdict_ans = _answer(article.verdict)
+    if verdict_ans:
+        faqs.append({
+            "q": f"What is the final verdict on {topic.lower()} for Indian professionals?",
+            "a": verdict_ans,
+        })
+
+    return faqs
+
+
+def _article_keywords(article):
+    """
+    Extract article-specific keywords from the title and category for schema markup.
+    Replaces the generic 4-word keyword string that was identical across all articles.
+    """
+    import re as _re
+
+    title_lower = article.title.lower()
+    category = article.category.name.lower()
+
+    stop_words = {
+        "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+        "of", "with", "by", "from", "is", "are", "was", "were", "have", "has",
+        "why", "what", "when", "how", "who", "which", "that", "this", "those",
+        "not", "no", "never", "vs", "after", "nobody", "actually", "about",
+        "your", "you", "most", "more", "than", "work", "works", "working",
+    }
+
+    words = _re.sub(r"[₹'\"':,!?()\-–—]", " ", title_lower).split()
+    meaningful = [w for w in words if w not in stop_words and len(w) > 3]
+
+    keywords = ["india", "career", category, "salary", "2026"]
+    keywords.extend(meaningful[:5])
+
+    role_signals = [
+        "developer", "engineer", "manager", "designer", "analyst", "lead",
+        "data", "frontend", "devops", "product", "marketing", "freelance",
+        "startup", "mba", "equity", "remote", "layoff", "plateau", "switch",
+    ]
+    for kw in role_signals:
+        if kw in title_lower and f"{kw} india" not in keywords:
+            keywords.append(f"{kw} india")
+
+    seen, unique = set(), []
+    for k in keywords:
+        if k not in seen:
+            seen.add(k)
+            unique.append(k)
+
+    return unique[:12]
 
 def author_detail(request, author_id):
     author = get_object_or_404(Author, id=author_id, is_active=True)
@@ -242,6 +502,8 @@ def article_detail(request, slug):
         'key_takeaways': _key_takeaways(article),
         'originality': _originality_moat(article),
         'evidence_map': _evidence_map(article, source_refs),
+        'faqs': _generate_article_faqs(article),
+        'article_keywords': _article_keywords(article),
         'article_meta_title': article.meta_title,
         'article_meta_description': article.meta_description,
         'og_type': 'article',

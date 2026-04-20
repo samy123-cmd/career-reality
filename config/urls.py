@@ -40,6 +40,8 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('payments/', include('payments.urls', namespace='payments')),
     path('accounts/', include('allauth.urls')),
+    # Required by Google AdSense — must be at root domain, not under any prefix
+    path('ads.txt', core_views.ads_txt, name='ads_txt'),
 ]
 
 # Translated URLs

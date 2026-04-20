@@ -2832,6 +2832,41 @@ blockquote.pullquote {
 .art-evidence-claim { margin: 0 0 0.25rem; font-size: 15px; }
 .art-evidence-sources { margin: 0; font-size: 13px; color: var(--c-grey-light); }
 
+/* FAQ section */
+.art-faq {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--c-divider);
+}
+.art-faq h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+.art-faq-list {
+    margin: 0;
+    padding: 0;
+}
+.art-faq-item {
+    border-bottom: 1px solid var(--c-divider);
+    padding: 1rem 0;
+}
+.art-faq-item:last-child { border-bottom: none; }
+.art-faq-question {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--c-black);
+    margin: 0 0 0.5rem;
+    cursor: default;
+    line-height: 1.4;
+}
+.art-faq-answer {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--c-grey-mid);
+    margin: 0;
+}
+
 /* Verdict section */
 .art-verdict-section {
     margin-top: var(--space-md);
@@ -5094,25 +5129,25 @@ textarea.cr-input { resize: vertical; }
 
 /* ===== Audit fixes: new utility classes ===== */
 
-/* result.html — next-7-days section left border */
+/* result.html ï¿½ next-7-days section left border */
 .section-box--bordered { border-left: 4px solid #000; }
 
-/* layoff_radar.html — section spacing and subtitle */
+/* layoff_radar.html ï¿½ section spacing and subtitle */
 .az-radar-section { margin-top: var(--space-lg); margin-bottom: var(--space-xl); }
 .az-radar-subtitle { max-width: 500px; margin: 0 auto; }
 
-/* layoff_radar.html — risk band colour classes */
+/* layoff_radar.html ï¿½ risk band colour classes */
 .stat-value--risk-low      { color: #16a34a; }
 .stat-value--risk-moderate { color: #16a34a; }
 .stat-value--risk-elevated { color: #f59e0b; }
 .stat-value--risk-high     { color: #ef4444; }
 .stat-value--risk-critical { color: #dc2626; }
 
-/* salary.html — page header */
+/* salary.html ï¿½ page header */
 .sal-page-h1    { margin-bottom: 24px; }
 .sal-page-intro { margin-bottom: var(--space-md); }
 
-/* salary_calculator.html — inline validation error */
+/* salary_calculator.html ï¿½ inline validation error */
 .az-calc-field-error {
     color: #ef4444;
     font-size: 0.82rem;
