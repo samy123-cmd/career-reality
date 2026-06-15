@@ -1,13 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}Indian Tech Layoff Radar (2026): Live Hiring Tracker — Career Reality{% endblock %}
+{% block title %}{{ og_title|default:"IT Layoffs India 2026 Tracker — Hiring Freeze & Layoff Alerts" }}{% endblock %}
 
-{% block meta_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
-
-{% block og_title %}Indian Tech Layoff Radar (2026){% endblock %}
-{% block og_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
-{% block twitter_title %}Indian Tech Layoff Radar (2026){% endblock %}
-{% block twitter_description %}Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously.{% endblock %}
+{% block meta_description %}{{ og_description|default:"Live crowdsourced layoff and hiring freeze tracker for Indian IT and tech companies. Check company stability signals and report anonymously." }}{% endblock %}
 
 {% block content %}
 <script type="application/ld+json">
@@ -16,6 +11,7 @@
   "@type": "Dataset",
   "name": "Indian Tech Layoffs 2026",
   "description": "Crowdsourced data on hiring freezes and layoffs in Indian technology companies.",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
   "creator": {
     "@type": "Organization",
     "name": "Career Reality India"
@@ -58,7 +54,7 @@
 <section class="container-medium az-radar-section">
 
     <div class="az-radar-hero">
-        <h1 class="az-radar-title">Layoff <span>Radar</span></h1>
+        <h1 class="az-radar-title">{{ page_h1|default:"Layoff Radar" }}</h1>
         <p class="hero-subtitle az-radar-subtitle">
             Real-time market weather. Is your company safe?
             <br>Crowdsourced from insiders.
@@ -150,6 +146,11 @@
             if (searchInput) searchInput.addEventListener('input', filterCompanies);
         });
     </script>
+
+    <div class="container-medium" style="margin-top: var(--space-lg);">
+        {% include "partials/seo_tool_hub.html" %}
+        {% include "partials/seo_pillar_links.html" %}
+    </div>
 
 </section>
 {% endblock %}

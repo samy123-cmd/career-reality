@@ -3,11 +3,11 @@ import logging
 from django.db.models import Q, Value, CharField
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator
 
 from content.models import Article
-from companies.models import Company
+from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS
+from companies.indexing import indexable_companies_queryset
 from ainews.models import AINewsItem
 from analyzer.models import SalarySubmission
 
@@ -32,12 +32,12 @@ def search_view(request):
             Q(actual_reality__icontains=q) |
             Q(verdict__icontains=q),
             status="published",
-        ).select_related("author", "category").order_by("-published_at")
+        ).exclude(slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS).select_related("author", "category").order_by("-published_at")
         counts["articles"] = articles.count()
         results["articles"] = articles[:20]
 
-        # Companies
-        companies = Company.objects.filter(
+        # Companies — only those with community data (avoids linking to noindex thin pages)
+        companies = indexable_companies_queryset().filter(
             Q(name__icontains=q) |
             Q(description__icontains=q) |
             Q(headquarters__icontains=q)
@@ -87,11 +87,13 @@ def search_suggest_api(request):
     suggestions = []
 
     # Articles
-    for a in Article.objects.filter(title__icontains=q, status="published").values("title", "slug")[:3]:
+    for a in Article.objects.filter(title__icontains=q, status="published").exclude(
+        slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS
+    ).values("title", "slug")[:3]:
         suggestions.append({"type": "article", "text": a["title"], "url": f"/article/{a['slug']}/"})
 
-    # Companies
-    for c in Company.objects.filter(name__icontains=q).values("name", "slug")[:3]:
+    # Companies — indexable only
+    for c in indexable_companies_queryset().filter(name__icontains=q).values("name", "slug")[:3]:
         suggestions.append({"type": "company", "text": c["name"], "url": f"/companies/{c['slug']}/"})
 
     # AI News

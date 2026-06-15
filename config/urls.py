@@ -16,20 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.sitemaps.views import sitemap
-from core.sitemaps import ArticleSitemap, StaticViewSitemap, CategorySitemap, AINewsSitemap, CompanySitemap
+from core.sitemap_view import cached_sitemap
 from core import views as core_views
 
 handler404 = 'core.views.custom_404'
 handler500 = 'core.views.custom_500'
-
-sitemaps = {
-    'articles': ArticleSitemap,
-    'categories': CategorySitemap,
-    'static': StaticViewSitemap,
-    'ainews': AINewsSitemap,
-    'companies': CompanySitemap,
-}
 
 from django.conf.urls.i18n import i18n_patterns
 
@@ -37,7 +28,7 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', cached_sitemap, name='cached_sitemap'),
     path('payments/', include('payments.urls', namespace='payments')),
     path('accounts/', include('allauth.urls')),
     # Required by Google AdSense — must be at root domain, not under any prefix

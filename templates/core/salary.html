@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}Salary Reality (India) - Career Reality{% endblock %}
-{% block meta_description %}Real, uninflated salary data for Indian tech roles. No '1 Crore' outliers. Just the median
-reality.{% endblock %}
+{% block title %}{{ og_title|default:"Software Engineer Salary India 2026 — Median Pay by Role & City" }}{% endblock %}
+{% block meta_description %}{{ og_description|default:"Median software engineer, data, and product salaries in India — not inflated outliers. Role-wise pay bands for Bengaluru, Hyderabad, Pune, and remote." }}{% endblock %}
 
 {% block extra_head %}
 <script type="application/ld+json">
@@ -22,13 +21,45 @@ reality.{% endblock %}
   "keywords": ["indian tech salary", "median salary india", "software engineer salary", "data engineer salary", "AI engineer salary"]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Are these median or average salaries?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We track medians, not averages inflated by unicorn outliers and US-remote roles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often is salary data updated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Core role bands are reviewed monthly, with ad-hoc updates when market shifts are material."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I compare in-hand pay from CTC?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the CTC to In-Hand Calculator to decode offer letters into real monthly take-home."
+      }
+    }
+  ]
+}
+</script>
 {% endblock %}
 
 {% block content %}
 
 <!-- HEADER -->
 <section class="container-medium sal-page-header">
-    <h1 class="sal-page-h1">The Salary "Reality Check"</h1>
+    <h1 class="sal-page-h1">{{ page_h1|default:"The Salary Reality Check" }}</h1>
     <p class="article-list-summary sal-page-intro">
         We track the <strong>median</strong> salaries, not the "top 1%" outliers.
         Most "Average Salary" reports are inflated by unicorns and US-remote roles.
@@ -443,6 +474,11 @@ reality.{% endblock %}
         Update cadence: monthly scheduled review, plus ad-hoc corrections when major salary shifts occur.
     </p>
 </section>
+
+<div class="container-medium" style="margin-bottom: var(--space-xl);">
+    {% include "partials/seo_tool_hub.html" %}
+    {% include "partials/seo_pillar_links.html" %}
+</div>
 
 {% endblock %}
 

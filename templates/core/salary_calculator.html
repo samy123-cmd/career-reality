@@ -1,13 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}CTC Decoder: Calculate In-Hand Salary India (2026) — Career Reality{% endblock %}
+{% block title %}{{ og_title|default:"CTC to In-Hand Salary Calculator India (2026) — Free | Career Reality" }}{% endblock %}
 
-{% block meta_description %}Decode Indian CTC into real in-hand salary after PF, taxes, gratuity, and variable pay. Built for service firms, startups, and product roles.{% endblock %}
-
-{% block og_title %}CTC Decoder: Calculate In-Hand Salary India (2026){% endblock %}
-{% block og_description %}Decode CTC into real in-hand salary with PF, gratuity, variable pay, and tax regime logic.{% endblock %}
-{% block twitter_title %}CTC Decoder: Calculate In-Hand Salary India (2026){% endblock %}
-{% block twitter_description %}Decode CTC into real in-hand salary with PF, gratuity, variable pay, and tax regime logic.{% endblock %}
+{% block meta_description %}{{ og_description|default:"Free CTC to in-hand salary calculator for India. Decode your offer letter with PF, gratuity, variable pay, and new vs old tax regime deductions." }}{% endblock %}
 
 {% block content %}
 <script type="application/ld+json">
@@ -17,6 +12,8 @@
   "name": "CTC Decoder (India)",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Web",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
+  "keywords": "ctc to in hand salary calculator india, in hand salary calculator, ctc decoder, salary calculator india 2026",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -60,7 +57,7 @@
 <section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
 
     <div class="az-calc-hero">
-        <h1 class="az-calc-title">CTC Decoder</h1>
+        <h1 class="az-calc-title">{{ page_h1|default:"CTC Decoder" }}</h1>
         <p class="az-calc-subtitle">
             See where your "20 LPA" actually goes. We deduct the "Ghost Components" (Employer PF, Gratuity, Variable
             Pay)
@@ -512,6 +509,11 @@
         if (btn) btn.addEventListener('click', calculateSalary);
     });
 </script>
+
+<div class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    {% include "partials/seo_tool_hub.html" %}
+    {% include "partials/seo_pillar_links.html" %}
+</div>
 
 {% endblock %}
 

@@ -3,10 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
 
-<!-- Google AdSense auto-ads (required for approval) -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3766621537317806"
-     crossorigin="anonymous"></script>
-
+<!-- Google AdSense account verification (script loaded at end of body for performance) -->
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
 <meta name="robots" content="{{ meta_robots|default:'index, follow' }}">
 <link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
@@ -17,6 +14,9 @@
 <meta property="og:locale" content="en_IN">
 <meta name="theme-color" content="#000000">
 <meta name="author" content="Career Reality Editorial Desk">
+{% if page_keywords %}
+<meta name="keywords" content="{{ page_keywords|join:', ' }}">
+{% endif %}
 <!-- Inlined Favicon to bypass static file 404s -->
 <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000000'/%3E%3Ctext x='50' y='70' font-family='Arial, sans-serif' font-size='50' fill='%23ffffff' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
@@ -54,11 +54,13 @@
   "name": "Career Reality",
   "url": "{{ site_base_url }}",
   "email": "hello@careerreality.in",
+  "description": "Evidence-backed salary truths and career reality checks for Indian tech professionals.",
   "sameAs": [
+    {% for profile in site_social_profiles %}"{{ profile|escapejs }}"{% if not forloop.last %},{% endif %}
+    {% empty %}
     "https://www.careerreality.in/about/",
-    "https://www.careerreality.in/editorial/",
-    "https://www.careerreality.in/contact/",
-    "https://www.careerreality.in/career-reality-index/"
+    "https://www.careerreality.in/editorial/"
+    {% endfor %}
   ]
 }
 </script>
@@ -311,7 +313,10 @@
         "@type": "Organization",
         "name": "Career Reality (India)",
         "url": "{{ site_base_url }}",
-        "sameAs": []
+        "sameAs": [
+            {% for profile in site_social_profiles %}"{{ profile|escapejs }}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
     }
 }
 </script>

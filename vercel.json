@@ -1,12 +1,16 @@
 {
     "crons": [
         {
-            "path": "/internal/cron/freshness/?fetch_limit=8&warm_cache=False",
+            "path": "/internal/cron/freshness/?fetch_limit=8&warm_cache=True",
             "schedule": "0 */6 * * *"
         },
         {
-            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=12",
+            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=12&refresh_articles=True",
             "schedule": "30 2 * * *"
+        },
+        {
+            "path": "/internal/cron/warm-cache/",
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/internal/cron/weekly-digest/",
@@ -18,6 +22,36 @@
         }
     ],
     "redirects": [
+        {
+            "source": "/article/junior-data-scientist-reality-india-sql-janitor/",
+            "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
+            "permanent": true
+        },
+        {
+            "source": "/article/junior-data-scientist-reality-india-sql-janitor",
+            "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
+            "permanent": true
+        },
+        {
+            "source": "/article/digital-marketing-illusion-instagram-ads-burning-money/",
+            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+            "permanent": true
+        },
+        {
+            "source": "/article/digital-marketing-illusion-instagram-ads-burning-money",
+            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+            "permanent": true
+        },
+        {
+            "source": "/article/networking-myth-professional-relationships-worthless/",
+            "destination": "https://www.careerreality.in/article/networking-reality-india-introverts/",
+            "permanent": true
+        },
+        {
+            "source": "/article/networking-myth-professional-relationships-worthless",
+            "destination": "https://www.careerreality.in/article/networking-reality-india-introverts/",
+            "permanent": true
+        },
         {
             "source": "/(.*)",
             "has": [
@@ -55,6 +89,24 @@
             "headers": [
                 { "key": "Service-Worker-Allowed", "value": "/" },
                 { "key": "Cache-Control", "value": "no-cache" }
+            ]
+        },
+        {
+            "source": "/sitemap.xml",
+            "headers": [
+                { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=86400" }
+            ]
+        },
+        {
+            "source": "/robots.txt",
+            "headers": [
+                { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
+            ]
+        },
+        {
+            "source": "/ads.txt",
+            "headers": [
+                { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
             ]
         }
     ],

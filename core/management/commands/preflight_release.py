@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from datetime import timedelta
+import os
 
 from ainews.models import AINewsItem
 from content.models import Article
@@ -57,6 +58,12 @@ class Command(BaseCommand):
 
         if not getattr(settings, "SECURE_SSL_REDIRECT", False):
             issues.append("SECURE_SSL_REDIRECT is not enabled.")
+
+        if not os.environ.get("REDIS_URL") and not os.environ.get("KV_URL"):
+            warnings.append(
+                "REDIS_URL is not set — page cache will not persist across Vercel "
+                "serverless instances (expect 1-5s TTFB on cold hits)."
+            )
 
         if not getattr(settings, "SESSION_COOKIE_SECURE", False):
             issues.append("SESSION_COOKIE_SECURE is not enabled.")

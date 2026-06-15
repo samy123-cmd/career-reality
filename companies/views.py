@@ -12,11 +12,12 @@ from django.utils.text import slugify
 from analyzer.models import SalarySubmission, LayoffReport
 from .models import Company, CompanyReview, Discussion, DiscussionReply
 from .forms import CompanyReviewForm, DiscussionForm, DiscussionReplyForm
+from .indexing import company_is_indexable, indexable_companies_queryset
 
 logger = logging.getLogger(__name__)
 
 
-@cache_page(60 * 10)
+@cache_page(60 * 30)
 def company_directory(request):
     """Browsable directory of all companies with intelligence data."""
     sector = request.GET.get("sector", "")
@@ -31,7 +32,7 @@ def company_directory(request):
     }
     order = allowed_sorts.get(sort, "-salary_count")
 
-    qs = Company.objects.all()
+    qs = indexable_companies_queryset()
     if sector:
         qs = qs.filter(sector=sector)
     if q:
@@ -41,20 +42,24 @@ def company_directory(request):
     paginator = Paginator(qs, 30)
     page = paginator.get_page(request.GET.get("page", 1))
 
+    indexed_count = indexable_companies_queryset().count()
+
     return render(request, "companies/directory.html", {
         "page_obj": page,
         "sector_choices": Company.SECTOR_CHOICES,
         "current_sector": sector,
         "current_sort": sort,
         "search_query": q,
-        "total_companies": Company.objects.count(),
+        "total_companies": indexed_count,
         "total_reviews": CompanyReview.objects.count(),
         "total_salaries": SalarySubmission.objects.count(),
+        "pending_companies_count": Company.objects.count() - indexed_count,
         "og_title": "Company Intelligence — Career Reality India",
         "og_description": "Honest salary data, layoff alerts, and anonymous reviews for Indian tech companies. No login required.",
     })
 
 
+@cache_page(60 * 15)
 def company_detail(request, slug):
     """Deep-dive company profile with aggregated intelligence."""
     company = get_object_or_404(Company, slug=slug)
@@ -118,7 +123,11 @@ def company_detail(request, slug):
     ).order_by("-created_at")[:5]
 
     # Thin company pages (no reviews, no salaries) should not be indexed.
-    has_content = review_stats["total"] and review_stats["total"] > 0 or all_salaries
+    has_content = company_is_indexable(
+        company,
+        review_total=review_stats["total"] or 0,
+        salary_records=all_salaries,
+    )
     meta_robots = "index, follow" if has_content else "noindex, follow"
 
     return render(request, "companies/detail.html", {
@@ -171,12 +180,12 @@ def submit_review(request, slug):
 
 
 def company_search_api(request):
-    """JSON API for company autocomplete / search."""
+    """JSON API for company autocomplete / search — indexable companies only."""
     q = request.GET.get("q", "").strip()
     if len(q) < 2:
         return JsonResponse({"results": []})
 
-    companies = Company.objects.filter(name__icontains=q).values(
+    companies = indexable_companies_queryset().filter(name__icontains=q).values(
         "name", "slug", "sector", "salary_count", "overall_score"
     )[:10]
 

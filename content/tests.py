@@ -217,3 +217,188 @@ class ArticleInlineNewsletterCTATests(TestCase):
         # Pro users see it too — harmless, they may already subscribe.
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "article-newsletter-cta")
+
+
+class ArticleCanonicalRedirectTests(TestCase):
+    """P0: duplicate topic clusters 301 to canonical slug."""
+
+    def setUp(self):
+        self.author = Author.objects.create(
+            name="Jane Doe",
+            display_name="Jane Doe",
+            bio="Research-backed career writer " * 10,
+            linkedin_url="https://www.linkedin.com/in/jane-doe/",
+            experience_summary="8+ years in tech hiring and compensation analysis",
+            is_active=True,
+        )
+        self.category = Category.objects.create(
+            name="Data Science",
+            slug="data-science",
+            description="Data roles",
+            order=1,
+        )
+        self.canonical = Article.objects.create(
+            title="Junior Data Scientist Reality",
+            slug="junior-data-scientist-reality-india",
+            author=self.author,
+            category=self.category,
+            status="published",
+            target_persona="Aspiring data scientist",
+            who_should_avoid="People who hate SQL",
+            common_expectation="Building LLMs all day",
+            actual_reality="Mostly SQL and dashboards",
+            salary_reality="8-15 LPA for juniors",
+            stuck_point="Certification trap",
+            verdict="Learn SQL first",
+            meta_title="Junior DS Reality India",
+            meta_description=("Junior data scientist reality in India " * 8)[:160],
+            published_at=timezone.now(),
+        )
+        self.duplicate = Article.objects.create(
+            title="Junior Data Scientist SQL Janitor",
+            slug="junior-data-scientist-reality-india-sql-janitor",
+            author=self.author,
+            category=self.category,
+            status="published",
+            target_persona="Aspiring data scientist",
+            who_should_avoid="People who hate SQL",
+            common_expectation="Building LLMs all day",
+            actual_reality="Mostly SQL and dashboards",
+            salary_reality="8-15 LPA for juniors",
+            stuck_point="Certification trap",
+            verdict="Learn SQL first",
+            meta_title="Junior DS SQL Janitor",
+            meta_description=("SQL janitor reality " * 8)[:160],
+            published_at=timezone.now(),
+        )
+
+    def test_duplicate_slug_returns_301_to_canonical(self):
+        response = self.client.get(
+            reverse("article_detail", kwargs={"slug": self.duplicate.slug})
+        )
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(
+            response["Location"],
+            reverse("article_detail", kwargs={"slug": self.canonical.slug}),
+        )
+
+    def test_duplicate_og_image_redirects_to_canonical(self):
+        response = self.client.get(
+            reverse("article_og_image", kwargs={"slug": self.duplicate.slug})
+        )
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(
+            response["Location"],
+            reverse("article_og_image", kwargs={"slug": self.canonical.slug}),
+        )
+
+    def test_canonical_slug_renders_200(self):
+        response = self.client.get(
+            reverse("article_detail", kwargs={"slug": self.canonical.slug})
+        )
+        self.assertEqual(response.status_code, 200)
+
+
+class ArticleBoilerplateRemovalTests(TestCase):
+    """P0: auto-generated boilerplate sections removed from article pages."""
+
+    def setUp(self):
+        self.author = Author.objects.create(
+            name="Jane Doe",
+            display_name="Jane Doe",
+            bio="Research-backed career writer " * 10,
+            linkedin_url="https://www.linkedin.com/in/jane-doe/",
+            experience_summary="8+ years",
+            is_active=True,
+        )
+        self.category = Category.objects.create(
+            name="Engineering",
+            slug="engineering",
+            description="Engineering roles",
+            order=1,
+        )
+        Article.objects.create(
+            title="Engineering Reality Check",
+            slug="engineering-reality-check",
+            author=self.author,
+            category=self.category,
+            status="published",
+            target_persona="Mid-level engineer",
+            who_should_avoid="Hype seekers",
+            common_expectation="Fast growth from title alone",
+            actual_reality="Scope and impact drive growth in Indian tech companies over time.",
+            salary_reality="Ranges vary by leverage and org quality across Indian tech markets.",
+            stuck_point="Execution-only ownership without strategic scope expansion.",
+            verdict="Prioritize impact evidence over title optics for long-term career growth.",
+            meta_title="Engineering Reality",
+            meta_description=("Balanced meta description " * 8)[:160],
+            published_at=timezone.now(),
+        )
+
+    def test_boilerplate_sections_not_in_html(self):
+        response = self.client.get(
+            reverse("article_detail", kwargs={"slug": "engineering-reality-check"})
+        )
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertNotIn("Decision Framework", content)
+        self.assertNotIn("Common Mistakes Checklist", content)
+        self.assertNotIn("Real Scenario Snapshot", content)
+        self.assertNotIn("Originality Lens", content)
+        self.assertNotIn("Evidence By Section", content)
+        self.assertNotIn("What Changed", content)
+
+    def test_core_editorial_sections_remain(self):
+        response = self.client.get(
+            reverse("article_detail", kwargs={"slug": "engineering-reality-check"})
+        )
+        content = response.content.decode()
+        self.assertIn("The Expectation", content)
+        self.assertIn("The Reality", content)
+        self.assertIn("Final Verdict", content)
+        self.assertIn("Sources", content)
+
+
+class CategoryIndexabilityTests(TestCase):
+    """P0: thin categories (<3 articles) are noindex."""
+
+    def setUp(self):
+        self.author = Author.objects.create(
+            name="Jane Doe",
+            display_name="Jane Doe",
+            bio="Bio " * 10,
+            linkedin_url="https://www.linkedin.com/in/jane-doe/",
+            experience_summary="8+ years",
+            is_active=True,
+        )
+        self.thin_category = Category.objects.create(
+            name="Design",
+            slug="design",
+            description="Design roles",
+            order=1,
+        )
+        for idx in range(2):
+            Article.objects.create(
+                title=f"Design Article {idx}",
+                slug=f"design-article-{idx}",
+                author=self.author,
+                category=self.thin_category,
+                status="published",
+                target_persona="Designer",
+                who_should_avoid="Avoid",
+                common_expectation="Expectation",
+                actual_reality="Reality",
+                salary_reality="Salary",
+                stuck_point="Stuck",
+                verdict="Verdict",
+                meta_title=f"Design {idx}",
+                meta_description=("Meta " * 8)[:160],
+                published_at=timezone.now(),
+            )
+
+    def test_thin_category_is_noindex(self):
+        response = self.client.get(
+            reverse("category_detail", kwargs={"slug": "design"})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["meta_robots"], "noindex, follow")

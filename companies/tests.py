@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from companies.models import Company, CompanyReview, Discussion, DiscussionReply
+from analyzer.models import SalarySubmission
 
 
 # ─── Helpers ────────────────────────────────────────────────────────────────
@@ -280,6 +281,7 @@ class DiscussionUpvoteViewTests(TestCase):
 
 class CompanyDetailDiscussionTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.company = make_company("FlipKart")
         make_discussion(company=self.company, title="Interview experience at FK")
         make_discussion(company=self.company, title="Culture at FK")
@@ -302,3 +304,47 @@ class CompanyDetailDiscussionTests(TestCase):
         response = self.client.get(reverse("company_detail", kwargs={"slug": self.company.slug}))
         titles = [d.title for d in response.context["company_discussions"]]
         self.assertNotIn("Flagged", titles)
+
+
+class CompanyDirectoryIndexingTests(TestCase):
+    """P0: directory only links to companies with review or salary data."""
+
+    def setUp(self):
+        cache.clear()
+
+    def test_directory_excludes_empty_companies(self):
+        empty = Company.objects.create(name="EmptyCorp", slug="emptycorp", sector="product")
+        with_data = Company.objects.create(
+            name="DataCorp", slug="datacorp", sector="product", review_count=2
+        )
+
+        response = self.client.get(reverse("company_directory"))
+        self.assertEqual(response.status_code, 200)
+        slugs = [c.slug for c in response.context["page_obj"].object_list]
+        self.assertIn(with_data.slug, slugs)
+        self.assertNotIn(empty.slug, slugs)
+
+    def test_directory_shows_pending_count_when_empty_companies_exist(self):
+        Company.objects.create(name="EmptyCorp", slug="emptycorp", sector="product")
+        response = self.client.get(reverse("company_directory"))
+        self.assertEqual(response.context["pending_companies_count"], 1)
+
+    def test_directory_includes_company_with_salary_count_only(self):
+        company = Company.objects.create(
+            name="SalaryCorp", slug="salarycorp", sector="startup", salary_count=3
+        )
+        response = self.client.get(reverse("company_directory"))
+        slugs = [c.slug for c in response.context["page_obj"].object_list]
+        self.assertIn(company.slug, slugs)
+
+    def test_company_search_api_excludes_empty_companies(self):
+        Company.objects.create(name="EmptySearchCo", slug="emptysearchco", sector="product")
+        indexed = Company.objects.create(
+            name="IndexedSearchCo", slug="indexedsearchco", sector="product", review_count=1
+        )
+
+        response = self.client.get(reverse("company_search_api"), {"q": "SearchCo"})
+        self.assertEqual(response.status_code, 200)
+        slugs = [r["slug"] for r in response.json()["results"]]
+        self.assertIn(indexed.slug, slugs)
+        self.assertNotIn("emptysearchco", slugs)

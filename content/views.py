@@ -1,11 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.urls import reverse
 from django.utils.html import escape, strip_tags
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 import re
 from .models import Article, Category, Author
+from .seo_redirects import (
+    ARTICLE_CANONICAL_REDIRECTS,
+    ARTICLE_SITEMAP_EXCLUDE_SLUGS,
+    indexable_categories_queryset,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -335,9 +340,9 @@ def _evidence_map(article, source_refs):
 
 def _generate_article_faqs(article):
     """
-    Generate 4 article-specific FAQs from model content fields.
-    Renders as FAQPage schema JSON-LD to win rich snippet pills in SERP — the
-    single highest-impact CTR lever for informational content.
+    Build FAQs from article body fields using stable, human-readable questions.
+    Avoids auto-parsing titles into awkward strings like
+    "What is the reality of indian it layoff cycle in India?"
     """
 
     def _answer(text, max_chars=300):
@@ -345,74 +350,51 @@ def _generate_article_faqs(article):
         plain = strip_tags(text or "").strip()
         if not plain:
             return ""
-        # Split on blank lines (paragraphs)
         paragraphs = [p.strip() for p in re.split(r"\n{2,}", plain) if p.strip()]
         for para in paragraphs:
             clean = re.sub(r"[^\w\s₹%.,!?'-]", " ", para).strip()
-            # Must be >= 50 chars and >= 8 words — filters heading/label lines
             if len(clean) < 50 or len(clean.split()) < 8:
                 continue
-            # Skip section labels: short lines ending with colon
             if para.rstrip().endswith(":") and len(para.rstrip()) < 80:
                 continue
-            # Skip table-derived fragments: require at least one sentence-ending char
             if not re.search(r"[.!?]", para):
                 continue
             if len(para) > max_chars:
                 return para[:max_chars].rsplit(" ", 1)[0] + "…"
             return para
-        # Fallback: first 250 chars, ellipsis only when actually truncated
         truncated = plain[:250]
         if len(plain) > 250:
             truncated = truncated.rsplit(" ", 1)[0] + "…"
         return truncated
 
-    category = article.category.name
-
-    # Build a concise topic phrase from the article title for natural-sounding questions.
-    title_clean = re.sub(r"^the\s+", "", article.title, flags=re.IGNORECASE).strip()
-    for sep in [":", " — ", " - "]:
-        if sep in title_clean:
-            title_clean = title_clean.split(sep)[0].strip()
-            break
-    topic = title_clean[:60] if len(title_clean) > 60 else title_clean
-
-    # Avoid "...in India in India" duplication when topic itself ends with "in India"
-    india_suffix = " in India"
-    topic_lower = topic.lower()
-    if topic_lower.endswith(" in india"):
-        topic = topic[: -len(" in India")].strip()
-    # Guard: if topic is empty after stripping, fall back to category name
-    if not topic:
-        topic = article.category.name
-
+    category_label = article.category.name
     faqs = []
 
     reality_ans = _answer(article.actual_reality)
     if reality_ans:
         faqs.append({
-            "q": f"What is the reality of {topic.lower()}{india_suffix}?",
+            "q": f"What is the actual reality for {category_label} careers in India?",
             "a": reality_ans,
         })
 
     salary_ans = _answer(article.salary_reality)
     if salary_ans:
         faqs.append({
-            "q": f"What salary can {category.lower()} professionals realistically earn{india_suffix}?",
+            "q": f"What salary ranges are realistic in India for this role?",
             "a": salary_ans,
         })
 
     avoid_ans = _answer(article.who_should_avoid)
     if avoid_ans:
         faqs.append({
-            "q": f"Who should avoid {topic.lower()}{india_suffix}?",
+            "q": "Who should avoid this career path?",
             "a": avoid_ans,
         })
 
     verdict_ans = _answer(article.verdict)
     if verdict_ans:
         faqs.append({
-            "q": f"What is the final verdict on {topic.lower()} for Indian professionals?",
+            "q": "What's the bottom line for Indian professionals?",
             "a": verdict_ans,
         })
 
@@ -460,48 +442,63 @@ def _article_keywords(article):
 
     return unique[:12]
 
+@cache_page(60 * 15)
 def author_detail(request, author_id):
     author = get_object_or_404(Author, id=author_id, is_active=True)
-    articles = Article.objects.filter(author=author, status='published').order_by('-published_at')
+    articles = (
+        Article.objects.filter(author=author, status='published')
+        .exclude(slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS)
+        .order_by('-published_at')
+    )
 
-    # Noindex thin author pages to avoid AdSense "low value content" flag
     has_minimum_articles = articles.values('id')[1:2].exists()
     meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
+
+    meta_title = f"{author.display_name} — Career Reality Author"
+    meta_description = (
+        f"{author.experience_summary}. "
+        f"Editorial contributor covering Indian tech careers, salary data, and career risk analysis."
+    )[:160]
 
     return render(request, 'content/author_detail.html', {
         'author': author,
         'articles': articles,
         'meta_robots': meta_robots,
+        'og_title': meta_title,
+        'og_description': meta_description,
+        'twitter_title': meta_title,
+        'twitter_description': meta_description,
+        'article_meta_title': meta_title,
+        'article_meta_description': meta_description,
     })
-@cache_page(60 * 15)
+@cache_page(60 * 60)
 def article_detail(request, slug):
+    canonical_slug = ARTICLE_CANONICAL_REDIRECTS.get(slug)
+    if canonical_slug:
+        return HttpResponsePermanentRedirect(
+            reverse("article_detail", kwargs={"slug": canonical_slug})
+        )
+
     article = get_object_or_404(
         Article.objects.select_related('author', 'category'),
         slug=slug,
         status='published',
     )
     og_image_url = request.build_absolute_uri(reverse('article_og_image', args=[article.slug]))
-    # Get related articles from the same category, excluding the current article
-    related_articles = Article.objects.filter(
+    related_qs = Article.objects.filter(
         category=article.category,
-        status='published'
-    ).exclude(id=article.id).select_related('category').order_by('-published_at')[:3]
-    # Get all categories for internal linking
-    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
+        status='published',
+    ).exclude(id=article.id).exclude(
+        slug__in=ARTICLE_CANONICAL_REDIRECTS.keys()
+    ).select_related('category').order_by('-published_at')[:3]
     source_refs = _article_sources(article)
     return render(request, 'content/article_detail.html', {
         'article': article,
-        'related_articles': related_articles,
-        'categories': categories,
+        'related_articles': related_qs,
+        'categories': indexable_categories_queryset(),
         'source_references': source_refs,
-        'update_log_items': _article_update_log(article),
-        'decision_framework': _decision_framework(article),
-        'mistake_checklist': _mistake_checklist(article),
-        'scenario_snapshot': _scenario_snapshot(article),
         'reading_time': _reading_time_minutes(article),
         'key_takeaways': _key_takeaways(article),
-        'originality': _originality_moat(article),
-        'evidence_map': _evidence_map(article, source_refs),
         'faqs': _generate_article_faqs(article),
         'article_keywords': _article_keywords(article),
         'article_meta_title': article.meta_title,
@@ -520,10 +517,15 @@ def category_detail(request, slug):
     og_title = f"{category.name} Careers in India - Career Reality"
     og_description = f"Reality checks and insights about {category.name.lower()} careers in India. Salary expectations, trade-offs, and growth risks."
     # Filter only published articles, order by most recent
-    articles = Article.objects.filter(category=category, status='published').select_related('author').order_by('-published_at')
-    related_categories = Category.objects.exclude(id=category.id).order_by('order', 'name')[:4]
+    articles = (
+        Article.objects.filter(category=category, status='published')
+        .exclude(slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS)
+        .select_related('author')
+        .order_by('-published_at')
+    )
+    related_categories = indexable_categories_queryset().exclude(id=category.id)[:4]
 
-    # Noindex thin categories (< 3 articles) to avoid AdSense "low value content" flag
+    # Noindex thin categories (< 3 canonical articles)
     has_minimum_articles = articles.values('id')[2:3].exists()
     meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
 
@@ -538,7 +540,14 @@ def category_detail(request, slug):
         'twitter_description': og_description,
     })
 
+@cache_page(60 * 60 * 24)
 def article_og_image(request, slug):
+    canonical_slug = ARTICLE_CANONICAL_REDIRECTS.get(slug)
+    if canonical_slug:
+        return HttpResponsePermanentRedirect(
+            reverse("article_og_image", kwargs={"slug": canonical_slug})
+        )
+
     article = get_object_or_404(Article, slug=slug, status='published')
 
     def wrap_text(text, max_chars=34, max_lines=3):

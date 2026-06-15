@@ -73,6 +73,29 @@ class SecurityHeadersMiddleware:
         return response
 
 
+class EdgeCacheHeadersMiddleware:
+    """
+    Attach Vercel CDN cache hints for anonymous public pages.
+    Works alongside Django Redis cache_page — edge caches full HTML responses.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        if request.method != "GET":
+            return response
+        from core.cache_utils import apply_edge_cache_headers
+
+        apply_edge_cache_headers(
+            response,
+            request.path,
+            is_authenticated=bool(getattr(request, "user", None) and request.user.is_authenticated),
+        )
+        return response
+
+
 class RequestObservabilityMiddleware:
     """
     Adds lightweight request observability for production troubleshooting.

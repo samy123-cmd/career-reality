@@ -22,7 +22,7 @@
         <div class="dir-hero-inner">
             <div>
                 <h1>Company Intelligence</h1>
-                <p>Honest salary data, anonymous reviews, and layoff alerts. No login required.</p>
+                <p>Honest salary data, anonymous reviews, and layoff alerts for companies with community-contributed data.</p>
                 <div class="dir-stats">
                     <div class="dir-stat"><strong>{{ total_companies }}</strong><span>Companies</span></div>
                     <div class="dir-stat"><strong>{{ total_salaries }}</strong><span>Salary Points</span></div>
@@ -132,8 +132,11 @@
 
     {% else %}
     <div class="dir-empty">
-        <p class="dir-empty-msg">No companies found{% if search_query %} for "{{ search_query }}"{% endif %}.</p>
-        <p>Know a company? <a href="{% url 'submit_salary' %}" class="dir-empty-link">Submit salary data</a> and we'll add it.</p>
+        <p class="dir-empty-msg">No companies with salary or review data yet{% if search_query %} matching "{{ search_query }}"{% endif %}.</p>
+        {% if pending_companies_count %}
+        <p>{{ pending_companies_count }} companies are listed internally but hidden until someone contributes salary or review data.</p>
+        {% endif %}
+        <p>Be the first: <a href="{% url 'submit_salary' %}" class="dir-empty-link">Submit salary data</a> or <a href="{% url 'write_review' %}" class="dir-empty-link">write a review</a>.</p>
     </div>
     {% endif %}
 </div>
