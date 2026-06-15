@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET
 from django.urls import reverse
+from django.db.models import Count, Q
 from content.models import Article, Category
 from django.utils import timezone
 from django.conf import settings
@@ -12,6 +13,8 @@ from datetime import date
 import os
 import io
 from django.core.management import call_command
+from core.cache_utils import get_career_index_rows_cached, get_social_proof_counts, fmt_count
+from core.seo_pages import HOME, SALARY_REALITY
 
 
 def _topic_clusters():
@@ -30,7 +33,7 @@ def _topic_clusters():
             "description": "Stagnation, switching risk, and timing decisions under uncertainty.",
             "pillar_url_name": "analyzer_home",
             "supporting_urls": [
-                {"label": "Resignation Risk Analyzer", "url_name": "wizard_start"},
+                {"label": "Resignation Risk Analyzer", "url_name": "analyzer_home"},
                 {"label": "Layoff Radar", "url_name": "layoff_radar"},
             ],
         },
@@ -185,30 +188,29 @@ def healthz(request):
         status=status_code,
     )
 
-@cache_page(60 * 15)
+@cache_page(60 * 60)
 def home(request):
     """
     Home page view.
     - Shows mission statement.
     - Lists only PUBLISHED articles.
     """
-    from analyzer.models import AssessmentLog, SalarySubmission, LayoffReport
-    from companies.models import Company
+    from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS, indexable_categories_queryset
 
-    article_qs = Article.objects.filter(status='published').select_related('author', 'category').order_by('-published_at')
+    article_qs = (
+        Article.objects.filter(status='published')
+        .exclude(slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS)
+        .select_related('author', 'category')
+        .order_by('-published_at')
+    )
     articles = article_qs[:10]
-    categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
+    categories = indexable_categories_queryset()
     recent_updates = article_qs.order_by('-updated_at')[:5]
-    index_rows = _career_reality_index_rows()
+    index_rows = get_career_index_rows_cached()
+    counts = get_social_proof_counts()
 
-    # Dynamic social-proof counts
-    assessment_count = _fmt_count(max(AssessmentLog.objects.count(), 12000))
-    salary_count     = _fmt_count(max(SalarySubmission.objects.count(), 847))
-    layoff_count     = _fmt_count(max(LayoffReport.objects.count(), 120))
-    company_count    = _fmt_count(max(Company.objects.count(), 35))
-
-    title = "Career Reality India - Salary Truths and Career Reality Checks"
-    description = "Data-backed reality checks on Indian tech careers: salary stagnation, skill decay, and the real trade-offs you need to plan for."
+    title = HOME.title
+    description = HOME.description
     home_faq = [
         {
             "q": "What makes Career Reality different from generic career blogs?",
@@ -232,10 +234,11 @@ def home(request):
         'latest_index_row': index_rows[0],
         'latest_band': _index_band(index_rows[0]['overall']),
         'home_faq': home_faq,
-        'assessment_count': assessment_count,
-        'salary_count': salary_count,
-        'layoff_count': layoff_count,
-        'company_count': company_count,
+        'assessment_count': counts['assessment_count'],
+        'salary_count': counts['salary_count'],
+        'layoff_count': counts['layoff_count'],
+        'company_count': counts['company_count'],
+        'page_keywords': HOME.keywords,
         **_seo(title, description),
     })
 
@@ -249,16 +252,8 @@ def _seo(title, description):
 
 
 def _fmt_count(n):
-    """Human-readable social-proof count with trailing + (e.g. 12483 → '12K+')."""
-    if n >= 10_000:
-        return f"{n // 1000}K+"
-    if n >= 1_000:
-        return f"{round(n / 1000, 1):.1f}K+"
-    if n >= 100:
-        return f"{(n // 10) * 10}+"
-    if n > 0:
-        return str(n)
-    return "0"
+    """Backward-compatible alias — prefer core.cache_utils.fmt_count."""
+    return fmt_count(n)
 
 @cache_page(60 * 60)
 def about(request):
@@ -272,20 +267,28 @@ def editorial_standards(request):
     description = "Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts."
     return render(request, 'core/editorial.html', _seo(title, description))
 
-@cache_page(60 * 15)
+@cache_page(60 * 60)
 def salary_reality(request):
-    title = "Salary Reality (India) - Career Reality"
-    description = "Real, uninflated salary data for Indian tech roles with context and median ranges."
-    return render(request, 'core/salary.html', _seo(title, description))
+    title = SALARY_REALITY.title
+    description = SALARY_REALITY.description
+    return render(request, 'core/salary.html', {
+        **_seo(title, description),
+        'page_h1': SALARY_REALITY.h1,
+        'page_keywords': SALARY_REALITY.keywords,
+    })
 
 @cache_page(60 * 60)
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
+    from core.seo_pages import CTC_CALCULATOR
+
     categories = Category.objects.only('id', 'name', 'slug', 'order').order_by('order', 'name')
-    title = "CTC Decoder: Calculate In-Hand Salary India (2026)"
-    description = "Decode CTC into real in-hand salary with PF, gratuity, variable pay, and tax regime logic."
+    title = CTC_CALCULATOR.title
+    description = CTC_CALCULATOR.description
     context = {
         'categories': categories,
+        'page_h1': CTC_CALCULATOR.h1,
+        'page_keywords': CTC_CALCULATOR.keywords,
         **_seo(title, description),
     }
     return render(request, 'core/salary_calculator.html', context)
@@ -298,16 +301,19 @@ def escape_plan(request):
     """
     return render(request, 'content/escape_plan.html')
 
+@cache_page(60 * 60)
 def privacy_policy(request):
     title = "Privacy Policy - Career Reality India"
     description = "Privacy Policy for Career Reality India. Covers cookies, data collection, and ad network compliance."
     return render(request, 'core/privacy_policy.html', _seo(title, description))
 
+@cache_page(60 * 60)
 def contact(request):
     title = "Contact Career Reality - Editorial Inquiries"
     description = "Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis."
     return render(request, 'core/contact.html', _seo(title, description))
 
+@cache_page(60 * 60)
 def terms(request):
     title = "Terms of Service - Career Reality India"
     description = "Terms of Service for Career Reality India. Read before using the site and its career content."
@@ -318,7 +324,9 @@ def terms(request):
 def topic_clusters(request):
     title = "Topic Clusters - Career Reality India"
     description = "Explore Career Reality authority clusters: salary, career risk, and role-specific market realities."
-    categories = Category.objects.all().order_by('order', 'name')
+    from content.seo_redirects import indexable_categories_queryset
+
+    categories = indexable_categories_queryset()
     return render(request, 'core/topic_clusters.html', {
         "categories": categories,
         "clusters": _topic_clusters(),
@@ -330,7 +338,7 @@ def topic_clusters(request):
 def career_reality_index(request):
     title = "Career Reality Index (India) - Monthly Career Pressure Tracker"
     description = "Monthly index tracking salary pressure, switching difficulty, and layoff risk in Indian tech careers."
-    rows = _career_reality_index_rows()
+    rows = get_career_index_rows_cached()
     latest = rows[0]
     previous = rows[1] if len(rows) > 1 else rows[0]
     delta_overall = latest["overall"] - previous["overall"]
@@ -532,6 +540,41 @@ def newsletter_signup(request):
 
 
 @require_GET
+def run_warm_cache_cron(request):
+    """Lightweight cron: rebuild sitemap + warm Redis page cache only."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse({"status": "error", "message": "cron token not configured"}, status=503)
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    from core.cache_utils import warm_page_cache, invalidate_sitemap_cache
+    from core.sitemap_view import cached_sitemap
+    from django.test import RequestFactory
+
+    started_at = timezone.now()
+    invalidate_sitemap_cache()
+    cached_sitemap(RequestFactory().get("/sitemap.xml"))
+
+    summary = warm_page_cache(article_limit=20)
+    elapsed_ms = round((timezone.now() - started_at).total_seconds() * 1000, 2)
+    return JsonResponse({
+        "status": "ok",
+        "elapsed_ms": elapsed_ms,
+        "warmed": summary["warmed"],
+        "paths_total": summary["paths_total"],
+    })
+
+
+@require_GET
 def run_freshness_cron(request):
     """Secure internal endpoint for scheduled freshness maintenance jobs."""
     expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
@@ -551,9 +594,14 @@ def run_freshness_cron(request):
     if provided_token != expected_token:
         return JsonResponse({"status": "forbidden"}, status=403)
 
-    limit = int(request.GET.get("limit", os.environ.get("CRON_FETCH_LIMIT", "12")))
+    limit = int(
+        request.GET.get("fetch_limit")
+        or request.GET.get("limit")
+        or os.environ.get("CRON_FETCH_LIMIT", "12")
+    )
     commit_refresh = request.GET.get("commit_refresh", os.environ.get("CRON_REFRESH_COMMIT", "False")) == "True"
     strict_freshness = request.GET.get("strict_freshness", os.environ.get("CRON_STRICT_FRESHNESS", "False")) == "True"
+    refresh_articles = request.GET.get("refresh_articles", os.environ.get("CRON_REFRESH_ARTICLES", "False")) == "True"
     warm_cache = request.GET.get("warm_cache", os.environ.get("CRON_WARM_CACHE", "True")) == "True"
 
     started_at = timezone.now()
@@ -567,6 +615,7 @@ def run_freshness_cron(request):
             commit_refresh=commit_refresh,
             strict_freshness=strict_freshness,
             warm_cache=warm_cache,
+            refresh_articles=refresh_articles,
             stdout=output,
         )
     except Exception as exc:

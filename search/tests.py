@@ -71,8 +71,14 @@ class SearchViewTests(TestCase):
         self.assertNotIn(self.draft_article, response.context["results"]["articles"])
 
     def test_search_finds_company(self):
+        self.company.review_count = 1
+        self.company.save(update_fields=["review_count"])
         response = self.client.get(reverse("search"), {"q": "infosys"})
         self.assertIn(self.company, response.context["results"]["companies"])
+
+    def test_search_excludes_empty_company(self):
+        response = self.client.get(reverse("search"), {"q": "infosys"})
+        self.assertNotIn(self.company, response.context["results"]["companies"])
 
     def test_search_finds_published_ai_news(self):
         response = self.client.get(reverse("search"), {"q": "gpt"})
@@ -141,9 +147,16 @@ class SearchSuggestApiTests(TestCase):
         self.assertIn("Engineer Career Tips", texts)
 
     def test_suggest_finds_company(self):
+        self.company.review_count = 1
+        self.company.save(update_fields=["review_count"])
         data = self.client.get(reverse("search_suggest"), {"q": "wipro"}).json()
         texts = [s["text"] for s in data["suggestions"]]
         self.assertIn("Wipro Tech", texts)
+
+    def test_suggest_excludes_empty_company(self):
+        data = self.client.get(reverse("search_suggest"), {"q": "wipro"}).json()
+        texts = [s["text"] for s in data["suggestions"]]
+        self.assertNotIn("Wipro Tech", texts)
 
     def test_suggest_finds_ai_news(self):
         data = self.client.get(reverse("search_suggest"), {"q": "engineer"}).json()

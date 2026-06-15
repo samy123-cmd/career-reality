@@ -1,0 +1,141 @@
+"""
+SEO metadata for high-traffic landing pages.
+
+Centralizes title/description/keyword targets so templates and views stay aligned.
+Tune these when Search Console query data shifts.
+"""
+
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class PageSEO:
+    title: str
+    description: str
+    h1: str | None = None
+    keywords: tuple[str, ...] = ()
+
+
+# ── Tool pages (traffic engine — target high-volume Indian career queries) ──
+
+CTC_CALCULATOR = PageSEO(
+    title="CTC to In-Hand Salary Calculator India (2026) — Free | Career Reality",
+    description=(
+        "Free CTC to in-hand salary calculator for India. Decode your offer letter "
+        "with PF, gratuity, variable pay, and new vs old tax regime deductions."
+    ),
+    h1="CTC to In-Hand Salary Calculator",
+    keywords=(
+        "ctc to in hand salary calculator india",
+        "in hand salary calculator",
+        "ctc decoder",
+        "salary calculator india 2026",
+    ),
+)
+
+RESIGNATION_ANALYZER = PageSEO(
+    title="Resignation Risk Analyzer India — Notice Period & Bond Calculator (Free)",
+    description=(
+        "Free resignation risk calculator for Indian employees. Assess notice period "
+        "pressure, service bonds, and HR escalation risk before you put in papers."
+    ),
+    h1="Resignation Risk Analyzer",
+    keywords=(
+        "resignation notice period india",
+        "resignation risk calculator",
+        "service bond india",
+        "relieving letter india",
+    ),
+)
+
+LAYOFF_RADAR = PageSEO(
+    title="IT Layoffs India 2026 Tracker — Hiring Freeze & Layoff Alerts",
+    description=(
+        "Live crowdsourced layoff and hiring freeze tracker for Indian IT and tech "
+        "companies. Check company stability signals and report anonymously."
+    ),
+    h1="Indian Tech Layoff Radar",
+    keywords=(
+        "it layoffs india 2026",
+        "hiring freeze india",
+        "tech layoff tracker india",
+        "infosys layoff",
+        "tcs layoff news",
+    ),
+)
+
+SALARY_REALITY = PageSEO(
+    title="Software Engineer Salary India 2026 — Median Pay by Role & City",
+    description=(
+        "Median software engineer, data, and product salaries in India — not inflated "
+        "outliers. Role-wise pay bands for Bengaluru, Hyderabad, Pune, and remote."
+    ),
+    h1="Indian Tech Salary Reality",
+    keywords=(
+        "software engineer salary india 2026",
+        "median salary india",
+        "developer salary bangalore",
+        "data engineer salary india",
+    ),
+)
+
+HOME = PageSEO(
+    title="Career Reality India — Salary Truths, CTC Calculator & Layoff Tracker",
+    description=(
+        "Salary truths and career reality checks for Indian tech professionals. "
+        "Free CTC calculator, layoff radar, resignation risk tool, and honest analysis."
+    ),
+    keywords=(
+        "career reality india",
+        "salary reality check india",
+        "indian tech career advice",
+        "ctc calculator india",
+    ),
+)
+
+# Internal linking hub — shown on articles and data pages.
+SEO_TOOL_HUB = (
+    {
+        "label": "CTC to In-Hand Calculator",
+        "description": "Decode your offer letter into real monthly take-home.",
+        "url_name": "salary_calculator",
+        "icon": "🧮",
+    },
+    {
+        "label": "Resignation Risk Analyzer",
+        "description": "Notice period, bonds, and HR pressure — before you resign.",
+        "url_name": "analyzer_home",
+        "icon": "🎯",
+    },
+    {
+        "label": "IT Layoff Radar",
+        "description": "Hiring freeze and layoff signals across Indian tech.",
+        "url_name": "layoff_radar",
+        "icon": "🚨",
+    },
+    {
+        "label": "Salary Reality Data",
+        "description": "Median pay by role — not unicorn outliers.",
+        "url_name": "salary_reality",
+        "icon": "💰",
+    },
+)
+
+# Pillar articles to cross-link from tool pages (high intent ↔ content loop).
+SEO_PILLAR_ARTICLES = (
+    {
+        "label": "Layoff Recovery Timeline India",
+        "url_name": "article_detail",
+        "slug": "layoff-recovery-timeline-india",
+    },
+    {
+        "label": "What 20 LPA Actually Feels Like",
+        "url_name": "article_detail",
+        "slug": "what-20-lpa-actually-feels-like-india-purchasing-power",
+    },
+    {
+        "label": "Manager vs IC: Which Path Pays",
+        "url_name": "article_detail",
+        "slug": "manager-vs-ic-career-path-india",
+    },
+)

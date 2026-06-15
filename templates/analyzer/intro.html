@@ -1,16 +1,31 @@
 {% extends "analyzer/step_base.html" %}
 
-{% block title %}Resignation Risk Analyzer India | Notice Period & Bond Calculator{% endblock %}
+{% block title %}{{ og_title|default:"Resignation Risk Analyzer India — Notice Period & Bond Calculator (Free)" }}{% endblock %}
 
-{% block meta_description %}Assess your resignation risk in India. Free tool analyzes notice periods, service bonds, and
-manager pressure to predict exit outcomes.{% endblock %}
+{% block meta_description %}{{ og_description|default:"Free resignation risk calculator for Indian employees. Assess notice period pressure, service bonds, and HR escalation risk before you put in papers." }}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Resignation Risk Analyzer (India)",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+  "description": "Free tool that assesses resignation risk for Indian private-sector employees based on notice period, bonds, and company culture patterns.",
+  "keywords": "resignation notice period india, resignation risk calculator, service bond india, relieving letter india",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
 
 {% block content %}
 
 <div class="az-intro-container">
 
   <header class="az-intro-header">
-    <h1 class="az-intro-title">Resignation Risk Analyzer</h1>
+    <h1 class="az-intro-title">{{ page_h1|default:"Resignation Risk Analyzer" }}</h1>
     <p class="az-intro-subtitle">Neutral, privacy-first guidance for Indian professionals.</p>
   </header>
 
@@ -152,5 +167,10 @@ manager pressure to predict exit outcomes.{% endblock %}
       }]
     }
     </script>
+</div>
+
+<div class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    {% include "partials/seo_tool_hub.html" %}
+    {% include "partials/seo_pillar_links.html" %}
 </div>
 {% endblock %}

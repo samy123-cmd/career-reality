@@ -1,15 +1,14 @@
 from django.conf import settings
 
+from core.seo_pages import SEO_PILLAR_ARTICLES, SEO_TOOL_HUB
+
 
 def seo_defaults(request):
-    # Build canonical URL without query parameters to prevent duplicate indexing.
     path = request.path
     canonical_url = f"{settings.CANONICAL_BASE_URL}{path}"
 
-    # Compute language-specific alternate URLs for hreflang signals.
-    # /hi/ prefix is the Django i18n_patterns locale prefix for Hindi.
     if path.startswith('/hi/'):
-        en_path = path[3:]  # strip /hi prefix → /article/slug/
+        en_path = path[3:]
         hi_path = path
     elif path == '/hi':
         en_path = '/'
@@ -21,27 +20,21 @@ def seo_defaults(request):
     en_canonical_url = f"{settings.CANONICAL_BASE_URL}{en_path}"
     hi_canonical_url = f"{settings.CANONICAL_BASE_URL}{hi_path}"
 
-    # Keep header category navigation populated across all templates.
-    # Only show categories that have at least one published article.
-    # Cached for 1 hour to avoid a DB hit on every uncached page request.
     from django.core.cache import cache
-    categories = cache.get('nav_categories')
+    from core.cache_utils import NAV_CATEGORIES_CACHE_KEY
+
+    categories = cache.get(NAV_CATEGORIES_CACHE_KEY)
     if categories is None:
         try:
-            from django.db.models import Count, Q
-            from content.models import Category
-            categories = list(Category.objects.annotate(
-                article_count=Count('article', filter=Q(article__status='published'))
-            ).filter(article_count__gt=0).order_by('order', 'name'))
-            cache.set('nav_categories', categories, 3600)
+            from core.cache_utils import refresh_nav_categories_cache
+            refresh_nav_categories_cache()
+            categories = cache.get(NAV_CATEGORIES_CACHE_KEY) or []
         except Exception:
             categories = []
 
-    # /hi/ pages have no actual Hindi content — mark noindex and
-    # point canonical to the English original so they never dilute SEO.
     is_hindi_duplicate = path.startswith('/hi/') or path == '/hi'
     meta_robots = "noindex, nofollow" if is_hindi_duplicate else "index, follow"
-    canonical_url = en_canonical_url  # Always canonical to English
+    canonical_url = en_canonical_url
 
     return {
         "article_meta_title": "",
@@ -59,5 +52,12 @@ def seo_defaults(request):
         "en_canonical_url": en_canonical_url,
         "hi_canonical_url": hi_canonical_url,
         "categories": categories,
+        "site_social_profiles": getattr(settings, "SITE_SOCIAL_PROFILES", []),
     }
 
+
+def seo_internal_links(request):
+    return {
+        "seo_tool_hub": SEO_TOOL_HUB,
+        "seo_pillar_articles": SEO_PILLAR_ARTICLES,
+    }

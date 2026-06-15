@@ -126,8 +126,6 @@
                 <li><a href="#salary-growth">Salary and Growth Reality</a></li>
                 <li><a href="#stuck-point">Where Most People Get Stuck</a></li>
                 <li><a href="#avoid-path">Who Should Avoid This Path</a></li>
-                <li><a href="#decision-framework">Decision Framework</a></li>
-                <li><a href="#originality-lens">Originality Lens</a></li>
                 {% if faqs %}<li><a href="#faq">Frequently Asked Questions</a></li>{% endif %}
                 <li><a href="#verdict">Final Verdict</a></li>
             </ul>
@@ -190,7 +188,7 @@
             {% if LANGUAGE_CODE == 'hi' and article.stuck_point_hi %}{{ article.stuck_point_hi|safe }}{% else %}{{ article.stuck_point|safe }}{% endif %}
             <p class="art-context-note">
                 If this matches your current situation, run the
-                <a href="{% url 'wizard_start' %}">Resignation Risk Analyzer</a>
+                <a href="{% url 'analyzer_home' %}">Resignation Risk Analyzer</a>
                 before making your next move.
             </p>
         </section>
@@ -198,53 +196,6 @@
         <section id="avoid-path">
             <h2>Who Should Avoid This Path</h2>
             {% if LANGUAGE_CODE == 'hi' and article.who_should_avoid_hi %}{{ article.who_should_avoid_hi|safe }}{% else %}{{ article.who_should_avoid|safe }}{% endif %}
-        </section>
-
-        <section id="decision-framework">
-            <h2>Decision Framework</h2>
-            <p>Use this quick framework before changing role, company, or specialization.</p>
-            <ul>
-                {% for point in decision_framework %}
-                <li>{{ point }}</li>
-                {% endfor %}
-            </ul>
-        </section>
-
-        <section>
-            <h2>Common Mistakes Checklist</h2>
-            <ul>
-                {% for item in mistake_checklist %}
-                <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
-        </section>
-
-        <section>
-            <h2>Real Scenario Snapshot</h2>
-            <p>{{ scenario_snapshot }}</p>
-        </section>
-
-        <section id="originality-lens" class="art-callout art-callout--muted">
-            <h2 class="art-callout-heading">Originality Lens</h2>
-            <p><strong>Contrarian thesis:</strong> {{ originality.contrarian_thesis }}</p>
-            <p class="art-callout-last"><strong>Non-obvious signal:</strong> {{ originality.non_obvious_signal }}</p>
-        </section>
-
-        <section class="art-callout">
-            <h2 class="art-callout-heading">Evidence By Section</h2>
-            {% for item in evidence_map %}
-            <div class="art-evidence-item">
-                <p class="art-evidence-claim"><strong>Claim:</strong> {{ item.claim }}</p>
-                <p class="art-evidence-sources">
-                    Evidence:
-                    {% for src in item.sources %}
-                    <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer">{{ src.name }}</a>{% if not forloop.last %}, {% endif %}
-                    {% empty %}
-                    Source list unavailable.
-                    {% endfor %}
-                </p>
-            </div>
-            {% endfor %}
         </section>
 
         {% if faqs %}
@@ -281,17 +232,6 @@
                 Found a factual error? <a href="{% url 'contact' %}">Request a correction</a>.
             </div>
 
-            <div class="art-changelog">
-                <h3 class="art-callout-title">What Changed</h3>
-                <ul class="art-callout-list">
-                    {% for log in update_log_items %}
-                    <li class="art-changelog-item">
-                        <strong>{{ log.date|date:"F j, Y" }}</strong>: {{ log.summary }}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-
             <div class="art-sources">
                 <h3 class="art-callout-title">Sources</h3>
                 <ul class="art-callout-list">
@@ -304,6 +244,11 @@
                 </ul>
             </div>
         </div>
+    </div>
+
+    <div class="container-medium" style="margin-bottom: var(--space-xl);">
+        {% include "partials/seo_tool_hub.html" %}
+        {% include "partials/seo_pillar_links.html" %}
     </div>
 
     <!-- Related Articles -->

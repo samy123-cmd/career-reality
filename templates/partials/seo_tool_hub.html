@@ -1,0 +1,21 @@
+{% if seo_tool_hub %}
+<section class="hp-section container-wide" aria-labelledby="seo-tool-hub-title" style="padding-top: 0;">
+    <div class="hp-section-header">
+        <span class="section-label">FREE CAREER TOOLS</span>
+        <h2 id="seo-tool-hub-title" class="hp-section-title">Make your next move with data</h2>
+        <p class="hp-section-sub">Calculators and trackers built for Indian tech professionals.</p>
+    </div>
+    <div class="hp-tools-grid">
+        {% for tool in seo_tool_hub %}
+        <a href="{% url tool.url_name %}" class="hp-tool-card">
+            <div class="hp-tool-icon">{{ tool.icon }}</div>
+            <div class="hp-tool-body">
+                <h3>{{ tool.label }}</h3>
+                <p>{{ tool.description }}</p>
+            </div>
+            <span class="hp-tool-arrow">→</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

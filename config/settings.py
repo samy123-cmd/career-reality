@@ -46,6 +46,16 @@ else:
 CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "https://www.careerreality.in").strip().rstrip("/")
 CANONICAL_HOST = urlsplit(CANONICAL_BASE_URL).netloc.lower()
 
+# E-E-A-T: external profiles for Organization/WebSite schema sameAs (comma-separated URLs).
+SITE_SOCIAL_PROFILES = _csv_env("SITE_SOCIAL_PROFILES")
+
+# Performance tuning (seconds).
+SITEMAP_CACHE_TIMEOUT = int(os.environ.get("SITEMAP_CACHE_TIMEOUT", "21600"))
+SOCIAL_PROOF_CACHE_TIMEOUT = int(os.environ.get("SOCIAL_PROOF_CACHE_TIMEOUT", "1800"))
+INDEX_ROWS_CACHE_TIMEOUT = int(os.environ.get("INDEX_ROWS_CACHE_TIMEOUT", "3600"))
+PAGE_CACHE_ARTICLE_SECONDS = int(os.environ.get("PAGE_CACHE_ARTICLE_SECONDS", "3600"))
+PAGE_CACHE_HOME_SECONDS = int(os.environ.get("PAGE_CACHE_HOME_SECONDS", "3600"))
+
 if DEBUG:
     ALLOWED_HOSTS = _csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver")
 else:
@@ -113,6 +123,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware', # Serve static files before GZip (avoids double-compression)
     'django.middleware.gzip.GZipMiddleware', # Compress HTML/JSON responses from Django views
     'core.middleware.SecurityHeadersMiddleware',
+    'core.middleware.EdgeCacheHeadersMiddleware',
     'core.middleware.RequestObservabilityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -132,6 +143,7 @@ template_options = {
         'django.contrib.auth.context_processors.auth',
         'django.contrib.messages.context_processors.messages',
         'core.context_processors.seo_defaults',
+        'core.context_processors.seo_internal_links',
     ],
 }
 if not DEBUG:
@@ -220,6 +232,12 @@ if _REDIS_URL:
             'TIMEOUT': _CACHE_TIMEOUT,
         }
     }
+elif not DEBUG:
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "REDIS_URL not set in production — page cache will NOT persist across "
+        "Vercel serverless instances. Set REDIS_URL for sub-second TTFB."
+    )
 else:
     # Local development fallback only — NOT suitable for multi-process/serverless.
     CACHES = {

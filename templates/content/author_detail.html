@@ -1,9 +1,24 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ author.display_name }} - Career Reality (India){% endblock %}
-{% block meta_description %}{{ author.experience_summary }} - Editorial contributor at Career Reality.{% endblock %}
+{% block title %}{{ og_title|default:author.display_name }} — Career Reality Author{% endblock %}
+{% block meta_description %}{{ og_description|default:author.experience_summary }} — Editorial contributor at Career Reality.{% endblock %}
 
 {% block content %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ author.display_name|escapejs }}",
+  "description": "{{ author.experience_summary|escapejs }}",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Career Reality",
+    "url": "{{ site_base_url }}"
+  }{% if author.linkedin_url %},
+  "sameAs": ["{{ author.linkedin_url|escapejs }}"]{% endif %}
+}
+</script>
 <section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
 
     <!-- Author Header -->
@@ -90,4 +105,8 @@
         Author page reviewed: {% now "F j, Y" %}
     </p>
 </section>
+
+<div class="container-medium" style="margin-bottom: var(--space-xl);">
+    {% include "partials/seo_tool_hub.html" %}
+</div>
 {% endblock %}

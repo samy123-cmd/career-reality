@@ -1,0 +1,17 @@
+{% if seo_pillar_articles %}
+<section class="container-medium" style="margin-top: var(--space-lg);" aria-labelledby="seo-pillar-title">
+    <span class="section-label">DEEP-DIVE READS</span>
+    <h2 id="seo-pillar-title" class="hp-section-title" style="font-size: 28px; margin-bottom: var(--space-sm);">Related reality checks</h2>
+    <ul style="margin: 0; padding-left: 1.25rem; line-height: 1.8;">
+        {% for item in seo_pillar_articles %}
+        <li>
+            {% if item.slug %}
+            <a href="{% url item.url_name slug=item.slug %}">{{ item.label }}</a>
+            {% else %}
+            <a href="{% url item.url_name %}">{{ item.label }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}

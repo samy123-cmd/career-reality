@@ -5,8 +5,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
+from django.views.decorators.vary import vary_on_cookie
 from django.utils.cache import patch_cache_control
 from django.utils import timezone
+from core.seo_pages import LAYOFF_RADAR, RESIGNATION_ANALYZER
 from . import forms, logic, models
 
 COMPANY_TYPE_LABELS = dict(models.SalarySubmission.COMPANY_TYPES)
@@ -18,20 +20,20 @@ STEPS = {
     3: forms.Step3Form,
 }
 
+@cache_page(60 * 30)
+@vary_on_cookie
 def intro_view(request):
-    """
-    Landing page for the analyzer.
-    Static, indexable content + Start button.
-    """
-    title = "Career Risk Analyzer - Career Reality India"
-    description = "Answer 6 questions to estimate career risk and get a reality-first action plan."
+    """Landing page for the resignation risk analyzer."""
     methodology_last_updated = timezone.localdate().strftime('%B %d, %Y')
+    seo = RESIGNATION_ANALYZER
     return render(request, 'analyzer/intro.html', {
-        'og_title': title,
-        'og_description': description,
-        'twitter_title': title,
-        'twitter_description': description,
+        'og_title': seo.title,
+        'og_description': seo.description,
+        'twitter_title': seo.title,
+        'twitter_description': seo.description,
         'methodology_last_updated': methodology_last_updated,
+        'page_h1': seo.h1,
+        'page_keywords': seo.keywords,
     })
 
 def wizard_start_session(request):
@@ -326,6 +328,7 @@ def salary_feed_api(request):
         patch_cache_control(response, no_store=True)
         return response
 
+@cache_page(60 * 15)
 def layoff_radar(request):
     """
     Dashboard showing company stability status.
@@ -375,8 +378,7 @@ def layoff_radar(request):
         risk_band_color  = "#16a34a"
         market_volatility = danger_pct
 
-    title = "Indian Tech Layoff Radar (2026)"
-    description = "Crowdsourced layoff alerts and hiring freeze updates for Indian IT. Check if your company is safe and report anonymously."
+    seo = LAYOFF_RADAR
     return render(request, 'analyzer/layoff_radar.html', {
         'reports': recent_reports,
         'today_count': today_count,
@@ -384,10 +386,12 @@ def layoff_radar(request):
         'risk_band': risk_band,
         'risk_band_color': risk_band_color,
         'market_volatility': market_volatility,
-        'og_title': title,
-        'og_description': description,
-        'twitter_title': title,
-        'twitter_description': description,
+        'page_h1': seo.h1,
+        'page_keywords': seo.keywords,
+        'og_title': seo.title,
+        'og_description': seo.description,
+        'twitter_title': seo.title,
+        'twitter_description': seo.description,
     })
 
 def report_layoff(request):
