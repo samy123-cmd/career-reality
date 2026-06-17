@@ -129,6 +129,8 @@ def robots_txt(request):
         "Disallow: /payments/",
         # Pro dashboard — gated content
         "Disallow: /pro/dashboard/",
+        # Community UGC — thin, user-generated; not editorial content
+        "Disallow: /discussions/",
         # Internal cron endpoints
         "Disallow: /internal/",
         # Admin
@@ -496,6 +498,8 @@ def run_career_index_cron(request):
         return JsonResponse({"status": "forbidden"}, status=403)
 
     call_command("refresh_career_index", months=4)
+    from core.cache_utils import invalidate_career_index_cache
+    invalidate_career_index_cache()
     return JsonResponse({"status": "ok", "message": "Career Reality Index refreshed."})
 
 

@@ -164,6 +164,7 @@ def ai_news_detail(request, slug):
 
     faqs = _extract_faqs(item.summary) if item.summary else []
     timeline = _ai_evolution_timeline()
+    meta_robots = "noindex, follow" if content_is_stale else "index, follow"
 
     return render(
         request,
@@ -176,6 +177,7 @@ def ai_news_detail(request, slug):
             "content_is_stale": content_is_stale,
             "ai_evolution_timeline": timeline,
             "timeline_position": _timeline_position_for_item(item.event_date or item.published_at),
+            "meta_robots": meta_robots,
             **_seo(title, description),
         },
     )

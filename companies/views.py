@@ -248,6 +248,8 @@ def discussion_list(request):
         "total_discussions": Discussion.objects.filter(is_flagged=False).count(),
         "og_title": "Community Discussions — Career Reality India",
         "og_description": "Anonymous career discussions from Indian tech professionals. No corporate spin.",
+        # UGC threads are thin for crawlers — keep for users, not search index.
+        "meta_robots": "noindex, follow",
     })
 
 
@@ -264,6 +266,7 @@ def discussion_detail(request, pk):
         "reply_form": reply_form,
         "og_title": f"{discussion.title} — Career Reality Discussions",
         "og_description": discussion.body[:160],
+        "meta_robots": "noindex, follow",
     })
 
 

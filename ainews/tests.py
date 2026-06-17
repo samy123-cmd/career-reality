@@ -108,6 +108,23 @@ class AINewsModelAndViewTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    def test_stale_ai_news_detail_is_noindex(self):
+        from datetime import timedelta
+
+        stale_date = timezone.now() - timedelta(days=30)
+        self._create_item(
+            'Stale News',
+            'stale-news',
+            reviewed_at=stale_date,
+            published_at=stale_date,
+        )
+
+        response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'stale-news'}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['meta_robots'], 'noindex, follow')
+        self.assertTrue(response.context['content_is_stale'])
+
     # --- Tag View Tests ---
 
     def test_ai_news_by_tag_filters_correctly(self):

@@ -80,6 +80,10 @@ class DiscussionListViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("page_obj", response.context)
 
+    def test_list_is_noindex(self):
+        response = self.client.get(reverse("discussion_list"))
+        self.assertEqual(response.context["meta_robots"], "noindex, follow")
+
     def test_list_excludes_flagged(self):
         flagged = make_discussion(title="Flagged post")
         flagged.is_flagged = True
@@ -123,6 +127,10 @@ class DiscussionDetailViewTests(TestCase):
         response = self.client.get(reverse("discussion_detail", kwargs={"pk": self.disc.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["discussion"], self.disc)
+
+    def test_detail_is_noindex(self):
+        response = self.client.get(reverse("discussion_detail", kwargs={"pk": self.disc.pk}))
+        self.assertEqual(response.context["meta_robots"], "noindex, follow")
 
     def test_detail_includes_replies(self):
         response = self.client.get(reverse("discussion_detail", kwargs={"pk": self.disc.pk}))

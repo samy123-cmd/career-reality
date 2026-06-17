@@ -16,8 +16,15 @@ ARTICLE_CANONICAL_REDIRECTS = {
     "junior-data-scientist-reality-india-sql-janitor": "junior-data-scientist-reality-india",
     # Digital Marketing — keep the deeper agency-vs-B2B analysis.
     "digital-marketing-illusion-instagram-ads-burning-money": "digital-marketing-reality-agency-burnout",
+    "digital-marketing-reality-india": "digital-marketing-reality-agency-burnout",
     # Networking — keep the introvert-focused, natural-title article.
     "networking-myth-professional-relationships-worthless": "networking-reality-india-introverts",
+    # Product Management — keep the Jira-janitor deep dive (stronger E-E-A-T signals).
+    "the-product-manager-reality-coordinator-not-ceo": "product-manager-reality-india-jira-janitor",
+    # UX / Design — keep the strategy-focused long-form piece.
+    "the-ux-design-reality-india-ui-factory": "the-design-reality-beautiful-screens-do-not-save-bad-strategy",
+    # Upskilling — keep the career-trap narrative (featured in topic clusters).
+    "the-learning-reality-upskilling-is-not-a-guarantee": "why-upskilling-stops-working-career-trap",
 }
 
 ARTICLE_SITEMAP_EXCLUDE_SLUGS = frozenset(ARTICLE_CANONICAL_REDIRECTS.keys())

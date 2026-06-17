@@ -53,6 +53,46 @@
             "permanent": true
         },
         {
+            "source": "/article/digital-marketing-reality-india/",
+            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+            "permanent": true
+        },
+        {
+            "source": "/article/digital-marketing-reality-india",
+            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+            "permanent": true
+        },
+        {
+            "source": "/article/the-product-manager-reality-coordinator-not-ceo/",
+            "destination": "https://www.careerreality.in/article/product-manager-reality-india-jira-janitor/",
+            "permanent": true
+        },
+        {
+            "source": "/article/the-product-manager-reality-coordinator-not-ceo",
+            "destination": "https://www.careerreality.in/article/product-manager-reality-india-jira-janitor/",
+            "permanent": true
+        },
+        {
+            "source": "/article/the-ux-design-reality-india-ui-factory/",
+            "destination": "https://www.careerreality.in/article/the-design-reality-beautiful-screens-do-not-save-bad-strategy/",
+            "permanent": true
+        },
+        {
+            "source": "/article/the-ux-design-reality-india-ui-factory",
+            "destination": "https://www.careerreality.in/article/the-design-reality-beautiful-screens-do-not-save-bad-strategy/",
+            "permanent": true
+        },
+        {
+            "source": "/article/the-learning-reality-upskilling-is-not-a-guarantee/",
+            "destination": "https://www.careerreality.in/article/why-upskilling-stops-working-career-trap/",
+            "permanent": true
+        },
+        {
+            "source": "/article/the-learning-reality-upskilling-is-not-a-guarantee",
+            "destination": "https://www.careerreality.in/article/why-upskilling-stops-working-career-trap/",
+            "permanent": true
+        },
+        {
             "source": "/(.*)",
             "has": [
                 {

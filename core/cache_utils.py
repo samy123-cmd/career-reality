@@ -128,6 +128,10 @@ def invalidate_sitemap_cache() -> None:
     cache.delete(SITEMAP_CACHE_KEY)
 
 
+def invalidate_career_index_cache() -> None:
+    cache.delete(INDEX_ROWS_CACHE_KEY)
+
+
 def refresh_nav_categories_cache() -> int:
     """Rebuild header nav category cache. Returns category count."""
     from content.seo_redirects import indexable_categories_queryset
@@ -203,11 +207,14 @@ def get_career_index_rows_cached(*, rebuild: bool = False):
             return date(year, month, 1)
 
         base = timezone.localdate()
+        from core.career_index_data import JUNE_2026_BASELINE
+
+        june = JUNE_2026_BASELINE
         rows = [
-            {"month": _shift_month(base, 0).strftime("%B %Y"), "salary_pressure": 72, "switch_difficulty": 68, "layoff_risk": 54, "overall": 65},
-            {"month": _shift_month(base, 1).strftime("%B %Y"), "salary_pressure": 71, "switch_difficulty": 66, "layoff_risk": 56, "overall": 64},
-            {"month": _shift_month(base, 2).strftime("%B %Y"), "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 58, "overall": 63},
-            {"month": _shift_month(base, 3).strftime("%B %Y"), "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 57, "overall": 62},
+            {"month": _shift_month(base, 0).strftime("%B %Y"), "salary_pressure": june.salary_pressure, "switch_difficulty": june.switch_difficulty, "layoff_risk": june.layoff_risk, "overall": june.overall},
+            {"month": _shift_month(base, 1).strftime("%B %Y"), "salary_pressure": 68, "switch_difficulty": 56, "layoff_risk": 45, "overall": 57},
+            {"month": _shift_month(base, 2).strftime("%B %Y"), "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 48, "overall": 60},
+            {"month": _shift_month(base, 3).strftime("%B %Y"), "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 47, "overall": 58},
         ]
     cache.set(INDEX_ROWS_CACHE_KEY, rows, index_rows_cache_timeout())
     return rows
