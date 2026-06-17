@@ -7,7 +7,7 @@ from content.seo_redirects import (
     ARTICLE_SITEMAP_EXCLUDE_SLUGS,
     MIN_INDEXABLE_CATEGORY_ARTICLES,
 )
-from core.sitemaps import ArticleSitemap, CategorySitemap, ToolSitemap
+from core.sitemaps import ArticleSitemap, CategorySitemap, StaticViewSitemap, ToolSitemap
 
 
 class SitemapHygieneTests(TestCase):
@@ -138,3 +138,7 @@ class SitemapHygieneTests(TestCase):
         slugs = [c.slug for c in CategorySitemap().items()]
         self.assertNotIn("borderline", slugs)
         self.assertIn("engineering", slugs)
+
+    def test_static_sitemap_excludes_ai_hub_when_no_published_items(self):
+        urls = [StaticViewSitemap().location(item) for item in StaticViewSitemap().items()]
+        self.assertNotIn(reverse("ai_news_hub"), urls)

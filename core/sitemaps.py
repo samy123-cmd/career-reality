@@ -53,7 +53,7 @@ class StaticViewSitemap(Sitemap):
     changefreq = "monthly"
 
     def items(self):
-        return [
+        static = [
             'home',
             'about',
             'editorial',
@@ -63,9 +63,12 @@ class StaticViewSitemap(Sitemap):
             'terms',
             'topic_clusters',
             'career_reality_index',
-            'ai_news_hub',
             'company_directory',
         ]
+        # Only list AI Pulse hub when published items exist (matches view noindex gate).
+        if AINewsItem.objects.filter(status='published').exists():
+            static.append('ai_news_hub')
+        return static
 
     def location(self, item):
         return reverse(item)

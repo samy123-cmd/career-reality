@@ -298,6 +298,56 @@ class ArticleCanonicalRedirectTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_all_duplicate_slugs_redirect_to_canonical(self):
+        pairs = {
+            "digital-marketing-reality-india": "digital-marketing-reality-agency-burnout",
+            "the-product-manager-reality-coordinator-not-ceo": "product-manager-reality-india-jira-janitor",
+            "the-ux-design-reality-india-ui-factory": "the-design-reality-beautiful-screens-do-not-save-bad-strategy",
+            "the-learning-reality-upskilling-is-not-a-guarantee": "why-upskilling-stops-working-career-trap",
+        }
+        for loser, winner in pairs.items():
+            Article.objects.create(
+                title=f"Loser {loser}",
+                slug=loser,
+                author=self.author,
+                category=self.category,
+                status="published",
+                target_persona="p",
+                who_should_avoid="a",
+                common_expectation="e",
+                actual_reality="r",
+                salary_reality="s",
+                stuck_point="st",
+                verdict="v",
+                meta_title="t",
+                meta_description=("Meta " * 8)[:160],
+                published_at=timezone.now(),
+            )
+            Article.objects.create(
+                title=f"Winner {winner}",
+                slug=winner,
+                author=self.author,
+                category=self.category,
+                status="published",
+                target_persona="p",
+                who_should_avoid="a",
+                common_expectation="e",
+                actual_reality="r",
+                salary_reality="s",
+                stuck_point="st",
+                verdict="v",
+                meta_title="t",
+                meta_description=("Meta " * 8)[:160],
+                published_at=timezone.now(),
+            )
+            response = self.client.get(reverse("article_detail", kwargs={"slug": loser}))
+            self.assertEqual(response.status_code, 301, msg=loser)
+            self.assertEqual(
+                response["Location"],
+                reverse("article_detail", kwargs={"slug": winner}),
+                msg=loser,
+            )
+
 
 class ArticleBoilerplateRemovalTests(TestCase):
     """P0: auto-generated boilerplate sections removed from article pages."""

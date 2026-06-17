@@ -12,6 +12,8 @@ from django.core.management.base import BaseCommand
 from django.db.models import Avg, Count, Q
 from django.utils import timezone
 
+from core.career_index_data import IndexBaseline, blend_with_baseline, editorial_baseline
+from core.cache_utils import invalidate_career_index_cache
 from core.models import CareerRealityIndexSnapshot
 
 
@@ -87,20 +89,32 @@ class Command(BaseCommand):
                 layoff_risk = 40  # Fallback
 
             # --- Switch Difficulty ---
-            # Derived from: layoff_risk (market fear = harder to switch) + salary_pressure
             switch_difficulty = min(95, int((salary_pressure * 0.4 + layoff_risk * 0.6)))
             switch_difficulty = max(30, switch_difficulty)
 
-            # --- Overall ---
-            overall = int(salary_pressure * 0.35 + switch_difficulty * 0.35 + layoff_risk * 0.30)
-
-            # --- Review counts for context ---
             review_count = CompanyReview.objects.filter(
                 created_at__date__gte=month_start,
                 created_at__date__lte=month_end,
             ).count()
 
-            # Upsert snapshot
+            computed = IndexBaseline(
+                salary_pressure=salary_pressure,
+                switch_difficulty=switch_difficulty,
+                layoff_risk=layoff_risk,
+            )
+
+            # Blend with editorial baseline when we have a calibrated monthly trend.
+            baseline = editorial_baseline(year, month)
+            if baseline:
+                data_points = sal_count + layoff_count + review_count
+                data_weight = min(0.7, data_points / 50)
+                blended = blend_with_baseline(computed, baseline, data_weight=data_weight)
+                salary_pressure = blended.salary_pressure
+                switch_difficulty = blended.switch_difficulty
+                layoff_risk = blended.layoff_risk
+
+            overall = int(salary_pressure * 0.35 + switch_difficulty * 0.35 + layoff_risk * 0.30)
+
             snapshot, created = CareerRealityIndexSnapshot.objects.update_or_create(
                 month_date=month_start,
                 defaults={
@@ -123,4 +137,5 @@ class Command(BaseCommand):
                 )
             )
 
+        invalidate_career_index_cache()
         self.stdout.write(self.style.SUCCESS("Career Reality Index refresh complete."))
