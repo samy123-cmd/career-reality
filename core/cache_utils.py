@@ -130,6 +130,29 @@ def invalidate_sitemap_cache() -> None:
 
 def invalidate_career_index_cache() -> None:
     cache.delete(INDEX_ROWS_CACHE_KEY)
+    invalidate_cached_pages(("/", "/career-reality-index/"))
+
+
+def _internal_request_kwargs() -> dict:
+    """Headers for in-process cache warm / invalidation (production ALLOWED_HOSTS)."""
+    host = getattr(settings, "CANONICAL_HOST", "www.careerreality.in")
+    return {"HTTP_HOST": host, "wsgi.url_scheme": "https"}
+
+
+def invalidate_cached_pages(paths: Iterable[str]) -> int:
+    """Delete Django cache_page entries so the next request renders fresh HTML."""
+    from django.test import RequestFactory
+    from django.utils.cache import get_cache_key
+
+    factory = RequestFactory()
+    kwargs = _internal_request_kwargs()
+    deleted = 0
+    for path in paths:
+        request = factory.get(path, **kwargs)
+        key = get_cache_key(request)
+        if key and cache.delete(key):
+            deleted += 1
+    return deleted
 
 
 def refresh_nav_categories_cache() -> int:
@@ -239,12 +262,13 @@ def warm_page_cache(*, article_limit: int = 15, stdout=None) -> dict:
     Returns summary stats.
     """
     client = Client()
+    req_kwargs = _internal_request_kwargs()
     paths = list(STATIC_WARM_PATHS) + article_warm_paths(article_limit)
     ok, failed = 0, []
 
     for path in paths:
         try:
-            response = client.get(path)
+            response = client.get(path, **req_kwargs)
             if response.status_code in (200, 301, 308):
                 ok += 1
                 if stdout:

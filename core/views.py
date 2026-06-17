@@ -570,12 +570,17 @@ def run_warm_cache_cron(request):
 
     summary = warm_page_cache(article_limit=20)
     elapsed_ms = round((timezone.now() - started_at).total_seconds() * 1000, 2)
-    return JsonResponse({
+    payload = {
         "status": "ok",
         "elapsed_ms": elapsed_ms,
         "warmed": summary["warmed"],
         "paths_total": summary["paths_total"],
-    })
+    }
+    if summary.get("failed"):
+        payload["failed"] = [
+            {"path": p, "error": err} for p, err in summary["failed"][:10]
+        ]
+    return JsonResponse(payload)
 
 
 @require_GET

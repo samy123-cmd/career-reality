@@ -70,3 +70,8 @@ class WarmPageCacheTests(TestCase):
     def test_warm_page_cache_hits_core_paths(self):
         summary = warm_page_cache(article_limit=0)
         self.assertGreaterEqual(summary["warmed"], 5)
+
+    @override_settings(DEBUG=False, ALLOWED_HOSTS=["www.careerreality.in"])
+    def test_warm_page_cache_works_in_production_allowed_hosts(self):
+        summary = warm_page_cache(article_limit=0)
+        self.assertGreaterEqual(summary["warmed"], 5, msg=summary.get("failed"))
