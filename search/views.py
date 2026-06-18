@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 from content.models import Article
 from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS
 from companies.indexing import indexable_companies_queryset
+from ainews.indexing import indexable_ai_news_queryset
 from ainews.models import AINewsItem
 from analyzer.models import SalarySubmission
 
@@ -46,12 +47,11 @@ def search_view(request):
         results["companies"] = companies[:20]
 
         # AI News
-        news = AINewsItem.objects.filter(
-            Q(title__icontains=q) |
-            Q(summary__icontains=q) |
-            Q(career_angle__icontains=q),
-            status="published",
-        ).order_by("-published_at")
+        news = indexable_ai_news_queryset().filter(
+            Q(title__icontains=q)
+            | Q(summary__icontains=q)
+            | Q(career_angle__icontains=q),
+        )
         counts["news"] = news.count()
         results["news"] = news[:20]
 
@@ -97,7 +97,7 @@ def search_suggest_api(request):
         suggestions.append({"type": "company", "text": c["name"], "url": f"/companies/{c['slug']}/"})
 
     # AI News
-    for n in AINewsItem.objects.filter(title__icontains=q, status="published").values("title", "slug")[:2]:
+    for n in indexable_ai_news_queryset().filter(title__icontains=q).values("title", "slug")[:2]:
         suggestions.append({"type": "news", "text": n["title"], "url": f"/ai/{n['slug']}/"})
 
     return JsonResponse({"suggestions": suggestions})

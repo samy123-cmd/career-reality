@@ -9,7 +9,7 @@ Apply 900+ word editorial expansions to thin core articles.
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from content.expansions import CORE_ARTICLE_EXPANSIONS, expansion_word_count, resolve_slugs
+from content.expansions import ALL_ARTICLE_EXPANSIONS, expansion_word_count, resolve_slugs
 from content.models import Article
 
 CONTENT_FIELDS = (
@@ -27,7 +27,7 @@ CONTENT_FIELDS = (
 
 
 class Command(BaseCommand):
-    help = "Apply 900+ word editorial expansions to six thin core articles."
+    help = "Apply 900+ word editorial expansions to thin published articles (core + priority batch)."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -40,16 +40,27 @@ class Command(BaseCommand):
             default="",
             help="Apply a single canonical or alias slug only.",
         )
+        parser.add_argument(
+            "--core-only",
+            action="store_true",
+            help="Apply only the original six core expansions.",
+        )
 
     def handle(self, *args, **options):
         apply_changes = options["apply"]
         slug_filter = options["slug"]
         today = timezone.localdate()
 
-        targets = CORE_ARTICLE_EXPANSIONS.items()
+        if options["core_only"]:
+            from content.expansions.articles import CORE_ARTICLE_EXPANSIONS
+            expansion_map = CORE_ARTICLE_EXPANSIONS
+        else:
+            expansion_map = ALL_ARTICLE_EXPANSIONS
+
+        targets = expansion_map.items()
         if slug_filter:
             matched = None
-            for primary, data in CORE_ARTICLE_EXPANSIONS.items():
+            for primary, data in expansion_map.items():
                 if slug_filter in resolve_slugs(primary, data):
                     matched = (primary, data)
                     break

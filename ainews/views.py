@@ -11,6 +11,7 @@ from datetime import timezone as dt_timezone
 from datetime import timedelta
 
 from .models import AINewsItem, AITag
+from .indexing import indexable_ai_news_queryset, item_is_indexable
 
 
 TAG_PREFETCH = Prefetch("tags", queryset=AITag.objects.only("id", "name", "slug").order_by("name"))
@@ -99,11 +100,7 @@ def _timeline_position_for_item(item_dt):
     return position
 @cache_page(60 * 10)
 def ai_news_hub(request):
-    items = (
-        AINewsItem.objects.filter(status="published")
-        .prefetch_related(TAG_PREFETCH)
-        .order_by("-event_date", "-published_at")
-    )
+    items = indexable_ai_news_queryset().prefetch_related(TAG_PREFETCH)
     tags = cache.get("ainews_hub_tags")
     if tags is None:
         tags = list(AITag.objects.only("id", "name", "slug").order_by("name"))
@@ -120,8 +117,11 @@ def ai_news_hub(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    title = "AI Pulse - Latest AI Developments for Your Career"
-    description = "Track AI model releases, industry shifts, and career-impacting developments. Curated for Indian tech professionals."
+    title = "AI at Work — IT Workplace Impact | Career Reality"
+    description = (
+        "Curated AI developments that affect Indian IT teams: hiring, security, "
+        "productivity tools, and policy — not research paper noise."
+    )
 
     # Noindex if hub has zero items OR the view is query-param filtered (to avoid
     # duplicate content against the canonical /ai/tag/<slug>/ pages).
@@ -146,11 +146,10 @@ def ai_news_detail(request, slug):
         slug=slug,
         status="published",
     )
-    related_items = (
-        AINewsItem.objects.filter(status="published")
-        .exclude(id=item.id)
-        .order_by("-event_date", "-published_at")[:4]
-    )
+    if not item_is_indexable(item):
+        from django.http import Http404
+        raise Http404("AI update not available.")
+    related_items = indexable_ai_news_queryset().exclude(id=item.id)[:4]
     effective_reviewed_at = item.last_verified_at or item.reviewed_at or item.published_at
     stale_cutoff = timezone.now() - timedelta(days=21)
     content_is_stale = bool(effective_reviewed_at and effective_reviewed_at < stale_cutoff)
@@ -184,11 +183,7 @@ def ai_news_detail(request, slug):
 @cache_page(60 * 10)
 def ai_news_by_tag(request, slug):
     tag = get_object_or_404(AITag, slug=slug)
-    items = (
-        AINewsItem.objects.filter(status="published", tags=tag)
-        .prefetch_related(TAG_PREFETCH)
-        .order_by("-event_date", "-published_at")
-    )
+    items = indexable_ai_news_queryset().filter(tags=tag).prefetch_related(TAG_PREFETCH)
 
     paginator = Paginator(items, 15)
     page_number = request.GET.get("page")

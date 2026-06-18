@@ -6,6 +6,7 @@ from content.seo_redirects import (
     category_published_article_filter,
     indexable_categories_queryset,
 )
+from ainews.indexing import indexable_ai_news_queryset
 from ainews.models import AINewsItem
 from companies.models import Company
 from companies.indexing import indexable_companies_queryset
@@ -42,7 +43,7 @@ class AINewsSitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return AINewsItem.objects.filter(status='published').order_by('-reviewed_at', '-published_at')
+        return indexable_ai_news_queryset()
 
     def lastmod(self, obj):
         return obj.reviewed_at or obj.published_at
@@ -66,7 +67,7 @@ class StaticViewSitemap(Sitemap):
             'company_directory',
         ]
         # Only list AI Pulse hub when published items exist (matches view noindex gate).
-        if AINewsItem.objects.filter(status='published').exists():
+        if indexable_ai_news_queryset().exists():
             static.append('ai_news_hub')
         return static
 

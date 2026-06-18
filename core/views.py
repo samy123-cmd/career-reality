@@ -611,6 +611,7 @@ def run_freshness_cron(request):
     commit_refresh = request.GET.get("commit_refresh", os.environ.get("CRON_REFRESH_COMMIT", "False")) == "True"
     strict_freshness = request.GET.get("strict_freshness", os.environ.get("CRON_STRICT_FRESHNESS", "False")) == "True"
     refresh_articles = request.GET.get("refresh_articles", os.environ.get("CRON_REFRESH_ARTICLES", "False")) == "True"
+    prune_ai = request.GET.get("prune_ai", os.environ.get("CRON_PRUNE_AI", "False")) == "True"
     warm_cache = request.GET.get("warm_cache", os.environ.get("CRON_WARM_CACHE", "True")) == "True"
 
     started_at = timezone.now()
@@ -625,6 +626,7 @@ def run_freshness_cron(request):
             strict_freshness=strict_freshness,
             warm_cache=warm_cache,
             refresh_articles=refresh_articles,
+            prune_ai=prune_ai,
             stdout=output,
         )
     except Exception as exc:

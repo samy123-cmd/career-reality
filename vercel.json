@@ -1,11 +1,11 @@
 {
     "crons": [
         {
-            "path": "/internal/cron/freshness/?fetch_limit=8&warm_cache=True",
+            "path": "/internal/cron/freshness/?warm_cache=True",
             "schedule": "0 */6 * * *"
         },
         {
-            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=12&refresh_articles=True",
+            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=2&refresh_articles=True&prune_ai=True",
             "schedule": "30 2 * * *"
         },
         {

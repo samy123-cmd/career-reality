@@ -22,16 +22,26 @@ class AINewsModelAndViewTests(TestCase):
         self.tag_research = AITag.objects.create(name='Research Paper', slug='research-paper')
 
     def _create_item(self, title, slug, status='published', significance='medium', **kwargs):
+        default_career_angle = (
+            "Indian IT teams should expect hiring and on-call workflow changes — "
+            "update skills toward production deployment and security compliance."
+        )
+        default_summary = (
+            kwargs.get('summary')
+            or f"Enterprise developer hiring and workplace policy update: {title}. "
+            "Affects engineering teams and IT services delivery in India."
+        )
         item = AINewsItem.objects.create(
             title=title,
             slug=slug,
-            summary=kwargs.get('summary', f'Summary for {title}'),
-            source_name=kwargs.get('source_name', 'TestSource'),
+            summary=default_summary,
+            career_angle=kwargs.get('career_angle', default_career_angle),
+            source_name=kwargs.get('source_name', 'VentureBeat AI'),
             source_url=kwargs.get('source_url', 'https://example.com/article'),
             status=status,
             significance=significance,
             event_date=kwargs.get('event_date'),
-            reviewed_at=kwargs.get('reviewed_at'),
+            reviewed_at=kwargs.get('reviewed_at', kwargs.get('published_at', timezone.now())),
             published_at=kwargs.get('published_at', timezone.now()),
             external_id=kwargs.get('external_id', f'ext-{slug}'),
         )
@@ -121,9 +131,7 @@ class AINewsModelAndViewTests(TestCase):
 
         response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'stale-news'}))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['meta_robots'], 'noindex, follow')
-        self.assertTrue(response.context['content_is_stale'])
+        self.assertEqual(response.status_code, 404)
 
     # --- Tag View Tests ---
 
@@ -194,8 +202,8 @@ class AINewsModelAndViewTests(TestCase):
                 SimpleNamespace(
                     id='ext-123',
                     link='https://example.com/post-1',
-                    title='Test Feed Item',
-                    summary='<p>Summary content</p>',
+                    title='Microsoft expands Copilot for enterprise developer teams',
+                    summary='<p>Workplace productivity and hiring impact for engineering teams.</p>',
                     published_parsed=None,
                     updated_parsed=None,
                 )

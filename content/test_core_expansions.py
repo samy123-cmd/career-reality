@@ -8,16 +8,17 @@ from content.expansions import (
     expansion_word_count,
     resolve_slugs,
 )
+from content.expansions.registry import ALL_ARTICLE_EXPANSIONS
 
 
 class CoreArticleExpansionContentTests(TestCase):
     """Generated editorial bodies must meet AdSense-quality thresholds."""
 
-    def test_six_canonical_articles_defined(self):
-        self.assertEqual(len(CORE_ARTICLE_EXPANSIONS), 6)
+    def test_all_expansions_defined(self):
+        self.assertEqual(len(ALL_ARTICLE_EXPANSIONS), 17)
 
     def test_all_expansions_meet_word_threshold(self):
-        for slug, data in CORE_ARTICLE_EXPANSIONS.items():
+        for slug, data in ALL_ARTICLE_EXPANSIONS.items():
             wc = expansion_word_count(data)
             sw = expansion_salary_words(data)
             self.assertGreaterEqual(wc, 900, msg=f"{slug} has {wc} words")
@@ -34,7 +35,7 @@ class CoreArticleExpansionContentTests(TestCase):
     def test_resolve_slugs_includes_aliases(self):
         slugs = resolve_slugs(
             "why-upskilling-stops-working-career-trap",
-            CORE_ARTICLE_EXPANSIONS["why-upskilling-stops-working-career-trap"],
+            ALL_ARTICLE_EXPANSIONS["why-upskilling-stops-working-career-trap"],
         )
         self.assertIn("why-upskilling-stops-working", slugs)
 

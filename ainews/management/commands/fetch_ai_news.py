@@ -8,85 +8,52 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.text import slugify
 
+from ainews.impact_filters import passes_ingest_filter
 from ainews.models import AINewsFetchRun, AINewsItem, AITag
 
 logger = logging.getLogger(__name__)
 REQUEST_HEADERS = {'User-Agent': 'CareerRealityAIBot/1.0 (+https://careerreality.in)'}
 REQUEST_TIMEOUT_SECONDS = 15
 
-# RSS feeds to aggregate, grouped by source name
+# IT workplace impact only — no research papers, model roundups, or benchmark feeds.
 RSS_FEEDS = [
-    {
-        'name': 'OpenAI',
-        'url': 'https://openai.com/news/rss.xml',
-        'default_tags': ['Model Release', 'Industry News'],
-    },
-    {
-        'name': 'Google DeepMind',
-        'url': 'https://deepmind.google/blog/rss.xml',
-        'default_tags': ['Research Paper', 'Model Release'],
-    },
     {
         'name': 'VentureBeat AI',
         'url': 'https://venturebeat.com/category/ai/feed',
         'default_tags': ['Industry News'],
     },
-    {
-        'name': 'HuggingFace Trending',
-        'url': 'https://zernel.github.io/huggingface-trending-feed/feed.xml',
-        'default_tags': ['Open Source', 'Model Release'],
-        'bundle': True,
-    },
-    {
-        'name': 'HuggingFace Papers',
-        'url': 'https://papers.takara.ai/api/feed',
-        'default_tags': ['Research Paper'],
-        'bundle': True,
-    },
-    {
-        'name': 'MIT AI News',
-        'url': 'https://news.mit.edu/rss/topic/artificial-intelligence2',
-        'default_tags': ['Research Paper', 'Industry News'],
-    },
-    {
-        'name': 'MarkTechPost',
-        'url': 'https://www.marktechpost.com/feed/',
-        'default_tags': ['Industry News'],
-    },
 ]
 
-# Trusted sources that can be auto-published when --auto-publish is used
-TRUSTED_SOURCES = {'OpenAI', 'Google DeepMind', 'HuggingFace Trending'}
+TRUSTED_SOURCES: set[str] = set()
 
 
 class Command(BaseCommand):
-    help = 'Fetch AI news from RSS feeds and store as AINewsItem entries.'
+    help = 'Fetch IT workplace-impact AI news (draft only; editor publishes with career_angle).'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--auto-publish',
             action='store_true',
-            help='Auto-publish items from trusted sources instead of saving as draft.',
+            help='Deprecated — kept for compatibility; items always save as draft.',
         )
         parser.add_argument(
             '--limit',
             type=int,
-            default=10,
-            help='Maximum number of items to process per feed (default: 10).',
+            default=3,
+            help='Maximum items per feed after filtering (default: 3).',
         )
 
     def handle(self, *args, **options):
-        auto_publish = options['auto_publish']
         limit = options['limit']
         run = AINewsFetchRun.objects.create(source_count=len(RSS_FEEDS))
         run_notes = []
 
         total_created = 0
         total_skipped = 0
+        total_filtered = 0
         total_errors = 0
         total_warnings = 0
 
-        # Ensure default tags exist
         tag_cache = {}
         for feed_config in RSS_FEEDS:
             for tag_name in feed_config.get('default_tags', []):
@@ -116,72 +83,16 @@ class Command(BaseCommand):
                 run_notes.append(f"{source_name}: failed to fetch usable feed")
                 continue
 
-            entries = feed.entries[:limit]
-            self.stdout.write(f"  Found {len(feed.entries)} entries, processing {len(entries)}")
+            kept = 0
+            for entry in feed.entries:
+                if kept >= limit:
+                    break
 
-            bundle = feed_config.get('bundle', False)
-            if bundle:
-                bundled_items = []
-                today_str = timezone.now().strftime('%Y-%m-%d')
-                bundle_external_id = f"{source_name}-bundle-{today_str}"
-                
-                if AINewsItem.objects.filter(external_id=bundle_external_id).exists():
-                    self.stdout.write(f"  Bundle for {source_name} already exists today. Skipping {len(entries)} items.")
-                    total_skipped += len(entries)
-                    continue
-                
-                for entry in entries:
-                    title = getattr(entry, 'title', 'Untitled')[:300]
-                    link = getattr(entry, 'link', '')
-                    if link:
-                        bundled_items.append(f"<li><a href='{link}' target='_blank' rel='noopener noreferrer'>{title}</a></li>")
-                    else:
-                        bundled_items.append(f"<li>{title}</li>")
-                
-                if bundled_items:
-                    summary = "<p>Here are the latest model releases and trending repositories:</p><ul>" + "".join(bundled_items) + "</ul>"
-                    title = f"{source_name} Daily Model Roundup"
-                    
-                    is_trusted = source_name in TRUSTED_SOURCES
-                    status = 'published' if (auto_publish and is_trusted) else 'draft'
-                    slug = slugify(f"{title} {today_str}")[:300]
-                    counter = 1
-                    base_slug = slug
-                    while AINewsItem.objects.filter(slug=slug).exists():
-                        slug = f"{base_slug[:290]}-{counter}"
-                        counter += 1
-                    
-                    try:
-                        item = AINewsItem.objects.create(
-                            title=title,
-                            slug=slug,
-                            summary=summary,
-                            source_name=source_name,
-                            source_url=feed_url,
-                            status=status,
-                            fact_check_status='pending',
-                            event_date=timezone.now(),
-                            reviewed_at=timezone.now() if status == 'published' else None,
-                            published_at=timezone.now(),
-                            external_id=bundle_external_id,
-                        )
-                        for tag_name in default_tag_names:
-                            if tag_name in tag_cache:
-                                item.tags.add(tag_cache[tag_name])
-                        total_created += 1
-                        self.stdout.write(f"  + Bundled {len(bundled_items)} items into one roundup [{status}]")
-                    except Exception as exc:
-                        self.stderr.write(self.style.ERROR(f"  Error saving bundle: {exc}"))
-                        total_errors += 1
-                continue
-
-            for entry in entries:
                 external_id = getattr(entry, 'id', None) or getattr(entry, 'link', None)
                 if not external_id:
                     total_skipped += 1
                     continue
 
-                # Deduplication check
                 if AINewsItem.objects.filter(external_id=external_id).exists():
                     total_skipped += 1
                     continue
@@ -189,28 +100,25 @@ class Command(BaseCommand):
                 title = getattr(entry, 'title', 'Untitled')[:300]
                 link = getattr(entry, 'link', '')
 
-                # Extract summary from various feed formats
                 summary = ''
                 if hasattr(entry, 'summary'):
                     summary = entry.summary
                 elif hasattr(entry, 'description'):
                     summary = entry.description
 
-                # Strip HTML tags for a clean summary
                 summary = re.sub(r'<[^>]+>', '', summary or '').strip()
                 summary = re.sub(r'[\r\n\t]+', ' ', summary).strip()
                 if len(summary) > 1000:
                     summary = summary[:997] + '...'
 
-                # Parse published date
+                if not passes_ingest_filter(title, summary, source_name):
+                    total_filtered += 1
+                    self.stdout.write(f"  - filtered (not IT impact): {title[:70]}…")
+                    continue
+
                 published_dt = self._parse_entry_datetime(entry)
 
-                # Determine status
-                is_trusted = source_name in TRUSTED_SOURCES
-                status = 'published' if (auto_publish and is_trusted) else 'draft'
-
                 slug = slugify(title)[:300]
-                # Handle slug collisions
                 base_slug = slug
                 counter = 1
                 while AINewsItem.objects.filter(slug=slug).exists():
@@ -221,24 +129,22 @@ class Command(BaseCommand):
                     item = AINewsItem.objects.create(
                         title=title,
                         slug=slug,
-                        summary=summary or f"New development from {source_name}.",
+                        summary=summary or f"Development from {source_name}.",
                         source_name=source_name,
                         source_url=link or feed_url,
-                        status=status,
+                        status='draft',
                         fact_check_status='pending',
                         event_date=published_dt,
-                        reviewed_at=timezone.now() if status == 'published' else None,
                         published_at=published_dt,
                         external_id=external_id,
                     )
-
-                    # Attach default tags
                     for tag_name in default_tag_names:
                         if tag_name in tag_cache:
                             item.tags.add(tag_cache[tag_name])
 
                     total_created += 1
-                    self.stdout.write(f"  + {title[:80]}... [{status}]")
+                    kept += 1
+                    self.stdout.write(f"  + draft: {title[:80]}…")
 
                 except Exception as exc:
                     self.stderr.write(self.style.ERROR(f"  Error saving '{title[:60]}': {exc}"))
@@ -247,7 +153,7 @@ class Command(BaseCommand):
 
         run.finished_at = timezone.now()
         run.total_created = total_created
-        run.total_skipped = total_skipped
+        run.total_skipped = total_skipped + total_filtered
         run.total_warnings = total_warnings
         run.total_errors = total_errors
         if total_errors and total_created == 0:
@@ -260,18 +166,17 @@ class Command(BaseCommand):
         run.save(
             update_fields=[
                 'finished_at', 'total_created', 'total_skipped', 'total_warnings',
-                'total_errors', 'status', 'notes'
+                'total_errors', 'status', 'notes',
             ]
         )
 
         self.stdout.write(self.style.SUCCESS(
-            f"\nDone. Created: {total_created} | Skipped (dupes): {total_skipped} | Warnings: {total_warnings} | Errors: {total_errors}"
+            f"\nDone. Created: {total_created} | Skipped/filtered: {total_skipped + total_filtered} | "
+            f"Warnings: {total_warnings} | Errors: {total_errors}"
         ))
 
     def _parse_feed_with_fallback(self, feed_url):
-        """Parse feed by URL first, then retry using raw HTTP bytes for brittle feeds."""
         warning = None
-
         try:
             feed = feedparser.parse(feed_url, request_headers=REQUEST_HEADERS)
         except Exception as exc:
@@ -293,11 +198,6 @@ class Command(BaseCommand):
             return None, f"{fallback_reason}; fallback fetch failed: {exc}"
 
         if not getattr(fallback_feed, 'entries', None):
-            if getattr(fallback_feed, 'bozo', False):
-                return None, (
-                    f"{fallback_reason}; fallback parser warning: "
-                    f"{getattr(fallback_feed, 'bozo_exception', 'unknown bozo warning')}"
-                )
             return None, f"{fallback_reason}; fallback returned no entries"
 
         warning = f"{fallback_reason}; recovered via raw-fetch fallback"

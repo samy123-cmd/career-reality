@@ -34,6 +34,12 @@ class Command(BaseCommand):
             default=False,
             help="Run refresh_published_articles --apply after cache warm.",
         )
+        parser.add_argument(
+            "--prune-ai",
+            action="store_true",
+            default=False,
+            help="Demote non-IT-impact published AI news to draft.",
+        )
 
     def handle(self, *args, **options):
         fetch_limit = options["fetch_limit"]
@@ -97,5 +103,12 @@ class Command(BaseCommand):
                 )
             except Exception as exc:
                 self.stdout.write(self.style.WARNING(f"Article refresh skipped: {exc}"))
+
+        if options.get("prune_ai"):
+            self.stdout.write("Pruning non-IT-impact AI news…")
+            try:
+                call_command("prune_ai_news", "--apply", stdout=self.stdout)
+            except Exception as exc:
+                self.stdout.write(self.style.WARNING(f"AI prune skipped: {exc}"))
 
         self.stdout.write(self.style.SUCCESS("Maintenance complete."))
