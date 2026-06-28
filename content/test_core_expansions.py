@@ -15,7 +15,7 @@ class CoreArticleExpansionContentTests(TestCase):
     """Generated editorial bodies must meet AdSense-quality thresholds."""
 
     def test_all_expansions_defined(self):
-        self.assertEqual(len(ALL_ARTICLE_EXPANSIONS), 21)
+        self.assertEqual(len(ALL_ARTICLE_EXPANSIONS), 22)
 
     def test_all_expansions_meet_word_threshold(self):
         for slug, data in ALL_ARTICLE_EXPANSIONS.items():
