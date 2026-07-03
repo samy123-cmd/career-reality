@@ -633,6 +633,7 @@ def run_freshness_cron(request):
     refresh_articles = request.GET.get("refresh_articles", os.environ.get("CRON_REFRESH_ARTICLES", "False")) == "True"
     prune_ai = request.GET.get("prune_ai", os.environ.get("CRON_PRUNE_AI", "False")) == "True"
     warm_cache = request.GET.get("warm_cache", os.environ.get("CRON_WARM_CACHE", "True")) == "True"
+    bootstrap_july = request.GET.get("bootstrap_july", os.environ.get("CRON_BOOTSTRAP_JULY_2026", "False")) == "True"
 
     started_at = timezone.now()
     output = io.StringIO()
@@ -647,6 +648,7 @@ def run_freshness_cron(request):
             warm_cache=warm_cache,
             refresh_articles=refresh_articles,
             prune_ai=prune_ai,
+            bootstrap_july=bootstrap_july,
             stdout=output,
         )
     except Exception as exc:
