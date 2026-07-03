@@ -1,7 +1,7 @@
 # Article Freshness Audit
 
-Generated: 2026-06-18
-Market period: 2026-06 (June 2026)
+Generated: 2026-07-03
+Market period: 2026-07 (July 2026)
 Published articles: 1
 Needs refresh: 0
 Up to date: 1
@@ -18,4 +18,4 @@ Up to date: 1
 
 | Slug | Cluster | Words | Last check | Market period | Issues |
 |------|---------|-------|------------|---------------|--------|
-| `senior-developer-salary-ceiling-india` | engineering | 1081 | 2026-06-18 | 2026-06 | — |
+| `senior-developer-salary-ceiling-india` | engineering | 1079 | 2026-07-03 | 2026-07 | — |

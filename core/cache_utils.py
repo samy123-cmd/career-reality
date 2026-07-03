@@ -230,15 +230,22 @@ def get_career_index_rows_cached(*, rebuild: bool = False):
             return date(year, month, 1)
 
         base = timezone.localdate()
-        from core.career_index_data import JUNE_2026_BASELINE
+        from core.career_index_data import editorial_baseline
 
-        june = JUNE_2026_BASELINE
-        rows = [
-            {"month": _shift_month(base, 0).strftime("%B %Y"), "salary_pressure": june.salary_pressure, "switch_difficulty": june.switch_difficulty, "layoff_risk": june.layoff_risk, "overall": june.overall},
-            {"month": _shift_month(base, 1).strftime("%B %Y"), "salary_pressure": 68, "switch_difficulty": 56, "layoff_risk": 45, "overall": 57},
-            {"month": _shift_month(base, 2).strftime("%B %Y"), "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 48, "overall": 60},
-            {"month": _shift_month(base, 3).strftime("%B %Y"), "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 47, "overall": 58},
-        ]
+        def _baseline_row(months_back: int) -> dict:
+            d = _shift_month(base, months_back)
+            bl = editorial_baseline(d.year, d.month)
+            if bl is None:
+                bl = editorial_baseline(2026, 6)  # fallback to June baseline
+            return {
+                "month": d.strftime("%B %Y"),
+                "salary_pressure": bl.salary_pressure,
+                "switch_difficulty": bl.switch_difficulty,
+                "layoff_risk": bl.layoff_risk,
+                "overall": bl.overall,
+            }
+
+        rows = [_baseline_row(i) for i in range(4)]
     cache.set(INDEX_ROWS_CACHE_KEY, rows, index_rows_cache_timeout())
     return rows
 

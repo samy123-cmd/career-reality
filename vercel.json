@@ -5,7 +5,7 @@
             "schedule": "0 */6 * * *"
         },
         {
-            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=2&refresh_articles=True&prune_ai=True",
+            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=2&refresh_articles=True&prune_ai=True&bootstrap_july=True",
             "schedule": "30 2 * * *"
         },
         {
