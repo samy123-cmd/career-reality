@@ -9,22 +9,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-# Bump this when running a site-wide refresh (e.g. "2026-06").
-MARKET_PERIOD = "2026-06"
-MARKET_LABEL = "June 2026"
+# Bump this when running a site-wide refresh (e.g. "2026-07").
+MARKET_PERIOD = "2026-07"
+MARKET_LABEL = "July 2026"
 
-# Shared macro context for Indian tech (Q2 2026 appraisal season aftermath).
+# Shared macro context for Indian tech (Q3 2026 post-appraisal, campus PPO season).
 MACRO_BULLETS = (
-    "Appraisal season (March–April 2026) compressed offers for general engineering; "
-    "counter-offers rose for mid-senior backend and platform roles.",
+    "Post-appraisal hangover: many engineers received 5–8% hikes vs 12%+ expectations; "
+    "counter-offers remain selective for mid-senior backend and platform roles.",
+    "Campus internship season is converting to PPO decisions — conversion rates at "
+    "product companies are 40–55%, service companies 15–25%.",
+    "GCC hiring slowed in summer but the bar is unchanged: system design + ownership "
+    "expected at 4–6 YOE; bench risk rising in IT services.",
     "AI/GenAI roles (RAG, agents, eval pipelines) still command 15–35% premiums over "
-    "general SWE bands in Bengaluru and Hyderabad.",
-    "Junior service-company fresher anchors remain 3.2–4.5 LPA despite inflation; "
-    "product-company fresher median is 8–12 LPA.",
-    "Layoff signals remain elevated in IT services and mid-tier SaaS; GCC hiring "
-    "continues but bar is rising (system design + ownership expected at 4–6 YOE).",
-    "Remote US/EU roles pay more on paper but TDS, forex, and contract instability "
-    "reduce effective take-home — validate with the CTC Decoder before comparing.",
+    "general SWE bands; general engineering bands remain flat.",
+    "Junior service-company fresher anchors remain 3.2–4.5 LPA; product-company "
+    "fresher median is 8–13 LPA. Validate CTC with the Decoder before comparing offers.",
 )
 
 EXTERNAL_SOURCES_HTML = """
@@ -83,6 +83,7 @@ SALARY_CLUSTERS: dict[str, tuple[SalaryBand, ...]] = {
         SalaryBand("IT Services (Dev)", "2–5 YOE", "6–12 LPA", "5–10 LPA", "N/A"),
         SalaryBand("GCC / Captive", "4–8 YOE", "18–32 LPA", "16–28 LPA", "20–34 LPA"),
         SalaryBand("Startup (Series A–C)", "3–7 YOE", "14–28 LPA", "12–24 LPA", "15–30 LPA"),
+        SalaryBand("Product Fresher", "0–1 YOE", "8–13 LPA", "7–11 LPA", "9–14 LPA"),
         SalaryBand("MBA (Tier-1 campus)", "0–2 YOE post-MBA", "22–32 LPA", "20–28 LPA", "N/A"),
     ),
 }
@@ -136,12 +137,12 @@ def salary_table_html(cluster: str) -> str:
 
 def market_update_html(cluster: str) -> str:
     cluster_notes = {
-        "engineering": "Platform and backend hiring picked up in GCCs; IT services bench strength remains a risk for 4–7 YOE engineers without system design depth.",
+        "engineering": "Summer hiring slowdown in GCCs; IT services bench trimming continues for 4–7 YOE engineers without system design depth.",
         "data": "Most 'data scientist' postings still map to analytics or pipeline work; true ML roles require production deployment evidence, not notebook Kaggle wins.",
-        "product": "PM hiring is selective — execution and metrics ownership matter more than MBA pedigree in product-first companies.",
+        "product": "PM hiring is selective in July — execution and metrics ownership matter more than MBA pedigree in product-first companies.",
         "design": "UI-only roles are commoditising; product design with research + metrics commands better bands.",
         "marketing": "Performance marketing and marketing ops roles hold up; pure 'creative' agency roles remain low-leverage for long-term comp growth.",
-        "general": "Cross-role switching costs rise after 30; financial planning beats motivational pivots.",
+        "general": "Post-appraisal disappointment is driving passive job searches; cross-role switching costs rise after 30.",
     }
     bullets = "".join(f"<li>{b}</li>" for b in MACRO_BULLETS)
     note = cluster_notes.get(cluster, cluster_notes["general"])

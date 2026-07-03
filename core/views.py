@@ -89,12 +89,20 @@ def _career_reality_index_rows():
         return date(year, month, 1)
 
     base = timezone.localdate()
-    return [
-        {"month": _shift_month(base, 0).strftime("%B %Y"), "salary_pressure": 72, "switch_difficulty": 68, "layoff_risk": 54, "overall": 65},
-        {"month": _shift_month(base, 1).strftime("%B %Y"), "salary_pressure": 71, "switch_difficulty": 66, "layoff_risk": 56, "overall": 64},
-        {"month": _shift_month(base, 2).strftime("%B %Y"), "salary_pressure": 69, "switch_difficulty": 63, "layoff_risk": 58, "overall": 63},
-        {"month": _shift_month(base, 3).strftime("%B %Y"), "salary_pressure": 67, "switch_difficulty": 61, "layoff_risk": 57, "overall": 62},
-    ]
+    from core.career_index_data import editorial_baseline
+
+    def _row(months_back):
+        d = _shift_month(base, months_back)
+        bl = editorial_baseline(d.year, d.month) or editorial_baseline(2026, 6)
+        return {
+            "month": d.strftime("%B %Y"),
+            "salary_pressure": bl.salary_pressure,
+            "switch_difficulty": bl.switch_difficulty,
+            "layoff_risk": bl.layoff_risk,
+            "overall": bl.overall,
+        }
+
+    return [_row(i) for i in range(4)]
 
 
 def _index_band(score):
@@ -190,6 +198,14 @@ def healthz(request):
         status=status_code,
     )
 
+JULY_2026_ARTICLE_SLUGS = (
+    "campus-internship-ppo-reality-2026",
+    "mid-year-layoff-pulse-india-july-2026",
+    "appraisal-hike-inflation-gap-2026",
+    "ai-job-market-midyear-reality-2026",
+)
+
+
 @cache_page(60 * 60)
 def home(request):
     """
@@ -206,6 +222,9 @@ def home(request):
         .order_by('-published_at')
     )
     articles = article_qs[:10]
+    july_articles = list(
+        article_qs.filter(slug__in=JULY_2026_ARTICLE_SLUGS).order_by("-published_at")
+    )
     categories = indexable_categories_queryset()
     recent_updates = article_qs.order_by('-updated_at')[:5]
     index_rows = get_career_index_rows_cached()
@@ -230,6 +249,7 @@ def home(request):
 
     return render(request, 'core/home.html', {
         'articles': articles,
+        'july_articles': july_articles,
         'categories': categories,
         'recent_updates': recent_updates,
         'topic_clusters': _topic_clusters(),
