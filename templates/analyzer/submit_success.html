@@ -8,12 +8,19 @@
 <section class="container-medium" style="margin-top: var(--space-xl); text-align: center;">
     <h1 style="font-size: 40px; margin-bottom: 1rem;">Thank you.</h1>
     <h2 style="font-size: 22px; margin-bottom: 1rem;">Submission received.</h2>
-    <p style="max-width: 400px; margin: 0 auto 2rem auto;">
+    <p style="max-width: 480px; margin: 0 auto 1rem auto;">
         Your data has been dropped into the system. It helps thousands of others know their worth.
     </p>
+    <p style="max-width: 480px; margin: 0 auto 2rem auto; font-weight: 600;">
+        You earned {{ credits_earned }} salary unlock credit{{ credits_earned|pluralize }}.
+        {% if salary_credit_balance %}
+        Balance: {{ salary_credit_balance }} credit{{ salary_credit_balance|pluralize }}.
+        {% endif %}
+    </p>
 
-    <a href="{% url 'home' %}" class="btn">Return to Base</a>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="{% url 'company_directory' %}" class="btn">Browse Company Salaries</a>
+        <a href="{% url 'home' %}" class="btn" style="background: transparent; border: 1px solid var(--c-border);">Return to Base</a>
+    </div>
 </section>
 {% endblock %}
-
-

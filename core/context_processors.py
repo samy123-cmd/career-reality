@@ -61,3 +61,17 @@ def seo_internal_links(request):
         "seo_tool_hub": SEO_TOOL_HUB,
         "seo_pillar_articles": SEO_PILLAR_ARTICLES,
     }
+
+
+def salary_credits_context(request):
+    from analyzer.salary_access import (
+        get_balance,
+        get_free_previews_remaining,
+        is_pro_user,
+    )
+
+    return {
+        "salary_credit_balance": get_balance(request),
+        "salary_free_previews_remaining": get_free_previews_remaining(request),
+        "salary_is_pro": is_pro_user(request),
+    }

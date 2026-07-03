@@ -1,0 +1,14 @@
+<div class="salary-submit-cta" style="margin-top: var(--space-lg); padding: var(--space-md); border: 1px solid var(--c-border); border-radius: 8px; background: var(--c-surface-alt, #f8f9fa);">
+    <p style="font-weight: 600; margin-bottom: 0.5rem;">Help the community — unlock 3 salary previews</p>
+    <p style="font-size: 14px; color: var(--c-grey); margin-bottom: var(--space-sm);">
+        Drop your real numbers anonymously (30 sec). Every submission earns you 3 salary unlock credits.
+    </p>
+    <a href="{% url 'submit_salary' %}?source={{ source }}" class="hp-btn hp-btn--primary" style="display: inline-block; font-size: 14px; padding: 0.5rem 1rem;">
+        + Drop Your Salary
+    </a>
+    {% if salary_credit_balance %}
+    <p style="font-size: 12px; color: var(--c-grey); margin-top: 0.75rem; margin-bottom: 0;">
+        You have {{ salary_credit_balance }} unlock credit{{ salary_credit_balance|pluralize }}.
+    </p>
+    {% endif %}
+</div>

@@ -26,6 +26,8 @@ class UserProfile(models.Model):
         default=0,
         help_text="Credits earned by submitting salary data. 1 credit = unlock 1 salary record.",
     )
+    salary_previews_used = models.PositiveIntegerField(default=0)
+    salary_previews_month = models.CharField(max_length=7, blank=True, default="")
 
     # Newsletter
     newsletter_subscribed = models.BooleanField(default=False)
@@ -54,3 +56,32 @@ class UserProfile(models.Model):
             delta = self.subscription_expires_at - timezone.now()
             return max(0, delta.days)
         return None
+
+
+class CompanyWatchlist(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="company_watchlist"
+    )
+    company = models.ForeignKey("companies.Company", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("user", "company")]
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.email} watches {self.company.name}"
+
+
+class LayoffAlertLog(models.Model):
+    """Dedup: one alert per user per layoff report."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    layoff_report = models.ForeignKey("analyzer.LayoffReport", on_delete=models.CASCADE)
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("user", "layoff_report")]
+
+    def __str__(self):
+        return f"Alert to {self.user.email} for report #{self.layoff_report_id}"

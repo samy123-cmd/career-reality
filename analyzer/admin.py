@@ -2,12 +2,21 @@ from django.contrib import admin
 from .models import AssessmentLog, FunnelEventLog, SalarySubmission, LayoffReport
 
 
+@admin.action(description="Mark selected as verified")
+def mark_verified(modeladmin, request, queryset):
+    queryset.update(verification_status="verified", is_verified=True)
+
+
 @admin.register(SalarySubmission)
 class SalarySubmissionAdmin(admin.ModelAdmin):
-    list_display = ['role', 'company_name', 'company', 'company_type', 'ctc', 'city', 'experience_years', 'is_verified', 'created_at']
-    list_filter = ['company_type', 'is_verified', 'city']
+    list_display = [
+        'role', 'company_name', 'company', 'company_type', 'ctc', 'city',
+        'experience_years', 'verification_status', 'is_verified', 'source', 'created_at',
+    ]
+    list_filter = ['company_type', 'verification_status', 'is_verified', 'city', 'source']
     search_fields = ['role', 'company_name', 'city', 'tech_stack']
     raw_id_fields = ['company']
+    actions = [mark_verified]
 
 
 @admin.register(LayoffReport)

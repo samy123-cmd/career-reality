@@ -271,3 +271,22 @@ class CareerIndexCronTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "ok")
 
+
+class LayoffAlertsCronTests(TestCase):
+    def test_cron_rejects_missing_token(self):
+        with patch.dict(os.environ, {"CRON_SECRET": "secret-tok"}, clear=False):
+            response = self.client.get(reverse("run_layoff_alerts_cron"))
+        self.assertEqual(response.status_code, 403)
+
+    @patch("django.core.management.call_command")
+    def test_layoff_alerts_cron_accepts_correct_bearer_token(self, mock_cmd):
+        with patch.dict(os.environ, {"CRON_SECRET": "correct"}, clear=False):
+            response = self.client.get(
+                reverse("run_layoff_alerts_cron"),
+                HTTP_AUTHORIZATION="Bearer correct",
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "ok")
+        mock_cmd.assert_called_once()
+        self.assertEqual(mock_cmd.call_args.args[0], "send_layoff_alerts")
+

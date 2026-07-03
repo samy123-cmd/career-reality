@@ -199,3 +199,86 @@ def _weekly_digest_html(email: str, salary_count: int, layoff_count: int) -> str
   </p>
 </div>
 """
+
+
+# ---------------------------------------------------------------------------
+# Pro watchlist layoff alerts
+# ---------------------------------------------------------------------------
+
+
+STATUS_LABELS = {
+    "freeze": "Hiring Freeze",
+    "rumor": "Layoff Rumors",
+    "layoff": "Active Layoffs",
+}
+
+
+def send_layoff_watchlist_alert(email: str, company, reports: list) -> bool:
+    """Send a layoff alert email for a watched company."""
+    resend = _resend_client()
+    if resend is None:
+        return False
+    try:
+        company_name = company.name if hasattr(company, "name") else str(company)
+        subject = f"Layoff alert: {company_name} — new stability reports"
+        resend.Emails.send(
+            {
+                "from": FROM_ADDRESS,
+                "to": [email],
+                "subject": subject,
+                "html": _layoff_watchlist_html(email, company, reports),
+            }
+        )
+        return True
+    except Exception:
+        logger.exception("send_layoff_watchlist_alert failed for %s", email)
+        return False
+
+
+def _layoff_watchlist_html(email: str, company, reports: list) -> str:
+    company_name = company.name if hasattr(company, "name") else str(company)
+    slug = getattr(company, "slug", "")
+    company_url = (
+        f"https://www.careerreality.in/companies/{slug}/"
+        if slug
+        else "https://www.careerreality.in/layoff-radar/"
+    )
+
+    rows = ""
+    for report in reports:
+        status_label = STATUS_LABELS.get(report.status, report.get_status_display())
+        details = report.details[:200] if report.details else ""
+        role_part = f" — {report.role_affected}" if report.role_affected else ""
+        loc_part = f" ({report.location})" if report.location else ""
+        detail_part = (
+            f'<br><span style="color:#666;font-size:13px;">{details}</span>'
+            if details
+            else ""
+        )
+        rows += f"""
+        <li style="margin-bottom:12px;">
+          <strong>{status_label}</strong>{role_part}{loc_part}{detail_part}
+        </li>
+        """
+
+    return f"""
+<div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;color:#111;">
+  <h2 style="border-bottom:2px solid #000;padding-bottom:8px;">Layoff Alert — {company_name}</h2>
+  <p>New stability reports were submitted for a company on your Pro watchlist:</p>
+  <ul>{rows}</ul>
+  <p>
+    <a href="{company_url}"
+       style="background:#000;color:#fff;padding:10px 20px;text-decoration:none;border-radius:4px;">
+      View {company_name} Profile →
+    </a>
+  </p>
+  <p style="margin-top:1.5rem;">
+    <a href="https://www.careerreality.in/layoff-radar/">Layoff Radar</a> &nbsp;|&nbsp;
+    <a href="https://www.careerreality.in/accounts/dashboard/">Pro Dashboard</a>
+  </p>
+  <hr style="margin:2rem 0;border:none;border-top:1px solid #eee;">
+  <p style="font-size:12px;color:#999;">
+    Sent to {email} because you watch {company_name} on Career Reality Pro.
+  </p>
+</div>
+"""

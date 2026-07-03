@@ -144,6 +144,7 @@ template_options = {
         'django.contrib.messages.context_processors.messages',
         'core.context_processors.seo_defaults',
         'core.context_processors.seo_internal_links',
+        'core.context_processors.salary_credits_context',
     ],
 }
 if not DEBUG:

@@ -156,6 +156,29 @@
                 <a href="#write-review">✍️ Write a Review</a>
             </div>
         </div>
+
+        <div class="sidebar-card">
+            <h3>Layoff Alerts</h3>
+            {% if user_is_pro %}
+            <form method="POST" action="{% url 'toggle_watchlist' company.slug %}">
+                {% csrf_token %}
+                <button type="submit" class="hp-btn hp-btn--primary" style="width: 100%; font-size: 13px; padding: 0.5rem;">
+                    {% if is_watching %}✓ Watching — click to remove{% else %}+ Watch for layoff alerts{% endif %}
+                </button>
+            </form>
+            <p style="font-size: 12px; color: var(--c-grey); margin-top: 0.5rem; margin-bottom: 0;">
+                Email alerts when new freeze or layoff reports appear.
+            </p>
+            {% elif request.user.is_authenticated %}
+            <a href="{% url 'payments:pricing' %}" class="hp-btn hp-btn--primary" style="display: block; text-align: center; font-size: 13px; padding: 0.5rem;">
+                Pro: Layoff email alerts
+            </a>
+            {% else %}
+            <a href="{% url 'payments:pricing' %}" class="hp-btn hp-btn--primary" style="display: block; text-align: center; font-size: 13px; padding: 0.5rem;">
+                Pro feature — layoff alerts
+            </a>
+            {% endif %}
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -176,22 +199,63 @@
         {% endif %}
 
         {% if salaries %}
+        {% if not user_is_pro %}
+        <div class="salary-credit-banner" style="margin-bottom: 1rem; padding: 0.75rem 1rem; border: 1px solid var(--c-border); border-radius: 6px; font-size: 14px;">
+            {% if salary_balance %}
+            You have <strong>{{ salary_balance }}</strong> unlock credit{{ salary_balance|pluralize }}.
+            {% endif %}
+            {% if free_previews_remaining %}
+            {{ free_previews_remaining }} free preview{{ free_previews_remaining|pluralize }} left this month.
+            {% endif %}
+            {% if not salary_balance and not free_previews_remaining %}
+            First row is free. <a href="{% url 'submit_salary' %}?source=company_detail">Submit your salary</a> to earn 3 credits.
+            {% endif %}
+        </div>
+        {% endif %}
         <div class="cp-table-wrap">
             <table class="salary-table">
-                <thead><tr><th>Role</th><th>Exp</th><th>CTC (₹)</th><th>City</th><th>Stack</th></tr></thead>
+                <thead><tr><th>Role</th><th>Exp</th><th>CTC (₹)</th><th>City</th><th>Stack</th><th></th></tr></thead>
                 <tbody>
                 {% for s in salaries %}
+                {% if user_is_pro or forloop.first or s.id in unlocked_salary_ids %}
                 <tr>
-                    <td><strong>{{ s.role }}</strong></td>
+                    <td>
+                        <strong>{{ s.role }}</strong>
+                        {% if s.verification_status == 'verified' %}
+                        <span class="cp-badge verified" style="font-size: 10px; margin-left: 4px;">Verified</span>
+                        {% else %}
+                        <span class="cp-badge" style="font-size: 10px; margin-left: 4px;">Community</span>
+                        {% endif %}
+                    </td>
                     <td>{{ s.experience_years }}y</td>
                     <td>₹{{ s.ctc|floatformat:0 }}</td>
                     <td>{{ s.city }}</td>
                     <td class="cp-tech-stack">{{ s.tech_stack|truncatechars:40 }}</td>
+                    <td></td>
                 </tr>
+                {% else %}
+                <tr class="salary-row-locked" style="filter: blur(4px); user-select: none;">
+                    <td><strong>{{ s.role }}</strong></td>
+                    <td>{{ s.experience_years }}y</td>
+                    <td>₹••••••</td>
+                    <td>{{ s.city }}</td>
+                    <td class="cp-tech-stack">•••</td>
+                    <td style="filter: none;">
+                        <form method="POST" action="{% url 'unlock_salary' s.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="submit" class="hp-btn hp-btn--primary" style="font-size: 11px; padding: 0.25rem 0.5rem;">Unlock</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% if not user_is_pro %}
+        {% include "partials/salary_submit_cta.html" with source="company_detail" %}
+        {% endif %}
         {% else %}
         <p class="cp-empty">No salary data yet. <a href="{% url 'submit_salary' %}">Be the first to contribute.</a></p>
         {% endif %}

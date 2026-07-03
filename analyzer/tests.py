@@ -341,3 +341,105 @@ class AnalyzerIntroNewsletterCTATests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Start Risk Assessment")
+
+
+class SalaryUnlockTests(TestCase):
+    def setUp(self):
+        self.submission = SalarySubmission.objects.create(
+            role="Backend Engineer",
+            experience_years=4.0,
+            company_type="service",
+            ctc=1800000,
+            city="Bengaluru",
+        )
+
+    def test_unlock_consumes_credit(self):
+        self.client.post(reverse("submit_salary"), _VALID_SALARY_PAYLOAD)
+        self.assertEqual(self.client.session.get("salary_unlocks"), 3)
+
+        response = self.client.post(
+            reverse("unlock_salary", args=[self.submission.id]),
+            {"next": "/companies/"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.client.session.get("salary_unlocks"), 2)
+        self.assertIn(self.submission.id, self.client.session.get("unlocked_salary_ids", []))
+
+    def test_unlock_uses_free_preview_when_no_credits(self):
+        response = self.client.post(
+            reverse("unlock_salary", args=[self.submission.id]),
+            {"next": "/companies/"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.client.session.get("salary_previews_used"), 1)
+        self.assertIn(self.submission.id, self.client.session.get("unlocked_salary_ids", []))
+
+    def test_pro_user_unlocks_without_consuming_credits(self):
+        user = User.objects.create_user("prouser2", password="pass")
+        user.profile.tier = "pro"
+        user.profile.save()
+        self.client.login(username="prouser2", password="pass")
+
+        self.client.post(
+            reverse("unlock_salary", args=[self.submission.id]),
+            {"next": "/companies/"},
+        )
+        user.refresh_from_db()
+        self.assertEqual(user.profile.salary_credits, 0)
+
+
+class LayoffReportTests(TestCase):
+    def test_report_layoff_links_company_fk(self):
+        company = Company.objects.create(name="TestCorp", slug="testcorp", sector="product")
+        self.client.post(reverse("report_layoff"), {
+            "company_name": "TestCorp",
+            "status": "freeze",
+        })
+        from analyzer.models import LayoffReport
+        report = LayoffReport.objects.first()
+        self.assertEqual(report.company_id, company.id)
+
+
+class LightVerificationTests(TestCase):
+    def test_in_range_submission_auto_verifies_with_peers(self):
+        for ctc in [1600000, 1700000, 1800000]:
+            SalarySubmission.objects.create(
+                role="Backend Engineer",
+                experience_years=4.0,
+                company_type="service",
+                ctc=ctc,
+                city="Bengaluru",
+                verification_status="verified",
+            )
+
+        self.client.post(reverse("submit_salary"), {
+            **_VALID_SALARY_PAYLOAD,
+            "ctc": "1750000",
+        })
+        submission = SalarySubmission.objects.order_by("-created_at").first()
+        self.assertEqual(submission.verification_status, "verified")
+        self.assertTrue(submission.is_verified)
+
+    def test_outlier_submission_is_flagged(self):
+        for ctc in [1600000, 1700000, 1800000]:
+            SalarySubmission.objects.create(
+                role="Backend Engineer",
+                experience_years=4.0,
+                company_type="service",
+                ctc=ctc,
+                city="Bengaluru",
+                verification_status="verified",
+            )
+
+        self.client.post(reverse("submit_salary"), {
+            **_VALID_SALARY_PAYLOAD,
+            "ctc": "5000000",
+        })
+        submission = SalarySubmission.objects.order_by("-created_at").first()
+        self.assertEqual(submission.verification_status, "flagged")
+
+    def test_submission_saves_source_attribution(self):
+        payload = dict(_VALID_SALARY_PAYLOAD, source="ctc_decoder")
+        self.client.post(reverse("submit_salary"), payload)
+        submission = SalarySubmission.objects.first()
+        self.assertEqual(submission.source, "ctc_decoder")
