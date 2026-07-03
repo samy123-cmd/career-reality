@@ -274,6 +274,10 @@
         </a>
     </div>
 
+    <div id="calc-salary-cta" style="display: none;">
+        {% include "partials/salary_submit_cta.html" with source="ctc_decoder" %}
+    </div>
+
     <div class="az-calc-bottom">
         <div class="key-takeaway" style="margin-bottom: var(--space-md);">
             <h4>What This Calculator Covers</h4>
@@ -455,6 +459,12 @@
             if (window.crTrack) {
                 window.crTrack('newsletter_cta_shown', { source: 'ctc_decoder' });
             }
+        }
+
+        var salaryCta = document.getElementById('calc-salary-cta');
+        if (salaryCta && salaryCta.getAttribute('data-shown') !== '1') {
+            salaryCta.style.display = 'block';
+            salaryCta.setAttribute('data-shown', '1');
         }
     }
 

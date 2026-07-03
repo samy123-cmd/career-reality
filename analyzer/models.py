@@ -47,9 +47,23 @@ class SalarySubmission(models.Model):
     in_hand = models.IntegerField(help_text="Monthly In-Hand (Optional)", null=True, blank=True)
     city = models.CharField(max_length=50)
     tech_stack = models.CharField(max_length=200, help_text="e.g. Java, React, AWS", blank=True)
-    
+
+    source = models.CharField(max_length=40, blank=True, help_text="Attribution source (tool exit CTA)")
+    verification_status = models.CharField(
+        max_length=20,
+        choices=[
+            ("pending", "Pending"),
+            ("verified", "Verified"),
+            ("flagged", "Flagged"),
+        ],
+        default="pending",
+    )
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    def save(self, *args, **kwargs):
+        self.is_verified = self.verification_status == "verified"
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['-created_at']

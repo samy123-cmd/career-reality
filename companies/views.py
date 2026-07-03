@@ -10,6 +10,13 @@ from django.contrib import messages
 from django.utils.text import slugify
 
 from analyzer.models import SalarySubmission, LayoffReport
+from analyzer.salary_access import (
+    get_balance,
+    get_free_previews_remaining,
+    get_unlocked_ids,
+    is_pro_user,
+)
+from accounts.models import CompanyWatchlist
 from .models import Company, CompanyReview, Discussion, DiscussionReply
 from .forms import CompanyReviewForm, DiscussionForm, DiscussionReplyForm
 from .indexing import company_is_indexable, indexable_companies_queryset
@@ -75,6 +82,9 @@ def company_detail(request, slug):
     ).exclude(company_name__iexact=company.name).order_by("-created_at")[:20]
 
     all_salaries = list(salaries | direct_salaries)[:30]
+    all_salaries.sort(
+        key=lambda s: (s.verification_status != "verified", -s.created_at.timestamp())
+    )
 
     # Salary stats
     if all_salaries:
@@ -130,6 +140,19 @@ def company_detail(request, slug):
     )
     meta_robots = "index, follow" if has_content else "noindex, follow"
 
+    is_watching = False
+    if request.user.is_authenticated:
+        try:
+            if request.user.profile.is_pro:
+                is_watching = CompanyWatchlist.objects.filter(
+                    user=request.user, company=company
+                ).exists()
+        except Exception:
+            pass
+
+    unlocked_ids = get_unlocked_ids(request)
+    user_is_pro = is_pro_user(request)
+
     return render(request, "companies/detail.html", {
         "company": company,
         "salaries": all_salaries[:15],
@@ -140,6 +163,11 @@ def company_detail(request, slug):
         "form": form,
         "company_discussions": company_discussions,
         "meta_robots": meta_robots,
+        "is_watching": is_watching,
+        "user_is_pro": user_is_pro,
+        "salary_balance": get_balance(request),
+        "free_previews_remaining": get_free_previews_remaining(request),
+        "unlocked_salary_ids": unlocked_ids,
         "og_title": f"{company.name} — Salary, Reviews & Reality Check",
         "og_description": f"Honest salary data, anonymous reviews, and layoff alerts for {company.name}. No login required.",
     })

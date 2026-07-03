@@ -14,45 +14,47 @@
         <h1 class="az-form-title">The Salary Drop</h1>
         <p class="az-form-subtitle">
             Glassdoor is censored. LinkedIn is fake.
-            <br>Drop your real numbers anonymously. Help the community.
+            <br>Drop your real numbers anonymously. Earn <strong>3 unlock credits</strong> per submission.
         </p>
     </div>
 
     <div class="az-form-card">
-        <form method="POST" action="{% url 'submit_salary' %}">
+        <form method="POST" action="{% url 'submit_salary' %}{% if source %}?source={{ source }}{% endif %}">
             {% csrf_token %}
+            <input type="hidden" name="source" value="{{ source|default:form.source.value|default:'' }}">
 
-            <!-- Role -->
             <div class="az-field">
                 <label class="az-label">Role / Job Title</label>
                 <input type="text" name="role" placeholder="e.g. Senior Backend Engineer" required
-                    class="az-input">
+                    class="az-input" value="{{ form.role.value|default:'' }}">
             </div>
 
-            <!-- Tech Stack -->
+            <div class="az-field">
+                <label class="az-label">Company Name (optional)</label>
+                <input type="text" name="company_name" placeholder="e.g. Infosys, Swiggy"
+                    class="az-input az-input--light" value="{{ form.company_name.value|default:'' }}">
+            </div>
+
             <div class="az-field">
                 <label class="az-label">Tech Stack (Optional)</label>
                 <input type="text" name="tech_stack" placeholder="e.g. Java, Spring Boot, AWS"
-                    class="az-input az-input--light">
+                    class="az-input az-input--light" value="{{ form.tech_stack.value|default:'' }}">
             </div>
 
             <div class="az-grid-2">
-                <!-- Exp -->
                 <div>
                     <label class="az-label">Experience (Years)</label>
-                    <input type="number" step="0.1" name="experience" placeholder="e.g. 3.5" required
-                        class="az-input">
+                    <input type="number" step="0.1" name="experience_years" placeholder="e.g. 3.5" required
+                        class="az-input" value="{{ form.experience_years.value|default:'' }}">
                 </div>
-                <!-- CTC -->
                 <div>
                     <label class="az-label">Annual CTC (Rs)</label>
                     <input type="number" name="ctc" placeholder="e.g. 1200000" required
-                        class="az-input">
+                        class="az-input" value="{{ form.ctc.value|default:'' }}">
                 </div>
             </div>
 
             <div class="az-grid-2">
-                <!-- Company Type -->
                 <div>
                     <label class="az-label">Company Type</label>
                     <select name="company_type" required class="az-select az-input--light">
@@ -62,15 +64,29 @@
                         <option value="unicorn">Unicorn / FAANG</option>
                     </select>
                 </div>
-                <!-- City -->
                 <div>
                     <label class="az-label">City</label>
                     <input type="text" name="city" placeholder="e.g. Bangalore" required
-                        class="az-input az-input--light">
+                        class="az-input az-input--light" value="{{ form.city.value|default:'' }}">
                 </div>
             </div>
 
-            <button type="submit" class="az-submit-btn">Submit Anonymously</button>
+            <div class="az-field" style="margin-top: 1rem;">
+                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 14px; cursor: pointer;">
+                    <input type="checkbox" name="confirm_payslip" value="1" style="margin-top: 3px;">
+                    <span>I confirm this matches my offer letter or payslip (helps light verification)</span>
+                </label>
+            </div>
+
+            {% if form.errors %}
+            <div class="az-form-errors" style="color: #d93025; margin-bottom: 1rem;">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}<p>{{ error }}</p>{% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <button type="submit" class="az-submit-btn">Submit Anonymously — Earn 3 Credits</button>
             <p class="az-form-note">No names. No emails. Pure data.</p>
         </form>
     </div>
@@ -80,6 +96,7 @@
         <h4>How Your Data Is Used</h4>
         <p>
             We aggregate submissions to improve salary ranges and reality checks. No personal identifiers are stored.
+            Each submission unlocks 3 full salary records for you.
         </p>
     </div>
 
@@ -94,30 +111,9 @@
         </div>
     </details>
 
-    <details class="collapsible">
-        <summary>What Happens Next</summary>
-        <div class="content">
-            <p>Your entry is reviewed, normalized, and added to the dataset on the next update cycle.</p>
-        </div>
-    </details>
-
-    <details class="collapsible">
-        <summary>FAQ</summary>
-        <div class="content">
-            <p><strong>Should I enter fixed pay or total CTC?</strong> Use total annual CTC.</p>
-            <p><strong>Can I submit for multiple offers?</strong> Yes, submit separate entries.</p>
-            <p><strong>Do you show company names?</strong> Not publicly. We use them only for internal validation.</p>
-        </div>
-    </details>
-
     <p class="az-form-note" style="margin-top:1.5rem;">
         Last updated: {% now "F Y" %}
     </p>
 </div>
 </section>
 {% endblock %}
-
-
-
-
-

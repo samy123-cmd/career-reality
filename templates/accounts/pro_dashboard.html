@@ -62,6 +62,11 @@
       {% for s in recent_salaries %}
         <div class="salary-item">
           <strong>{{ s.role }}</strong> — ₹{{ s.ctc|floatformat:"-0" }}
+          {% if s.verification_status == 'verified' %}
+          <span class="cp-badge verified" style="font-size: 10px;">Verified</span>
+          {% else %}
+          <span class="cp-badge" style="font-size: 10px;">Community</span>
+          {% endif %}
           <div class="salary-meta">
             {{ s.experience_years }}y exp &middot; {{ s.get_company_type_display }} &middot; {{ s.city }}
           </div>
@@ -70,6 +75,48 @@
     {% else %}
       <p class="dash-empty-msg">No submissions yet. Help build the database —
         <a href="{% url 'submit_salary' %}">submit yours anonymously</a>.</p>
+    {% endif %}
+  </div>
+
+  <!-- Pro Watchlist -->
+  <div class="dash-card dash-card--full">
+    <p class="dash-card-title">Your Watchlist — Layoff Alerts</p>
+    {% if watchlist_entries %}
+      <table class="editorial-table" style="width: 100%; font-size: 14px;">
+        <thead>
+          <tr><th>Company</th><th>Latest Status</th><th>Last Report</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for item in watchlist_entries %}
+          <tr>
+            <td><a href="{% url 'company_detail' item.company.slug %}">{{ item.company.name }}</a></td>
+            <td>
+              {% if item.latest_report %}
+                {{ item.latest_report.get_status_display }}
+              {% else %}
+                No reports yet
+              {% endif %}
+            </td>
+            <td>
+              {% if item.latest_report %}
+                {{ item.latest_report.created_at|timesince }} ago
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              <form method="POST" action="{% url 'toggle_watchlist' item.company.slug %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="font-size: 12px; background: none; border: none; color: #666; cursor: pointer; text-decoration: underline;">Remove</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="dash-empty-msg">No companies watched yet. Visit a
+        <a href="{% url 'company_directory' %}">company profile</a> and click "Watch for layoff alerts".</p>
     {% endif %}
   </div>
 

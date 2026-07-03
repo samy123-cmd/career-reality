@@ -501,6 +501,31 @@ def run_weekly_digest_cron(request):
     return JsonResponse({"status": "ok", "sent": sent, "total_subscribers": len(subscribers)})
 
 
+@require_GET
+def run_layoff_alerts_cron(request):
+    """Secure internal endpoint to trigger Pro watchlist layoff alerts."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse({"status": "error", "message": "cron token not configured"}, status=503)
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    from django.core.management import call_command
+    from io import StringIO
+
+    out = StringIO()
+    call_command("send_layoff_alerts", stdout=out)
+    return JsonResponse({"status": "ok", "output": out.getvalue().strip()})
+
+
 def run_career_index_cron(request):
     """Secure internal endpoint to recompute the Career Reality Index from live data."""
     expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")

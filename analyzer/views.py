@@ -10,6 +10,8 @@ from django.utils.cache import patch_cache_control
 from django.utils import timezone
 from core.seo_pages import LAYOFF_RADAR, RESIGNATION_ANALYZER
 from . import forms, logic, models
+from .salary_access import CREDITS_PER_SUBMISSION, get_balance, unlock_salary_row
+from .verification import apply_light_verification
 
 COMPANY_TYPE_LABELS = dict(models.SalarySubmission.COMPANY_TYPES)
 
@@ -228,7 +230,7 @@ def submit_salary(request):
     Handle anonymous salary submissions.
     Give-to-get: submitting a salary earns 3 unlock credits (or session unlock for anon users).
     """
-    CREDITS_PER_SUBMISSION = 3
+    source = request.GET.get("source", "") or request.POST.get("source", "")
 
     if request.method == 'POST':
         form = forms.SalarySubmissionForm(request.POST)
@@ -244,7 +246,7 @@ def submit_salary(request):
                     name__iexact=raw_name
                 ).first()
 
-            models.SalarySubmission.objects.create(
+            submission = models.SalarySubmission.objects.create(
                 role=d['role'],
                 experience_years=d['experience_years'],
                 company_type=d['company_type'],
@@ -253,6 +255,11 @@ def submit_salary(request):
                 tech_stack=d.get('tech_stack', ''),
                 company=company_obj,
                 company_name=raw_name,
+                source=(d.get("source") or source or "")[:40],
+            )
+            apply_light_verification(
+                submission,
+                confirmed_payslip=d.get('confirm_payslip', False),
             )
 
             # ── Give-to-get: award salary unlock credits ──────────────────
@@ -272,14 +279,19 @@ def submit_salary(request):
                     request.session.get('salary_unlocks', 0) + CREDITS_PER_SUBMISSION
                 )
 
+            request.session['last_credits_earned'] = CREDITS_PER_SUBMISSION
             return redirect(reverse('salary_submit_success'))
     else:
-        form = forms.SalarySubmissionForm()
+        initial = {}
+        if source:
+            initial['source'] = source[:40]
+        form = forms.SalarySubmissionForm(initial=initial)
 
     title = "Anonymous Salary Drop"
     description = "Submit an anonymous salary data point to improve Career Reality salary ranges and insights."
     return render(request, 'analyzer/submit_salary.html', {
         'form': form,
+        'source': source,
         'og_title': title,
         'og_description': description,
         'twitter_title': title,
@@ -288,6 +300,7 @@ def submit_salary(request):
     })
 
 def salary_submit_success(request):
+    credits_earned = request.session.pop('last_credits_earned', CREDITS_PER_SUBMISSION)
     title = "Submission Received - Career Reality India"
     description = "Thanks for contributing anonymous salary data. It helps improve salary reality checks for everyone."
     return render(request, 'analyzer/submit_success.html', {
@@ -296,7 +309,37 @@ def salary_submit_success(request):
         'twitter_title': title,
         'twitter_description': description,
         'meta_robots': 'noindex, follow',
+        'credits_earned': credits_earned,
+        'salary_credit_balance': get_balance(request),
     })
+
+
+@require_POST
+def unlock_salary(request, submission_id):
+    """Unlock a single salary row using credits or free monthly previews."""
+    from django.contrib import messages
+
+    submission = models.SalarySubmission.objects.filter(pk=submission_id).first()
+    if not submission:
+        messages.error(request, "Salary record not found.")
+        return redirect(request.META.get("HTTP_REFERER", "company_directory"))
+
+    success, reason = unlock_salary_row(request, submission_id)
+    if success:
+        if reason == "credit":
+            messages.success(request, "Salary unlocked using 1 credit.")
+        elif reason == "preview":
+            messages.success(request, "Salary unlocked using a free monthly preview.")
+        elif reason == "pro":
+            messages.success(request, "Salary unlocked (Pro access).")
+    else:
+        messages.warning(
+            request,
+            "No unlocks remaining. Submit your salary to earn 3 credits, or upgrade to Pro.",
+        )
+
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER", "company_directory")
+    return redirect(next_url)
 def salary_feed_api(request):
     """
     Returns last 20 verified (or all for now) salaries for the ticker.
@@ -305,10 +348,22 @@ def salary_feed_api(request):
     from django.http import JsonResponse
     logger = logging.getLogger(__name__)
     try:
-        # For now, return all recent submissions. In prod, filter by is_verified=True
-        submissions = models.SalarySubmission.objects.values(
-            'role', 'company_type', 'experience_years', 'ctc', 'city'
-        ).order_by('-created_at')[:20]
+        verified = list(
+            models.SalarySubmission.objects.filter(
+                verification_status="verified"
+            ).values(
+                'role', 'company_type', 'experience_years', 'ctc', 'city'
+            ).order_by('-created_at')[:20]
+        )
+        pending_limit = max(0, 20 - len(verified))
+        pending = list(
+            models.SalarySubmission.objects.exclude(
+                verification_status="verified"
+            ).values(
+                'role', 'company_type', 'experience_years', 'ctc', 'city'
+            ).order_by('-created_at')[:pending_limit]
+        )
+        submissions = verified + pending
         data = [
             {
                 'role': row['role'],
@@ -402,8 +457,18 @@ def report_layoff(request):
         form = forms.LayoffReportForm(request.POST)
         if form.is_valid():
             d = form.cleaned_data
+
+            from companies.models import Company as CompanyModel
+            company_obj = None
+            raw_name = d['company_name'].strip()
+            if raw_name:
+                company_obj = CompanyModel.objects.filter(
+                    name__iexact=raw_name
+                ).first()
+
             models.LayoffReport.objects.create(
-                company_name=d['company_name'],
+                company_name=raw_name,
+                company=company_obj,
                 status=d['status'],
                 role_affected=d.get('role_affected', ''),
                 location=d.get('location', ''),

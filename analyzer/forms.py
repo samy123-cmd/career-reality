@@ -41,6 +41,11 @@ class SalarySubmissionForm(forms.Form):
         strip=True,
         label="Tech Stack (optional)",
     )
+    confirm_payslip = forms.BooleanField(
+        required=False,
+        label="I confirm this matches my offer letter or payslip",
+    )
+    source = forms.CharField(max_length=40, required=False, widget=forms.HiddenInput())
 
 
 class LayoffReportForm(forms.Form):

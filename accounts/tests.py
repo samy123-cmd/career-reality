@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from companies.models import Company
 from accounts.models import UserProfile
 
 
@@ -154,3 +155,28 @@ class OnboardingPageTests(TestCase):
         mock_request = MagicMock()
         url = adapter.get_signup_redirect_url(mock_request)
         self.assertEqual(url, reverse("onboarding"))
+
+
+class WatchlistTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user("watchuser", password="pass", email="watch@example.com")
+        self.user.profile.tier = "pro"
+        self.user.profile.save()
+        self.company = Company.objects.create(name="WatchCo", slug="watchco", sector="product")
+
+    def test_pro_user_can_toggle_watchlist(self):
+        self.client.login(username="watchuser", password="pass")
+        response = self.client.post(reverse("toggle_watchlist", args=[self.company.slug]))
+        self.assertEqual(response.status_code, 302)
+        from accounts.models import CompanyWatchlist
+        self.assertTrue(CompanyWatchlist.objects.filter(user=self.user, company=self.company).exists())
+
+        self.client.post(reverse("toggle_watchlist", args=[self.company.slug]))
+        self.assertFalse(CompanyWatchlist.objects.filter(user=self.user, company=self.company).exists())
+
+    def test_free_user_redirected_from_watchlist(self):
+        free_user = User.objects.create_user("freeuser", password="pass")
+        self.client.login(username="freeuser", password="pass")
+        response = self.client.post(reverse("toggle_watchlist", args=[self.company.slug]))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("pricing", response.url)
