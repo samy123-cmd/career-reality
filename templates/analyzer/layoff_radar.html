@@ -14,7 +14,13 @@
   "url": "{{ canonical_url|default:request.build_absolute_uri }}",
   "creator": {
     "@type": "Organization",
-    "name": "Career Reality India"
+    "name": "Career Reality India",
+    "url": "{{ site_base_url }}"
+  },
+  "license": {
+    "@type": "CreativeWork",
+    "name": "Career Reality Terms of Use",
+    "url": "{{ site_base_url }}/terms/"
   },
   "keywords": ["Layoffs", "Hiring Freeze", "Indian IT", "Tech Jobs"]
 }
