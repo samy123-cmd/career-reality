@@ -55,6 +55,12 @@ class LandingPageSEOTests(TestCase):
         response = self.client.get(reverse("salary_reality"))
         self.assertContains(response, '"@type": "FAQPage"')
 
+    def test_salary_reality_dataset_includes_license(self):
+        response = self.client.get(reverse("salary_reality"))
+        self.assertContains(response, '"@type": "Dataset"')
+        self.assertContains(response, '"license"')
+        self.assertContains(response, "/terms/")
+
     def test_layoff_radar_has_dataset_schema(self):
         response = self.client.get(reverse("layoff_radar"))
         self.assertContains(response, '"@type": "Dataset"')
