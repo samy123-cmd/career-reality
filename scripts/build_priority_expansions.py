@@ -1049,11 +1049,6 @@ STUCK_TOP_UP: dict[str, str] = {
 """,
 }
 
-_SAFETY_PAD = """
-<p>Indian IT compensation decisions in 2026 should always be stress-tested with in-hand cash flow, not headline CTC alone. Use structured comparison tools, talk to three people who made the same choice last year, and write down your assumptions before committing — ambiguity favors employers and coaching marketers, not candidates.</p>
-"""
-
-
 def _apply_boosts(art: dict) -> dict:
     slug = art.get("slug")
     merged = dict(art)
@@ -1081,13 +1076,14 @@ def main() -> None:
         stuck_up = STUCK_TOP_UP.get(slug)
         if stuck_up:
             data["stuck_point"] = data["stuck_point"] + stuck_up
-        while expansion_word_count(data) < 900:
-            data["stuck_point"] = data["stuck_point"] + _SAFETY_PAD
         while expansion_salary_words(data) < 150:
             data["salary_reality"] = data["salary_reality"].replace(_SOURCE_FOOTER, "") + (
                 "<p>Compare bands by city and YOE using multiple sources — single datapoints mislead during volatile hiring cycles.</p>"
                 + _SOURCE_FOOTER
             )
+        wc = expansion_word_count(data)
+        if wc < 900:
+            raise ValueError(f"{slug}: only {wc} words after boosts — add article-specific content")
         expansions[slug] = data
 
     failures = []

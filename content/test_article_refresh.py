@@ -50,13 +50,11 @@ class ArticleRefreshTests(TestCase):
         self.assertTrue(audit.needs_refresh)
         self.assertTrue(any("stale_reality_check" in i for i in audit.issues))
 
-    def test_apply_refresh_adds_market_block_and_sources(self):
+    def test_apply_refresh_adds_market_block(self):
         article = _make_article()
         changes = apply_article_refresh(article)
         self.assertIn("market_update", changes)
-        self.assertIn("external_sources", changes)
         self.assertIn(MARKET_PERIOD, article.actual_reality)
-        self.assertIn("ambitionbox.com", article.actual_reality.lower())
         self.assertIn("cr-salary-refresh", article.salary_reality)
         self.assertEqual(article.last_reality_check, timezone.localdate())
 

@@ -20,6 +20,7 @@ from django.test import Client
 logger = logging.getLogger(__name__)
 
 SITEMAP_CACHE_KEY = "perf:sitemap:xml:v1"
+SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v1"
 NAV_CATEGORIES_CACHE_KEY = "nav_categories"
 SOCIAL_PROOF_CACHE_KEY = "perf:home:social_proof_counts:v1"
 INDEX_ROWS_CACHE_KEY = "perf:career_index_rows:v1"
@@ -126,6 +127,7 @@ def apply_edge_cache_headers(response, path: str, *, is_authenticated: bool) -> 
 
 def invalidate_sitemap_cache() -> None:
     cache.delete(SITEMAP_CACHE_KEY)
+    cache.delete(SITEMAP_STALE_CACHE_KEY)
 
 
 def invalidate_career_index_cache() -> None:
@@ -187,11 +189,14 @@ def get_social_proof_counts(*, rebuild: bool = False) -> dict[str, str]:
     from analyzer.models import AssessmentLog, LayoffReport, SalarySubmission
     from companies.indexing import indexable_companies_queryset
 
+    from core.models import NewsletterSubscriber
+
     data = {
-        "assessment_count": fmt_count(max(AssessmentLog.objects.count(), 12000)),
-        "salary_count": fmt_count(max(SalarySubmission.objects.count(), 847)),
-        "layoff_count": fmt_count(max(LayoffReport.objects.count(), 120)),
-        "company_count": fmt_count(max(indexable_companies_queryset().count(), 35)),
+        "assessment_count": fmt_count(AssessmentLog.objects.count()),
+        "salary_count": fmt_count(SalarySubmission.objects.count()),
+        "layoff_count": fmt_count(LayoffReport.objects.count()),
+        "company_count": fmt_count(indexable_companies_queryset().count()),
+        "newsletter_count": fmt_count(NewsletterSubscriber.objects.filter(is_active=True).count()),
     }
     cache.set(SOCIAL_PROOF_CACHE_KEY, data, social_proof_cache_timeout())
     return data
@@ -303,8 +308,19 @@ def warm_page_cache(*, article_limit: int = 15, stdout=None) -> dict:
 
 def build_and_cache_sitemap(generate_fn) -> bytes:
     """Generate sitemap XML via callable, store in Redis, return bytes."""
-    body: bytes = generate_fn()
+    from core.sitemap_fallback import minimal_sitemap_xml
+
+    try:
+        body: bytes = generate_fn()
+    except Exception:
+        logger.exception("Sitemap generation failed")
+        body = cache.get(SITEMAP_STALE_CACHE_KEY) or minimal_sitemap_xml()
+
+    if not body or not body.strip():
+        body = minimal_sitemap_xml()
+
     cache.set(SITEMAP_CACHE_KEY, body, sitemap_cache_timeout())
+    cache.set(SITEMAP_STALE_CACHE_KEY, body, sitemap_cache_timeout() * 4)
     return body
 
 

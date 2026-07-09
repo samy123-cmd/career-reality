@@ -19,12 +19,13 @@ class PageSEO:
 # ── Tool pages (traffic engine — target high-volume Indian career queries) ──
 
 CTC_CALCULATOR = PageSEO(
-    title="CTC to In-Hand Salary Calculator India (2026) — Free | Career Reality",
+    title="CTC Calculator India 2026 — CTC to In-Hand Salary (Free)",
     description=(
-        "Free CTC to in-hand salary calculator for India. Decode your offer letter "
-        "with PF, gratuity, variable pay, and new vs old tax regime deductions."
+        "Free CTC calculator and CTC salary calculator for India. Calculate CTC to "
+        "in-hand salary instantly with PF, gratuity, variable pay, and new vs old tax "
+        "regime deductions."
     ),
-    h1="CTC to In-Hand Salary Calculator",
+    h1="CTC Calculator India — CTC to In-Hand Salary",
     keywords=(
         "ctc to in hand salary calculator india",
         "in hand salary calculator",

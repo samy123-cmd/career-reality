@@ -240,30 +240,11 @@
         }
     }
 
-    /* Font Faces */
-    @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
-        font-display: optional;
-        src:url('{% static "fonts/Inter-Regular.woff2" %}') format('woff2')
+    body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-    @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 600;
-        font-display: optional;
-        src:url('{% static "fonts/Inter-SemiBold.woff2" %}') format('woff2')
-    }
-
-    @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 700;
-        font-display: optional;
-        src:url('{% static "fonts/Inter-Bold.woff2" %}') format('woff2')
-    }
+    /* Font stack uses system UI fonts — no external font files required */
 
     /* CRITICAL LAYOUT STABILITY (Prevents CLS & LCP delay) */
     .mobile-nav {
@@ -290,11 +271,6 @@
     }
 </style>
 
-<!-- Preload critical font weights -->
-<link rel="preload" href="{% static 'fonts/Inter-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{% static 'fonts/Inter-Regular.woff2' %}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{% static 'fonts/Inter-SemiBold.woff2' %}" as="font" type="font/woff2" crossorigin>
-
 <!-- Main CSS - Preload to reduce render-blocking time -->
 <link rel="preload" href="{% static 'css/style.css' %}?v=6" as="style">
 <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
@@ -309,6 +285,11 @@
     "url": "{{ site_base_url }}",
     "description": "The brutal truth about engineering careers in India. No-BS salary data, career reality checks, and honest career advice.",
     "image": "{{ site_base_url }}{{ og_default_image_png }}",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ site_base_url }}/search/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+    },
     "publisher": {
         "@type": "Organization",
         "name": "Career Reality (India)",

@@ -17,28 +17,49 @@ MARKET_LABEL = "July 2026"
 MACRO_BULLETS = (
     "Post-appraisal hangover: many engineers received 5–8% hikes vs 12%+ expectations; "
     "counter-offers remain selective for mid-senior backend and platform roles.",
-    "Campus internship season is converting to PPO decisions — conversion rates at "
-    "product companies are 40–55%, service companies 15–25%.",
-    "GCC hiring slowed in summer but the bar is unchanged: system design + ownership "
-    "expected at 4–6 YOE; bench risk rising in IT services.",
     "AI/GenAI roles (RAG, agents, eval pipelines) still command 15–35% premiums over "
     "general SWE bands; general engineering bands remain flat.",
-    "Junior service-company fresher anchors remain 3.2–4.5 LPA; product-company "
-    "fresher median is 8–13 LPA. Validate CTC with the Decoder before comparing offers.",
 )
 
-EXTERNAL_SOURCES_HTML = """
-<section class="art-source-refs">
-<h3>Primary sources referenced in this refresh</h3>
-<ul>
-  <li><a href="https://www.ambitionbox.com/salaries" rel="noopener noreferrer" target="_blank">AmbitionBox Salary Insights (India)</a></li>
-  <li><a href="https://www.glassdoor.co.in/Salaries/index.htm" rel="noopener noreferrer" target="_blank">Glassdoor India Salaries</a></li>
-  <li><a href="https://www.naukri.com/jobSpeak" rel="noopener noreferrer" target="_blank">Naukri JobSpeak Index</a></li>
-  <li><a href="https://labour.gov.in/" rel="noopener noreferrer" target="_blank">Ministry of Labour &amp; Employment (India)</a></li>
-</ul>
-<p class="art-source-note">Salary bands are medians from multiple employer-reported and crowdsourced datasets — not unicorn outliers.</p>
-</section>
-""".strip()
+# Per-article insights appended to the market update block (unique per slug).
+ARTICLE_SPECIFIC_UPDATES: dict[str, str] = {
+    "junior-data-scientist-reality-india": (
+        "Hiring loops for 'data scientist' titles still map to SQL + dashboard work; "
+        "production ML roles require pipeline ownership evidence."
+    ),
+    "ai-upskilling-trap-india-api-wrapper-reality": (
+        "Bootcamp 'AI engineer' grads face interview loops testing FastAPI + eval harnesses, "
+        "not notebook accuracy alone."
+    ),
+    "indian-it-layoff-cycle-2026": (
+        "Bench trimming in IT services is concentrated at 4–7 YOE without client-facing "
+        "or architecture depth."
+    ),
+    "what-20-lpa-actually-feels-like-india-purchasing-power": (
+        "Metro rent and EMI outflows mean ₹20 LPA CTC often nets ₹85k–₹1.1L in-hand in "
+        "Bengaluru after tax — validate with the CTC Decoder."
+    ),
+    "gcc-gold-rush-india-captive-center-reality": (
+        "GCC offers are rising but system-design bar at 4–6 YOE is now standard; "
+        "bench risk in services is pushing lateral GCC moves."
+    ),
+    "campus-internship-ppo-reality-2026": (
+        "Product-company PPO conversion is 40–55% this cycle; service companies remain "
+        "at 15–25% with lower fixed-pay anchors."
+    ),
+    "mid-year-layoff-pulse-india-july-2026": (
+        "Mid-tier SaaS and IT services account for most July layoff signals; GCC hiring "
+        "continues but interview loops are longer."
+    ),
+    "appraisal-hike-inflation-gap-2026": (
+        "Nominal hikes of 6–9% are common while urban inflation on rent and school fees "
+        "runs higher — real take-home often flat."
+    ),
+    "ai-job-market-midyear-reality-2026": (
+        "GenAI hiring is narrow: RAG, eval, and cost-controlled inference beat generic "
+        "'prompt engineer' titles in offer volume."
+    ),
+}
 
 
 @dataclass(frozen=True)
@@ -135,7 +156,7 @@ def salary_table_html(cluster: str) -> str:
 """.strip()
 
 
-def market_update_html(cluster: str) -> str:
+def market_update_html(cluster: str, *, article_slug: str = "") -> str:
     cluster_notes = {
         "engineering": "Summer hiring slowdown in GCCs; IT services bench trimming continues for 4–7 YOE engineers without system design depth.",
         "data": "Most 'data scientist' postings still map to analytics or pipeline work; true ML roles require production deployment evidence, not notebook Kaggle wins.",
@@ -146,10 +167,17 @@ def market_update_html(cluster: str) -> str:
     }
     bullets = "".join(f"<li>{b}</li>" for b in MACRO_BULLETS)
     note = cluster_notes.get(cluster, cluster_notes["general"])
+    article_note = ARTICLE_SPECIFIC_UPDATES.get(article_slug, "")
+    article_html = (
+        f"<p><strong>Article-specific read:</strong> {article_note}</p>"
+        if article_note
+        else ""
+    )
     return f"""
 <section class="art-market-update">
   <h3>Market update — {MARKET_LABEL}</h3>
   <p><strong>Cluster read ({cluster.replace('_', ' ').title()}):</strong> {note}</p>
+  {article_html}
   <ul>{bullets}</ul>
   <p>Compare live ranges on <a href="/salary-reality/">Salary Reality</a> and track employer signals on <a href="/layoff-radar/">Layoff Radar</a>.</p>
 </section>

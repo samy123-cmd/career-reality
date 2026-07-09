@@ -1,21 +1,30 @@
 # Article Freshness Audit
 
-Generated: 2026-07-03
+Generated: 2026-07-09
 Market period: 2026-07 (July 2026)
 Published articles: 1
-Needs refresh: 0
-Up to date: 1
+Needs refresh: 1
+Up to date: 0
 
 ## Summary
 
 | Status | Count |
 |--------|-------|
-| Needs refresh | 0 |
+| Needs refresh | 1 |
 | Minor issues only | 0 |
-| Clean | 1 |
+| Clean | 0 |
+
+## Articles updated / needing update
+
+### Senior Developer Salary Ceiling India (`senior-developer-salary-ceiling-india`)
+
+- Cluster: **engineering** | Words: 979 | Salary words: 224 | External links: 0
+- Last reality check: 2026-07-09
+- Market block: 2026-07 → target **2026-07**
+- Issues: missing_external_sources
 
 ## All articles
 
 | Slug | Cluster | Words | Last check | Market period | Issues |
 |------|---------|-------|------------|---------------|--------|
-| `senior-developer-salary-ceiling-india` | engineering | 1079 | 2026-07-03 | 2026-07 | — |
+| `senior-developer-salary-ceiling-india` | engineering | 979 | 2026-07-09 | 2026-07 | missing_external_sources |

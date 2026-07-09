@@ -86,16 +86,19 @@ class Command(BaseCommand):
 
             changes = apply_article_refresh(article, today=today)
             if changes:
-                article.save(
-                    update_fields=[
-                        "actual_reality",
-                        "salary_reality",
-                        "meta_title",
-                        "meta_description",
-                        "last_reality_check",
-                        "updated_at",
-                    ]
-                )
+                update_fields = [
+                    "common_expectation",
+                    "actual_reality",
+                    "salary_reality",
+                    "stuck_point",
+                    "who_should_avoid",
+                    "verdict",
+                    "meta_title",
+                    "meta_description",
+                    "last_reality_check",
+                    "updated_at",
+                ]
+                article.save(update_fields=update_fields)
                 updated += 1
                 self.stdout.write(
                     self.style.SUCCESS(f"✓ {article.slug}: {', '.join(changes)}")

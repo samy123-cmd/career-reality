@@ -346,34 +346,12 @@ def salary_feed_api(request):
     """
     import logging
     from django.http import JsonResponse
+
+    from .salary_feed import get_salary_ticker_items
+
     logger = logging.getLogger(__name__)
     try:
-        verified = list(
-            models.SalarySubmission.objects.filter(
-                verification_status="verified"
-            ).values(
-                'role', 'company_type', 'experience_years', 'ctc', 'city'
-            ).order_by('-created_at')[:20]
-        )
-        pending_limit = max(0, 20 - len(verified))
-        pending = list(
-            models.SalarySubmission.objects.exclude(
-                verification_status="verified"
-            ).values(
-                'role', 'company_type', 'experience_years', 'ctc', 'city'
-            ).order_by('-created_at')[:pending_limit]
-        )
-        submissions = verified + pending
-        data = [
-            {
-                'role': row['role'],
-                'company': COMPANY_TYPE_LABELS.get(row['company_type'], row['company_type']),
-                'exp': f"{row['experience_years']}y",
-                'ctc': f"{row['ctc']/100000:.1f} LPA",
-                'city': row['city'],
-            }
-            for row in submissions
-        ]
+        data = get_salary_ticker_items(limit=20)
         response = JsonResponse({'submissions': data})
         patch_cache_control(response, public=True, max_age=120, stale_while_revalidate=60)
         return response

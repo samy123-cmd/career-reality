@@ -230,6 +230,8 @@ def home(request):
     index_rows = get_career_index_rows_cached()
     counts = get_social_proof_counts()
 
+    from analyzer.salary_feed import get_salary_ticker_items
+
     title = HOME.title
     description = HOME.description
     home_faq = [
@@ -260,6 +262,8 @@ def home(request):
         'salary_count': counts['salary_count'],
         'layoff_count': counts['layoff_count'],
         'company_count': counts['company_count'],
+        'newsletter_count': counts['newsletter_count'],
+        'salary_ticker_items': get_salary_ticker_items(limit=12),
         'page_keywords': HOME.keywords,
         **_seo(title, description),
     })
@@ -280,13 +284,13 @@ def _fmt_count(n):
 @cache_page(60 * 60)
 def about(request):
     title = "About Career Reality - India Career Truths"
-    description = "Why Career Reality exists, who it serves, and how we cover Indian tech careers with independent, data-backed analysis."
+    description = "Why Career Reality exists, who it serves, and how we publish evidence-backed, no-hype analysis on Indian careers."
     return render(request, 'core/about.html', _seo(title, description))
 
 @cache_page(60 * 60)
 def editorial_standards(request):
     title = "Editorial Standards - Career Reality India"
-    description = "Editorial principles for Career Reality: accuracy over comfort, no sponsored influence, and transparent updates to reflect market shifts."
+    description = "The editorial rules, correction protocol, evidence requirements, and tone guidelines behind Career Reality."
     return render(request, 'core/editorial.html', _seo(title, description))
 
 @cache_page(60 * 60)
@@ -321,7 +325,12 @@ def escape_plan(request):
     The Service Company Escape Plan.
     Contains the "Rot Check" quiz and the roadmap.
     """
-    return render(request, 'content/escape_plan.html')
+    title = "The Service Company Escape Plan — Career Rot Score"
+    description = (
+        "Stuck in TCS/Infosys? Check your Career Rot score and get a practical "
+        "escape roadmap for Indian IT services professionals."
+    )
+    return render(request, 'content/escape_plan.html', _seo(title, description))
 
 @cache_page(60 * 60)
 def privacy_policy(request):
@@ -332,7 +341,7 @@ def privacy_policy(request):
 @cache_page(60 * 60)
 def contact(request):
     title = "Contact Career Reality - Editorial Inquiries"
-    description = "Contact Career Reality for editorial inquiries, corrections, or feedback on our India career analysis."
+    description = "How to contact Career Reality for corrections, editorial clarifications, and professional feedback."
     return render(request, 'core/contact.html', _seo(title, description))
 
 @cache_page(60 * 60)

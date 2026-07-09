@@ -48,6 +48,7 @@ CANONICAL_HOST = urlsplit(CANONICAL_BASE_URL).netloc.lower()
 
 # E-E-A-T: external profiles for Organization/WebSite schema sameAs (comma-separated URLs).
 SITE_SOCIAL_PROFILES = _csv_env("SITE_SOCIAL_PROFILES")
+GA_MEASUREMENT_ID = os.environ.get("GA_MEASUREMENT_ID", "").strip()
 
 # Performance tuning (seconds).
 SITEMAP_CACHE_TIMEOUT = int(os.environ.get("SITEMAP_CACHE_TIMEOUT", "21600"))

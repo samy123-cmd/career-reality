@@ -1,5 +1,6 @@
 from django.conf import settings
 
+from core.cache_utils import get_social_proof_counts
 from core.seo_pages import SEO_PILLAR_ARTICLES, SEO_TOOL_HUB
 
 
@@ -35,6 +36,7 @@ def seo_defaults(request):
     is_hindi_duplicate = path.startswith('/hi/') or path == '/hi'
     meta_robots = "noindex, nofollow" if is_hindi_duplicate else "index, follow"
     canonical_url = en_canonical_url
+    social_proof = get_social_proof_counts()
 
     return {
         "article_meta_title": "",
@@ -53,6 +55,9 @@ def seo_defaults(request):
         "hi_canonical_url": hi_canonical_url,
         "categories": categories,
         "site_social_profiles": getattr(settings, "SITE_SOCIAL_PROFILES", []),
+        "newsletter_count": social_proof.get("newsletter_count", "0"),
+        "assessment_count": social_proof.get("assessment_count", "0"),
+        "GA_MEASUREMENT_ID": getattr(settings, "GA_MEASUREMENT_ID", ""),
     }
 
 

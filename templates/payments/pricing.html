@@ -11,9 +11,9 @@
 </section>
 
 <ul class="proof-items social-proof">
-  <li class="proof-item">847+<small>salary data points</small></li>
-  <li class="proof-item">120+<small>layoff reports</small></li>
-  <li class="proof-item">12K+<small>risk assessments run</small></li>
+  <li class="proof-item">{{ salary_count|default:"0" }}<small>salary data points</small></li>
+  <li class="proof-item">{{ layoff_count|default:"0" }}<small>layoff reports</small></li>
+  <li class="proof-item">{{ assessment_count|default:"0" }}<small>risk assessments run</small></li>
   <li class="proof-item">&lt;2 min<small>to assess your risk</small></li>
 </ul>
 

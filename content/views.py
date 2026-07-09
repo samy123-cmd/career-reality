@@ -57,28 +57,11 @@ def _substantive_sentence_from_field(text: str) -> str:
     return ""
 
 
+from .source_citations import article_source_references
+
+
 def _article_sources(article):
-    checked_on = article.last_reality_check
-    if checked_on is None and article.updated_at:
-        checked_on = timezone.localtime(article.updated_at).date()
-    if checked_on is None:
-        checked_on = timezone.localdate()
-    common_sources = [
-        {"name": "AmbitionBox Salary Insights", "url": "https://www.ambitionbox.com/salaries", "checked_on": checked_on},
-        {"name": "Glassdoor India Salaries", "url": "https://www.glassdoor.co.in/Salaries/index.htm", "checked_on": checked_on},
-        {"name": "LinkedIn Jobs (India)", "url": "https://www.linkedin.com/jobs/", "checked_on": checked_on},
-        {"name": "Naukri Jobs (India)", "url": "https://www.naukri.com/", "checked_on": checked_on},
-    ]
-
-    category_name = (article.category.name or "").lower()
-    if "design" in category_name:
-        common_sources.append({"name": "Dribbble Salary Guide", "url": "https://dribbble.com/resources", "checked_on": checked_on})
-    if "data" in category_name or "ai" in category_name:
-        common_sources.append({"name": "Kaggle State of Data/AI", "url": "https://www.kaggle.com/", "checked_on": checked_on})
-    if "product" in category_name:
-        common_sources.append({"name": "Product Management Salary Benchmarks", "url": "https://www.productledalliance.com/", "checked_on": checked_on})
-
-    return common_sources[:6]
+    return article_source_references(article)
 
 
 def _article_update_log(article):
@@ -497,6 +480,7 @@ def article_detail(request, slug):
         'related_articles': related_qs,
         'categories': indexable_categories_queryset(),
         'source_references': source_refs,
+        'update_log': _article_update_log(article),
         'reading_time': _reading_time_minutes(article),
         'key_takeaways': _key_takeaways(article),
         'faqs': _generate_article_faqs(article),
