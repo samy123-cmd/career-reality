@@ -4,6 +4,8 @@
 
 {% block meta_description %}{{ og_description|default:"Live crowdsourced layoff and hiring freeze tracker for Indian IT and tech companies. Check company stability signals and report anonymously." }}{% endblock %}
 
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
+
 {% block content %}
 <script type="application/ld+json">
 {

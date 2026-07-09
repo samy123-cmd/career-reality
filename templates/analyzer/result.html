@@ -3,6 +3,8 @@
 {% block title %}Risk Result: {{ result.label }} - Career Reality{% endblock %}
 {% block meta_description %}Your resignation risk level with context and next steps based on common Indian employment patterns.{% endblock %}
 
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
+
 {% block extra_head %}
 {% if razorpay_key_id %}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

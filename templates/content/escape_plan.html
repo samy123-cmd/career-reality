@@ -10,6 +10,8 @@ to Product companies. Tailored for Support, QA, and Legacy Devs.{% endblock %}
 {% block og_description %}Stuck in TCS/Infosys? Check your 'Career Rot' score and get a step-by-step roadmap to switch
 to Product companies.{% endblock %}
 
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
+
 {% block content %}
 <script type="application/ld+json">
 {
@@ -211,7 +213,7 @@ to Product companies.{% endblock %}
 
     </div>
 
-{% comment %}Escape plan styles live in static/css/style.css under .ep-* classes{% endcomment %}
+{% comment %}Escape plan styles live in static/css/style-tools.css under .ep-* classes{% endcomment %}
 
     <script>
         (function () {

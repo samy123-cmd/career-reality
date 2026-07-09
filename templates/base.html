@@ -8,6 +8,8 @@
     <meta name="description"
         content="{% block meta_description %}Unfiltered insights on Indian tech careers, salary stagnation, and real-world career trade-offs.{% endblock %}">
     {% include "partials/meta.html" %}
+    {% block page_css %}{% endblock %}
+    <script defer src="{% static 'js/theme.js' %}?v=1"></script>
     {% if GA_MEASUREMENT_ID %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_MEASUREMENT_ID }}"></script>
     <script>

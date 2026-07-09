@@ -1,6 +1,18 @@
 {% load static %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+(function () {
+    try {
+        var t = localStorage.getItem('cr-theme');
+        if (t === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('theme-dark');
+            document.documentElement.classList.add('theme-light');
+        }
+    } catch (e) { /* no-op */ }
+})();
+</script>
 <!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
 
 <!-- Google AdSense account verification (script loaded at end of body for performance) -->
@@ -110,6 +122,31 @@
         padding: 0;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
+    }
+
+    [data-theme="light"] {
+        color-scheme: light;
+        --cr-page: #fafafa;
+        --cr-surface: #ffffff;
+        --cr-text: #09090b;
+        --cr-text-secondary: #52525b;
+        --cr-border: rgba(0, 0, 0, 0.08);
+        --c-page: #fafafa;
+        --c-white: #ffffff;
+        --c-black: #09090b;
+        --c-grey-mid: #52525b;
+        --c-grey-light: #71717a;
+        --c-divider: rgba(0, 0, 0, 0.1);
+        --c-bg-footer: #f4f4f5;
+        --c-blue-accent: #0284c7;
+    }
+
+    [data-theme="light"] .site-header {
+        background: rgba(255, 255, 255, 0.92);
+    }
+
+    [data-theme="light"] .mobile-menu-toggle span {
+        background-color: #09090b;
     }
 
     /* Layout Containers */
@@ -279,10 +316,11 @@
     }
 </style>
 
-<!-- Main CSS - Preload to reduce render-blocking time -->
-<link rel="preload" href="{% static 'css/style.css' %}?v=7" as="style">
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=7">
-<link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=1">
+<!-- Main CSS — core bundle + theme layers -->
+<link rel="preload" href="{% static 'css/style-core.css' %}?v=8" as="style">
+<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=8">
+<link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/theme-light.css' %}?v=1">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
