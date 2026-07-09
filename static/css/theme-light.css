@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Career Reality — Light Theme (opt-in via data-theme="light")
+   Loaded after theme-premium-dark.css. Dark remains the default.
+   ========================================================================== */
+
+[data-theme="light"] {
+    color-scheme: light;
+
+    /* Core palette */
+    --cr-page: #fafafa;
+    --cr-surface: #ffffff;
+    --cr-surface-2: #f4f4f5;
+    --cr-surface-3: #e4e4e7;
+    --cr-elevated: #ffffff;
+    --cr-border: rgba(0, 0, 0, 0.08);
+    --cr-border-strong: rgba(0, 0, 0, 0.14);
+    --cr-text: #09090b;
+    --cr-text-secondary: #52525b;
+    --cr-text-muted: #71717a;
+    --cr-accent: #0284c7;
+    --cr-accent-dim: rgba(2, 132, 199, 0.1);
+    --cr-danger: #dc2626;
+    --cr-danger-dim: rgba(220, 38, 38, 0.08);
+    --cr-success: #16a34a;
+    --cr-glow: 0 0 40px rgba(2, 132, 199, 0.06);
+
+    /* Legacy editorial tokens */
+    --c-page: var(--cr-page);
+    --c-white: #ffffff;
+    --c-black: #09090b;
+    --c-grey-dark: #3f3f46;
+    --c-grey-mid: #52525b;
+    --c-grey-light: #71717a;
+    --c-divider: rgba(0, 0, 0, 0.1);
+    --c-bg-footer: #f4f4f5;
+    --c-blue-accent: var(--cr-accent);
+
+    --cr-black: #18181b;
+    --cr-black-light: #27272a;
+    --cr-white: #ffffff;
+    --cr-gray-50: #fafafa;
+    --cr-gray-100: #f4f4f5;
+    --cr-gray-200: #e4e4e7;
+    --cr-gray-300: #d4d4d8;
+    --cr-gray-400: #a1a1aa;
+    --cr-gray-500: #71717a;
+    --cr-gray-600: #52525b;
+    --cr-gray-700: #3f3f46;
+    --cr-gray-800: #27272a;
+    --cr-gray-900: #18181b;
+
+    --cr-success-bg: rgba(22, 163, 74, 0.1);
+    --cr-success-text: #15803d;
+    --cr-warning-bg: rgba(245, 158, 11, 0.1);
+    --cr-warning-text: #b45309;
+    --cr-danger-bg: rgba(239, 68, 68, 0.1);
+    --cr-danger-text: #dc2626;
+    --cr-info-bg: var(--cr-accent-dim);
+    --cr-info-text: var(--cr-accent);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] html {
+    background: var(--cr-page);
+    -webkit-tap-highlight-color: rgba(2, 132, 199, 0.15);
+}
+
+[data-theme="light"] body {
+    background-color: var(--cr-page);
+    color: var(--cr-text-secondary);
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+    color: var(--cr-text);
+}
+
+[data-theme="light"] a {
+    color: var(--cr-text);
+}
+
+[data-theme="light"] a:hover {
+    color: var(--cr-accent);
+}
+
+[data-theme="light"] ::selection {
+    background: rgba(2, 132, 199, 0.25);
+    color: #09090b;
+}
+
+/* Header */
+[data-theme="light"] .site-header {
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid var(--cr-border);
+}
+
+[data-theme="light"] .site-header.scrolled {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .nav-dropdown-content {
+    background: #fff;
+    border: 1px solid var(--cr-border);
+    box-shadow: var(--shadow-lg);
+}
+
+[data-theme="light"] .mobile-nav {
+    background: #fff;
+}
+
+[data-theme="light"] .mobile-menu-overlay {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .mobile-menu-toggle span {
+    background-color: var(--cr-text);
+}
+
+/* Homepage */
+[data-theme="light"] .hp-hero {
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(2, 132, 199, 0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 90% 20%, rgba(220, 38, 38, 0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #fff 0%, #fafafa 100%);
+}
+
+[data-theme="light"] .hp-hero-badge {
+    color: #dc2626;
+    background: var(--cr-danger-dim);
+    border-color: rgba(220, 38, 38, 0.15);
+}
+
+[data-theme="light"] .hp-btn--primary {
+    background: linear-gradient(135deg, #09090b 0%, #27272a 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .hp-btn--primary:hover {
+    background: #18181b;
+}
+
+[data-theme="light"] .hp-index-card,
+[data-theme="light"] .hp-tool-card {
+    background: #fff;
+    border-color: var(--cr-border);
+    box-shadow: var(--shadow-md);
+}
+
+[data-theme="light"] .hp-ticker {
+    background: #fff;
+}
+
+[data-theme="light"] .hp-newsletter {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Cards & surfaces */
+[data-theme="light"] .chart-container,
+[data-theme="light"] .sal-summary-box,
+[data-theme="light"] .az-calc-card,
+[data-theme="light"] .art-callout,
+[data-theme="light"] .art-callout--muted,
+[data-theme="light"] .art-toc,
+[data-theme="light"] .comp-card,
+[data-theme="light"] .search-result-card {
+    background-color: #fff !important;
+    border-color: var(--cr-border) !important;
+}
+
+[data-theme="light"] .data-table th,
+[data-theme="light"] .salary-table th {
+    background: var(--cr-surface-2) !important;
+}
+
+[data-theme="light"] .dock-container {
+    background: #fff;
+    border-color: var(--cr-border);
+}
+
+[data-theme="light"] .cr-toast {
+    background: #fff;
+    border-color: var(--cr-border);
+    color: var(--cr-text);
+}
+
+[data-theme="light"] .btn-primary {
+    background: linear-gradient(135deg, #09090b, #27272a);
+    color: #fff;
+}

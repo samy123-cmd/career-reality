@@ -5,6 +5,8 @@
 
 {% block meta_description %}{{ og_description|default:"Salary truths and career reality checks for Indian tech professionals. Free CTC calculator, layoff radar, resignation risk tool, and honest analysis." }}{% endblock %}
 
+{% block page_css %}{% include "partials/css_home.html" %}{% endblock %}
+
 {% block extra_head %}
 <!-- No image preloads needed (CSS only) -->
 <script type="application/ld+json">

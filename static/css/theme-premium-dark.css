@@ -1,6 +1,6 @@
 /* ==========================================================================
    Career Reality — Premium Dark Theme (default)
-   Loaded after style.css. Maps legacy --c-* tokens to a cohesive dark UI.
+   Loaded after style-core.css. Maps legacy --c-* tokens to a cohesive dark UI.
    ========================================================================== */
 
 :root {
@@ -512,27 +512,7 @@ select:focus {
     }
 }
 
-/* ── AI Pulse pages ── */
-.ai-page {
-    background: var(--cr-page);
-    color: var(--cr-text-secondary);
-}
-
-.ai-page .ai-hero,
-.ai-page .ai-card,
-.ai-page .ai-panel,
-.ai-page .ai-feed-item {
-    background: var(--cr-surface-2) !important;
-    border-color: var(--cr-border) !important;
-    color: inherit;
-}
-
-.ai-page h1,
-.ai-page h2,
-.ai-page h3,
-.ai-page .ai-title {
-    color: var(--cr-text);
-}
+/* AI Pulse theming lives in ai_pulse.css (theme-aware variables) */
 
 /* Reduced transparency — solid surfaces */
 @media (prefers-reduced-transparency: reduce) {
