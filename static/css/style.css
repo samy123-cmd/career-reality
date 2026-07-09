@@ -4,14 +4,15 @@
 */
 
 :root {
-    /* Color System */
-    --c-white: #ffffff;
-    --c-black: #000000;
-    --c-grey-dark: #222222;
-    --c-grey-mid: #555555;
-    --c-grey-light: #666666;
-    --c-divider: #e6e6e6;
-    --c-bg-footer: #f9f9f9;
+    /* Color System — remapped by theme-premium-dark.css; defaults for SSR */
+    --c-page: #06060b;
+    --c-white: #0e0e16;
+    --c-black: #f4f4f5;
+    --c-grey-dark: #d4d4d8;
+    --c-grey-mid: #a1a1aa;
+    --c-grey-light: #71717a;
+    --c-divider: rgba(255, 255, 255, 0.08);
+    --c-bg-footer: #0e0e16;
 
     /* WIDTH SYSTEM (THE CORE FIX) */
     --w-wide: 1100px;
@@ -35,7 +36,7 @@
 }
 
 body {
-    background-color: var(--c-white);
+    background-color: var(--c-page, #06060b);
     color: var(--c-grey-mid);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 17px;
@@ -137,17 +138,18 @@ a:hover {
 .site-header {
     padding: 0;
     margin-bottom: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: sticky;
     top: 0;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(6, 6, 11, 0.82);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
     z-index: 900;
     transition: box-shadow 0.3s ease;
 }
 .site-header.scrolled {
-    box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
 }
 
 .nav-flex {
@@ -1212,26 +1214,7 @@ footer {
         gap: 24px;
     }
 
-    /* Mobile Header & Nav Fixes */
-    .nav-flex {
-        flex-direction: column;
-        align-items: center;
-        gap: 16px;
-    }
-
-    .site-nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-    }
-
-    nav a {
-        margin: 0 10px 10px 10px;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-
+    /* Legacy mobile nav rules removed — premium mobile nav handles 768px */
     /* Responsive Tables: Scroller Utility */
     .table-scroll {
         overflow-x: auto;
@@ -1946,7 +1929,10 @@ blockquote.pullquote {
 
 /* ——— Hero ——— */
 .hp-hero {
-    background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 90% 20%, rgba(239, 68, 68, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #0e0e16 0%, #06060b 100%);
     padding: 80px 0 60px;
     overflow: hidden;
 }

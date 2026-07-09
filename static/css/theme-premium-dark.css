@@ -1,0 +1,543 @@
+/* ==========================================================================
+   Career Reality — Premium Dark Theme (default)
+   Loaded after style.css. Maps legacy --c-* tokens to a cohesive dark UI.
+   ========================================================================== */
+
+:root {
+    color-scheme: dark;
+
+    /* Core palette */
+    --cr-page: #06060b;
+    --cr-surface: #0e0e16;
+    --cr-surface-2: #14141f;
+    --cr-surface-3: #1c1c28;
+    --cr-elevated: #22222f;
+    --cr-border: rgba(255, 255, 255, 0.08);
+    --cr-border-strong: rgba(255, 255, 255, 0.14);
+    --cr-text: #f4f4f5;
+    --cr-text-secondary: #a1a1aa;
+    --cr-text-muted: #71717a;
+    --cr-accent: #38bdf8;
+    --cr-accent-dim: rgba(56, 189, 248, 0.12);
+    --cr-danger: #f87171;
+    --cr-danger-dim: rgba(248, 113, 113, 0.12);
+    --cr-success: #4ade80;
+    --cr-glow: 0 0 40px rgba(56, 189, 248, 0.08);
+
+    /* Legacy editorial tokens (remapped) */
+    --c-page: var(--cr-page);
+    --c-white: var(--cr-surface);
+    --c-black: var(--cr-text);
+    --c-grey-dark: #d4d4d8;
+    --c-grey-mid: var(--cr-text-secondary);
+    --c-grey-light: var(--cr-text-muted);
+    --c-divider: var(--cr-border);
+    --c-bg-footer: var(--cr-surface);
+    --c-blue-accent: var(--cr-accent);
+
+    /* Design-system semantic remap */
+    --cr-black: var(--cr-surface-2);
+    --cr-black-light: var(--cr-surface-3);
+    --cr-white: var(--cr-text);
+    --cr-gray-50: var(--cr-surface);
+    --cr-gray-100: var(--cr-surface-2);
+    --cr-gray-200: var(--cr-surface-3);
+    --cr-gray-300: #3f3f46;
+    --cr-gray-400: #52525b;
+    --cr-gray-500: var(--cr-text-muted);
+    --cr-gray-600: var(--cr-text-secondary);
+    --cr-gray-700: #d4d4d8;
+    --cr-gray-800: var(--cr-text);
+    --cr-gray-900: var(--cr-text);
+
+    --cr-success-bg: rgba(34, 197, 94, 0.12);
+    --cr-success-text: #86efac;
+    --cr-warning-bg: rgba(245, 158, 11, 0.12);
+    --cr-warning-text: #fcd34d;
+    --cr-danger-bg: rgba(239, 68, 68, 0.12);
+    --cr-danger-text: #fca5a5;
+    --cr-info-bg: var(--cr-accent-dim);
+    --cr-info-text: var(--cr-accent);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.55);
+}
+
+/* ── Base ── */
+html {
+    background: var(--cr-page);
+    -webkit-tap-highlight-color: rgba(56, 189, 248, 0.2);
+}
+
+body {
+    background-color: var(--cr-page);
+    color: var(--cr-text-secondary);
+}
+
+h1, h2, h3, h4 {
+    color: var(--cr-text);
+}
+
+a {
+    color: var(--cr-text);
+    text-decoration-color: var(--cr-border-strong);
+}
+
+a:hover {
+    color: var(--cr-accent);
+    opacity: 1;
+}
+
+::selection {
+    background: rgba(56, 189, 248, 0.35);
+    color: #fff;
+}
+
+/* ── Header (glass dark) ── */
+.site-header {
+    background: rgba(6, 6, 11, 0.82);
+    border-bottom: 1px solid var(--cr-border);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+
+.site-header.scrolled {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+    border-bottom-color: var(--cr-border-strong);
+}
+
+.brand-wordmark,
+.brand-accent,
+.nav-link,
+.nav-dropdown-trigger {
+    color: var(--cr-text);
+}
+
+.nav-link:hover,
+.nav-dropdown-trigger:hover {
+    color: var(--cr-accent);
+}
+
+.nav-dropdown-content {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+    box-shadow: var(--shadow-lg);
+}
+
+.nav-search-input,
+.mobile-search-input {
+    background: var(--cr-surface-3);
+    border-color: var(--cr-border);
+    color: var(--cr-text);
+}
+
+.nav-search-input::placeholder,
+.mobile-search-input::placeholder {
+    color: var(--cr-text-muted);
+}
+
+.mobile-nav {
+    background: var(--cr-surface);
+    border-left: 1px solid var(--cr-border);
+}
+
+.mobile-menu-overlay {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.mobile-nav-link {
+    color: var(--cr-text-secondary);
+    border-bottom-color: var(--cr-border);
+}
+
+.mobile-nav-link:hover {
+    color: var(--cr-accent);
+    background: var(--cr-accent-dim);
+}
+
+/* ── Footer ── */
+.site-footer {
+    background: var(--cr-surface);
+    border-top: 1px solid var(--cr-border);
+}
+
+.newsletter-input {
+    background: var(--cr-surface-3);
+    border-color: var(--cr-border);
+    color: var(--cr-text);
+}
+
+.newsletter-btn {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: #06060b;
+}
+
+.footer-nav a {
+    color: var(--cr-text-secondary);
+}
+
+/* ── Homepage hero ── */
+.hp-hero {
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 90% 20%, rgba(239, 68, 68, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, var(--cr-surface) 0%, var(--cr-page) 100%);
+}
+
+.hp-hero-badge {
+    color: #fca5a5;
+    background: var(--cr-danger-dim);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+.hp-hero-title {
+    color: var(--cr-text);
+}
+
+.hp-hero-sub {
+    color: var(--cr-text-secondary);
+}
+
+.hp-hero-stat-num {
+    color: var(--cr-text);
+}
+
+.hp-hero-stat-label {
+    color: var(--cr-text-muted);
+}
+
+.hp-btn--primary {
+    background: linear-gradient(135deg, #f4f4f5 0%, #e4e4e7 100%);
+    color: #09090b;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.hp-btn--primary:hover {
+    background: #fff;
+    box-shadow: 0 6px 28px rgba(56, 189, 248, 0.2);
+}
+
+.hp-btn--ghost {
+    background: transparent;
+    color: var(--cr-text);
+    border-color: var(--cr-border-strong);
+}
+
+.hp-btn--ghost:hover {
+    border-color: var(--cr-accent);
+    background: var(--cr-accent-dim);
+}
+
+.hp-index-card {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+    box-shadow: var(--shadow-lg), var(--cr-glow);
+}
+
+.hp-tool-card,
+.hp-trust,
+.hp-section {
+    color: inherit;
+}
+
+.hp-tool-card {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+}
+
+.hp-tool-card:hover {
+    border-color: var(--cr-border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.hp-ticker {
+    background: var(--cr-surface);
+    border-top: 1px solid var(--cr-border);
+    border-bottom: 1px solid var(--cr-border);
+}
+
+.hp-newsletter {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    border: 1px solid var(--cr-border);
+}
+
+.hp-trust-item {
+    color: var(--cr-text-secondary);
+}
+
+/* ── Cards, articles, tables ── */
+.chart-container,
+.sal-summary-box,
+.az-calc-card,
+.az-calc-noscript,
+.editorial-table,
+.data-table th,
+.data-table tr:nth-child(even),
+.data-table tr:hover,
+.article-body section,
+.art-callout,
+.art-callout--muted,
+.art-toc,
+.art-faq-item,
+.art-related-card,
+.comp-card,
+.comp-hero,
+.review-card,
+.salary-table th,
+.salary-table tr:hover,
+.cp-layoff-wrap,
+.cp-breadcrumb,
+.review-form,
+.search-result-card,
+.topic-cluster-card {
+    background-color: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: inherit;
+}
+
+.data-table th,
+.salary-table th {
+    background: var(--cr-surface-3) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+.data-table td,
+.salary-table td {
+    color: var(--cr-text-secondary);
+    border-color: var(--cr-border) !important;
+}
+
+.art-callout-title,
+.art-verdict-label {
+    color: var(--cr-text);
+}
+
+.art-market-update {
+    background: var(--cr-accent-dim);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+
+/* ── Forms & inputs ── */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="password"],
+textarea,
+select,
+.az-calc-input,
+.newsletter-input,
+.form-input {
+    background: var(--cr-surface-3);
+    border: 1px solid var(--cr-border);
+    color: var(--cr-text);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--cr-text-muted);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--cr-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--cr-accent-dim);
+}
+
+/* ── Calculator & tools ── */
+.az-calc-hero,
+.az-calc-title,
+.sal-page-h1 {
+    color: var(--cr-text);
+}
+
+.az-calc-subtitle,
+.sal-page-intro {
+    color: var(--cr-text-secondary);
+}
+
+.az-calc-row--subtotal {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+}
+
+/* ── Utility dock ── */
+.dock-container {
+    background: var(--cr-surface-2);
+    border-color: var(--cr-border);
+    box-shadow: var(--shadow-lg);
+}
+
+.dock-item {
+    color: var(--cr-text-muted);
+}
+
+.dock-item:hover {
+    color: var(--cr-accent);
+    background: var(--cr-accent-dim);
+}
+
+/* ── Badges & toasts ── */
+.badge-neutral,
+.badge-info,
+.badge-success,
+.badge-warning,
+.badge-danger {
+    border: 1px solid var(--cr-border);
+}
+
+.cr-toast {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+    color: var(--cr-text);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ── Search ── */
+.search-suggestion-item {
+    background: var(--cr-surface-2);
+    color: var(--cr-text);
+    border-bottom: 1px solid var(--cr-border);
+}
+
+.search-suggestion-item:hover {
+    background: var(--cr-surface-3);
+}
+
+#search-suggestions {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ── Buttons (design system) ── */
+.btn-primary {
+    background: linear-gradient(135deg, #f4f4f5, #d4d4d8);
+    color: #09090b;
+}
+
+.btn-secondary {
+    background: var(--cr-surface-3);
+    color: var(--cr-text);
+    border-color: var(--cr-border);
+}
+
+.btn-secondary:hover {
+    background: var(--cr-elevated);
+    border-color: var(--cr-border-strong);
+}
+
+/* ── Performance: below-fold sections ── */
+.hp-section,
+.hp-trust,
+.site-footer,
+.art-related-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
+}
+
+/* ── Mobile premium polish ── */
+@media (max-width: 768px) {
+    .site-header {
+        /* Solid header on mobile — cheaper GPU, no blur jank */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: var(--cr-surface);
+    }
+
+    main {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .utility-dock .dock-container {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+        border-radius: 16px 16px 0 0;
+        border-bottom: none;
+    }
+
+    .utility-dock {
+        left: 0;
+        right: 0;
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+    }
+
+    h1 {
+        font-size: clamp(28px, 8vw, 36px);
+    }
+
+    .hp-hero-title {
+        font-size: clamp(32px, 9vw, 40px);
+    }
+
+    .hp-hero-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hp-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="search"],
+    .az-calc-input,
+    .newsletter-input {
+        font-size: 16px; /* prevent iOS zoom */
+    }
+
+    .container-wide,
+    .container-medium,
+    .container-reading {
+        padding-left: max(16px, env(safe-area-inset-left, 16px));
+        padding-right: max(16px, env(safe-area-inset-right, 16px));
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ── AI Pulse pages ── */
+.ai-page {
+    background: var(--cr-page);
+    color: var(--cr-text-secondary);
+}
+
+.ai-page .ai-hero,
+.ai-page .ai-card,
+.ai-page .ai-panel,
+.ai-page .ai-feed-item {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: inherit;
+}
+
+.ai-page h1,
+.ai-page h2,
+.ai-page h3,
+.ai-page .ai-title {
+    color: var(--cr-text);
+}
+
+/* Reduced transparency — solid surfaces */
+@media (prefers-reduced-transparency: reduce) {
+    .site-header {
+        backdrop-filter: none;
+        background: var(--cr-surface);
+    }
+}
