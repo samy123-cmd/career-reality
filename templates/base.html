@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load static i18n %}
 {% get_current_language as CURRENT_LANG %}
-<html lang="{% if CURRENT_LANG == 'hi' %}hi-IN{% else %}en-IN{% endif %}">
+<html lang="{% if CURRENT_LANG == 'hi' %}hi-IN{% else %}en-IN{% endif %}" class="theme-dark" data-theme="dark">
 
 <head>
     <title>{% block title %}Career Reality India - Salary Truths and Career Reality Checks{% endblock %}</title>
@@ -23,7 +23,7 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <link rel="manifest" href="{% static 'manifest.json' %}">
-    <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'css/design-system.css' %}?v=2">
     {% block extra_head %}{% endblock %}
 </head>
 
