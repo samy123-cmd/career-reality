@@ -101,7 +101,7 @@
         <!-- Razorpay not configured — teaser -->
         <div class="paywall-lock">
             <p class="az-privacy-text">
-                7-day exit checklist — ₹99. Coming soon.
+                Personalized 7-day exit checklist — included with <a href="{% url 'payments:pricing' %}">Career Reality Pro</a>.
             </p>
             <a href="{% url 'payments:pricing' %}" class="upgrade-btn">See All Plans →</a>
         </div>
@@ -120,7 +120,7 @@
             <p class="az-result-newsletter-headline">Your risk is {{ result.label }}. Stay informed.</p>
             <p class="az-result-newsletter-sub">
                 Get weekly layoff signals, company stability scores, and salary data for your sector.
-                <strong>12,000+</strong> Indian tech professionals read this every Monday.
+                {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong>{% else %}Thousands of{% endif %} Indian tech professionals read this every Monday.
             </p>
             {% elif result.level == "medium" %}
             <p class="az-result-newsletter-headline">Situations like yours can shift quickly.</p>
@@ -132,7 +132,7 @@
             <p class="az-result-newsletter-headline">Low risk now doesn't mean low risk forever.</p>
             <p class="az-result-newsletter-sub">
                 Stay ahead with weekly salary benchmarks, layoff signals, and career reality checks.
-                <strong>12,000+</strong> Indian tech professionals get it every Monday.
+                {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong>{% else %}Thousands of{% endif %} Indian tech professionals get it every Monday.
             </p>
             {% endif %}
             <form class="az-result-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">

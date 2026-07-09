@@ -396,7 +396,7 @@ class ArticleBoilerplateRemovalTests(TestCase):
         self.assertNotIn("Real Scenario Snapshot", content)
         self.assertNotIn("Originality Lens", content)
         self.assertNotIn("Evidence By Section", content)
-        self.assertNotIn("What Changed", content)
+        self.assertIn("What Changed", content)
 
     def test_core_editorial_sections_remain(self):
         response = self.client.get(

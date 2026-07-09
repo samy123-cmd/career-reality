@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ og_title|default:"CTC to In-Hand Salary Calculator India (2026) — Free | Career Reality" }}{% endblock %}
+{% block title %}{{ og_title|default:"CTC Calculator India 2026 — CTC to In-Hand Salary (Free)" }}{% endblock %}
 
-{% block meta_description %}{{ og_description|default:"Free CTC to in-hand salary calculator for India. Decode your offer letter with PF, gratuity, variable pay, and new vs old tax regime deductions." }}{% endblock %}
+{% block meta_description %}{{ og_description|default:"Free CTC calculator and CTC salary calculator for India. Calculate CTC to in-hand salary instantly with PF, gratuity, variable pay, and tax regime deductions." }}{% endblock %}
 
 {% block content %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "CTC Decoder (India)",
+  "name": "CTC Calculator India",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Web",
   "url": "{{ canonical_url|default:request.build_absolute_uri }}",
-  "keywords": "ctc to in hand salary calculator india, in hand salary calculator, ctc decoder, salary calculator india 2026",
+  "keywords": "ctc calculator, ctc salary calculator, ctc to in hand salary calculator india, in hand salary calculator, ctc decoder, salary calculator india 2026",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -244,7 +244,7 @@
         <div class="az-calc-newsletter-inner">
             <p class="az-calc-newsletter-headline">Is your in-hand above or below market?</p>
             <p class="az-calc-newsletter-sub">
-                Join <strong>12,000+</strong> Indian tech professionals getting weekly salary data,
+                Join {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong>{% else %}our{% endif %} Indian tech professionals getting weekly salary data,
                 layoff signals, and career reality checks. Free. No spam.
             </p>
             <form class="az-calc-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">

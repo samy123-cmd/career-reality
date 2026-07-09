@@ -128,29 +128,28 @@ class CoreViewsTests(TestCase):
         self.assertContains(response, 'type="email"')
 
     def test_hero_social_proof_assessment_count_present(self):
-        """Homepage hero must show the 12K+ risk-assessment social proof number."""
+        """Homepage hero must show dynamic risk-assessment social proof number."""
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "12K+")
         self.assertContains(response, "risk assessments run")
+        self.assertIn("assessment_count", response.context)
 
     def test_hero_social_proof_salary_data_points_present(self):
         """Homepage hero must show dynamic salary data-points social proof number."""
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        # _fmt_count(847) → "840+"  (floor rounds 847 to nearest 10)
-        self.assertContains(response, "840+")
         self.assertContains(response, "salary data points")
+        self.assertIn("salary_count", response.context)
 
     def test_hero_social_proof_layoff_reports_present(self):
-        """Homepage hero must show the 120+ layoff-reports social proof number."""
+        """Homepage hero must show dynamic layoff-reports social proof number."""
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "120+")
         self.assertContains(response, "layoff reports tracked")
+        self.assertIn("layoff_count", response.context)
 
     def test_homepage_newsletter_section_present(self):
         """Homepage must contain the inline newsletter capture section."""
@@ -169,12 +168,12 @@ class CoreViewsTests(TestCase):
         self.assertContains(response, 'type="email"')
 
     def test_homepage_newsletter_copy_present(self):
-        """Homepage newsletter section must include the headline and key trust lines."""
+        """Homepage newsletter section must include the headline and trust lines."""
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Monday Reality Check")
-        self.assertContains(response, "12,000+")
+        self.assertIn("newsletter_count", response.context)
 
 
 class CareerRealityIndexTests(TestCase):

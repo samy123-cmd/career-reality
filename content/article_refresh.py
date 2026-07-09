@@ -14,18 +14,16 @@ from datetime import date, timedelta
 from django.utils import timezone
 
 from content.article_market_data import (
-    EXTERNAL_SOURCES_HTML,
     MARKET_LABEL,
     MARKET_PERIOD,
     market_update_html,
     role_cluster_for_article,
     salary_table_html,
 )
+from content.boilerplate import strip_safety_pad
 
 MARKET_MARKER = "<!-- cr-market-update:"
 SALARY_MARKER = "<!-- cr-salary-refresh:"
-SOURCES_MARKER = "<!-- cr-source-refs -->"
-SOURCES_END = "<!-- /cr-source-refs -->"
 
 YEAR_RE = re.compile(r"\b(20\d{2})\b")
 
@@ -47,19 +45,6 @@ def _replace_marked_block(content: str, marker_prefix: str, end_marker: str, new
     wrapped = f"{marker_prefix}{MARKET_PERIOD} -->\n{new_block}\n{end_marker}"
     if pattern.search(content or ""):
         return pattern.sub(wrapped, content)
-    return (content or "").rstrip() + "\n\n" + wrapped
-
-
-def _replace_sources_block(content: str) -> str:
-    pattern = re.compile(
-        rf"{re.escape(SOURCES_MARKER)}.*?{re.escape(SOURCES_END)}",
-        re.DOTALL | re.IGNORECASE,
-    )
-    wrapped = f"{SOURCES_MARKER}\n{EXTERNAL_SOURCES_HTML}\n{SOURCES_END}"
-    if pattern.search(content or ""):
-        return pattern.sub(wrapped, content)
-    if "ambitionbox.com" in (content or "").lower():
-        return content
     return (content or "").rstrip() + "\n\n" + wrapped
 
 
@@ -204,7 +189,7 @@ def apply_article_refresh(article, *, today: date | None = None) -> list[str]:
         article.actual_reality,
         MARKET_MARKER,
         "<!-- /cr-market-update -->",
-        market_update_html(cluster),
+        market_update_html(cluster, article_slug=article.slug),
     )
     if new_reality != (article.actual_reality or ""):
         article.actual_reality = new_reality
@@ -224,12 +209,6 @@ def apply_article_refresh(article, *, today: date | None = None) -> list[str]:
             article.salary_reality = new_salary
             changes.append("salary_bands")
 
-    if not _has_external_links(article.actual_reality):
-        new_reality = _replace_sources_block(article.actual_reality)
-        if new_reality != article.actual_reality:
-            article.actual_reality = new_reality
-            changes.append("external_sources")
-
     new_meta = refresh_meta_years(article.meta_description, current_year)
     if new_meta != article.meta_description:
         article.meta_description = new_meta[:160]
@@ -239,6 +218,20 @@ def apply_article_refresh(article, *, today: date | None = None) -> list[str]:
     if new_title != article.meta_title:
         article.meta_title = new_title[:60]
         changes.append("title_year")
+
+    for field in (
+        "common_expectation",
+        "actual_reality",
+        "salary_reality",
+        "stuck_point",
+        "who_should_avoid",
+        "verdict",
+    ):
+        original = getattr(article, field) or ""
+        cleaned = strip_safety_pad(original)
+        if cleaned != original:
+            setattr(article, field, cleaned)
+            changes.append("strip_boilerplate")
 
     article.last_reality_check = today
     changes.append("last_reality_check")

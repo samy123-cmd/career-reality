@@ -22,15 +22,6 @@
     }
 }
 </script>
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Career Reality (India)",
-    "url": "{{ site_base_url }}",
-    "inLanguage": "en-IN"
-}
-</script>
 {% if articles %}
 <script type="application/ld+json">
 {
@@ -103,7 +94,7 @@
             </p>
             <div class="hp-hero-actions">
                 <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">
-                    <span>🧮</span> Decode Your CTC
+                    <span>🧮</span> CTC Calculator
                 </a>
                 <a href="{% url 'analyzer_home' %}" class="hp-btn hp-btn--ghost">
                     <span>🎯</span> Analyze Risk
@@ -161,7 +152,22 @@
 <div class="hp-ticker" id="salary-ticker-container">
     <div class="hp-ticker-label">Live Salaries</div>
     <div class="hp-ticker-track" id="salary-ticker-content">
-        <span class="hp-ticker-placeholder">Loading anonymous salary submissions…</span>
+        {% if salary_ticker_items %}
+            {% for item in salary_ticker_items %}
+            <span class="hp-ticker-item">
+                <span class="hp-ticker-role">{{ item.role }}</span>
+                <span class="hp-ticker-exp">{{ item.exp }}</span>
+                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
+                <span class="hp-ticker-city">{{ item.city }}</span>
+            </span>
+            {% endfor %}
+        {% else %}
+            <span class="hp-ticker-placeholder">
+                No submissions yet —
+                <a href="{% url 'submit_salary' %}" style="color:#fff;text-decoration:underline;">drop your salary</a>
+                to help the community.
+            </span>
+        {% endif %}
     </div>
 </div>
 
@@ -382,7 +388,7 @@
             <h2 class="hp-newsletter-title">The Monday Reality Check</h2>
             <p class="hp-newsletter-sub">One email a week. Salary data, layoff signals, and career moves that actually make sense for Indian tech. No recruiter spam. Ever.</p>
             <ul class="hp-newsletter-proof">
-                <li>✓ 12,000+ subscribers</li>
+                <li>✓ {% if newsletter_count != "0" %}{{ newsletter_count }} subscribers{% else %}Free weekly digest{% endif %}</li>
                 <li>✓ Unsubscribe in one click</li>
                 <li>✓ No paid influence on editorial conclusions</li>
             </ul>
@@ -427,12 +433,15 @@
 </section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const el = document.getElementById('salary-ticker-content');
+        if (!el || el.querySelector('.hp-ticker-item')) {
+            return;
+        }
         const loadFeed = () => fetch('/api/salary-feed/')
             .then(r => r.json())
             .then(data => {
-                const subs = data.submissions;
+                const subs = data.submissions || [];
                 if (!subs.length) return;
-                const el = document.getElementById('salary-ticker-content');
                 const fragment = document.createDocumentFragment();
                 subs.forEach(function(s) {
                     const item = document.createElement('span');
