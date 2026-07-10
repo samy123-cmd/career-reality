@@ -124,7 +124,8 @@ a {
 }
 
 a:hover {
-    opacity: 0.7;
+    opacity: 1;
+    color: var(--c-blue-accent, var(--cr-accent));
 }
 
 /* Animation Utility */
@@ -151,7 +152,6 @@ a:hover {
 .site-header.scrolled {
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
 }
-}
 
 .nav-flex {
     display: flex;
@@ -175,12 +175,14 @@ a:hover {
     justify-content: center;
     width: 32px;
     height: 32px;
-    background: var(--c-black);
-    color: #fff;
+    background: linear-gradient(145deg, #38bdf8 0%, #0ea5e9 100%);
+    color: #06060b;
     font-size: 12px;
     font-weight: 800;
     letter-spacing: -0.02em;
     border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+    flex-shrink: 0;
 }
 .brand-wordmark {
     font-size: 15px;
@@ -190,7 +192,7 @@ a:hover {
 }
 .brand-accent {
     font-weight: 400;
-    color: #888;
+    color: var(--c-grey-mid);
 }
 
 /* ── Nav core ── */
@@ -208,12 +210,12 @@ a:hover {
     height: 100%;
     font-size: 13px;
     font-weight: 500;
-    color: #555;
+    color: var(--c-grey-mid);
     text-decoration: none;
     padding: 0 14px;
     transition: color 0.15s ease;
 }
-.nav-link:hover { color: var(--c-black); }
+.nav-link:hover { color: var(--c-black); opacity: 1; }
 .nav-link::after {
     content: '';
     position: absolute;
@@ -237,14 +239,14 @@ a:hover {
     height: 100%;
     font-size: 13px;
     font-weight: 500;
-    color: #555;
+    color: var(--c-grey-mid);
     background: none;
     border: none;
     cursor: pointer;
     padding: 0 14px;
     transition: color 0.15s ease;
 }
-.nav-dropdown-trigger:hover { color: var(--c-black); }
+.nav-dropdown-trigger:hover { color: var(--c-black); opacity: 1; }
 .dropdown-arrow { transition: transform 0.2s ease; }
 
 /* ── Standard dropdown ── */
@@ -272,7 +274,7 @@ a:hover {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #999;
+    color: var(--c-grey-light);
     padding: 10px 12px 6px;
 }
 .nav-dropdown-content a {
@@ -282,14 +284,15 @@ a:hover {
     padding: 10px 12px;
     font-size: 13px;
     font-weight: 500;
-    color: #333;
+    color: var(--c-grey-dark);
     text-decoration: none;
     border-radius: 8px;
-    transition: background 0.12s ease;
+    transition: background 0.12s ease, color 0.12s ease;
 }
 .nav-dropdown-content a:hover {
-    background: #f5f5f5;
-    color: #000;
+    background: var(--cr-surface-3, #f5f5f5);
+    color: var(--c-black);
+    opacity: 1;
 }
 .dropdown-icon {
     font-size: 12px;
@@ -320,7 +323,7 @@ a:hover {
     padding: 8px;
 }
 .mega-col + .mega-col {
-    border-left: 1px solid rgba(0,0,0,0.06);
+    border-left: 1px solid var(--c-divider);
 }
 .nav-mega a {
     display: flex;
@@ -329,11 +332,12 @@ a:hover {
     padding: 10px;
     border-radius: 10px;
     text-decoration: none;
-    color: #333;
-    transition: background 0.12s ease;
+    color: var(--c-grey-dark);
+    transition: background 0.12s ease, color 0.12s ease;
 }
 .nav-mega a:hover {
-    background: #f7f7f7;
+    background: var(--cr-surface-3, #f7f7f7);
+    opacity: 1;
 }
 .mega-icon {
     font-size: 18px;
@@ -349,19 +353,19 @@ a:hover {
 .mega-label strong {
     font-size: 13px;
     font-weight: 600;
-    color: #111;
+    color: var(--c-black);
 }
 .mega-label small {
     font-size: 11.5px;
-    color: #888;
+    color: var(--c-grey-mid);
     line-height: 1.4;
 }
 .mega-highlight {
-    background: #fff8f8;
-    border: 1px dashed rgba(217,48,37,0.2);
+    background: var(--cr-danger-dim, #fff8f8);
+    border: 1px dashed rgba(217, 48, 37, 0.25);
 }
 .mega-highlight:hover {
-    background: #fff0f0 !important;
+    background: var(--cr-danger-dim, #fff0f0) !important;
 }
 
 /* ── Search ── */
@@ -378,16 +382,17 @@ a:hover {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    border: 1px solid rgba(0,0,0,0.08);
-    background: #fafafa;
-    color: #666;
+    border: 1px solid var(--c-divider);
+    background: var(--cr-surface-3, #fafafa);
+    color: var(--c-grey-mid);
     cursor: pointer;
     transition: all 0.15s ease;
 }
 .nav-search-toggle:hover {
-    background: #f0f0f0;
-    color: #222;
-    border-color: rgba(0,0,0,0.12);
+    background: var(--cr-elevated, #f0f0f0);
+    color: var(--c-black);
+    border-color: var(--cr-border-strong, rgba(0,0,0,0.12));
+    opacity: 1;
 }
 .nav-search-form {
     display: none;
@@ -395,10 +400,10 @@ a:hover {
     top: calc(100% + 8px);
     right: 0;
     width: 360px;
-    background: #fff;
+    background: var(--cr-surface-2, #fff);
     border-radius: 14px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
-    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.14));
+    border: 1px solid var(--c-divider);
     padding: 6px;
     z-index: 1001;
     animation: navDropIn 0.15s ease forwards;
@@ -413,11 +418,11 @@ a:hover {
     border-radius: 10px;
     font-size: 14px;
     outline: none;
-    background: #f8f8f8;
-    color: #111;
+    background: var(--cr-surface-3, #f8f8f8);
+    color: var(--c-black);
 }
-.nav-search-form input::placeholder { color: #aaa; }
-.nav-search-form input:focus { background: #f3f3f3; }
+.nav-search-form input::placeholder { color: var(--c-grey-light); }
+.nav-search-form input:focus { background: var(--cr-elevated, #f3f3f3); }
 .nav-search-form > button {
     position: absolute;
     top: 50%;
@@ -426,7 +431,7 @@ a:hover {
     background: none;
     border: none;
     cursor: pointer;
-    color: #999;
+    color: var(--c-grey-light);
     padding: 4px;
 }
 .nav-search-form .search-suggestions {
@@ -437,7 +442,7 @@ a:hover {
     border: none;
     border-radius: 0 0 10px 10px;
     box-shadow: none;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--c-divider);
     margin-top: 4px;
 }
 
@@ -1165,7 +1170,7 @@ footer {
 details.collapsible {
     border: 1px solid var(--c-divider);
     margin-bottom: 1rem;
-    background: #fafafa;
+    background: var(--cr-surface-2, #fafafa);
 }
 
 details.collapsible summary {
@@ -1202,7 +1207,7 @@ details.collapsible[open] summary::after {
 }
 
 details.collapsible summary:hover {
-    background: #f0f0f0;
+    background: var(--cr-surface-3, #f0f0f0);
 }
 
 details.collapsible .content {
@@ -1214,7 +1219,7 @@ details.collapsible .content {
 
 /* Enhanced Contact Page */
 .contact-card {
-    background: #fafafa;
+    background: var(--cr-surface-2, #fafafa);
     border: 1px solid var(--c-divider);
     padding: 2rem;
     margin-bottom: 1.5rem;
