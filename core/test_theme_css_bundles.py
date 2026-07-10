@@ -43,6 +43,23 @@ class ThemeCssBundleTests(TestCase):
         self.assertNotIn("style-home.css", content)
         self.assertNotIn("style-tools.css", content)
 
+    def test_dark_contrast_layer_loaded_after_themes(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        contrast_pos = content.find("theme-dark-contrast.css")
+        premium_pos = content.find("theme-premium-dark.css")
+        self.assertGreater(contrast_pos, 0)
+        self.assertGreater(premium_pos, 0)
+        self.assertGreater(contrast_pos, premium_pos)
+
+    def test_homepage_includes_ink_inverse_tokens_in_critical_css(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("--c-ink-inverse", content)
+        self.assertIn("brand-mark", content)
+
     def test_ai_pulse_hub_loads_ai_pulse_css(self):
         response = self.client.get(reverse("ai_news_hub"))
         self.assertEqual(response.status_code, 200)

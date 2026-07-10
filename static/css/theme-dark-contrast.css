@@ -524,3 +524,249 @@ html:not([data-theme="light"]) [style*="background: var(--c-surface-alt"] {
 html:not([data-theme="light"]) [style*="color: var(--c-grey)"] {
     color: var(--cr-text-muted) !important;
 }
+
+/* ==========================================================================
+   v2 — Token fix fallout + hardcoded light-color sweep
+   ========================================================================== */
+
+/* Logo — always visible on dark header */
+html:not([data-theme="light"]) .brand-mark {
+    background: linear-gradient(145deg, #38bdf8 0%, #0ea5e9 100%) !important;
+    color: #06060b !important;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
+}
+
+html:not([data-theme="light"]) .brand-wordmark {
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .brand-accent {
+    color: var(--cr-accent) !important;
+}
+
+/* Primary / inverted buttons (legacy c-black bg + c-ink-inverse text) */
+html:not([data-theme="light"]) .hp-btn--primary,
+html:not([data-theme="light"]) .hp-index-cta,
+html:not([data-theme="light"]) .az-btn-start,
+html:not([data-theme="light"]) .az-calc-cta-btn,
+html:not([data-theme="light"]) .az-radar-btn,
+html:not([data-theme="light"]) .az-resources-btn,
+html:not([data-theme="light"]) .upgrade-btn,
+html:not([data-theme="light"]) .sal-submit-btn,
+html:not([data-theme="light"]) .btn-analyzer,
+html:not([data-theme="light"]) .btn-plan-primary,
+html:not([data-theme="light"]) .art-topic-pill.is-active {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9) !important;
+    color: #06060b !important;
+    border-color: transparent !important;
+}
+
+html:not([data-theme="light"]) .hp-btn--primary:hover,
+html:not([data-theme="light"]) .az-btn-start:hover,
+html:not([data-theme="light"]) .btn-analyzer:hover {
+    background: linear-gradient(135deg, #7dd3fc, #38bdf8) !important;
+    color: #06060b !important;
+    opacity: 1 !important;
+}
+
+html:not([data-theme="light"]) .hp-btn--ghost,
+html:not([data-theme="light"]) .hp-btn--white,
+html:not([data-theme="light"]) .btn-plan-outline {
+    background: var(--cr-surface-3) !important;
+    color: var(--cr-text) !important;
+    border-color: var(--cr-border-strong) !important;
+}
+
+html:not([data-theme="light"]) .hp-btn--ghost:hover,
+html:not([data-theme="light"]) .hp-btn--white:hover {
+    border-color: var(--cr-accent) !important;
+    color: var(--cr-accent) !important;
+}
+
+/* Newsletter band */
+html:not([data-theme="light"]) .newsletter-section {
+    background: var(--cr-surface-2) !important;
+    border: 1px solid var(--cr-border);
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .newsletter-title,
+html:not([data-theme="light"]) .newsletter-desc {
+    color: var(--cr-text-secondary) !important;
+    opacity: 1 !important;
+}
+
+html:not([data-theme="light"]) .newsletter-input {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border-strong) !important;
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .newsletter-input::placeholder {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .newsletter-btn {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9) !important;
+    color: #06060b !important;
+    border-color: transparent !important;
+}
+
+/* Dark promo bands on homepage */
+html:not([data-theme="light"]) .hp-drop-banner,
+html:not([data-theme="light"]) .hp-pro,
+html:not([data-theme="light"]) .hp-trust {
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .hp-drop-title,
+html:not([data-theme="light"]) .hp-pro-title,
+html:not([data-theme="light"]) .hp-trust-title {
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .hp-pro-mockup-val {
+    color: var(--cr-text) !important;
+}
+
+/* Salary ticker */
+html:not([data-theme="light"]) .hp-ticker-exp,
+html:not([data-theme="light"]) .hp-ticker-city {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .hp-ticker-ctc {
+    color: var(--cr-text) !important;
+}
+
+/* Analyzer wizard (inline styles in step_base.html) */
+html:not([data-theme="light"]) .dot {
+    background: var(--cr-surface-3) !important;
+}
+
+html:not([data-theme="light"]) .dot.active {
+    background: var(--cr-accent) !important;
+}
+
+html:not([data-theme="light"]) .option-card {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .option-card:hover {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border-strong) !important;
+}
+
+/* Tools — muted labels & footers */
+html:not([data-theme="light"]) .stat-label,
+html:not([data-theme="light"]) .az-result-footer a,
+html:not([data-theme="light"]) .az-calc-regime-badge,
+html:not([data-theme="light"]) .az-calc-row--ghost td {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .az-calc-regime-badge {
+    background: var(--cr-surface-3) !important;
+}
+
+html:not([data-theme="light"]) .az-calc-row--final {
+    background: var(--cr-surface-3) !important;
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .badge-warn {
+    background: var(--cr-warning-bg) !important;
+    color: var(--cr-warning-text) !important;
+}
+
+html:not([data-theme="light"]) .bg-yellow,
+html:not([data-theme="light"]) .bg-red,
+html:not([data-theme="light"]) .bg-green {
+    color: var(--cr-text-secondary) !important;
+}
+
+/* Calculator / form inputs */
+html:not([data-theme="light"]) .az-calc-input,
+html:not([data-theme="light"]) .az-form-input,
+html:not([data-theme="light"]) .sal-form-input,
+html:not([data-theme="light"]) select.az-calc-input {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text) !important;
+}
+
+/* Companies — form controls & cards */
+html:not([data-theme="light"]) .dir-controls select,
+html:not([data-theme="light"]) .dir-controls input,
+html:not([data-theme="light"]) .review-form input,
+html:not([data-theme="light"]) .review-form textarea,
+html:not([data-theme="light"]) .review-form select {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .cp-layoff-wrap,
+html:not([data-theme="light"]) .comp-card,
+html:not([data-theme="light"]) .cc-card {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+}
+
+/* Catch-all: light gray backgrounds in page bundles */
+html:not([data-theme="light"]) .hp-featured-article,
+html:not([data-theme="light"]) .hp-article-card,
+html:not([data-theme="light"]) .hp-cluster-card,
+html:not([data-theme="light"]) .hp-tool-card,
+html:not([data-theme="light"]) .hp-updates-panel,
+html:not([data-theme="light"]) .hp-faq,
+html:not([data-theme="light"]) .art-callout,
+html:not([data-theme="light"]) .art-toc,
+html:not([data-theme="light"]) .az-calc-card,
+html:not([data-theme="light"]) .az-intro-card,
+html:not([data-theme="light"]) .az-result-card,
+html:not([data-theme="light"]) .az-form-card,
+html:not([data-theme="light"]) .sal-summary-box,
+html:not([data-theme="light"]) .az-calc-noscript,
+html:not([data-theme="light"]) .pricing-card,
+html:not([data-theme="light"]) .dash-card,
+html:not([data-theme="light"]) .onboard-card {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+}
+
+/* Catch-all: low-contrast gray text */
+html:not([data-theme="light"]) .hp-ticker-exp,
+html:not([data-theme="light"]) .hp-ticker-city,
+html:not([data-theme="light"]) .az-result-footer a,
+html:not([data-theme="light"]) .stat-label,
+html:not([data-theme="light"]) [style*="color: #999"],
+html:not([data-theme="light"]) [style*="color:#999"] {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) [style*="background: #fafafa"],
+html:not([data-theme="light"]) [style*="background:#fafafa"],
+html:not([data-theme="light"]) [style*="background: #f9f9f9"],
+html:not([data-theme="light"]) [style*="background:#f9f9f9"] {
+    background: var(--cr-surface-2) !important;
+}
+
+/* AI Pulse — ensure dark tokens win */
+html:not([data-theme="light"]) .ai-page,
+html:not([data-theme="light"]) .ai-detail-page,
+html:not([data-theme="light"]) .ai-tag-page {
+    --ai-ink: #f4f4f5;
+    --ai-soft-ink: #c8c8d0;
+    --ai-muted: #9e9ea8;
+    --ai-paper: #14141f;
+    --ai-panel: #0e0e16;
+    --ai-card: #14141f;
+    --ai-card-muted: #1c1c28;
+}
+
+html:not([data-theme="light"]) .significance-low {
+    background: var(--cr-text-muted) !important;
+}

@@ -6,7 +6,6 @@
 
 {% block content %}
 <style>
-    /* Analyzer Specific Styles (Inline for now/Prototyping) */
     .analyzer-container {
         max-width: 500px;
         margin: 60px auto;
@@ -22,6 +21,7 @@
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
+        color: var(--cr-text);
     }
 
     .progress-dots {
@@ -35,11 +35,11 @@
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: #eee;
+        background: var(--cr-surface-3, #eee);
     }
 
     .dot.active {
-        background: #333;
+        background: var(--cr-accent, #38bdf8);
     }
 
     .form-group {
@@ -51,33 +51,34 @@
         display: block;
         margin-bottom: 0.5rem;
         font-size: 1.1rem;
+        color: var(--cr-text);
     }
 
-    /* Custom Radio Inputs */
     .option-card {
         display: block;
         padding: 12px 16px;
-        border: 1px solid #ddd;
+        border: 1px solid var(--cr-border, #ddd);
         border-radius: 8px;
         margin-bottom: 10px;
         cursor: pointer;
         transition: all 0.2s;
         font-weight: 500;
+        background: var(--cr-surface-2, #fff);
+        color: var(--cr-text-secondary);
     }
 
     .option-card:hover {
-        background: #f9f9f9;
-        border-color: #999;
+        background: var(--cr-surface-3, #f9f9f9);
+        border-color: var(--cr-border-strong, #999);
     }
 
     .option-card input {
         margin-right: 10px;
     }
 
-    /* Button */
     .btn-analyzer {
-        background: #000;
-        color: #fff;
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        color: #06060b;
         width: 100%;
         padding: 14px;
         border: none;
@@ -89,7 +90,7 @@
     }
 
     .btn-analyzer:hover {
-        background: #333;
+        background: linear-gradient(135deg, #7dd3fc, #38bdf8);
     }
 </style>
 
@@ -106,7 +107,7 @@
 
     {% block wizard_content %}{% endblock %}
 
-    <div style="margin-top: 2rem; text-align: center; font-size: 0.85rem; color: #999;">
+    <div style="margin-top: 2rem; text-align: center; font-size: 0.85rem; color: var(--cr-text-muted, #999);">
         Private. Anonymous. No Sign-up.
     </div>
 </div>

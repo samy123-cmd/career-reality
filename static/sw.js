@@ -1,11 +1,13 @@
 // Career Reality Service Worker — Offline support + caching
-const CACHE_NAME = 'cr-v1';
+const CACHE_NAME = 'cr-v2';
 const OFFLINE_URL = '/offline/';
 
 const PRECACHE_URLS = [
     '/',
     '/offline/',
-    '/static/css/design-system.css',
+    '/static/css/style-core.css',
+    '/static/css/theme-premium-dark.css',
+    '/static/css/theme-dark-contrast.css',
     '/static/js/main.js',
 ];
 

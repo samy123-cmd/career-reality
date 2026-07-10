@@ -26,6 +26,9 @@
 
     /* Legacy editorial tokens */
     --c-page: var(--cr-page);
+    --c-surface: #ffffff;
+    --c-ink: #09090b;
+    --c-ink-inverse: #ffffff;
     --c-white: #ffffff;
     --c-black: #09090b;
     --c-grey-dark: #3f3f46;
