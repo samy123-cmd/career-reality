@@ -24,9 +24,14 @@
     --cr-success: #4ade80;
     --cr-glow: 0 0 40px rgba(56, 189, 248, 0.08);
 
-    /* Legacy editorial tokens (remapped) */
+    /* Legacy editorial tokens (semantic remapping) */
     --c-page: var(--cr-page);
+    --c-surface: var(--cr-surface);
+    --c-ink: var(--cr-text);
+    --c-ink-inverse: #f4f4f5;
+    /* --c-white: elevated surfaces (was page/card white) */
     --c-white: var(--cr-surface);
+    /* --c-black: primary text (was body/heading black) */
     --c-black: var(--cr-text);
     --c-grey-dark: #d4d4d8;
     --c-grey-mid: var(--cr-text-secondary);

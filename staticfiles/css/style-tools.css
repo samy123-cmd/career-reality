@@ -316,7 +316,7 @@
     font-size: 12px;
     font-weight: 700;
     background: var(--c-black);
-    color: var(--c-white);
+    color: var(--c-ink-inverse);
     border: none;
     cursor: pointer;
     white-space: nowrap;
