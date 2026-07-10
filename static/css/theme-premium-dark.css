@@ -14,9 +14,9 @@
     --cr-elevated: #22222f;
     --cr-border: rgba(255, 255, 255, 0.08);
     --cr-border-strong: rgba(255, 255, 255, 0.14);
-    --cr-text: #f4f4f5;
-    --cr-text-secondary: #a1a1aa;
-    --cr-text-muted: #71717a;
+    --cr-text: #fafafa;
+    --cr-text-secondary: #c8c8d0;
+    --cr-text-muted: #9e9ea8;
     --cr-accent: #38bdf8;
     --cr-accent-dim: rgba(56, 189, 248, 0.12);
     --cr-danger: #f87171;
@@ -113,6 +113,18 @@ a:hover {
 .nav-link,
 .nav-dropdown-trigger {
     color: var(--cr-text);
+}
+
+.brand-accent {
+    color: var(--cr-accent);
+}
+
+.site-brand:hover .brand-wordmark {
+    color: var(--cr-text);
+}
+
+.site-brand:hover .brand-accent {
+    color: var(--cr-accent);
 }
 
 .nav-link:hover,

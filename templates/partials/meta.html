@@ -83,15 +83,16 @@
         color-scheme: dark;
         --cr-page: #06060b;
         --cr-surface: #0e0e16;
-        --cr-text: #f4f4f5;
-        --cr-text-secondary: #a1a1aa;
+        --cr-text: #fafafa;
+        --cr-text-secondary: #c8c8d0;
+        --cr-text-muted: #9e9ea8;
         --cr-border: rgba(255, 255, 255, 0.08);
         --c-page: #06060b;
         --c-white: #0e0e16;
-        --c-black: #f4f4f5;
-        --c-grey-dark: #d4d4d8;
-        --c-grey-mid: #a1a1aa;
-        --c-grey-light: #71717a;
+        --c-black: #fafafa;
+        --c-grey-dark: #e4e4e7;
+        --c-grey-mid: #c8c8d0;
+        --c-grey-light: #9e9ea8;
         --c-divider: rgba(255, 255, 255, 0.08);
         --c-bg-footer: #0e0e16;
         --c-blue-accent: #38bdf8;
@@ -316,11 +317,13 @@
     }
 </style>
 
-<!-- Main CSS — core bundle + theme layers -->
-<link rel="preload" href="{% static 'css/style-core.css' %}?v=8" as="style">
-<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=8">
-<link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=2">
+<!-- Main CSS — core bundle + design system + theme layers -->
+<link rel="preload" href="{% static 'css/style-core.css' %}?v=9" as="style">
+<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=9">
+<link rel="stylesheet" href="{% static 'css/design-system.css' %}?v=3">
+<link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=3">
 <link rel="stylesheet" href="{% static 'css/theme-light.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/theme-dark-contrast.css' %}?v=1">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">

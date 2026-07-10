@@ -1,0 +1,526 @@
+/* ==========================================================================
+   Career Reality — Dark mode contrast & readability fixes
+   Loaded after design-system + theme-premium-dark. Dark default only.
+   ========================================================================== */
+
+html:not([data-theme="light"]) {
+    /* Brighter readable body copy */
+    --cr-text-secondary: #c8c8d0;
+    --cr-text-muted: #9e9ea8;
+    --c-grey-mid: #c8c8d0;
+    --c-grey-light: #9e9ea8;
+    --c-grey-dark: #e4e4e7;
+}
+
+html:not([data-theme="light"]) body,
+html:not([data-theme="light"]) p,
+html:not([data-theme="light"]) li,
+html:not([data-theme="light"]) .content {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .section-label {
+    color: var(--cr-text-muted);
+    border-top-color: var(--cr-border-strong);
+}
+
+/* ── Navigation & header ── */
+html:not([data-theme="light"]) .nav-dropdown-content,
+html:not([data-theme="light"]) .nav-mega {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+    box-shadow: var(--shadow-lg);
+}
+
+html:not([data-theme="light"]) .nav-dropdown-content a,
+html:not([data-theme="light"]) .nav-mega a {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .nav-dropdown-content a:hover,
+html:not([data-theme="light"]) .nav-mega a:hover {
+    background: var(--cr-surface-3);
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .mega-label strong {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .mega-label small {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .dropdown-header {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .nav-search-toggle,
+html:not([data-theme="light"]) .theme-toggle {
+    background: var(--cr-surface-3);
+    border-color: var(--cr-border);
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .nav-search-form,
+html:not([data-theme="light"]) .mobile-search-panel {
+    background: var(--cr-surface-2);
+    border-color: var(--cr-border);
+}
+
+html:not([data-theme="light"]) .mobile-search-panel input {
+    background: var(--cr-surface-3);
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .mobile-menu-toggle span {
+    background-color: var(--cr-text);
+}
+
+/* ── Collapsible / FAQ / contact ── */
+html:not([data-theme="light"]) details.collapsible,
+html:not([data-theme="light"]) .contact-card,
+html:not([data-theme="light"]) .key-takeaway {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) details.collapsible summary {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) details.collapsible summary:hover {
+    background: var(--cr-surface-3);
+}
+
+/* ── Article detail ── */
+html:not([data-theme="light"]) .art-callout,
+html:not([data-theme="light"]) .art-callout--muted,
+html:not([data-theme="light"]) .art-toc,
+html:not([data-theme="light"]) .art-related-card,
+html:not([data-theme="light"]) .art-share-btn {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .art-callout-title,
+html:not([data-theme="light"]) .art-callout-heading,
+html:not([data-theme="light"]) .art-related-card h3 {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .art-share-btn:hover {
+    background: var(--cr-surface-3) !important;
+}
+
+/* ── Homepage ── */
+html:not([data-theme="light"]) .hp-featured-article,
+html:not([data-theme="light"]) .hp-article-card,
+html:not([data-theme="light"]) .hp-cluster-card,
+html:not([data-theme="light"]) .hp-faq,
+html:not([data-theme="light"]) .hp-drop-card {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .hp-featured-title,
+html:not([data-theme="light"]) .hp-article-card h3,
+html:not([data-theme="light"]) .hp-cluster-card h3,
+html:not([data-theme="light"]) .hp-section-title,
+html:not([data-theme="light"]) .hp-tool-card h3 {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .hp-ticker-exp,
+html:not([data-theme="light"]) .hp-ticker-city {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .hp-ticker-role {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .hp-meter-bar {
+    background: var(--cr-surface-3);
+}
+
+html:not([data-theme="light"]) .hp-index-preview {
+    background: var(--cr-surface-3);
+}
+
+html:not([data-theme="light"]) .hp-pro-mockup {
+    background: var(--cr-surface-2);
+    border-color: var(--cr-border);
+}
+
+html:not([data-theme="light"]) .hp-faq summary {
+    color: var(--cr-text);
+}
+
+/* ── Tools / analyzer / calculator ── */
+html:not([data-theme="light"]) .az-calc-card,
+html:not([data-theme="light"]) .az-calc-noscript,
+html:not([data-theme="light"]) .az-intro-card,
+html:not([data-theme="light"]) .az-result-card,
+html:not([data-theme="light"]) .az-form-card,
+html:not([data-theme="light"]) .az-radar-card,
+html:not([data-theme="light"]) .az-radar-row,
+html:not([data-theme="light"]) .sal-summary-box,
+html:not([data-theme="light"]) .sal-explainer,
+html:not([data-theme="light"]) .ep-quiz-card,
+html:not([data-theme="light"]) .ep-result-card,
+html:not([data-theme="light"]) .share-btn,
+html:not([data-theme="light"]) .az-share-box {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .az-calc-label,
+html:not([data-theme="light"]) .az-form-label,
+html:not([data-theme="light"]) .sal-page-intro {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .az-calc-row--subtotal {
+    background: var(--cr-surface-3) !important;
+}
+
+html:not([data-theme="light"]) .az-calc-row--ghost td {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .bg-red,
+html:not([data-theme="light"]) .bg-yellow,
+html:not([data-theme="light"]) .bg-green {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .badge-warn {
+    background: var(--cr-warning-bg);
+    color: var(--cr-warning-text);
+}
+
+html:not([data-theme="light"]) .az-calc-pro-upsell,
+html:not([data-theme="light"]) .salary-submit-cta {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .az-calc-pro-upsell p,
+html:not([data-theme="light"]) .salary-submit-cta p {
+    color: var(--cr-text-secondary) !important;
+}
+
+/* ── Companies directory & detail ── */
+html:not([data-theme="light"]) .dir-controls select,
+html:not([data-theme="light"]) .dir-controls input {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .comp-card,
+html:not([data-theme="light"]) .cc-card,
+html:not([data-theme="light"]) .sidebar-card,
+html:not([data-theme="light"]) .review-card,
+html:not([data-theme="light"]) .rc-card,
+html:not([data-theme="light"]) .salary-stats-grid .stat-card,
+html:not([data-theme="light"]) .cp-disc-item,
+html:not([data-theme="light"]) .review-form,
+html:not([data-theme="light"]) .disc-create-card,
+html:not([data-theme="light"]) .disc-reply-card {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .cc-name,
+html:not([data-theme="light"]) .cc-stat-val,
+html:not([data-theme="light"]) .score-big,
+html:not([data-theme="light"]) .cp-main h2,
+html:not([data-theme="light"]) .rc-card h3 {
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .cc-sector,
+html:not([data-theme="light"]) .cc-stats,
+html:not([data-theme="light"]) .sidebar-card h3,
+html:not([data-theme="light"]) .score-label,
+html:not([data-theme="light"]) .rc-meta,
+html:not([data-theme="light"]) .rc-section strong {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .cc-logo-wrap,
+html:not([data-theme="light"]) .cc-logo-placeholder {
+    background: var(--cr-surface-3) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .cc-score.low {
+    background: var(--cr-danger-bg) !important;
+    color: var(--cr-danger-text) !important;
+}
+
+html:not([data-theme="light"]) .cc-score.mid {
+    background: var(--cr-warning-bg) !important;
+    color: var(--cr-warning-text) !important;
+}
+
+html:not([data-theme="light"]) .cc-score.high,
+html:not([data-theme="light"]) .cc-score.good {
+    background: var(--cr-success-bg) !important;
+    color: var(--cr-success-text) !important;
+}
+
+html:not([data-theme="light"]) .pagination a {
+    color: var(--cr-text-secondary);
+    border-color: var(--cr-border);
+}
+
+html:not([data-theme="light"]) .dir-empty,
+html:not([data-theme="light"]) .dir-empty-link {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .dir-empty-link {
+    color: var(--cr-accent);
+}
+
+/* ── Search results ── */
+html:not([data-theme="light"]) .search-hero {
+    background: var(--cr-surface-2);
+}
+
+html:not([data-theme="light"]) .search-bar input {
+    background: var(--cr-surface-3);
+    border-color: var(--cr-border);
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .sr-card,
+html:not([data-theme="light"]) .search-result-card {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .sr-title {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .sr-snippet {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .sr-type.news {
+    background: var(--cr-warning-bg);
+    color: var(--cr-warning-text);
+}
+
+html:not([data-theme="light"]) .sr-type.salary {
+    background: rgba(167, 139, 250, 0.15);
+    color: #c4b5fd;
+}
+
+/* ── Pricing / dashboard / onboarding ── */
+html:not([data-theme="light"]) .pricing-card,
+html:not([data-theme="light"]) .dash-card,
+html:not([data-theme="light"]) .onboard-card,
+html:not([data-theme="light"]) .onboard-tool {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .pricing-card h3,
+html:not([data-theme="light"]) .dash-card h3 {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .btn-plan-outline {
+    background: transparent;
+    color: var(--cr-text);
+    border-color: var(--cr-border-strong);
+}
+
+html:not([data-theme="light"]) .btn-plan-disabled {
+    background: var(--cr-surface-3);
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .quick-link {
+    background: var(--cr-surface-3);
+    color: var(--cr-text);
+    border-color: var(--cr-border);
+}
+
+/* ── Tables ── */
+html:not([data-theme="light"]) .editorial-table,
+html:not([data-theme="light"]) .data-table,
+html:not([data-theme="light"]) .salary-table {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .editorial-table th,
+html:not([data-theme="light"]) .editorial-table td {
+    border-color: var(--cr-border) !important;
+}
+
+html:not([data-theme="light"]) .editorial-table tr:nth-child(even) {
+    background: var(--cr-surface-3) !important;
+}
+
+/* ── Footer newsletter ── */
+html:not([data-theme="light"]) .newsletter-section {
+    background: var(--cr-surface-2);
+    border: 1px solid var(--cr-border);
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .newsletter-desc {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .footer-tagline,
+html:not([data-theme="light"]) .footer-copy {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .footer-nav a {
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .footer-nav a:hover {
+    color: var(--cr-accent);
+}
+
+/* ── Toasts (dark semantic) ── */
+html:not([data-theme="light"]) .cr-toast--success {
+    background: var(--cr-success-bg);
+    color: var(--cr-success-text);
+    border-color: rgba(74, 222, 128, 0.25);
+}
+
+html:not([data-theme="light"]) .cr-toast--error {
+    background: var(--cr-danger-bg);
+    color: var(--cr-danger-text);
+    border-color: rgba(248, 113, 113, 0.25);
+}
+
+html:not([data-theme="light"]) .cr-toast--warning {
+    background: var(--cr-warning-bg);
+    color: var(--cr-warning-text);
+    border-color: rgba(251, 191, 36, 0.25);
+}
+
+html:not([data-theme="light"]) .cr-toast--info {
+    background: var(--cr-info-bg);
+    color: var(--cr-info-text);
+    border-color: rgba(56, 189, 248, 0.25);
+}
+
+/* ── Design system components (re-assert after design-system.css) ── */
+html:not([data-theme="light"]) .card {
+    background: var(--cr-surface-2);
+    border-color: var(--cr-border);
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .input,
+html:not([data-theme="light"]) select.input,
+html:not([data-theme="light"]) textarea.input {
+    background: var(--cr-surface-3);
+    border-color: var(--cr-border);
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .form-label {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .form-help,
+html:not([data-theme="light"]) .text-muted {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .stat-block {
+    background: var(--cr-surface-2);
+}
+
+html:not([data-theme="light"]) .stat-block .stat-value {
+    color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .table th {
+    background: var(--cr-surface-3);
+    color: var(--cr-text-muted);
+    border-color: var(--cr-border);
+}
+
+html:not([data-theme="light"]) .table td {
+    border-color: var(--cr-border);
+    color: var(--cr-text-secondary);
+}
+
+html:not([data-theme="light"]) .table tbody tr:hover {
+    background: var(--cr-surface-3);
+}
+
+html:not([data-theme="light"]) .section-header {
+    color: var(--cr-text);
+    border-bottom-color: var(--cr-border);
+}
+
+html:not([data-theme="light"]) .search-suggestion,
+html:not([data-theme="light"]) .search-suggestion-item {
+    color: var(--cr-text);
+    border-color: var(--cr-border);
+}
+
+html:not([data-theme="light"]) .search-suggestion:hover,
+html:not([data-theme="light"]) .search-suggestion-item:hover {
+    background: var(--cr-surface-3);
+}
+
+/* ── Utility dock ── */
+html:not([data-theme="light"]) .dock-item {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .dock-label {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .dock-item:hover .dock-label {
+    color: var(--cr-accent);
+}
+
+/* ── Mobile nav ── */
+html:not([data-theme="light"]) .mobile-nav-section-title {
+    color: var(--cr-text-muted);
+}
+
+html:not([data-theme="light"]) .mobile-theme-toggle {
+    background: var(--cr-surface-3);
+    border-color: var(--cr-border);
+    color: var(--cr-text);
+}
+
+/* ── Inline style fallbacks in templates ── */
+html:not([data-theme="light"]) [style*="background: #f8f9fa"],
+html:not([data-theme="light"]) [style*="background:#f8f9fa"],
+html:not([data-theme="light"]) [style*="background: var(--c-surface-alt"] {
+    background: var(--cr-surface-2) !important;
+}
+
+html:not([data-theme="light"]) [style*="color: var(--c-grey)"] {
+    color: var(--cr-text-muted) !important;
+}
