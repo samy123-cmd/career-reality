@@ -60,20 +60,24 @@ class ThemeCssBundleTests(TestCase):
         self.assertIn("--c-ink-inverse", content)
         self.assertIn("brand-mark", content)
 
-    def test_homepage_ui_polish_markup(self):
+    def test_homepage_editorial_layout(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         content = response.content.decode("utf-8")
         self.assertIn("nav-utilities", content)
-        self.assertIn("hp-ticker-chip", content)
+        self.assertIn("hp-ticker-item", content)
+        self.assertNotIn("hp-ticker-chip", content)
+        # Editorial block renders when articles exist in DB
+        if "hp-editorial-list" in content:
+            self.assertIn("hp-editorial-featured", content)
 
-    def test_footer_has_column_grid(self):
+    def test_footer_minimal_layout(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         content = response.content.decode("utf-8")
-        self.assertIn("footer-grid", content)
-        self.assertIn("footer-col-title", content)
-        self.assertIn("footer-newsletter", content)
+        self.assertIn("footer-links", content)
+        self.assertNotIn("footer-grid", content)
+        self.assertNotIn("footer-newsletter", content)
 
     def test_ai_pulse_hub_loads_ai_pulse_css(self):
         response = self.client.get(reverse("ai_news_hub"))
