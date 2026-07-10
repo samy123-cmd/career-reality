@@ -211,82 +211,92 @@
 
 /* ——— Ticker ——— */
 .hp-ticker {
-    display: flex;
-    align-items: center;
-    height: 40px;
     background: var(--cr-surface, #0e0e16);
+    border-top: 1px solid var(--cr-border, var(--c-divider));
     border-bottom: 1px solid var(--cr-border, var(--c-divider));
+    display: flex;
+    align-items: stretch;
+    min-height: 52px;
     overflow: hidden;
-    white-space: nowrap;
 }
 .hp-ticker-label {
     flex-shrink: 0;
-    height: 40px;
-    padding: 0 14px;
+    background: #cc3333;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     font-size: 10px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: #fff;
-    background: #b91c1c;
+}
+.hp-ticker-track-wrap {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 .hp-ticker-track {
     display: flex;
-    align-items: center;
-    gap: 28px;
-    padding: 0 20px;
+    gap: 12px;
+    padding: 10px 20px;
     overflow-x: auto;
     scrollbar-width: none;
 }
 .hp-ticker-track::-webkit-scrollbar { display: none; }
-.hp-ticker-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    flex-shrink: 0;
-}
-.hp-ticker-role {
-    color: var(--cr-text-secondary, var(--c-grey-mid));
-    font-weight: 500;
-}
-.hp-ticker-sep {
-    color: var(--cr-text-muted, var(--c-grey-light));
-    opacity: 0.5;
-}
-.hp-ticker-meta {
-    color: var(--cr-text-muted, var(--c-grey-light));
-    font-size: 12px;
-}
-.hp-ticker-ctc {
-    color: var(--cr-accent, #38bdf8);
-    font-weight: 700;
-}
 .hp-ticker-placeholder {
     font-size: 13px;
     color: var(--cr-text-muted, var(--c-grey-light));
+    white-space: nowrap;
 }
 .hp-ticker-placeholder a {
     color: var(--cr-accent, var(--c-blue-accent));
     text-decoration: underline;
 }
+.hp-ticker-chip {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    background: var(--cr-surface-2, #14141f);
+    border: 1px solid var(--cr-border, var(--c-divider));
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.3;
+}
+.hp-ticker-chip-role {
+    font-weight: 600;
+    color: var(--cr-text, var(--c-black));
+}
+.hp-ticker-chip-meta {
+    font-size: 11px;
+    color: var(--cr-text-muted, var(--c-grey-light));
+}
+.hp-ticker-chip-ctc {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cr-accent, #38bdf8);
+}
 
 /* ——— Section Shells ——— */
 .hp-section {
-    padding: 56px 0;
+    padding: 72px 0;
 }
 .hp-section-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 40px;
 }
 .hp-section-title {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--c-black);
     margin: 0 0 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--cr-accent, var(--c-blue-accent));
+    display: inline-block;
 }
 .hp-section-sub {
     font-size: 16px;
@@ -392,110 +402,7 @@
     max-width: 500px;
 }
 
-/* ——— Editorial (stories) ——— */
-.hp-editorial {
-    padding: 56px 0 72px;
-}
-.hp-editorial-header {
-    margin-bottom: 40px;
-}
-.hp-editorial-heading {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--c-black);
-    margin: 0 0 8px;
-}
-.hp-editorial-lede {
-    font-size: 16px;
-    color: var(--c-grey-mid);
-    margin: 0;
-    max-width: 520px;
-}
-.hp-editorial-featured {
-    padding-bottom: 36px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid var(--cr-border, var(--c-divider));
-}
-.hp-editorial-meta {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--c-grey-light);
-    margin: 0 0 12px;
-}
-.hp-editorial-featured-title {
-    font-size: clamp(1.75rem, 4vw, 2.25rem);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin: 0 0 16px;
-}
-.hp-editorial-featured-title a {
-    color: var(--c-black);
-    text-decoration: none;
-}
-.hp-editorial-featured-title a:hover {
-    color: var(--cr-accent, var(--c-blue-accent));
-}
-.hp-editorial-featured-excerpt {
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--c-grey-mid);
-    margin: 0 0 16px;
-    max-width: 640px;
-}
-.hp-editorial-read {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--cr-accent, var(--c-blue-accent));
-    text-decoration: none;
-}
-.hp-editorial-read:hover {
-    text-decoration: underline;
-}
-.hp-editorial-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-.hp-editorial-list-item {
-    border-bottom: 1px solid var(--cr-border, var(--c-divider));
-}
-.hp-editorial-list-item:last-child {
-    border-bottom: none;
-}
-.hp-editorial-list-link {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 18px 0;
-    text-decoration: none;
-    transition: opacity 0.15s ease;
-}
-.hp-editorial-list-link:hover {
-    opacity: 1;
-}
-.hp-editorial-list-link:hover .hp-editorial-list-title {
-    color: var(--cr-accent, var(--c-blue-accent));
-}
-.hp-editorial-list-title {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--c-black);
-    flex: 1;
-    min-width: 0;
-}
-.hp-editorial-list-meta {
-    font-size: 12px;
-    color: var(--c-grey-light);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-/* ——— Legacy article cards (other pages may use) ——— */
+/* ——— Featured Article ——— */
 .hp-featured-article {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -925,16 +832,8 @@
 
     .hp-ticker { display: none; } /* Hide ticker on mobile */
 
-    .hp-section { padding: 40px 0; }
+    .hp-section { padding: 48px 0; }
     .hp-section-title { font-size: 24px; }
-    .hp-editorial { padding: 40px 0 56px; }
-    .hp-editorial-list-link {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-        padding: 16px 0;
-    }
-    .hp-editorial-list-meta { white-space: normal; }
     .hp-tools-grid { grid-template-columns: 1fr; }
     .hp-tool-arrow { display: none; }
 
@@ -949,6 +848,10 @@
     }
     .hp-featured-title { font-size: 24px; }
     .hp-article-grid { grid-template-columns: 1fr; }
+    .hp-article-grid--below-featured {
+        margin-top: 32px;
+        padding-top: 32px;
+    }
 
     .hp-pro-inner { grid-template-columns: 1fr; gap: 40px; }
     .hp-pro-title { font-size: 28px; }
