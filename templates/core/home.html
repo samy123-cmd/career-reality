@@ -153,23 +153,24 @@
 <!-- ═══════════════ LIVE SALARY TICKER ═══════════════ -->
 <div class="hp-ticker" id="salary-ticker-container">
     <div class="hp-ticker-label">Live Salaries</div>
-    <div class="hp-ticker-track" id="salary-ticker-content">
-        {% if salary_ticker_items %}
-            {% for item in salary_ticker_items %}
-            <span class="hp-ticker-item">
-                <span class="hp-ticker-role">{{ item.role }}</span>
-                <span class="hp-ticker-exp">{{ item.exp }}</span>
-                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
-                <span class="hp-ticker-city">{{ item.city }}</span>
-            </span>
-            {% endfor %}
-        {% else %}
-            <span class="hp-ticker-placeholder">
-                No submissions yet —
-                <a href="{% url 'submit_salary' %}" style="color:#fff;text-decoration:underline;">drop your salary</a>
-                to help the community.
-            </span>
-        {% endif %}
+    <div class="hp-ticker-track-wrap">
+        <div class="hp-ticker-track" id="salary-ticker-content">
+            {% if salary_ticker_items %}
+                {% for item in salary_ticker_items %}
+                <div class="hp-ticker-chip">
+                    <span class="hp-ticker-chip-role">{{ item.role }}</span>
+                    <span class="hp-ticker-chip-meta">{{ item.exp }} · {{ item.city }}</span>
+                    <span class="hp-ticker-chip-ctc">{{ item.ctc }}</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <span class="hp-ticker-placeholder">
+                    No submissions yet —
+                    <a href="{% url 'submit_salary' %}">drop your salary</a>
+                    to help the community.
+                </span>
+            {% endif %}
+        </div>
     </div>
 </div>
 
@@ -256,9 +257,9 @@
     <div class="hp-article-grid">
         {% for article in july_articles %}
         <a href="{% url 'article_detail' article.slug %}" class="hp-article-card">
-            <div class="hp-article-card-meta">{{ article.category.name }} · July 2026</div>
+            <span class="hp-article-card-pill">{{ article.category.name }}</span>
             <h3 class="hp-article-card-title">{{ article.title }}</h3>
-            <p class="hp-article-card-excerpt">{{ article.common_expectation|striptags|truncatewords:16 }}</p>
+            <span class="hp-article-card-date">July 2026</span>
         </a>
         {% endfor %}
     </div>
@@ -275,22 +276,27 @@
 
     {% with featured=articles.0 %}
     <div class="hp-featured-article">
-        <div class="hp-featured-meta">{{ featured.category.name }} · Updated {{ featured.updated_at|date:"F Y" }}</div>
-        <h2 class="hp-featured-title">
-            <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
-        </h2>
-        <p class="hp-featured-excerpt">{{ featured.common_expectation|striptags|truncatewords:35 }}</p>
-        <a href="{% url 'article_detail' featured.slug %}" class="hp-featured-link">Read the reality check →</a>
+        <div class="hp-featured-main">
+            <span class="hp-featured-pill">{{ featured.category.name }}</span>
+            <h2 class="hp-featured-title">
+                <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
+            </h2>
+            <span class="hp-featured-meta">Updated {{ featured.updated_at|date:"F Y" }}</span>
+        </div>
+        <div class="hp-featured-aside">
+            <p class="hp-featured-excerpt">{{ featured.common_expectation|striptags|truncatewords:25 }}</p>
+            <a href="{% url 'article_detail' featured.slug %}" class="hp-btn hp-btn--ghost">Read the reality check →</a>
+        </div>
     </div>
     {% endwith %}
 
-    <div class="hp-article-grid">
+    <div class="hp-article-grid hp-article-grid--below-featured">
         {% for article in articles %}
         {% if not forloop.first and forloop.counter <= 7 %}
         <a href="{% url 'article_detail' article.slug %}" class="hp-article-card">
-            <div class="hp-article-card-meta">{{ article.category.name }} · {{ article.updated_at|date:"M Y" }}</div>
+            <span class="hp-article-card-pill">{{ article.category.name }}</span>
             <h3 class="hp-article-card-title">{{ article.title }}</h3>
-            <p class="hp-article-card-excerpt">{{ article.common_expectation|striptags|truncatewords:16 }}</p>
+            <span class="hp-article-card-date">{{ article.updated_at|date:"M Y" }}</span>
         </a>
         {% endif %}
         {% endfor %}
@@ -436,7 +442,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const el = document.getElementById('salary-ticker-content');
-        if (!el || el.querySelector('.hp-ticker-item')) {
+        if (!el || el.querySelector('.hp-ticker-chip')) {
             return;
         }
         const loadFeed = () => fetch('/api/salary-feed/')
@@ -446,14 +452,21 @@
                 if (!subs.length) return;
                 const fragment = document.createDocumentFragment();
                 subs.forEach(function(s) {
-                    const item = document.createElement('span');
-                    item.className = 'hp-ticker-item';
-                    const role = document.createElement('span'); role.className = 'hp-ticker-role'; role.textContent = s.role;
-                    const exp  = document.createElement('span'); exp.className  = 'hp-ticker-exp';  exp.textContent = s.exp;
-                    const ctc  = document.createElement('span'); ctc.className  = 'hp-ticker-ctc';  ctc.textContent = s.ctc;
-                    const city = document.createElement('span'); city.className = 'hp-ticker-city'; city.textContent = s.city;
-                    item.appendChild(role); item.appendChild(exp); item.appendChild(ctc); item.appendChild(city);
-                    fragment.appendChild(item);
+                    const chip = document.createElement('div');
+                    chip.className = 'hp-ticker-chip';
+                    const role = document.createElement('span');
+                    role.className = 'hp-ticker-chip-role';
+                    role.textContent = s.role;
+                    const meta = document.createElement('span');
+                    meta.className = 'hp-ticker-chip-meta';
+                    meta.textContent = s.exp + ' · ' + s.city;
+                    const ctc = document.createElement('span');
+                    ctc.className = 'hp-ticker-chip-ctc';
+                    ctc.textContent = s.ctc;
+                    chip.appendChild(role);
+                    chip.appendChild(meta);
+                    chip.appendChild(ctc);
+                    fragment.appendChild(chip);
                 });
                 el.innerHTML = '';
                 el.appendChild(fragment);

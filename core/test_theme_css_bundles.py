@@ -60,6 +60,21 @@ class ThemeCssBundleTests(TestCase):
         self.assertIn("--c-ink-inverse", content)
         self.assertIn("brand-mark", content)
 
+    def test_homepage_ui_polish_markup(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("nav-utilities", content)
+        self.assertIn("hp-ticker-chip", content)
+
+    def test_footer_has_column_grid(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("footer-grid", content)
+        self.assertIn("footer-col-title", content)
+        self.assertIn("footer-newsletter", content)
+
     def test_ai_pulse_hub_loads_ai_pulse_css(self):
         response = self.client.get(reverse("ai_news_hub"))
         self.assertEqual(response.status_code, 200)
