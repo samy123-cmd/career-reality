@@ -152,23 +152,25 @@
 
 <!-- ═══════════════ LIVE SALARY TICKER ═══════════════ -->
 <div class="hp-ticker" id="salary-ticker-container">
-    <div class="hp-ticker-label">Live</div>
-    <div class="hp-ticker-track" id="salary-ticker-content">
-        {% if salary_ticker_items %}
-            {% for item in salary_ticker_items %}
-            <span class="hp-ticker-item">
-                <span class="hp-ticker-role">{{ item.role }}</span>
-                <span class="hp-ticker-sep" aria-hidden="true">·</span>
-                <span class="hp-ticker-meta">{{ item.exp }}, {{ item.city }}</span>
-                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
-            </span>
-            {% endfor %}
-        {% else %}
-            <span class="hp-ticker-placeholder">
-                No submissions yet —
-                <a href="{% url 'submit_salary' %}">drop your salary</a>
-            </span>
-        {% endif %}
+    <div class="hp-ticker-label">Live Salaries</div>
+    <div class="hp-ticker-track-wrap">
+        <div class="hp-ticker-track" id="salary-ticker-content">
+            {% if salary_ticker_items %}
+                {% for item in salary_ticker_items %}
+                <div class="hp-ticker-chip">
+                    <span class="hp-ticker-chip-role">{{ item.role }}</span>
+                    <span class="hp-ticker-chip-meta">{{ item.exp }} · {{ item.city }}</span>
+                    <span class="hp-ticker-chip-ctc">{{ item.ctc }}</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <span class="hp-ticker-placeholder">
+                    No submissions yet —
+                    <a href="{% url 'submit_salary' %}">drop your salary</a>
+                    to help the community.
+                </span>
+            {% endif %}
+        </div>
     </div>
 </div>
 
@@ -230,6 +232,10 @@
     </div>
 </section>
 
+<div class="container-medium" style="margin-bottom: var(--space-xl);">
+    {% include "partials/seo_pillar_links.html" %}
+</div>
+
 <!-- ═══════════════ SALARY DROP CTA ═══════════════ -->
 <section class="hp-drop-banner">
     <div class="container-wide hp-drop-inner">
@@ -241,37 +247,78 @@
     </div>
 </section>
 
-<!-- ═══════════════ EDITORIAL ═══════════════ -->
+<!-- ═══════════════ NEW IN JULY 2026 ═══════════════ -->
+{% if july_articles %}
+<section class="hp-section container-medium">
+    <div class="hp-section-header">
+        <h2 class="hp-section-title">New in July 2026</h2>
+        <p class="hp-section-sub">Fresh reality checks for campus PPO season, mid-year layoffs, and post-appraisal decisions.</p>
+    </div>
+    <div class="hp-article-grid">
+        {% for article in july_articles %}
+        <a href="{% url 'article_detail' article.slug %}" class="hp-article-card">
+            <span class="hp-article-card-pill">{{ article.category.name }}</span>
+            <h3 class="hp-article-card-title">{{ article.title }}</h3>
+            <span class="hp-article-card-date">July 2026</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════ FEATURED ARTICLE ═══════════════ -->
 {% if articles %}
-<section class="hp-editorial container-medium">
-    <header class="hp-editorial-header">
-        <h2 class="hp-editorial-heading">Latest reality checks</h2>
-        <p class="hp-editorial-lede">Evidence-backed analysis for Indian tech professionals.</p>
-    </header>
+<section class="hp-section container-medium">
+    <div class="hp-section-header">
+        <h2 class="hp-section-title">Latest reality checks</h2>
+        <p class="hp-section-sub">Deep dives on the career topics that matter to Indian professionals.</p>
+    </div>
 
     {% with featured=articles.0 %}
-    <article class="hp-editorial-featured">
-        <p class="hp-editorial-meta">{{ featured.category.name }} · {{ featured.updated_at|date:"M j, Y" }}</p>
-        <h3 class="hp-editorial-featured-title">
-            <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
-        </h3>
-        <p class="hp-editorial-featured-excerpt">{{ featured.common_expectation|striptags|truncatewords:28 }}</p>
-        <a href="{% url 'article_detail' featured.slug %}" class="hp-editorial-read">Read analysis →</a>
-    </article>
+    <div class="hp-featured-article">
+        <div class="hp-featured-main">
+            <span class="hp-featured-pill">{{ featured.category.name }}</span>
+            <h2 class="hp-featured-title">
+                <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
+            </h2>
+            <span class="hp-featured-meta">Updated {{ featured.updated_at|date:"F Y" }}</span>
+        </div>
+        <div class="hp-featured-aside">
+            <p class="hp-featured-excerpt">{{ featured.common_expectation|striptags|truncatewords:25 }}</p>
+            <a href="{% url 'article_detail' featured.slug %}" class="hp-btn hp-btn--ghost">Read the reality check →</a>
+        </div>
+    </div>
     {% endwith %}
 
-    <ol class="hp-editorial-list">
+    <div class="hp-article-grid hp-article-grid--below-featured">
         {% for article in articles %}
-        {% if not forloop.first and forloop.counter <= 8 %}
-        <li class="hp-editorial-list-item">
-            <a href="{% url 'article_detail' article.slug %}" class="hp-editorial-list-link">
-                <span class="hp-editorial-list-title">{{ article.title }}</span>
-                <span class="hp-editorial-list-meta">{{ article.category.name }} · {{ article.updated_at|date:"M j" }}</span>
-            </a>
-        </li>
+        {% if not forloop.first and forloop.counter <= 7 %}
+        <a href="{% url 'article_detail' article.slug %}" class="hp-article-card">
+            <span class="hp-article-card-pill">{{ article.category.name }}</span>
+            <h3 class="hp-article-card-title">{{ article.title }}</h3>
+            <span class="hp-article-card-date">{{ article.updated_at|date:"M Y" }}</span>
+        </a>
         {% endif %}
         {% endfor %}
-    </ol>
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════ UPDATES STRIP ═══════════════ -->
+{% if recent_updates %}
+<section class="hp-updates container-medium">
+    <div class="hp-updates-header">
+        <span class="hp-updates-dot"></span>
+        Recently Updated
+    </div>
+    <div class="hp-updates-list">
+        {% for updated in recent_updates %}
+        <a href="{% url 'article_detail' updated.slug %}" class="hp-update-item">
+            <span>{{ updated.title }}</span>
+            <span class="hp-update-date">{{ updated.updated_at|date:"M j" }}</span>
+        </a>
+        {% endfor %}
+    </div>
 </section>
 {% endif %}
 
@@ -366,10 +413,36 @@
     </div>
 </section>
 
+<!-- ═══════════════ EDITORIAL TRUST STRIP ═══════════════ -->
+<section class="hp-trust">
+    <div class="container-medium hp-trust-inner">
+        <div class="hp-trust-item">
+            <div class="hp-trust-icon">📝</div>
+            <div>
+                <strong>Editorial-first</strong>
+                <p>Original analysis, not rewritten trends. <a href="{% url 'editorial' %}">Standards →</a></p>
+            </div>
+        </div>
+        <div class="hp-trust-item">
+            <div class="hp-trust-icon">🔍</div>
+            <div>
+                <strong>Source-backed</strong>
+                <p>Every claim cited. Monthly review cycles. <a href="{% url 'about' %}">About →</a></p>
+            </div>
+        </div>
+        <div class="hp-trust-item">
+            <div class="hp-trust-icon">🛡️</div>
+            <div>
+                <strong>Editorial independence</strong>
+                <p>No paid influence on conclusions. Ads support operations, not editorial. <a href="{% url 'contact' %}">Corrections →</a></p>
+            </div>
+        </div>
+    </div>
+</section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const el = document.getElementById('salary-ticker-content');
-        if (!el || el.querySelector('.hp-ticker-item')) {
+        if (!el || el.querySelector('.hp-ticker-chip')) {
             return;
         }
         const loadFeed = () => fetch('/api/salary-feed/')
@@ -379,26 +452,21 @@
                 if (!subs.length) return;
                 const fragment = document.createDocumentFragment();
                 subs.forEach(function(s) {
-                    const item = document.createElement('span');
-                    item.className = 'hp-ticker-item';
+                    const chip = document.createElement('div');
+                    chip.className = 'hp-ticker-chip';
                     const role = document.createElement('span');
-                    role.className = 'hp-ticker-role';
+                    role.className = 'hp-ticker-chip-role';
                     role.textContent = s.role;
-                    const sep = document.createElement('span');
-                    sep.className = 'hp-ticker-sep';
-                    sep.setAttribute('aria-hidden', 'true');
-                    sep.textContent = '·';
                     const meta = document.createElement('span');
-                    meta.className = 'hp-ticker-meta';
-                    meta.textContent = s.exp + ', ' + s.city;
+                    meta.className = 'hp-ticker-chip-meta';
+                    meta.textContent = s.exp + ' · ' + s.city;
                     const ctc = document.createElement('span');
-                    ctc.className = 'hp-ticker-ctc';
+                    ctc.className = 'hp-ticker-chip-ctc';
                     ctc.textContent = s.ctc;
-                    item.appendChild(role);
-                    item.appendChild(sep);
-                    item.appendChild(meta);
-                    item.appendChild(ctc);
-                    fragment.appendChild(item);
+                    chip.appendChild(role);
+                    chip.appendChild(meta);
+                    chip.appendChild(ctc);
+                    fragment.appendChild(chip);
                 });
                 el.innerHTML = '';
                 el.appendChild(fragment);

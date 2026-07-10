@@ -771,44 +771,69 @@ html:not([data-theme="light"]) .significance-low {
     background: var(--cr-text-muted) !important;
 }
 
-/* ── Homepage UI — editorial layout ── */
+/* ── Homepage UI polish (nav, ticker, footer) ── */
 html:not([data-theme="light"]) .nav-utilities {
-    /* spacing only, no divider */
+    border-left-color: var(--cr-border);
 }
 
 html:not([data-theme="light"]) .hp-ticker {
     background: var(--cr-surface) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-role {
-    color: var(--cr-text-secondary) !important;
+html:not([data-theme="light"]) .hp-ticker-chip {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-meta,
-html:not([data-theme="light"]) .hp-ticker-sep {
+html:not([data-theme="light"]) .hp-ticker-chip-role {
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .hp-ticker-chip-meta {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-ctc {
+html:not([data-theme="light"]) .hp-ticker-chip-ctc {
     color: var(--cr-accent) !important;
 }
 
-html:not([data-theme="light"]) .hp-editorial-featured-title a {
+html:not([data-theme="light"]) .footer-newsletter-inner {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+}
+
+html:not([data-theme="light"]) .footer-newsletter-title {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .hp-editorial-list-title {
+html:not([data-theme="light"]) .footer-newsletter-desc {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .footer-newsletter-input {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
     color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .footer-col-links a {
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .footer-col-links a:hover {
+    color: var(--cr-accent) !important;
 }
 
 html:not([data-theme="light"]) .footer-brand-name {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .footer-links a {
-    color: var(--cr-text-secondary) !important;
+html:not([data-theme="light"]) .hp-featured-pill {
+    color: var(--cr-accent) !important;
+    background: var(--cr-accent-dim) !important;
 }
 
-html:not([data-theme="light"]) .footer-links a:hover {
-    color: var(--cr-accent) !important;
+html:not([data-theme="light"]) .hp-article-card-pill {
+    background: var(--cr-surface-3) !important;
+    color: var(--cr-text-muted) !important;
 }

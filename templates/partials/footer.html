@@ -1,27 +1,66 @@
 <footer class="site-footer">
     <div class="container-medium">
-        <div class="footer-top">
-            <a href="/" class="footer-brand">
-                <span class="footer-brand-mark">CR</span>
-                <span class="footer-brand-name">Career<span class="footer-brand-accent">Reality</span></span>
-            </a>
-            <p class="footer-tagline">Independently written career intelligence for Indian tech.</p>
+
+        <!-- Newsletter band -->
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-inner">
+                <div class="footer-newsletter-copy">
+                    <h3 class="footer-newsletter-title">Get Career Reality in Your Inbox</h3>
+                    <p class="footer-newsletter-desc">Weekly reality checks. No spam.</p>
+                </div>
+                <form class="footer-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="your@email.com" required class="footer-newsletter-input">
+                    <button type="submit" class="footer-newsletter-btn">Subscribe</button>
+                </form>
+            </div>
         </div>
 
-        <nav class="footer-links" aria-label="Footer">
-            <a href="{% url 'salary_calculator' %}">Calculator</a>
-            <a href="{% url 'analyzer_home' %}">Risk Analyzer</a>
-            <a href="{% url 'layoff_radar' %}">Layoff Radar</a>
-            <a href="{% url 'company_directory' %}">Companies</a>
-            <a href="{% url 'ai_news_hub' %}">AI Pulse</a>
-            <a href="{% url 'salary_reality' %}">Salaries</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'editorial' %}">Editorial</a>
-            <a href="{% url 'contact' %}">Contact</a>
-            <a href="{% url 'terms' %}">Terms</a>
-            <a href="{% url 'privacy_policy' %}">Privacy</a>
-        </nav>
+        <div class="footer-grid">
+            <div class="footer-col footer-col--brand">
+                <a href="/" class="footer-brand">
+                    <span class="footer-brand-mark">CR</span>
+                    <span class="footer-brand-name">Career<span class="footer-brand-accent">Reality</span></span>
+                </a>
+                <p class="footer-tagline">Independently written. No sponsors. No courses. AI used only for assistive editing.</p>
+            </div>
 
-        <p class="footer-copy">&copy; {% now "Y" %} CareerReality · No sponsors. No courses.</p>
+            <div class="footer-col">
+                <div class="footer-col-title">Tools</div>
+                <nav class="footer-col-links">
+                    <a href="{% url 'salary_calculator' %}">CTC Calculator</a>
+                    <a href="{% url 'analyzer_home' %}">Risk Analyzer</a>
+                    <a href="{% url 'layoff_radar' %}">Layoff Radar</a>
+                    <a href="{% url 'payments:pricing' %}">Pro</a>
+                </nav>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">Explore</div>
+                <nav class="footer-col-links">
+                    <a href="{% url 'company_directory' %}">Companies</a>
+                    <a href="{% url 'ai_news_hub' %}">AI Pulse</a>
+                    <a href="{% url 'salary_reality' %}">Salary Data</a>
+                    <a href="{% url 'topic_clusters' %}">Topic Clusters</a>
+                    <a href="{% url 'career_reality_index' %}">Index</a>
+                    <a href="{% url 'search' %}">Search</a>
+                </nav>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <nav class="footer-col-links">
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'editorial' %}">Editorial Standards</a>
+                    <a href="{% url 'revenue_model' %}">Revenue Model</a>
+                    <a href="{% url 'sponsorship_policy' %}">Sponsorships</a>
+                    <a href="{% url 'contact' %}">Contact</a>
+                    <a href="{% url 'terms' %}">Terms</a>
+                    <a href="{% url 'privacy_policy' %}">Privacy</a>
+                </nav>
+            </div>
+        </div>
+
+        <p class="footer-copy">&copy; {% now "Y" %} CareerReality</p>
     </div>
 </footer>
