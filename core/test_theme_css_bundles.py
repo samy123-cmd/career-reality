@@ -81,12 +81,13 @@ class ThemeCssBundleTests(TestCase):
         self.assertIn("hp-editorial-list", content)
         self.assertIn("hp-editorial-featured", content)
 
-    def test_footer_minimal_layout(self):
+    def test_footer_column_layout(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         content = response.content.decode("utf-8")
-        self.assertIn("footer-links", content)
-        self.assertNotIn("footer-grid", content)
+        self.assertIn("footer-columns", content)
+        self.assertIn("footer-col-heading", content)
+        self.assertIn("footer-bottom-bar", content)
         self.assertNotIn("footer-newsletter", content)
 
     def test_ai_pulse_hub_loads_ai_pulse_css(self):
