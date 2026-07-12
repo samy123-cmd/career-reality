@@ -85,8 +85,9 @@ class ThemeCssBundleTests(TestCase):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         content = response.content.decode("utf-8")
-        self.assertIn("footer-links-grid", content)
-        self.assertIn("footer-link-group", content)
+        self.assertIn("footer-columns", content)
+        self.assertIn("footer-col-list", content)
+        self.assertIn("footer-bottom-bar", content)
         self.assertNotIn("footer-grid", content)
         self.assertNotIn("footer-newsletter", content)
 

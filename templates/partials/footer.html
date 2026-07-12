@@ -1,36 +1,62 @@
 <footer class="site-footer">
-    <div class="container-medium footer-inner">
-        <div class="footer-brand-block">
-            <a href="/" class="footer-brand">
-                <span class="footer-brand-mark">CR</span>
-                <span class="footer-brand-name">Career<span class="footer-brand-accent">Reality</span></span>
+    <div class="container-wide footer-shell">
+        <div class="footer-columns">
+            <div class="footer-col footer-col--brand">
+                <a href="/" class="footer-brand">
+                    <span class="footer-brand-mark">CR</span>
+                    <span class="footer-brand-name">Career<span class="footer-brand-accent">Reality</span></span>
+                </a>
+                <p class="footer-tagline">Independently written career intelligence for Indian tech.</p>
+            </div>
+
+            <nav class="footer-col" aria-label="Tools">
+                <p class="footer-col-heading">Tools</p>
+                <ul class="footer-col-list">
+                    <li><a href="{% url 'salary_calculator' %}">CTC Calculator</a></li>
+                    <li><a href="{% url 'analyzer_home' %}">Risk Analyzer</a></li>
+                    <li><a href="{% url 'layoff_radar' %}">Layoff Radar</a></li>
+                    <li><a href="{% url 'escape_plan' %}">Escape Plan</a></li>
+                    <li><a href="{% url 'submit_salary' %}">Salary Drop</a></li>
+                </ul>
+            </nav>
+
+            <nav class="footer-col" aria-label="Intelligence">
+                <p class="footer-col-heading">Intelligence</p>
+                <ul class="footer-col-list">
+                    <li><a href="{% url 'company_directory' %}">Companies</a></li>
+                    <li><a href="{% url 'salary_reality' %}">Salaries</a></li>
+                    <li><a href="{% url 'ai_news_hub' %}">AI Pulse</a></li>
+                    <li><a href="{% url 'career_reality_index' %}">Career Index</a></li>
+                    <li><a href="{% url 'topic_clusters' %}">Articles</a></li>
+                </ul>
+            </nav>
+
+            <nav class="footer-col" aria-label="Company and legal">
+                <p class="footer-col-heading">Company</p>
+                <ul class="footer-col-list">
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'editorial' %}">Editorial</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'terms' %}">Terms of Use</a></li>
+                    <li><a href="{% url 'privacy_policy' %}">Privacy</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="footer-bottom-bar">
+            <a href="{% url 'payments:pricing' %}" class="footer-bottom-link">
+                <span class="footer-bottom-icon" aria-hidden="true">◆</span>
+                Go Pro — ₹299/mo
             </a>
-            <p class="footer-tagline">Independently written career intelligence for Indian tech.</p>
+            <a href="{% url 'submit_salary' %}" class="footer-bottom-link">
+                <span class="footer-bottom-icon" aria-hidden="true">+</span>
+                Drop a Salary
+            </a>
+            <a href="{% url 'search' %}" class="footer-bottom-link">
+                <span class="footer-bottom-icon" aria-hidden="true">⌕</span>
+                Search
+            </a>
+            <p class="footer-copy">&copy; {% now "Y" %} CareerReality.in</p>
         </div>
-
-        <div class="footer-links-grid">
-            <nav class="footer-link-group" aria-label="Tools">
-                <p class="footer-group-label">Tools</p>
-                <a href="{% url 'salary_calculator' %}">Calculator</a>
-                <a href="{% url 'analyzer_home' %}">Risk Analyzer</a>
-                <a href="{% url 'layoff_radar' %}">Layoff Radar</a>
-                <a href="{% url 'company_directory' %}">Companies</a>
-                <a href="{% url 'ai_news_hub' %}">AI Pulse</a>
-                <a href="{% url 'salary_reality' %}">Salaries</a>
-            </nav>
-            <nav class="footer-link-group" aria-label="Company">
-                <p class="footer-group-label">Company</p>
-                <a href="{% url 'about' %}">About</a>
-                <a href="{% url 'editorial' %}">Editorial</a>
-                <a href="{% url 'contact' %}">Contact</a>
-            </nav>
-            <nav class="footer-link-group" aria-label="Legal">
-                <p class="footer-group-label">Legal</p>
-                <a href="{% url 'terms' %}">Terms</a>
-                <a href="{% url 'privacy_policy' %}">Privacy</a>
-            </nav>
-        </div>
-
-        <p class="footer-copy">&copy; {% now "Y" %} CareerReality · No sponsors. No courses.</p>
     </div>
 </footer>

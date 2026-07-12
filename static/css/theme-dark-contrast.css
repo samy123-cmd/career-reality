@@ -855,6 +855,21 @@ html:not([data-theme="light"]) .footer-brand-name {
     color: var(--cr-text) !important;
 }
 
+html:not([data-theme="light"]) .footer-col-list a,
+html:not([data-theme="light"]) .footer-bottom-link {
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .footer-col-list a:hover,
+html:not([data-theme="light"]) .footer-bottom-link:hover {
+    color: var(--cr-accent) !important;
+}
+
+html:not([data-theme="light"]) .footer-col-heading,
+html:not([data-theme="light"]) .footer-copy {
+    color: var(--cr-text-muted) !important;
+}
+
 html:not([data-theme="light"]) .footer-links a {
     color: var(--cr-text-secondary) !important;
 }

@@ -690,8 +690,8 @@
     }
 
     /* ── Footer ── */
-    .footer-links-grid {
-        max-width: 100%;
+    .footer-columns {
+        grid-template-columns: 1fr 1fr;
     }
 
     /* ── Pricing ── */
