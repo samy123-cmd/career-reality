@@ -689,12 +689,86 @@
         font-size: clamp(24px, 6vw, 32px) !important;
     }
 
-    /* ── Homepage ── */
+    /* ── Homepage + tool hub ── */
     .hp-hero { padding: 32px 0 28px; }
     .hp-section { padding: 32px 0; }
+    .hp-section-header { margin-bottom: 24px; }
+    .hp-tools-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
     .hp-tool-card {
+        align-items: center;
         border-radius: var(--mobile-card-radius);
-        padding: 18px;
+        padding: 16px;
+        text-decoration: none;
+    }
+    .hp-tool-card:hover {
+        transform: none;
+    }
+    .hp-tool-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        font-size: 20px;
+    }
+    .hp-tool-body h3 {
+        text-decoration: none;
+    }
+    .hp-tool-arrow {
+        display: block;
+        opacity: 0.5;
+        font-size: 16px;
+    }
+
+    /* ── CTC calculator ── */
+    .az-calc-hero {
+        text-align: left;
+        margin-bottom: 24px;
+    }
+    .az-calc-title {
+        font-size: clamp(24px, 6vw, 32px);
+        line-height: 1.15;
+    }
+    .az-calc-subtitle {
+        margin: 12px 0 0;
+        font-size: 15px;
+        line-height: 1.55;
+    }
+    .az-calc-card {
+        padding: 20px 16px;
+        border-radius: var(--mobile-card-radius);
+        margin-bottom: 24px;
+    }
+    .az-calc-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    .az-calc-label {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    .az-calc-input,
+    .az-calc-card select {
+        min-height: 48px;
+        font-size: 16px;
+        border-radius: 10px;
+        padding: 12px 14px;
+    }
+    .az-calc-input--light {
+        font-size: 16px;
+    }
+    .az-calc-divider {
+        margin-bottom: 16px;
+        padding-top: 12px;
+    }
+    .az-calc-btn {
+        min-height: 52px;
+        border-radius: 12px;
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        text-transform: none;
     }
 
     /* ── Company directory ── */
