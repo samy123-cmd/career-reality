@@ -54,6 +54,8 @@
       At ₹299/month, that's up to <strong>667x ROI</strong>.
     </div>
 
+    <input type="hidden" id="selected-product" value="pro-monthly">
+
     <p class="plan-desc">Unlimited salary intelligence. Layoff alerts. AI-personalized result reports.</p>
     <ul class="plan-features">
       <li>Everything in Free</li>
@@ -64,19 +66,33 @@
       <li>Role-level salary percentiles</li>
       <li>Priority support</li>
     </ul>
-    <button class="btn-plan btn-plan-primary"
-            id="btn-pro"
-            data-product="pro-monthly"
-            {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
-      Get Pro →
-    </button>
-    <div id="pro-email-wrap" style="display:none;margin-top:.75rem;">
-      <input type="email" id="pro-email-input" placeholder="your@email.com"
-             value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
-             style="width:100%;padding:.55rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem;margin-bottom:.5rem;">
-      <button type="button" id="btn-pro-confirm" class="btn-plan btn-plan-primary" style="width:100%;">Confirm &amp; Pay →</button>
+
+    <div id="pro-cta-wrap">
+      <button class="btn-plan btn-plan-primary"
+              id="btn-pro"
+              type="button"
+              {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
+        Get Pro →
+      </button>
     </div>
+
+    <div id="pro-email-wrap" class="plan-checkout-step" hidden>
+      <label class="plan-checkout-label" for="pro-email-input">Step 2 — Enter email for receipt &amp; access</label>
+      <input type="email"
+             id="pro-email-input"
+             class="plan-email-field"
+             placeholder="your@email.com"
+             autocomplete="email"
+             inputmode="email"
+             {% if request.user.is_authenticated %}data-autofill="{{ request.user.email }}"{% endif %}>
+      <div class="plan-checkout-actions">
+        <button type="button" id="btn-pro-confirm" class="btn-plan btn-plan-primary">Confirm &amp; Pay →</button>
+        <button type="button" id="btn-pro-back" class="plan-checkout-back">← Back to plan</button>
+      </div>
+    </div>
+
     <p class="plan-trust-line">Cancel anytime · Instant access · No lock-in</p>
+    <p class="plan-checkout-status" id="pro-checkout-status" aria-live="polite"></p>
     <p class="loading-msg" id="loading-pro">Opening checkout…</p>
   </div>
 
@@ -92,18 +108,32 @@
       <li>Bond clause breakdown</li>
       <li>Communication scripts</li>
     </ul>
-    <button class="btn-plan btn-plan-outline"
-            id="btn-checklist"
-            data-product="exit-checklist"
-            {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
-      Buy Now →
-    </button>
-    <div id="checklist-email-wrap" style="display:none;margin-top:.75rem;">
-      <input type="email" id="checklist-email-input" placeholder="your@email.com"
-             value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
-             style="width:100%;padding:.55rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem;margin-bottom:.5rem;">
-      <button type="button" id="btn-checklist-confirm" class="btn-plan btn-plan-outline" style="width:100%;">Confirm &amp; Pay →</button>
+
+    <div id="checklist-cta-wrap">
+      <button class="btn-plan btn-plan-outline"
+              id="btn-checklist"
+              type="button"
+              {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
+        Buy Now →
+      </button>
     </div>
+
+    <div id="checklist-email-wrap" class="plan-checkout-step" hidden>
+      <label class="plan-checkout-label" for="checklist-email-input">Step 2 — Enter email for delivery</label>
+      <input type="email"
+             id="checklist-email-input"
+             class="plan-email-field"
+             placeholder="your@email.com"
+             autocomplete="email"
+             inputmode="email"
+             {% if request.user.is_authenticated %}data-autofill="{{ request.user.email }}"{% endif %}>
+      <div class="plan-checkout-actions">
+        <button type="button" id="btn-checklist-confirm" class="btn-plan btn-plan-outline">Confirm &amp; Pay →</button>
+        <button type="button" id="btn-checklist-back" class="plan-checkout-back">← Back to plan</button>
+      </div>
+    </div>
+
+    <p class="plan-checkout-status" id="checklist-checkout-status" aria-live="polite"></p>
     <p class="loading-msg" id="loading-checklist">Opening checkout…</p>
   </div>
 
@@ -147,9 +177,51 @@
   var proPrice = document.getElementById("pro-price");
   var proPeriod = document.getElementById("pro-period");
   var annualNote = document.getElementById("annual-note");
-  var btnPro = document.getElementById("btn-pro");
+  var selectedProduct = document.getElementById("selected-product");
   var btnMonthlyToggle = document.getElementById("btn-monthly-toggle");
   var btnAnnualToggle = document.getElementById("btn-annual-toggle");
+  var proCheckoutStatus = document.getElementById("pro-checkout-status");
+  var checklistCheckoutStatus = document.getElementById("checklist-checkout-status");
+
+  function applyEmailAutofill(input) {
+    if (!input || input.value) return;
+    var autofill = input.getAttribute("data-autofill");
+    if (autofill) input.value = autofill;
+  }
+
+  function setCheckoutStatus(el, message) {
+    if (el) el.textContent = message || "";
+  }
+
+  function showCheckoutStep(ctaWrap, emailWrap, statusEl, message) {
+    if (ctaWrap) ctaWrap.hidden = true;
+    if (emailWrap) {
+      emailWrap.hidden = false;
+      var input = emailWrap.querySelector("input[type=email]");
+      applyEmailAutofill(input);
+      if (input) input.focus();
+    }
+    setCheckoutStatus(statusEl, message || "Step 2 of 2 — enter your email, then confirm payment.");
+  }
+
+  function hideCheckoutStep(ctaWrap, emailWrap, statusEl) {
+    if (ctaWrap) ctaWrap.hidden = false;
+    if (emailWrap) emailWrap.hidden = true;
+    setCheckoutStatus(statusEl, "");
+  }
+
+  function validateEmail(input) {
+    var email = input ? input.value.trim() : "";
+    if (!email || email.indexOf("@") === -1) {
+      if (input) {
+        input.classList.add("is-error");
+        input.focus();
+      }
+      return "";
+    }
+    if (input) input.classList.remove("is-error");
+    return email;
+  }
 
   var roiEl = document.getElementById("plan-roi");
   var ROI_MONTHLY = '<span class="plan-roi-icon">💡</span> One salary data point typically reveals a ₹40,000–₹2,00,000 gap. At ₹299/month, that\'s up to <strong>667x ROI</strong>.';
@@ -159,7 +231,7 @@
     proPrice.childNodes[0].textContent = "₹299 ";
     proPeriod.textContent = "/month";
     annualNote.style.display = "none";
-    if (btnPro) btnPro.setAttribute("data-product", "pro-monthly");
+    if (selectedProduct) selectedProduct.value = "pro-monthly";
     if (roiEl) roiEl.innerHTML = ROI_MONTHLY;
     btnMonthlyToggle.classList.add("active");
     btnAnnualToggle.classList.remove("active");
@@ -169,7 +241,7 @@
     proPrice.childNodes[0].textContent = "₹2,499 ";
     proPeriod.textContent = "/year";
     annualNote.style.display = "block";
-    if (btnPro) btnPro.setAttribute("data-product", "pro-annual");
+    if (selectedProduct) selectedProduct.value = "pro-annual";
     if (roiEl) roiEl.innerHTML = ROI_ANNUAL;
     btnAnnualToggle.classList.add("active");
     btnMonthlyToggle.classList.remove("active");
@@ -269,56 +341,60 @@
       });
   }
 
-  // Pro button: show inline email form, then confirm
+  // Pro checkout flow
   var btnPro = document.getElementById("btn-pro");
+  var proCtaWrap = document.getElementById("pro-cta-wrap");
   var proEmailWrap = document.getElementById("pro-email-wrap");
   var proEmailInput = document.getElementById("pro-email-input");
   var btnProConfirm = document.getElementById("btn-pro-confirm");
+  var btnProBack = document.getElementById("btn-pro-back");
 
   if (btnPro) {
     btnPro.addEventListener("click", function () {
-      if (!proEmailWrap) return;
-      proEmailWrap.style.display = "block";
-      btnPro.style.display = "none";
-      if (proEmailInput && !proEmailInput.value) proEmailInput.focus();
+      showCheckoutStep(proCtaWrap, proEmailWrap, proCheckoutStatus);
+    });
+  }
+
+  if (btnProBack) {
+    btnProBack.addEventListener("click", function () {
+      hideCheckoutStep(proCtaWrap, proEmailWrap, proCheckoutStatus);
     });
   }
 
   if (btnProConfirm) {
     btnProConfirm.addEventListener("click", function () {
-      var email = proEmailInput ? proEmailInput.value.trim() : "";
-      if (!email || !email.includes("@")) {
-        if (proEmailInput) { proEmailInput.style.borderColor = "#ef4444"; proEmailInput.focus(); }
-        return;
-      }
-      if (proEmailInput) proEmailInput.style.borderColor = "#d1d5db";
-      var productSlug = (btnPro ? btnPro.getAttribute("data-product") : null) || "pro-monthly";
+      var email = validateEmail(proEmailInput);
+      if (!email) return;
+      var productSlug = (selectedProduct && selectedProduct.value) || "pro-monthly";
+      setCheckoutStatus(proCheckoutStatus, "Step 3 — opening secure checkout…");
       openCheckout(productSlug, email, "btn-pro-confirm", "loading-pro");
     });
   }
 
   var btnChecklist = document.getElementById("btn-checklist");
+  var checklistCtaWrap = document.getElementById("checklist-cta-wrap");
   var checklistEmailWrap = document.getElementById("checklist-email-wrap");
   var checklistEmailInput = document.getElementById("checklist-email-input");
   var btnChecklistConfirm = document.getElementById("btn-checklist-confirm");
+  var btnChecklistBack = document.getElementById("btn-checklist-back");
 
   if (btnChecklist) {
     btnChecklist.addEventListener("click", function () {
-      if (!checklistEmailWrap) return;
-      checklistEmailWrap.style.display = "block";
-      btnChecklist.style.display = "none";
-      if (checklistEmailInput && !checklistEmailInput.value) checklistEmailInput.focus();
+      showCheckoutStep(checklistCtaWrap, checklistEmailWrap, checklistCheckoutStatus);
+    });
+  }
+
+  if (btnChecklistBack) {
+    btnChecklistBack.addEventListener("click", function () {
+      hideCheckoutStep(checklistCtaWrap, checklistEmailWrap, checklistCheckoutStatus);
     });
   }
 
   if (btnChecklistConfirm) {
     btnChecklistConfirm.addEventListener("click", function () {
-      var email = checklistEmailInput ? checklistEmailInput.value.trim() : "";
-      if (!email || !email.includes("@")) {
-        if (checklistEmailInput) { checklistEmailInput.style.borderColor = "#ef4444"; checklistEmailInput.focus(); }
-        return;
-      }
-      if (checklistEmailInput) checklistEmailInput.style.borderColor = "#d1d5db";
+      var email = validateEmail(checklistEmailInput);
+      if (!email) return;
+      setCheckoutStatus(checklistCheckoutStatus, "Step 3 — opening secure checkout…");
       openCheckout("exit-checklist", email, "btn-checklist-confirm", "loading-checklist");
     });
   }

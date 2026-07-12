@@ -689,6 +689,19 @@
         font-size: clamp(24px, 6vw, 32px) !important;
     }
 
+    /* ── Footer ── */
+    .footer-columns {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Pricing ── */
+    .pricing-grid {
+        padding: 0 1rem;
+    }
+    .plan-card {
+        padding: 1.5rem;
+    }
+
     /* ── Homepage + tool hub ── */
     .hp-hero { padding: 32px 0 28px; }
     .hp-section { padding: 32px 0; }
@@ -744,6 +757,9 @@
         grid-template-columns: 1fr;
         gap: 16px;
         margin-bottom: 16px;
+    }
+    .az-calc-field {
+        width: 100%;
     }
     .az-calc-label {
         font-size: 12px;

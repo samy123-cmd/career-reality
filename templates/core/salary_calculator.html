@@ -59,7 +59,7 @@
 <section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
 
     <div class="az-calc-hero">
-        <h1 class="az-calc-title">{{ page_h1|default:"CTC Decoder" }}</h1>
+        <h1 class="az-calc-title" id="calc-heading">{{ page_h1|default:"CTC Decoder" }}</h1>
         <p class="az-calc-subtitle">
             See where your "20 LPA" actually goes. We deduct the "Ghost Components" (Employer PF, Gratuity, Variable
             Pay)
@@ -68,61 +68,67 @@
     </div>
 
     <!-- Calculator Form -->
-    <div class="az-calc-card">
+    <form id="ctc-calculator-form" class="az-calc-card" aria-labelledby="calc-heading" novalidate>
 
-        <div class="az-calc-grid">
-            <!-- CTC -->
-            <div>
-                <label class="az-calc-label">
-                    Annual CTC (Rs)
-                </label>
-                <input type="number" id="ctc-input" placeholder="e.g. 1200000"
-                    class="az-calc-input" aria-describedby="ctc-input-error">
-                <p id="ctc-input-error" class="az-calc-field-error" style="display:none;"></p>
-            </div>
-
-            <!-- Variable Pay -->
-            <div>
-                <label class="az-calc-label">
-                    Variable Pay / Bonus (%)
-                </label>
-                <input type="number" id="variable-input" value="10"
-                    class="az-calc-input">
-                <p class="az-calc-hint">Money you *might* get annually,
-                    not monthly.</p>
-            </div>
-        </div>
-
-        <div class="az-calc-divider">
-            <p class="az-calc-heading">For Old Regime Optimization (HRA):</p>
+        <fieldset class="az-calc-fieldset">
+            <legend class="az-calc-heading">Salary inputs</legend>
             <div class="az-calc-grid">
-                <!-- Rent -->
-                <div>
-                    <label class="az-calc-label">
+                <div class="az-calc-field">
+                    <label class="az-calc-label" for="ctc-input">
+                        Annual CTC (Rs)
+                    </label>
+                    <input type="number" id="ctc-input" name="ctc" placeholder="e.g. 1200000"
+                        class="az-calc-input" inputmode="numeric" min="0" step="1000"
+                        aria-describedby="ctc-input-error" aria-required="true">
+                    <p id="ctc-input-error" class="az-calc-field-error" role="alert" hidden></p>
+                </div>
+
+                <div class="az-calc-field">
+                    <label class="az-calc-label" for="variable-input">
+                        Variable Pay / Bonus (%)
+                    </label>
+                    <input type="number" id="variable-input" name="variable_percent" placeholder="e.g. 10"
+                        class="az-calc-input" inputmode="decimal" min="0" max="100" step="1"
+                        aria-describedby="variable-input-hint">
+                    <p id="variable-input-hint" class="az-calc-hint">Money you *might* get annually,
+                        not monthly.</p>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="az-calc-fieldset az-calc-divider">
+            <legend class="az-calc-heading">For Old Regime Optimization (HRA)</legend>
+            <div class="az-calc-grid">
+                <div class="az-calc-field">
+                    <label class="az-calc-label" for="rent-input">
                         Monthly Rent Paid (Rs)
                     </label>
-                    <input type="number" id="rent-input" value="0"
-                        class="az-calc-input az-calc-input--light">
+                    <input type="number" id="rent-input" name="monthly_rent" placeholder="e.g. 15000"
+                        class="az-calc-input az-calc-input--light" inputmode="numeric" min="0" step="500"
+                        aria-describedby="rent-input-hint">
+                    <p id="rent-input-hint" class="az-calc-hint">Leave blank if you do not pay rent.</p>
                 </div>
 
-                <!-- City Type -->
-                <div>
-                    <label class="az-calc-label">
+                <div class="az-calc-field">
+                    <label class="az-calc-label" for="city-input">
                         City Type
                     </label>
-                    <select id="city-input"
-                        class="az-calc-input az-calc-input--light">
+                    <select id="city-input" name="city_type"
+                        class="az-calc-input az-calc-input--light"
+                        aria-describedby="city-input-hint">
+                        <option value="">Select city type</option>
                         <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
-                        <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
+                        <option value="non-metro">Non-Metro (Blr, Hyd, Pune)</option>
                     </select>
+                    <p id="city-input-hint" class="az-calc-hint">Used for HRA exemption under old tax regime.</p>
                 </div>
             </div>
-        </div>
+        </fieldset>
 
-        <button id="decode-btn" class="az-calc-btn">
+        <button id="decode-btn" type="button" class="az-calc-btn" aria-controls="results">
             Decode My Salary
         </button>
-    </div>
+    </form>
 
     <!-- Noscript Fallback for crawlers & no-JS users -->
     <noscript>
@@ -145,7 +151,7 @@
     </noscript>
 
     <!-- Results Section -->
-    <div id="results" style="display: none;" class="az-calc-results">
+    <div id="results" hidden class="az-calc-results" aria-live="polite" aria-atomic="true">
 
         <div class="az-calc-result-hero">
             <h2 class="az-calc-result-label">The Real Monthly In-Hand</h2>
@@ -341,21 +347,32 @@
 </section>
 
 <script>
+    var DEFAULT_VARIABLE_PCT = 10;
+    var DEFAULT_CITY = "non-metro";
+
+    function readNumberValue(id, fallback) {
+        var el = document.getElementById(id);
+        if (!el || el.value === "") return fallback;
+        var parsed = parseFloat(el.value);
+        return isNaN(parsed) ? fallback : parsed;
+    }
+
     function calculateSalary() {
-        const ctc = parseFloat(document.getElementById('ctc-input').value) || 0;
-        const variablePercent = parseFloat(document.getElementById('variable-input').value) || 0;
-        const monthlyRent = parseFloat(document.getElementById('rent-input').value) || 0;
-        const isMetro = document.getElementById('city-input').value === 'metro';
+        const ctc = readNumberValue('ctc-input', 0);
+        const variablePercent = readNumberValue('variable-input', DEFAULT_VARIABLE_PCT);
+        const monthlyRent = readNumberValue('rent-input', 0);
+        const cityValue = document.getElementById('city-input').value || DEFAULT_CITY;
+        const isMetro = cityValue === 'metro';
 
         if (ctc <= 0) {
             var ctcInput = document.getElementById('ctc-input');
             var errEl = document.getElementById('ctc-input-error');
-            if (errEl) { errEl.textContent = 'Please enter a valid CTC amount.'; errEl.style.display = 'block'; }
+            if (errEl) { errEl.textContent = 'Please enter a valid CTC amount.'; errEl.hidden = false; }
             if (ctcInput) ctcInput.focus();
             return;
         }
         var errEl = document.getElementById('ctc-input-error');
-        if (errEl) { errEl.style.display = 'none'; }
+        if (errEl) { errEl.hidden = true; errEl.textContent = ''; }
 
         // --- 1. Deconstruct CTC ---
         // Variable Pay
@@ -433,7 +450,8 @@
         // --- 4. Render ---
         const fmt = (n) => 'Rs ' + Math.round(n).toLocaleString('en-IN');
 
-        document.getElementById('results').style.display = 'block';
+        var resultsEl = document.getElementById('results');
+        if (resultsEl) resultsEl.hidden = false;
         document.getElementById('final-monthly').textContent = fmt(monthlyInHand);
         document.getElementById('best-regime').textContent = isNewRegime ? "New Regime" : "Old Regime";
         document.getElementById('tax-regime-label').textContent = isNewRegime ? "NEW REGIME" : "OLD REGIME";

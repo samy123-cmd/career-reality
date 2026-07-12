@@ -874,6 +874,19 @@
     margin-right: auto;
     border-radius: 10px;
 }
+.az-calc-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+.az-calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.az-calc-field-error[hidden] {
+    display: none;
+}
 .az-calc-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

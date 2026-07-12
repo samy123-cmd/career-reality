@@ -261,13 +261,19 @@ def razorpay_webhook(request):
 @require_GET
 def pricing(request):
     """Public pricing page."""
+    from core.cache_utils import get_social_proof_counts
+
     products = Product.objects.filter(is_active=True).order_by("price_paise")
+    social_proof = get_social_proof_counts()
     return render(
         request,
         "payments/pricing.html",
         {
             "products": products,
             "razorpay_key_id": getattr(settings, "RAZORPAY_KEY_ID", ""),
+            "salary_count": social_proof.get("salary_count", "0"),
+            "layoff_count": social_proof.get("layoff_count", "0"),
+            "assessment_count": social_proof.get("assessment_count", "0"),
             "og_title": "Career Reality Pro — Salary Intelligence & Career Tools",
             "og_description": "Get access to India's most honest salary database, layoff alerts, and personalized exit checklists.",
         },
