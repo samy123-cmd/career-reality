@@ -1,0 +1,40 @@
+<div class="more-sheet-overlay" id="more-sheet-overlay" aria-hidden="true"></div>
+<div class="more-sheet" id="more-sheet" role="dialog" aria-modal="true" aria-labelledby="more-sheet-title" aria-hidden="true">
+    <div class="more-sheet-handle" aria-hidden="true"></div>
+    <p class="more-sheet-title" id="more-sheet-title">More Tools</p>
+    <div class="more-sheet-grid">
+        <a href="{% url 'salary_reality' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">💰</span>
+            Salary Reality
+        </a>
+        <a href="{% url 'submit_salary' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">+</span>
+            Salary Drop
+        </a>
+        <a href="{% url 'escape_plan' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">🚀</span>
+            Escape Plan
+        </a>
+        <a href="{% url 'ai_news_hub' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">⚡</span>
+            AI Pulse
+        </a>
+        <a href="{% url 'career_reality_index' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">📊</span>
+            Career Index
+        </a>
+        <a href="{% url 'search' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">🔍</span>
+            Search
+        </a>
+        {% if user.is_authenticated and user.profile.is_pro %}
+        <a href="{% url 'pro_dashboard' %}" class="more-sheet-link more-sheet-link--pro">
+            ◆ Pro Dashboard
+        </a>
+        {% else %}
+        <a href="{% url 'payments:pricing' %}" class="more-sheet-link more-sheet-link--pro">
+            Go Pro — ₹299/mo
+        </a>
+        {% endif %}
+    </div>
+</div>

@@ -7,7 +7,7 @@
 {% block page_css %}{% include "partials/css_companies.html" %}{% endblock %}
 
 {% block content %}
-<div class="container-medium" style="padding: 2rem 1rem 4rem;">
+<div class="container-medium wr-page-wrap" style="padding: 2rem 1rem 4rem;">
     <nav class="cp-breadcrumb" aria-label="breadcrumb">
         <a href="{% url 'company_directory' %}">Companies</a>
         <span class="sep">&rsaquo;</span>
@@ -130,48 +130,12 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit">Submit Review</button>
+            <div class="wr-submit-wrap">
+                <button type="submit" class="btn-submit">Submit Review</button>
+            </div>
         </form>
     </div>
 </div>
-
-<style>
-.wr-page-title { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.5rem; }
-.wr-page-subtitle { color: #64748b; margin: 0 0 2rem; font-size: 0.95rem; }
-.wr-section-title { font-size: 1rem; font-weight: 700; margin: 0 0 1rem; }
-.wr-company-section { margin-bottom: 0.5rem; }
-.wr-divider { border: none; border-top: 1px solid var(--c-divider, #e2e8f0); margin: 1.5rem 0; }
-.wr-company-group { position: relative; }
-.wr-company-hint { font-size: 0.78rem; color: #94a3b8; margin: 0.25rem 0 0; }
-.wr-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    z-index: 100;
-    max-height: 220px;
-    overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
-    display: none;
-}
-.wr-suggestions.open { display: block; }
-.wr-suggestion-item {
-    padding: 0.65rem 1rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #f1f5f9;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.wr-suggestion-item:last-child { border-bottom: none; }
-.wr-suggestion-item:hover, .wr-suggestion-item.active { background: #f8fafc; }
-.wr-suggestion-sector { font-size: 0.75rem; color: #94a3b8; }
-</style>
 
 <script>
 (function () {

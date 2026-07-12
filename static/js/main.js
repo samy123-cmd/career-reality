@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     const mobileNav = document.querySelector('.mobile-nav');
     const overlay = document.querySelector('.mobile-menu-overlay');
+    const mobileNavClose = document.querySelector('.mobile-nav-close');
     const body = document.body;
 
     // ── Header scroll shadow ──
@@ -46,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
             mobileSearchPanel.classList.toggle('active');
             if (mobileSearchPanel.classList.contains('active')) {
                 mobileSearchPanel.querySelector('input').focus();
+            } else {
+                mobileSearchPanel.querySelector('input').blur();
             }
         });
         document.addEventListener('click', (e) => {
@@ -55,31 +58,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function toggleMenu() {
-        const isActive = mobileToggle.classList.contains('active');
+    function closeMenu() {
+        if (mobileToggle) mobileToggle.classList.remove('active');
+        if (mobileNav) mobileNav.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+        body.classList.remove('menu-open');
+    }
 
-        if (isActive) {
+    function openMenu() {
+        if (mobileToggle) mobileToggle.classList.add('active');
+        if (mobileNav) mobileNav.classList.add('active');
+        if (overlay) overlay.classList.add('active');
+        body.classList.add('menu-open');
+    }
+
+    function toggleMenu() {
+        if (mobileToggle && mobileToggle.classList.contains('active')) {
             closeMenu();
         } else {
             openMenu();
         }
     }
 
-    function openMenu() {
-        mobileToggle.classList.add('active');
-        mobileNav.classList.add('active');
-        overlay.classList.add('active');
-        body.classList.add('menu-open');
-    }
-
-    function closeMenu() {
-        mobileToggle.classList.remove('active');
-        mobileNav.classList.remove('active');
-        overlay.classList.remove('active');
-        body.classList.remove('menu-open');
-    }
-
-    // Event Listeners
     if (mobileToggle) {
         mobileToggle.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -87,9 +87,131 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (mobileNavClose) {
+        mobileNavClose.addEventListener('click', closeMenu);
+    }
+
     if (overlay) {
         overlay.addEventListener('click', closeMenu);
     }
+
+    // Close menu when a nav link is tapped
+    if (mobileNav) {
+        mobileNav.querySelectorAll('.mobile-nav-link, .mobile-pro-btn').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+    }
+
+    // ── Mobile drawer accordion ──
+    const accordionTriggers = document.querySelectorAll('.mobile-nav-accordion-trigger');
+    accordionTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const panelId = trigger.getAttribute('aria-controls');
+            const panel = document.getElementById(panelId);
+            const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+            accordionTriggers.forEach(other => {
+                if (other !== trigger) {
+                    other.setAttribute('aria-expanded', 'false');
+                    const otherPanel = document.getElementById(other.getAttribute('aria-controls'));
+                    if (otherPanel) otherPanel.classList.remove('is-open');
+                }
+            });
+
+            if (isOpen) {
+                trigger.setAttribute('aria-expanded', 'false');
+                if (panel) panel.classList.remove('is-open');
+            } else {
+                trigger.setAttribute('aria-expanded', 'true');
+                if (panel) panel.classList.add('is-open');
+            }
+        });
+    });
+
+    // ── Bottom tab bar: active state ──
+    const dockItems = document.querySelectorAll('.dock-item[data-dock-path]');
+    const currentPath = window.location.pathname;
+
+    dockItems.forEach(item => {
+        const dockPath = item.getAttribute('data-dock-path');
+        if (dockPath && (currentPath === dockPath || currentPath.startsWith(dockPath.replace(/\/$/, '') + '/'))) {
+            item.classList.add('is-active');
+        }
+    });
+
+    // Special case: company detail pages
+    if (currentPath.startsWith('/companies/') && currentPath !== '/companies/write-review/') {
+        dockItems.forEach(item => item.classList.remove('is-active'));
+        const companiesItem = document.querySelector('.dock-item[data-dock-path="/companies/"]');
+        if (companiesItem) companiesItem.classList.add('is-active');
+    }
+
+    // ── More bottom sheet ──
+    const moreTrigger = document.getElementById('dock-more-trigger');
+    const moreSheet = document.getElementById('more-sheet');
+    const moreOverlay = document.getElementById('more-sheet-overlay');
+
+    function openMoreSheet() {
+        if (!moreSheet || !moreOverlay) return;
+        moreSheet.classList.add('is-open');
+        moreOverlay.classList.add('is-open');
+        moreSheet.setAttribute('aria-hidden', 'false');
+        moreOverlay.setAttribute('aria-hidden', 'false');
+        if (moreTrigger) moreTrigger.setAttribute('aria-expanded', 'true');
+        body.classList.add('sheet-open');
+    }
+
+    function closeMoreSheet() {
+        if (!moreSheet || !moreOverlay) return;
+        moreSheet.classList.remove('is-open');
+        moreOverlay.classList.remove('is-open');
+        moreSheet.setAttribute('aria-hidden', 'true');
+        moreOverlay.setAttribute('aria-hidden', 'true');
+        if (moreTrigger) moreTrigger.setAttribute('aria-expanded', 'false');
+        body.classList.remove('sheet-open');
+    }
+
+    if (moreTrigger) {
+        moreTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (moreSheet && moreSheet.classList.contains('is-open')) {
+                closeMoreSheet();
+            } else {
+                openMoreSheet();
+            }
+        });
+    }
+
+    if (moreOverlay) {
+        moreOverlay.addEventListener('click', closeMoreSheet);
+    }
+
+    if (moreSheet) {
+        moreSheet.querySelectorAll('.more-sheet-link').forEach(link => {
+            link.addEventListener('click', closeMoreSheet);
+        });
+    }
+
+    // ── Table data-label injection for mobile cards ──
+    function injectTableLabels() {
+        if (window.innerWidth > 768) return;
+
+        document.querySelectorAll('table.editorial-table, table.salary-table').forEach(table => {
+            const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+            if (!headers.length) return;
+
+            table.querySelectorAll('tbody tr').forEach(row => {
+                row.querySelectorAll('td').forEach((td, i) => {
+                    if (!td.hasAttribute('data-label') && headers[i]) {
+                        td.setAttribute('data-label', headers[i]);
+                    }
+                });
+            });
+        });
+    }
+
+    injectTableLabels();
+    window.addEventListener('resize', injectTableLabels);
 
     // Generic Dropdown Handler (Supports multiple)
     const dropdowns = document.querySelectorAll('.nav-dropdown');
@@ -105,7 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 e.preventDefault();
 
-                // Close others
                 dropdowns.forEach(other => {
                     if (other !== dropdown) {
                         const otherContent = other.querySelector('.nav-dropdown-content');
@@ -115,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                isOpen = !isOpen; // Toggle current
+                isOpen = !isOpen;
 
                 if (isOpen) {
                     content.style.display = 'block';
@@ -126,25 +247,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Hover support (Desktop)
             let hoverTimeout;
             dropdown.addEventListener('mouseenter', () => {
-                // Close others first? Maybe not needed for hover, CSS handles it mostly.
-                // But for consistency with JS state:
                 clearTimeout(hoverTimeout);
                 content.style.display = 'block';
             });
             dropdown.addEventListener('mouseleave', () => {
                 hoverTimeout = setTimeout(() => {
                     content.style.display = 'none';
-                    isOpen = false; // Sync state
+                    isOpen = false;
                     trigger.setAttribute('aria-expanded', 'false');
                 }, 200);
             });
         }
     });
 
-    // Global Close on outside click
     document.addEventListener('click', (e) => {
         dropdowns.forEach(dropdown => {
             const content = dropdown.querySelector('.nav-dropdown-content');
@@ -156,11 +273,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Close mobile menu + dropdowns on Escape key (single handler)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (mobileNav && mobileNav.classList.contains('active')) {
                 closeMenu();
+            }
+            if (moreSheet && moreSheet.classList.contains('is-open')) {
+                closeMoreSheet();
+            }
+            if (mobileSearchPanel && mobileSearchPanel.classList.contains('active')) {
+                mobileSearchPanel.classList.remove('active');
             }
             dropdowns.forEach(dropdown => {
                 const content = dropdown.querySelector('.nav-dropdown-content');
@@ -168,7 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (content) content.style.display = 'none';
                 if (trigger) trigger.setAttribute('aria-expanded', 'false');
             });
-            // Close search suggestions on Escape
             const sugBox = document.getElementById('search-suggestions');
             if (sugBox) sugBox.style.display = 'none';
         }
@@ -216,14 +337,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 250);
         });
 
-        // Close suggestions on outside click
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
                 suggestionsBox.style.display = 'none';
             }
         });
 
-        // Allow keyboard navigation in suggestions
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown' && suggestionsBox.style.display === 'block') {
                 e.preventDefault();

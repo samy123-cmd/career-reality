@@ -613,7 +613,7 @@ a:hover {
     max-width: 360px;
     height: 100vh;
     height: 100dvh;
-    background: #fff;
+    background: var(--cr-surface, var(--c-white));
     z-index: 1001;
     overflow-y: auto;
     transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -633,7 +633,7 @@ a:hover {
 .mobile-nav-section {
     padding-bottom: 16px;
     margin-bottom: 16px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--cr-border, var(--c-divider));
 }
 .mobile-nav-section-title {
     font-size: 10px;
@@ -652,13 +652,14 @@ a:hover {
     padding: 12px;
     font-size: 15px;
     font-weight: 500;
-    color: #222;
+    color: var(--cr-text-secondary, var(--c-grey-mid));
     text-decoration: none;
     border-radius: 10px;
     transition: background 0.12s ease;
 }
 .mobile-nav-link:hover {
-    background: #f7f7f7;
+    background: var(--cr-surface-3, #f7f7f7);
+    color: var(--cr-text, var(--c-black));
 }
 .mnl-icon {
     font-size: 16px;
@@ -706,6 +707,7 @@ a:hover {
         display: flex;
     }
     .mobile-nav {
+        display: block;
         width: 88%;
     }
     .mobile-menu-overlay {
