@@ -805,9 +805,17 @@ html:not([data-theme="light"]) .footer-brand-name {
     color: var(--cr-text) !important;
 }
 
+html:not([data-theme="light"]) .site-footer {
+    background: #111116 !important;
+}
+
+html:not([data-theme="light"]) .footer-col-heading {
+    color: #878787 !important;
+}
+
 html:not([data-theme="light"]) .footer-col-list a,
 html:not([data-theme="light"]) .footer-bottom-link {
-    color: var(--cr-text-secondary) !important;
+    color: #fff !important;
 }
 
 html:not([data-theme="light"]) .footer-col-list a:hover,

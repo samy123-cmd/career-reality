@@ -1798,19 +1798,21 @@ blockquote.pullquote {
 .site-footer {
     padding: 0;
     border-top: 1px solid var(--cr-border, var(--c-divider));
-    background: var(--cr-surface, var(--c-bg-footer));
+    background: #111116;
     text-align: left;
 }
 
 .footer-shell {
-    padding: 40px 24px 0;
+    max-width: var(--w-wide);
+    margin: 0 auto;
+    padding: 48px 24px 0;
 }
 
 .footer-columns {
     display: grid;
-    grid-template-columns: 1.4fr repeat(3, 1fr);
-    gap: 32px 40px;
-    padding-bottom: 32px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 40px;
+    padding-bottom: 36px;
     border-bottom: 1px solid var(--cr-border, var(--c-divider));
 }
 
@@ -1819,7 +1821,7 @@ blockquote.pullquote {
 }
 
 .footer-col--brand {
-    padding-right: 16px;
+    padding-right: 0;
 }
 
 .footer-brand {
@@ -1860,16 +1862,16 @@ blockquote.pullquote {
     color: var(--cr-text-muted, var(--c-grey-light));
     line-height: 1.55;
     margin: 0;
-    max-width: 280px;
+    max-width: 260px;
 }
 
 .footer-col-heading {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--cr-text-muted, var(--c-grey-light));
-    margin: 0 0 12px;
+    color: #878787;
+    margin: 0 0 14px;
 }
 
 .footer-col-list {
@@ -1881,29 +1883,31 @@ blockquote.pullquote {
 .footer-col-list li {
     margin: 0;
     padding: 0;
+    list-style: none;
 }
 
 .footer-col-list a {
     display: block;
-    padding: 5px 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--cr-text, var(--c-black));
+    padding: 4px 0;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--cr-text, #fff);
     text-decoration: none;
-    line-height: 1.35;
+    line-height: 1.5;
 }
 
 .footer-col-list a:hover {
     color: var(--cr-accent, var(--c-blue-accent));
     opacity: 1;
+    text-decoration: underline;
 }
 
 .footer-bottom-bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px 28px;
-    padding: 20px 0 24px;
+    gap: 16px 32px;
+    padding: 22px 0 28px;
 }
 
 .footer-bottom-link {
@@ -1912,7 +1916,7 @@ blockquote.pullquote {
     gap: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--cr-text, var(--c-black));
+    color: var(--cr-text, #fff);
     text-decoration: none;
     white-space: nowrap;
 }
@@ -1929,12 +1933,12 @@ blockquote.pullquote {
     width: 20px;
     height: 20px;
     font-size: 12px;
-    color: var(--cr-accent, var(--c-blue-accent));
+    color: #fbbf24;
 }
 
 .footer-copy {
     font-size: 12px;
-    color: var(--cr-text-muted, var(--c-grey-light));
+    color: #878787;
     margin: 0 0 0 auto;
     white-space: nowrap;
 }
@@ -1992,33 +1996,38 @@ blockquote.pullquote {
 @media (max-width: 768px) {
     .site-footer {
         padding: 0;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
     }
     .footer-shell {
         padding: 32px 16px 0;
     }
     .footer-columns {
-        grid-template-columns: 1fr 1fr;
-        gap: 28px 24px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 20px;
         padding-bottom: 24px;
     }
     .footer-col--brand {
         grid-column: 1 / -1;
         padding-right: 0;
+        order: -1;
     }
     .footer-bottom-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-        padding: 16px 0 20px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 20px;
+        padding: 18px 0 20px;
     }
     .footer-copy {
-        margin: 8px 0 0;
+        margin: 0;
+        width: 100%;
     }
 }
 
 @media (max-width: 480px) {
     .footer-columns {
         grid-template-columns: 1fr;
+        gap: 24px;
     }
 }
 
