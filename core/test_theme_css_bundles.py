@@ -85,9 +85,29 @@ class ThemeCssBundleTests(TestCase):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         content = response.content.decode("utf-8")
-        self.assertIn("footer-links", content)
+        self.assertIn("footer-links-grid", content)
+        self.assertIn("footer-link-group", content)
         self.assertNotIn("footer-grid", content)
         self.assertNotIn("footer-newsletter", content)
+
+    def test_pricing_page_has_plan_cards_and_checkout_fields(self):
+        response = self.client.get(reverse("payments:pricing"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("plan-card", content)
+        self.assertIn("selected-product", content)
+        self.assertIn("plan-email-field", content)
+        self.assertIn("plan-checkout-step", content)
+
+    def test_salary_calculator_has_accessible_empty_inputs(self):
+        response = self.client.get(reverse("salary_calculator"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn('for="ctc-input"', content)
+        self.assertIn('id="ctc-calculator-form"', content)
+        self.assertIn('aria-live="polite"', content)
+        self.assertNotIn('id="variable-input" value=', content)
+        self.assertNotIn('id="rent-input" value=', content)
 
     def test_ai_pulse_hub_loads_ai_pulse_css(self):
         response = self.client.get(reverse("ai_news_hub"))

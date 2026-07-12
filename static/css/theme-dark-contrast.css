@@ -332,6 +332,7 @@ html:not([data-theme="light"]) .sr-type.salary {
 
 /* ── Pricing / dashboard / onboarding ── */
 html:not([data-theme="light"]) .pricing-card,
+html:not([data-theme="light"]) .plan-card,
 html:not([data-theme="light"]) .dash-card,
 html:not([data-theme="light"]) .onboard-card,
 html:not([data-theme="light"]) .onboard-tool {
@@ -341,8 +342,45 @@ html:not([data-theme="light"]) .onboard-tool {
 }
 
 html:not([data-theme="light"]) .pricing-card h3,
+html:not([data-theme="light"]) .plan-card .plan-name,
+html:not([data-theme="light"]) .plan-card .plan-price,
 html:not([data-theme="light"]) .dash-card h3 {
     color: var(--cr-text);
+}
+
+html:not([data-theme="light"]) .plan-desc,
+html:not([data-theme="light"]) .plan-features li,
+html:not([data-theme="light"]) .plan-price span,
+html:not([data-theme="light"]) .plan-price-annual-note,
+html:not([data-theme="light"]) .plan-trust-line,
+html:not([data-theme="light"]) .proof-item small {
+    color: var(--cr-text-muted) !important;
+}
+
+html:not([data-theme="light"]) .plan-roi {
+    background: rgba(34, 197, 94, 0.1) !important;
+    border-color: rgba(34, 197, 94, 0.3) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+html:not([data-theme="light"]) .plan-roi strong {
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .billing-toggle {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+}
+
+html:not([data-theme="light"]) .billing-toggle-btn.active {
+    background: var(--cr-surface) !important;
+    color: var(--cr-text) !important;
+}
+
+html:not([data-theme="light"]) .plan-email-field {
+    background: var(--cr-surface-3) !important;
+    border-color: var(--cr-border) !important;
+    color: var(--cr-text) !important;
 }
 
 html:not([data-theme="light"]) .btn-plan-outline {
@@ -549,6 +587,7 @@ html:not([data-theme="light"]) .hp-btn--primary,
 html:not([data-theme="light"]) .hp-index-cta,
 html:not([data-theme="light"]) .az-btn-start,
 html:not([data-theme="light"]) .az-calc-cta-btn,
+html:not([data-theme="light"]) .az-calc-btn,
 html:not([data-theme="light"]) .az-radar-btn,
 html:not([data-theme="light"]) .az-resources-btn,
 html:not([data-theme="light"]) .upgrade-btn,
@@ -731,10 +770,21 @@ html:not([data-theme="light"]) .az-form-card,
 html:not([data-theme="light"]) .sal-summary-box,
 html:not([data-theme="light"]) .az-calc-noscript,
 html:not([data-theme="light"]) .pricing-card,
+html:not([data-theme="light"]) .plan-card,
 html:not([data-theme="light"]) .dash-card,
 html:not([data-theme="light"]) .onboard-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
+}
+
+html:not([data-theme="light"]) .az-calc-breakdown {
+    background: var(--cr-surface-2) !important;
+    border-color: var(--cr-border) !important;
+}
+
+html:not([data-theme="light"]) .az-calc-row--offer,
+html:not([data-theme="light"]) .az-calc-row--subtotal {
+    background: var(--cr-surface-3) !important;
 }
 
 /* Catch-all: low-contrast gray text */

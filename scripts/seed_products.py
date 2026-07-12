@@ -38,6 +38,13 @@ PRODUCTS = [
         "product_type": "subscription_monthly",
     },
     {
+        "name": "Career Reality Pro (Annual)",
+        "slug": "pro-annual",
+        "short_description": "Full Pro access billed annually. Save 30% vs monthly.",
+        "price_paise": 249900,  # ₹2,499
+        "product_type": "subscription_annual",
+    },
+    {
         "name": "Career Reality Team",
         "slug": "team-monthly",
         "short_description": "5 seats, HR/recruiter salary dashboard, company-level layoff signal aggregation.",
