@@ -308,7 +308,9 @@ for company_name, entries in COMPANY_SALARIES.items():
             in_hand=in_hand,
             city=city,
             tech_stack=stack,
-            is_verified=True,
+            company=Company.objects.filter(name=company_name).first(),
+            company_name=company_name,
+            verification_status='verified',
         )
         inserted += 1
 

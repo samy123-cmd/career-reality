@@ -5,101 +5,18 @@
 {% block title %}Resignation Risk Analyzer - Career Reality{% endblock %}
 
 {% block content %}
-<style>
-    .analyzer-container {
-        max-width: 500px;
-        margin: 60px auto;
-        padding: 20px;
-    }
-
-    .analyzer-header {
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
-    .analyzer-h1 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: var(--cr-text);
-    }
-
-    .progress-dots {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 2rem;
-    }
-
-    .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--cr-surface-3, #eee);
-    }
-
-    .dot.active {
-        background: var(--cr-accent, #38bdf8);
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-        font-weight: 600;
-        display: block;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-        color: var(--cr-text);
-    }
-
-    .option-card {
-        display: block;
-        padding: 12px 16px;
-        border: 1px solid var(--cr-border, #ddd);
-        border-radius: 8px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-weight: 500;
-        background: var(--cr-surface-2, #fff);
-        color: var(--cr-text-secondary);
-    }
-
-    .option-card:hover {
-        background: var(--cr-surface-3, #f9f9f9);
-        border-color: var(--cr-border-strong, #999);
-    }
-
-    .option-card input {
-        margin-right: 10px;
-    }
-
-    .btn-analyzer {
-        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-        color: #06060b;
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 1rem;
-    }
-
-    .btn-analyzer:hover {
-        background: linear-gradient(135deg, #7dd3fc, #38bdf8);
-    }
-</style>
-
 <div class="analyzer-container">
     <div class="analyzer-header">
         <h1 class="analyzer-h1">Resignation Risk Analyzer</h1>
     </div>
 
-    <div class="progress-dots">
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{ step }}" aria-valuemin="1" aria-valuemax="3" aria-label="Step {{ step }} of 3">
+        <div class="progress-bar-segment {% if step >= 1 %}active{% endif %}"></div>
+        <div class="progress-bar-segment {% if step >= 2 %}active{% endif %}"></div>
+        <div class="progress-bar-segment {% if step >= 3 %}active{% endif %}"></div>
+    </div>
+
+    <div class="progress-dots" aria-hidden="true">
         <div class="dot {% if step >= 1 %}active{% endif %}"></div>
         <div class="dot {% if step >= 2 %}active{% endif %}"></div>
         <div class="dot {% if step >= 3 %}active{% endif %}"></div>
@@ -107,7 +24,7 @@
 
     {% block wizard_content %}{% endblock %}
 
-    <div style="margin-top: 2rem; text-align: center; font-size: 0.85rem; color: var(--cr-text-muted, #999);">
+    <div class="analyzer-footer-note">
         Private. Anonymous. No Sign-up.
     </div>
 </div>

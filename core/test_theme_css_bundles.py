@@ -10,6 +10,7 @@ class ThemeCssBundleTests(TestCase):
 
         self.assertIn("style-core.css", content)
         self.assertIn("style-home.css", content)
+        self.assertIn("components/tool-hub.css", content)
         self.assertIn("theme.js", content)
         self.assertIn("data-theme-toggle", content)
         self.assertNotIn("style-tools.css", content)
@@ -30,8 +31,18 @@ class ThemeCssBundleTests(TestCase):
 
         self.assertIn("style-core.css", content)
         self.assertIn("style-tools.css", content)
+        self.assertIn("components/tool-hub.css", content)
         self.assertNotIn("style-home.css", content)
         self.assertNotIn("style-companies.css", content)
+
+    def test_layoff_radar_loads_tool_hub_css_without_home_bundle(self):
+        response = self.client.get(reverse("layoff_radar"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+
+        self.assertIn("components/tool-hub.css", content)
+        self.assertIn("hp-tools-grid", content)
+        self.assertNotIn("style-home.css", content)
 
     def test_company_directory_loads_companies_bundle_only(self):
         response = self.client.get(reverse("company_directory"))
@@ -67,9 +78,8 @@ class ThemeCssBundleTests(TestCase):
         self.assertIn("nav-utilities", content)
         self.assertIn("hp-ticker-item", content)
         self.assertNotIn("hp-ticker-chip", content)
-        # Editorial block renders when articles exist in DB
-        if "hp-editorial-list" in content:
-            self.assertIn("hp-editorial-featured", content)
+        self.assertIn("hp-editorial-list", content)
+        self.assertIn("hp-editorial-featured", content)
 
     def test_footer_minimal_layout(self):
         response = self.client.get(reverse("home"))

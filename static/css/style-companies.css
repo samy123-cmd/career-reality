@@ -413,3 +413,55 @@ textarea.cr-input { resize: vertical; }
 .dir-empty { text-align: center; padding: 3rem 1rem; color: #64748b; }
 .dir-empty-msg { font-size: 1.2rem; }
 .dir-empty-link { color: #0f172a; font-weight: 600; }
+
+/* Write Review page */
+.wr-page-title { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.5rem; }
+.wr-page-subtitle { color: #64748b; margin: 0 0 2rem; font-size: 0.95rem; }
+.wr-section-title { font-size: 1rem; font-weight: 700; margin: 0 0 1rem; }
+.wr-company-section { margin-bottom: 0.5rem; }
+.wr-divider { border: none; border-top: 1px solid var(--c-divider, #e2e8f0); margin: 1.5rem 0; }
+.wr-company-group { position: relative; }
+.wr-company-hint { font-size: 0.78rem; color: #94a3b8; margin: 0.25rem 0 0; }
+.wr-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--cr-surface-2, #fff);
+    border: 1px solid var(--cr-border, #e2e8f0);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 100;
+    max-height: 220px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    display: none;
+}
+.wr-suggestions.open { display: block; }
+.wr-suggestion-item {
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--cr-border, #f1f5f9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 44px;
+}
+.wr-suggestion-item:last-child { border-bottom: none; }
+.wr-suggestion-item:hover, .wr-suggestion-item.active { background: var(--cr-surface-3, #f8fafc); }
+.wr-suggestion-sector { font-size: 0.75rem; color: #94a3b8; }
+
+@media (max-width: 768px) {
+    .wr-submit-wrap {
+        position: sticky;
+        bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 8px);
+        padding: 12px 0;
+        background: linear-gradient(to top, var(--cr-page, var(--c-page)) 80%, transparent);
+        z-index: 10;
+    }
+    .wr-submit-wrap .btn-submit {
+        width: 100%;
+        min-height: 44px;
+    }
+}

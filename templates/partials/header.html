@@ -192,75 +192,95 @@
         <div class="mobile-menu-overlay"></div>
 
         <!-- Mobile Slide-out -->
-        <nav class="mobile-nav">
+        <nav class="mobile-nav" aria-label="Mobile navigation">
+            <div class="mobile-nav-header">
+                <span class="mobile-nav-title">Menu</span>
+                <button type="button" class="mobile-nav-close" aria-label="Close menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
             <div class="mobile-nav-inner">
-                <div class="mobile-nav-section mobile-nav-theme">
-                    <button type="button" class="mobile-theme-toggle" data-theme-toggle>
-                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                <div class="mobile-nav-section">
+                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="true" aria-controls="nav-panel-intelligence">
+                        Intelligence
+                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
-                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
-                        <span class="mobile-theme-label">Light mode</span>
                     </button>
+                    <div class="mobile-nav-accordion-panel is-open" id="nav-panel-intelligence">
+                        <a href="{% url 'company_directory' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🏢</span> Companies
+                        </a>
+                        <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">⚡</span> AI Pulse
+                        </a>
+                        <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">📊</span> Career Index
+                        </a>
+                    </div>
                 </div>
 
                 <div class="mobile-nav-section">
-                    <div class="mobile-nav-section-title">Intelligence</div>
-                    <a href="{% url 'company_directory' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">🏢</span> Companies
-                    </a>
-                    <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">⚡</span> AI Pulse
-                    </a>
-                    <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">📊</span> Career Index
-                    </a>
+                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-tools">
+                        Tools
+                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="mobile-nav-accordion-panel" id="nav-panel-tools">
+                        <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🧮</span> CTC Calculator
+                        </a>
+                        <a href="{% url 'analyzer_home' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🎯</span> Risk Analyzer
+                        </a>
+                        <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🚨</span> Layoff Radar
+                        </a>
+                    </div>
                 </div>
 
                 <div class="mobile-nav-section">
-                    <div class="mobile-nav-section-title">Tools</div>
-                    <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">🧮</span> CTC Calculator
-                    </a>
-                    <a href="{% url 'analyzer_home' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">🎯</span> Risk Analyzer
-                    </a>
-                    <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">🚨</span> Layoff Radar
-                    </a>
+                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-data">
+                        Data
+                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="mobile-nav-accordion-panel" id="nav-panel-data">
+                        <a href="{% url 'salary_reality' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">💰</span> Salary Reality
+                        </a>
+                        <a href="{% url 'submit_salary' %}" class="mobile-nav-link mobile-nav-link--highlight">
+                            <span class="mnl-icon">+</span> Drop a Salary
+                        </a>
+                        <a href="{% url 'escape_plan' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🚀</span> Escape Plan
+                        </a>
+                    </div>
                 </div>
 
                 <div class="mobile-nav-section">
-                    <div class="mobile-nav-section-title">Data</div>
-                    <a href="{% url 'salary_reality' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">💰</span> Salary Reality
-                    </a>
-                    <a href="{% url 'submit_salary' %}" class="mobile-nav-link mobile-nav-link--highlight">
-                        <span class="mnl-icon">+</span> Drop a Salary
-                    </a>
-                    <a href="{% url 'escape_plan' %}" class="mobile-nav-link">
-                        <span class="mnl-icon">🚀</span> Escape Plan
-                    </a>
-                </div>
-
-                <div class="mobile-nav-section">
-                    <div class="mobile-nav-section-title">Browse</div>
-                    {% for category in categories %}
-                    <a href="{% url 'category_detail' category.slug %}" class="mobile-nav-link">
-                        {{ category.name }}
-                    </a>
-                    {% empty %}
-                    <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Career Strategy</a>
-                    {% endfor %}
-                </div>
-
-                <div class="mobile-nav-section" style="border-bottom:none;">
-                    <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
-                    <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
-                    <a href="{% url 'terms' %}" class="mobile-nav-link" style="opacity:0.6;">Terms & Privacy</a>
+                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-browse">
+                        Browse
+                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="mobile-nav-accordion-panel" id="nav-panel-browse">
+                        {% for category in categories %}
+                        <a href="{% url 'category_detail' category.slug %}" class="mobile-nav-link">
+                            {{ category.name }}
+                        </a>
+                        {% empty %}
+                        <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Career Strategy</a>
+                        {% endfor %}
+                        <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
+                        <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
+                    </div>
                 </div>
 
                 <!-- Mobile Pro CTA -->

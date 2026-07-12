@@ -273,6 +273,39 @@
         {% endfor %}
     </ol>
 </section>
+{% else %}
+<section class="hp-editorial container-medium">
+    <header class="hp-editorial-header">
+        <h2 class="hp-editorial-heading">Latest reality checks</h2>
+        <p class="hp-editorial-lede">Evidence-backed analysis for Indian tech professionals.</p>
+    </header>
+
+    <article class="hp-editorial-featured">
+        <p class="hp-editorial-meta">Editorial · Career Reality</p>
+        <h3 class="hp-editorial-featured-title">
+            <a href="{% url 'topic_clusters' %}">Browse our reality-check library</a>
+        </h3>
+        <p class="hp-editorial-featured-excerpt">Deep dives on salary opacity, layoff risk, and career moves — written for Indian tech professionals, not recruiters.</p>
+        <a href="{% url 'topic_clusters' %}" class="hp-editorial-read">Explore topic clusters →</a>
+    </article>
+
+    <ol class="hp-editorial-list">
+        {% for category in categories|slice:":6" %}
+        <li class="hp-editorial-list-item">
+            <a href="{% url 'category_detail' category.slug %}" class="hp-editorial-list-link">
+                <span class="hp-editorial-list-title">{{ category.name }}</span>
+                <span class="hp-editorial-list-meta">Category · Read analysis</span>
+            </a>
+        </li>
+        {% endfor %}
+        <li class="hp-editorial-list-item">
+            <a href="{% url 'editorial' %}" class="hp-editorial-list-link">
+                <span class="hp-editorial-list-title">Editorial standards</span>
+                <span class="hp-editorial-list-meta">How we research and write</span>
+            </a>
+        </li>
+    </ol>
+</section>
 {% endif %}
 
 <!-- ═══════════════ PRO UPSELL ═══════════════ -->

@@ -82,6 +82,7 @@
   <div class="dash-card dash-card--full">
     <p class="dash-card-title">Your Watchlist — Layoff Alerts</p>
     {% if watchlist_entries %}
+      <div class="table-scroll">
       <table class="editorial-table" style="width: 100%; font-size: 14px;">
         <thead>
           <tr><th>Company</th><th>Latest Status</th><th>Last Report</th><th></th></tr>
@@ -114,6 +115,7 @@
         {% endfor %}
         </tbody>
       </table>
+      </div>
     {% else %}
       <p class="dash-empty-msg">No companies watched yet. Visit a
         <a href="{% url 'company_directory' %}">company profile</a> and click "Watch for layoff alerts".</p>

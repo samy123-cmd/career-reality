@@ -48,7 +48,10 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% block utility_dock %}
     {% include "partials/utility_dock.html" %}
+    {% include "partials/mobile_more_sheet.html" %}
+    {% endblock %}
 
     {% include "partials/footer.html" %}
 
@@ -110,7 +113,7 @@
     </script>
 
 
-    <script defer src="{% static 'js/main.js' %}"></script>
+    <script defer src="{% static 'js/main.js' %}?v=2"></script>
     <script>
         // Register Service Worker for PWA
         if ('serviceWorker' in navigator) {

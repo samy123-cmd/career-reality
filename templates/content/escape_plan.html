@@ -49,6 +49,12 @@ to Product companies.{% endblock %}
 
     <!-- THE ROT CHECK QUIZ -->
     <div id="rot-quiz-container" class="calculator-card ep-quiz-card">
+        <div class="quiz-progress-bar" id="ep-quiz-progress" aria-hidden="true">
+            <div class="quiz-progress-segment" id="ep-seg-0"></div>
+            <div class="quiz-progress-segment" id="ep-seg-1"></div>
+            <div class="quiz-progress-segment" id="ep-seg-2"></div>
+            <div class="quiz-progress-segment" id="ep-seg-3"></div>
+        </div>
 
         <!-- STEP 0: ROLE -->
         <div class="quiz-step" id="step-role">
@@ -221,8 +227,17 @@ to Product companies.{% endblock %}
             var userRole = 'dev';
             var userStack = 'web';
 
+            function updateProgress(step) {
+                for (var i = 0; i <= 3; i++) {
+                    var seg = document.getElementById('ep-seg-' + i);
+                    if (seg) seg.classList.toggle('done', i <= step);
+                }
+            }
+
             function hide(el) { el.classList.add('ep-hidden'); }
             function show(el) { el.classList.remove('ep-hidden'); }
+
+            updateProgress(0);
 
             function showResult() {
                 var res   = document.getElementById('quiz-result');
@@ -268,6 +283,7 @@ to Product companies.{% endblock %}
                     userRole = btn.dataset.role;
                     hide(document.getElementById('step-role'));
                     show(document.getElementById('step-1'));
+                    updateProgress(1);
                     return;
                 }
 
@@ -277,6 +293,7 @@ to Product companies.{% endblock %}
                     if (btn.dataset.stack) userStack = btn.dataset.stack;
                     score += points;
                     hide(document.getElementById('step-' + step));
+                    updateProgress(step + 1);
                     if (step < 3) {
                         show(document.getElementById('step-' + (step + 1)));
                     } else {

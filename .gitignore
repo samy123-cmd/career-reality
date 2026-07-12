@@ -11,6 +11,10 @@ db.sqlite3
 *.sqlite3
 *.db
 
+# Python virtual environment
+.venv/
+venv/
+
 # Generated reports/artifacts
 audit_reports/
 *.log
