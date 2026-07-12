@@ -295,6 +295,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // ── Hide company review sticky CTA when form is visible ──
+    const reviewSticky = document.querySelector('.cp-sticky-cta');
+    const writeReviewSection = document.getElementById('write-review');
+    if (reviewSticky && writeReviewSection && 'IntersectionObserver' in window) {
+        const reviewObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                reviewSticky.classList.toggle('is-hidden', entry.isIntersecting);
+            });
+        }, { rootMargin: '-20% 0px -30% 0px', threshold: 0.1 });
+        reviewObserver.observe(writeReviewSection);
+    }
+
+    // ── Swipe down to close More sheet ──
+    if (moreSheet) {
+        let sheetStartY = 0;
+        moreSheet.addEventListener('touchstart', (e) => {
+            sheetStartY = e.touches[0].clientY;
+        }, { passive: true });
+        moreSheet.addEventListener('touchend', (e) => {
+            if (e.changedTouches[0].clientY - sheetStartY > 72) {
+                closeMoreSheet();
+            }
+        }, { passive: true });
+    }
+
     // --- Global Search Autocomplete ---
     const searchInput = document.getElementById('global-search-input');
     const suggestionsBox = document.getElementById('search-suggestions');

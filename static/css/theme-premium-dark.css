@@ -519,6 +519,22 @@ select:focus {
         padding-left: max(16px, env(safe-area-inset-left, 16px));
         padding-right: max(16px, env(safe-area-inset-right, 16px));
     }
+
+    .more-sheet-link {
+        background: var(--cr-surface-2);
+        border-color: var(--cr-border);
+        color: var(--cr-text);
+    }
+
+    .more-sheet-link--pro {
+        background: linear-gradient(135deg, #1a1a24 0%, #2a2a38 100%);
+        color: var(--cr-text);
+    }
+
+    .mobile-nav-accordion-trigger:active,
+    .mobile-nav-close:active {
+        background: var(--cr-surface-3);
+    }
 }
 
 /* Reduced motion */

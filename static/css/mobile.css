@@ -11,7 +11,19 @@
     display: none;
 }
 
+.more-sheet-overlay,
+.more-sheet {
+    display: none;
+}
+
 @media (max-width: 768px) {
+    .more-sheet-overlay.is-open {
+        display: block;
+    }
+
+    .more-sheet {
+        display: block;
+    }
     .dock-mobile-hide {
         display: none !important;
     }
@@ -175,7 +187,10 @@
     }
 
     .mobile-nav-inner {
-        padding: 0 12px calc(100px + env(safe-area-inset-bottom, 0px));
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100dvh - 57px);
+        padding: 0 12px 12px;
     }
 
     .mobile-nav-section {
@@ -241,13 +256,10 @@
     }
 
     .mobile-nav-cta {
-        position: fixed;
+        position: sticky;
         bottom: 0;
-        left: auto;
-        right: 0;
-        width: 88%;
-        max-width: 360px;
-        padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+        margin-top: auto;
+        padding: 16px 8px calc(16px + env(safe-area-inset-bottom, 0px));
         background: var(--cr-surface, var(--c-white));
         border-top: 1px solid var(--cr-border, var(--c-divider));
         z-index: 3;
@@ -612,20 +624,8 @@
         overflow: hidden;
     }
 
-    .progress-bar {
-        display: flex;
-    }
-
-    /* ── Analyzer wizard ── */
-    .analyzer-container {
-        max-width: 100%;
-        margin: 24px auto;
-        padding: 16px max(16px, env(safe-area-inset-left)) 24px max(16px, env(safe-area-inset-right));
-        padding-bottom: calc(24px + var(--dock-height) + env(safe-area-inset-bottom, 0px));
-    }
-
-    .analyzer-h1 {
-        font-size: 1.35rem;
+    body.menu-open .utility-dock {
+        z-index: 800;
     }
 
     .progress-bar {
@@ -647,8 +647,27 @@
         background: var(--c-blue-accent, #38bdf8);
     }
 
+    /* ── Analyzer wizard ── */
+    .analyzer-container {
+        max-width: 100%;
+        margin: 24px auto;
+        padding: 16px max(16px, env(safe-area-inset-left)) 24px max(16px, env(safe-area-inset-right));
+        padding-bottom: calc(24px + var(--dock-height) + env(safe-area-inset-bottom, 0px));
+    }
+
+    .analyzer-h1 {
+        font-size: 1.35rem;
+    }
+
     .progress-dots {
         display: none;
+    }
+
+    .cp-sticky-cta.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(12px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .analyzer-form-actions {
@@ -818,5 +837,15 @@
 
     .dock-label {
         font-size: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mobile-nav,
+    .more-sheet,
+    .more-sheet-overlay,
+    .dock-item,
+    .cp-sticky-cta {
+        transition: none !important;
     }
 }
