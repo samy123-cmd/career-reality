@@ -152,7 +152,7 @@
                 <p class="az-article-newsletter-headline">The data behind this article — in your inbox every Monday.</p>
                 <p class="az-article-newsletter-sub">
                     Salary benchmarks, layoff signals, and career reality checks for Indian tech professionals.
-                    Free. {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong> readers.{% else %}Weekly digest.{% endif %} No sponsors.
+                    Free. {% if newsletter_count %}<strong>{{ newsletter_count }}</strong> readers.{% else %}Weekly digest.{% endif %} No sponsors.
                 </p>
                 <form class="az-article-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">
                     {% csrf_token %}

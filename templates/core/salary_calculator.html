@@ -246,7 +246,7 @@
         <div class="az-calc-newsletter-inner">
             <p class="az-calc-newsletter-headline">Is your in-hand above or below market?</p>
             <p class="az-calc-newsletter-sub">
-                Join {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong>{% else %}our{% endif %} Indian tech professionals getting weekly salary data,
+                Join {% if newsletter_count %}<strong>{{ newsletter_count }}</strong> Indian tech professionals{% else %}Indian tech professionals{% endif %} getting weekly salary data,
                 layoff signals, and career reality checks. Free. No spam.
             </p>
             <form class="az-calc-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">

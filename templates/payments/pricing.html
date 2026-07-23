@@ -7,15 +7,17 @@
 {% block content %}
 <section class="pricing-hero">
   <h1>Real Data. Real Decisions.</h1>
-  <p>India's only career platform built on crowdsourced, verified salary and layoff data. Not LinkedIn. Not Glassdoor. Real.</p>
+  <p>Unlock every salary benchmark, layoff alert, and career report you need — built for Indian tech professionals who want evidence, not hype.</p>
 </section>
 
+{% if salary_count or layoff_count or assessment_count %}
 <ul class="proof-items social-proof">
-  <li class="proof-item">{{ salary_count|default:"0" }}<small>salary data points</small></li>
-  <li class="proof-item">{{ layoff_count|default:"0" }}<small>layoff reports</small></li>
-  <li class="proof-item">{{ assessment_count|default:"0" }}<small>risk assessments run</small></li>
+  {% if salary_count %}<li class="proof-item">{{ salary_count }}<small>salary data points</small></li>{% endif %}
+  {% if layoff_count %}<li class="proof-item">{{ layoff_count }}<small>layoff reports</small></li>{% endif %}
+  {% if assessment_count %}<li class="proof-item">{{ assessment_count }}<small>risk assessments run</small></li>{% endif %}
   <li class="proof-item">&lt;2 min<small>to assess your risk</small></li>
 </ul>
+{% endif %}
 
 <div class="pricing-grid">
 
@@ -23,7 +25,7 @@
   <div class="plan-card">
     <p class="plan-name">Free</p>
     <p class="plan-price">₹0 <span>/always</span></p>
-    <p class="plan-desc">Full access to the core tools. No credit card required.</p>
+    <p class="plan-desc">Always free: core calculators and the weekly newsletter — no credit card needed.</p>
     <ul class="plan-features">
       <li>CTC Decoder calculator</li>
       <li>Resignation Risk Analyzer</li>
@@ -31,7 +33,7 @@
       <li>3 salary data previews/month</li>
       <li>Weekly newsletter</li>
     </ul>
-    <a href="{% url 'home' %}" class="btn-plan btn-plan-outline">Start Free</a>
+    <a href="{% url 'salary_calculator' %}" class="btn-plan btn-plan-outline">Try free tools</a>
   </div>
 
   <!-- Pro Tier -->
@@ -54,7 +56,7 @@
       At ₹299/month, that's up to <strong>667x ROI</strong>.
     </div>
 
-    <p class="plan-desc">Unlimited salary intelligence. Layoff alerts. AI-personalized result reports.</p>
+    <p class="plan-desc">Unlimited salary benchmarks and early layoff alerts — plus AI-powered reports that guide your next move.</p>
     <ul class="plan-features">
       <li>Everything in Free</li>
       <li>Full salary database (unlimited)</li>
@@ -68,13 +70,14 @@
             id="btn-pro"
             data-product="pro-monthly"
             {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
-      Get Pro →
+      Unlock Pro →
     </button>
     <div id="pro-email-wrap" style="display:none;margin-top:.75rem;">
+      <label for="pro-email-input" class="sr-only">Email for Pro checkout</label>
       <input type="email" id="pro-email-input" placeholder="your@email.com"
              value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
              style="width:100%;padding:.55rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem;margin-bottom:.5rem;">
-      <button type="button" id="btn-pro-confirm" class="btn-plan btn-plan-primary" style="width:100%;">Confirm &amp; Pay →</button>
+      <button type="button" id="btn-pro-confirm" class="btn-plan btn-plan-primary" style="width:100%;">Pay securely →</button>
     </div>
     <p class="plan-trust-line">Cancel anytime · Instant access · No lock-in</p>
     <p class="loading-msg" id="loading-pro">Opening checkout…</p>
@@ -84,7 +87,7 @@
   <div class="plan-card">
     <p class="plan-name">Exit Checklist</p>
     <p class="plan-price">₹99 <span>one-time</span></p>
-    <p class="plan-desc">Personalized 7-day exit plan for your exact situation. Instant delivery.</p>
+    <p class="plan-desc">A personalized 7-day exit plan for your exact situation — delivered instantly after payment.</p>
     <ul class="plan-features">
       <li>AI-personalized action plan</li>
       <li>Full-and-Final calculation sheet</li>
@@ -96,13 +99,14 @@
             id="btn-checklist"
             data-product="exit-checklist"
             {% if not razorpay_key_id %}disabled title="Payments coming soon"{% endif %}>
-      Buy Now →
+      Buy checklist →
     </button>
     <div id="checklist-email-wrap" style="display:none;margin-top:.75rem;">
+      <label for="checklist-email-input" class="sr-only">Email for checklist checkout</label>
       <input type="email" id="checklist-email-input" placeholder="your@email.com"
              value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
              style="width:100%;padding:.55rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem;margin-bottom:.5rem;">
-      <button type="button" id="btn-checklist-confirm" class="btn-plan btn-plan-outline" style="width:100%;">Confirm &amp; Pay →</button>
+      <button type="button" id="btn-checklist-confirm" class="btn-plan btn-plan-outline" style="width:100%;">Pay securely →</button>
     </div>
     <p class="loading-msg" id="loading-checklist">Opening checkout…</p>
   </div>

@@ -55,8 +55,11 @@ def seo_defaults(request):
         "hi_canonical_url": hi_canonical_url,
         "categories": categories,
         "site_social_profiles": getattr(settings, "SITE_SOCIAL_PROFILES", []),
-        "newsletter_count": social_proof.get("newsletter_count", "0"),
-        "assessment_count": social_proof.get("assessment_count", "0"),
+        "newsletter_count": social_proof.get("newsletter_count", ""),
+        "assessment_count": social_proof.get("assessment_count", ""),
+        "salary_count": social_proof.get("salary_count", ""),
+        "layoff_count": social_proof.get("layoff_count", ""),
+        "company_count": social_proof.get("company_count", ""),
         "GA_MEASUREMENT_ID": getattr(settings, "GA_MEASUREMENT_ID", ""),
     }
 

@@ -17,6 +17,34 @@ class CacheUtilsTests(TestCase):
     def test_fmt_count_formats_large_numbers(self):
         self.assertEqual(fmt_count(12483), "12K+")
         self.assertEqual(fmt_count(847), "840+")
+        self.assertEqual(fmt_count(0), "")
+        self.assertEqual(fmt_count(7), "7")
+
+    def test_social_proof_hides_zero_and_weak_newsletter(self):
+        from core.cache_utils import NEWSLETTER_PROOF_MIN, get_social_proof_counts
+
+        counts = get_social_proof_counts(rebuild=True)
+        self.assertEqual(counts["assessment_count"], "")
+        self.assertEqual(counts["salary_count"], "")
+        self.assertEqual(counts["layoff_count"], "")
+        self.assertEqual(counts["newsletter_count"], "")
+        self.assertGreaterEqual(NEWSLETTER_PROOF_MIN, 50)
+
+    def test_nav_category_dedupe_prefers_software_engineering(self):
+        from types import SimpleNamespace
+
+        from core.cache_utils import _dedupe_nav_categories
+
+        cats = [
+            SimpleNamespace(slug="engineering", name="Engineering"),
+            SimpleNamespace(slug="software-engineering", name="Software Engineering"),
+            SimpleNamespace(slug="money-reality", name="Money Reality"),
+        ]
+        deduped = _dedupe_nav_categories(cats)
+        slugs = [c.slug for c in deduped]
+        self.assertNotIn("engineering", slugs)
+        self.assertIn("software-engineering", slugs)
+        self.assertIn("money-reality", slugs)
 
     def test_edge_cache_ttl_for_public_paths(self):
         self.assertEqual(edge_cache_ttl_for_path("/sitemap.xml"), 3600)

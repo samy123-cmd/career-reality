@@ -53,6 +53,22 @@ class PricingPageTests(TestCase):
         response = self.client.get(reverse("payments:pricing"))
         self.assertContains(response, "Cancel anytime")
 
+    def test_pricing_page_hides_zero_proof_counters(self):
+        response = self.client.get(reverse("payments:pricing"))
+        content = response.content.decode()
+        self.assertNotIn(">0<small>salary data points</small>", content)
+        self.assertNotIn('default:"0"', content)
+
+    def test_pricing_free_cta_goes_to_calculator(self):
+        response = self.client.get(reverse("payments:pricing"))
+        self.assertContains(response, "Try free tools")
+        self.assertContains(response, reverse("salary_calculator"))
+
+    def test_pricing_pro_cta_copy(self):
+        response = self.client.get(reverse("payments:pricing"))
+        self.assertContains(response, "Unlock Pro")
+        self.assertContains(response, "Unlimited salary benchmarks")
+
     def test_pro_button_default_product_is_monthly(self):
         response = self.client.get(reverse("payments:pricing"))
         self.assertContains(response, 'data-product="pro-monthly"')

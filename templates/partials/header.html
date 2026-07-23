@@ -115,7 +115,6 @@
                 </div>
             </div>
 
-            <a href="{% url 'company_directory' %}" class="nav-link">Companies</a>
             <a href="{% url 'about' %}" class="nav-link">About</a>
 
             <div class="nav-utilities">
@@ -265,7 +264,7 @@
 
                 <div class="mobile-nav-section">
                     <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-browse">
-                        Browse
+                        Topics
                         <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
                             <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
@@ -277,6 +276,8 @@
                         </a>
                         {% empty %}
                         <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Career Strategy</a>
+                        <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Software Engineering</a>
+                        <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Money Reality</a>
                         {% endfor %}
                         <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
                         <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>

@@ -122,7 +122,7 @@
             <p class="az-result-newsletter-headline">Your risk is {{ result.label }}. Stay informed.</p>
             <p class="az-result-newsletter-sub">
                 Get weekly layoff signals, company stability scores, and salary data for your sector.
-                {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong>{% else %}Thousands of{% endif %} Indian tech professionals read this every Monday.
+                {% if newsletter_count %}<strong>{{ newsletter_count }}</strong> Indian tech professionals read this every Monday.{% else %}One email a week. No spam.{% endif %}
             </p>
             {% elif result.level == "medium" %}
             <p class="az-result-newsletter-headline">Situations like yours can shift quickly.</p>
@@ -134,7 +134,7 @@
             <p class="az-result-newsletter-headline">Low risk now doesn't mean low risk forever.</p>
             <p class="az-result-newsletter-sub">
                 Stay ahead with weekly salary benchmarks, layoff signals, and career reality checks.
-                {% if newsletter_count != "0" %}<strong>{{ newsletter_count }}</strong>{% else %}Thousands of{% endif %} Indian tech professionals get it every Monday.
+                {% if newsletter_count %}<strong>{{ newsletter_count }}</strong> Indian tech professionals get it every Monday.{% else %}Free. Unsubscribe any time.{% endif %}
             </p>
             {% endif %}
             <form class="az-result-newsletter-form" action="{% url 'newsletter_signup' %}" method="POST">

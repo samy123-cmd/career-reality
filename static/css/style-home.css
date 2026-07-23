@@ -643,6 +643,14 @@
 .hp-pro-mockup-val { font-size: 14px; font-weight: 700; color: var(--c-ink-inverse); }
 .hp-pro-mockup-val--green { color: #28c840; }
 .hp-pro-mockup-val--amber { color: #e67e00; }
+.hp-pro-mockup-hint {
+    margin: -4px 0 8px;
+    padding: 0 0 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.4);
+}
 
 /* ——— Cluster Grid ——— */
 .hp-clusters-grid {
