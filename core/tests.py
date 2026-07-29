@@ -129,28 +129,73 @@ class CoreViewsTests(TestCase):
         self.assertContains(response, 'type="email"')
 
     def test_hero_social_proof_assessment_count_present(self):
-        """Homepage hero must show dynamic risk-assessment social proof number."""
+        """Homepage hero shows assessment proof only when count is non-zero."""
+        from analyzer.models import AssessmentLog
+        from core.cache_utils import get_social_proof_counts
+
+        AssessmentLog.objects.create(risk_level="Low", scenario_type="stable")
+        get_social_proof_counts(rebuild=True)
+
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "risk assessments run")
         self.assertIn("assessment_count", response.context)
+        self.assertTrue(response.context["assessment_count"])
 
     def test_hero_social_proof_salary_data_points_present(self):
-        """Homepage hero must show dynamic salary data-points social proof number."""
+        """Homepage hero shows salary proof only when count is non-zero."""
+        from analyzer.models import SalarySubmission
+        from core.cache_utils import get_social_proof_counts
+
+        SalarySubmission.objects.create(
+            role="SDE",
+            experience_years=3,
+            city="Bengaluru",
+            company_type="product",
+            ctc=1800000,
+        )
+        get_social_proof_counts(rebuild=True)
+
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "salary data points")
         self.assertIn("salary_count", response.context)
+        self.assertTrue(response.context["salary_count"])
 
     def test_hero_social_proof_layoff_reports_present(self):
-        """Homepage hero must show dynamic layoff-reports social proof number."""
+        """Homepage hero shows layoff proof only when count is non-zero."""
+        from analyzer.models import LayoffReport
+        from core.cache_utils import get_social_proof_counts
+
+        LayoffReport.objects.create(
+            company_name="Example Co",
+            status="freeze",
+        )
+        get_social_proof_counts(rebuild=True)
+
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "layoff reports tracked")
         self.assertIn("layoff_count", response.context)
+        self.assertTrue(response.context["layoff_count"])
+
+    def test_hero_hides_zero_social_proof(self):
+        """Empty counters must not render misleading zero proof labels."""
+        from core.cache_utils import get_social_proof_counts
+
+        get_social_proof_counts(rebuild=True)
+        response = self.client.get(reverse("home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "risk assessments run")
+        self.assertNotContains(response, "salary data points")
+        self.assertNotContains(response, "layoff reports tracked")
+        self.assertEqual(response.context["assessment_count"], "")
+        self.assertEqual(response.context["salary_count"], "")
+        self.assertEqual(response.context["layoff_count"], "")
 
     def test_homepage_newsletter_section_present(self):
         """Homepage must contain the inline newsletter capture section."""

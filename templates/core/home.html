@@ -91,31 +91,39 @@
                 <span class="hp-hero-accent">Know the reality.</span>
             </h1>
             <p class="hp-hero-sub">
-                Data-backed salary truths, company intelligence, and career
-                risk analysis for Indian tech professionals.
+                Calculate take-home pay, compare median salaries, and gauge career risk —
+                free tools and verified data for Indian tech professionals.
             </p>
             <div class="hp-hero-actions">
                 <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">
-                    <span>🧮</span> CTC Calculator
+                    Calculate take-home pay
                 </a>
                 <a href="{% url 'analyzer_home' %}" class="hp-btn hp-btn--ghost">
-                    <span>🎯</span> Analyze Risk
+                    Check resignation risk
                 </a>
             </div>
+            {% if assessment_count or salary_count or layoff_count %}
             <div class="hp-hero-proof">
+                {% if assessment_count %}
                 <div class="hp-hero-stat">
                     <span class="hp-hero-stat-num">{{ assessment_count }}</span>
                     <span class="hp-hero-stat-label">risk assessments run</span>
                 </div>
+                {% endif %}
+                {% if salary_count %}
                 <div class="hp-hero-stat">
                     <span class="hp-hero-stat-num">{{ salary_count }}</span>
                     <span class="hp-hero-stat-label">salary data points</span>
                 </div>
+                {% endif %}
+                {% if layoff_count %}
                 <div class="hp-hero-stat">
                     <span class="hp-hero-stat-num">{{ layoff_count }}</span>
                     <span class="hp-hero-stat-label">layoff reports tracked</span>
                 </div>
+                {% endif %}
             </div>
+            {% endif %}
         </div>
         <div class="hp-hero-visual">
             <div class="hp-index-card">
@@ -322,7 +330,7 @@
             </ul>
             <div class="hp-pro-actions">
                 <a href="{% url 'payments:pricing' %}" class="hp-btn hp-btn--primary">
-                    Start at ₹299/mo
+                    Unlock Pro — ₹299/mo
                 </a>
                 <span class="hp-pro-note">Cancel anytime. No lock-in.</span>
             </div>
@@ -336,6 +344,7 @@
                 </div>
                 <div class="hp-pro-mockup-body">
                     <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Your Percentile</span><span class="hp-pro-mockup-val">P72</span></div>
+                    <p class="hp-pro-mockup-hint">P72 means you earn more than 72% of peers in your role and city.</p>
                     <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Market Median</span><span class="hp-pro-mockup-val">₹18.5L</span></div>
                     <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Growth Potential</span><span class="hp-pro-mockup-val hp-pro-mockup-val--green">+34%</span></div>
                     <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Risk Score</span><span class="hp-pro-mockup-val hp-pro-mockup-val--amber">Medium</span></div>
@@ -382,7 +391,7 @@
             <h2 class="hp-newsletter-title">The Monday Reality Check</h2>
             <p class="hp-newsletter-sub">One email a week. Salary data, layoff signals, and career moves that actually make sense for Indian tech. No recruiter spam. Ever.</p>
             <ul class="hp-newsletter-proof">
-                <li>✓ {% if newsletter_count != "0" %}{{ newsletter_count }} subscribers{% else %}Free weekly digest{% endif %}</li>
+                <li>✓ {% if newsletter_count %}{{ newsletter_count }} subscribers{% else %}Free weekly digest{% endif %}</li>
                 <li>✓ Unsubscribe in one click</li>
                 <li>✓ No paid influence on editorial conclusions</li>
             </ul>

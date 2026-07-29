@@ -22,7 +22,13 @@ logger = logging.getLogger(__name__)
 SITEMAP_CACHE_KEY = "perf:sitemap:xml:v1"
 SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v1"
 NAV_CATEGORIES_CACHE_KEY = "nav_categories"
-SOCIAL_PROOF_CACHE_KEY = "perf:home:social_proof_counts:v1"
+SOCIAL_PROOF_CACHE_KEY = "perf:home:social_proof_counts:v2"
+# Hide weak newsletter proof until the count is credible.
+NEWSLETTER_PROOF_MIN = 50
+# Prefer the more specific label when both exist in nav.
+NAV_CATEGORY_OVERLAPS = {
+    "engineering": "software-engineering",
+}
 INDEX_ROWS_CACHE_KEY = "perf:career_index_rows:v1"
 
 # Paths warmed on every maintenance run (anonymous GET).
@@ -156,11 +162,24 @@ def invalidate_cached_pages(paths: Iterable[str]) -> int:
     return deleted
 
 
+def _dedupe_nav_categories(categories: list) -> list:
+    """Drop overlapping category labels (e.g. Engineering when Software Engineering exists)."""
+    slugs = {getattr(c, "slug", "") for c in categories}
+    drop = {
+        vague
+        for vague, specific in NAV_CATEGORY_OVERLAPS.items()
+        if vague in slugs and specific in slugs
+    }
+    if not drop:
+        return categories
+    return [c for c in categories if getattr(c, "slug", "") not in drop]
+
+
 def refresh_nav_categories_cache() -> int:
     """Rebuild header nav category cache. Returns category count."""
     from content.seo_redirects import indexable_categories_queryset
 
-    categories = list(indexable_categories_queryset())
+    categories = _dedupe_nav_categories(list(indexable_categories_queryset()))
     cache.set(NAV_CATEGORIES_CACHE_KEY, categories, 3600)
     return len(categories)
 
@@ -175,11 +194,11 @@ def fmt_count(n: int) -> str:
         return f"{(n // 10) * 10}+"
     if n > 0:
         return str(n)
-    return "0"
+    return ""
 
 
 def get_social_proof_counts(*, rebuild: bool = False) -> dict[str, str]:
-    """Cached homepage social-proof counters (expensive COUNT queries)."""
+    """Cached social-proof counters. Empty string means hide (zero / not credible)."""
     if not rebuild:
         cached = cache.get(SOCIAL_PROOF_CACHE_KEY)
         if cached is not None:
@@ -190,12 +209,19 @@ def get_social_proof_counts(*, rebuild: bool = False) -> dict[str, str]:
 
     from core.models import NewsletterSubscriber
 
+    assessment_n = AssessmentLog.objects.count()
+    salary_n = SalarySubmission.objects.count()
+    layoff_n = LayoffReport.objects.count()
+    company_n = indexable_companies_queryset().count()
+    newsletter_n = NewsletterSubscriber.objects.filter(is_active=True).count()
+
     data = {
-        "assessment_count": fmt_count(AssessmentLog.objects.count()),
-        "salary_count": fmt_count(SalarySubmission.objects.count()),
-        "layoff_count": fmt_count(LayoffReport.objects.count()),
-        "company_count": fmt_count(indexable_companies_queryset().count()),
-        "newsletter_count": fmt_count(NewsletterSubscriber.objects.filter(is_active=True).count()),
+        "assessment_count": fmt_count(assessment_n),
+        "salary_count": fmt_count(salary_n),
+        "layoff_count": fmt_count(layoff_n),
+        "company_count": fmt_count(company_n),
+        # Only surface newsletter proof once the count is respectable.
+        "newsletter_count": fmt_count(newsletter_n) if newsletter_n >= NEWSLETTER_PROOF_MIN else "",
     }
     cache.set(SOCIAL_PROOF_CACHE_KEY, data, social_proof_cache_timeout())
     return data

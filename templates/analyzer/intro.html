@@ -69,7 +69,7 @@
     <!-- Pre-start newsletter nudge — shown to anonymous visitors only -->
     <div class="az-intro-newsletter" id="az-intro-newsletter">
         <div class="az-intro-newsletter-copy">
-            <strong>Join {% if newsletter_count != "0" %}{{ newsletter_count }}{% else %}our newsletter{% endif %} professionals getting weekly career intel</strong>
+            <strong>{% if newsletter_count %}Join {{ newsletter_count }} professionals getting weekly career intel{% else %}Get weekly career intel in your inbox{% endif %}</strong>
             <span>Optional. No spam. Unsubscribe any time.</span>
         </div>
         <form class="az-intro-newsletter-form" action="{% url 'newsletter_signup' %}" method="post"
