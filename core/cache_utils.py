@@ -19,11 +19,11 @@ from django.test import Client
 
 logger = logging.getLogger(__name__)
 
-SITEMAP_CACHE_KEY = "perf:sitemap:xml:v1"
-SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v1"
+SITEMAP_CACHE_KEY = "perf:sitemap:xml:v2"
+SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v2"
 NAV_CATEGORIES_CACHE_KEY = "nav_categories"
 SOCIAL_PROOF_CACHE_KEY = "perf:home:social_proof_counts:v1"
-INDEX_ROWS_CACHE_KEY = "perf:career_index_rows:v1"
+INDEX_ROWS_CACHE_KEY = "perf:career_index_rows:v2"
 
 # Paths warmed on every maintenance run (anonymous GET).
 STATIC_WARM_PATHS: tuple[str, ...] = (

@@ -98,13 +98,13 @@ def _timeline_position_for_item(item_dt):
         else:
             break
     return position
-@cache_page(60 * 10, key_prefix="ainews_hub_v2")
+@cache_page(60 * 10, key_prefix="ainews_hub_v3")
 def ai_news_hub(request):
     items = indexable_ai_news_queryset().prefetch_related(TAG_PREFETCH)
-    tags = cache.get("ainews_hub_tags")
+    tags = cache.get("ainews_hub_tags_v3")
     if tags is None:
         tags = list(AITag.objects.only("id", "name", "slug").order_by("name"))
-        cache.set("ainews_hub_tags", tags, 900)
+        cache.set("ainews_hub_tags_v3", tags, 900)
 
     active_tag_slug = request.GET.get("tag")
     active_tag = None

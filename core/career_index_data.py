@@ -34,9 +34,9 @@ JUNE_2026_BASELINE = IndexBaseline(
 
 # July 2026 — post-appraisal disappointment, summer hiring slowdown, mid-year bench trimming.
 JULY_2026_BASELINE = IndexBaseline(
-    salary_pressure=73,   # Post-appraisal hikes below inflation expectations
-    switch_difficulty=62,   # Summer hiring slowdown; GCC bar unchanged
-    layoff_risk=49,         # Mid-year IT services bench trimming
+    salary_pressure=74,   # Late-July: hike disappointment + clawback-heavy offers
+    switch_difficulty=64,   # Notice/relieving friction offsets open reqs
+    layoff_risk=50,         # Quiet bench trimming continues into August pipeline
 )
 
 # Key: (year, month) → baseline. Add new months here each review cycle.

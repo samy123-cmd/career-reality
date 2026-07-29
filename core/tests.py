@@ -75,7 +75,7 @@ class CoreViewsTests(TestCase):
         response = self.client.get(reverse("career_reality_index"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["latest_row"]["overall"], 61)
+        self.assertEqual(response.context["latest_row"]["overall"], 63)
         self.assertEqual(response.context["latest_band"], "Elevated Pressure")
 
     def test_newsletter_signup_creates_subscriber_and_redirects(self):
@@ -197,7 +197,7 @@ class CareerRealityIndexTests(TestCase):
         """Without any DB snapshots, falls back to editorial July 2026 baseline."""
         self.assertEqual(CareerRealityIndexSnapshot.objects.count(), 0)
         response = self.client.get(reverse("career_reality_index"))
-        self.assertEqual(response.context["latest_row"]["overall"], 61)
+        self.assertEqual(response.context["latest_row"]["overall"], 63)
 
     def test_index_reads_from_db_snapshots(self):
         """When snapshots exist, the view reports from the DB."""

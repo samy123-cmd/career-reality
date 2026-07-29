@@ -166,4 +166,14 @@ SEO_PILLAR_ARTICLES = (
         "url_name": "article_detail",
         "slug": "networking-reality-india-introverts",
     },
+    {
+        "label": "Relieving Letter & Notice Period Traps",
+        "url_name": "article_detail",
+        "slug": "relieving-letter-hostage-notice-period-india-2026",
+    },
+    {
+        "label": "Joining Bonus Clawbacks Explained",
+        "url_name": "article_detail",
+        "slug": "joining-bonus-clawback-offer-letter-traps-2026",
+    },
 )
