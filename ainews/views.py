@@ -98,7 +98,7 @@ def _timeline_position_for_item(item_dt):
         else:
             break
     return position
-@cache_page(60 * 10)
+@cache_page(60 * 10, key_prefix="ainews_hub_v2")
 def ai_news_hub(request):
     items = indexable_ai_news_queryset().prefetch_related(TAG_PREFETCH)
     tags = cache.get("ainews_hub_tags")
@@ -139,7 +139,6 @@ def ai_news_hub(request):
             **_seo(title, description),
         },
     )
-@cache_page(60 * 10)
 def ai_news_detail(request, slug):
     from django.http import HttpResponsePermanentRedirect
     from django.urls import reverse
@@ -151,9 +150,19 @@ def ai_news_detail(request, slug):
     )
     # Draft / pruned / stale items used to 404 with noindex and clutter GSC.
     # Consolidate crawl signals onto the hub instead.
+    # Keep this redirect outside cache_page so Redis cannot pin old 404 HTML.
     if item is None or item.status != "published" or not item_is_indexable(item):
         return HttpResponsePermanentRedirect(reverse("ai_news_hub"))
+    return _ai_news_detail_cached(request, slug)
 
+
+@cache_page(60 * 10)
+def _ai_news_detail_cached(request, slug):
+    item = get_object_or_404(
+        AINewsItem.objects.prefetch_related(TAG_PREFETCH),
+        slug=slug,
+        status="published",
+    )
     related_items = indexable_ai_news_queryset().exclude(id=item.id)[:4]
     effective_reviewed_at = item.last_verified_at or item.reviewed_at or item.published_at
     stale_cutoff = timezone.now() - timedelta(days=21)

@@ -500,14 +500,19 @@ def article_detail(request, slug):
         'twitter_description': article.meta_description,
         'twitter_image': og_image_url,
     })
-@cache_page(60 * 15)
 def category_detail(request, slug):
+    # Redirects must run outside cache_page — otherwise Redis keeps serving the
+    # old thin noindex HTML forever for these URLs.
     canonical_slug = CATEGORY_CANONICAL_REDIRECTS.get(slug)
     if canonical_slug:
         return HttpResponsePermanentRedirect(
             reverse("category_detail", kwargs={"slug": canonical_slug})
         )
+    return _category_detail_cached(request, slug)
 
+
+@cache_page(60 * 15)
+def _category_detail_cached(request, slug):
     category = get_object_or_404(Category, slug=slug)
     og_title = f"{category.name} Careers in India - Career Reality"
     og_description = f"Reality checks and insights about {category.name.lower()} careers in India. Salary expectations, trade-offs, and growth risks."

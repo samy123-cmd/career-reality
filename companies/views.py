@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 
 from django.db.models import Avg, Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -66,7 +66,7 @@ def company_directory(request):
     })
 
 
-@cache_page(60 * 15)
+@cache_page(60 * 15, key_prefix="company_detail_v2")
 def company_detail(request, slug):
     """Deep-dive company profile with aggregated intelligence."""
     company = get_object_or_404(Company, slug=slug)
