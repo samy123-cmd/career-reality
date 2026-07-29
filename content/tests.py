@@ -422,33 +422,53 @@ class CategoryIndexabilityTests(TestCase):
             is_active=True,
         )
         self.thin_category = Category.objects.create(
-            name="Design",
-            slug="design",
-            description="Design roles",
+            name="Consulting",
+            slug="consulting",
+            description="Consulting roles",
             order=1,
         )
         for idx in range(2):
             Article.objects.create(
-                title=f"Design Article {idx}",
-                slug=f"design-article-{idx}",
+                title=f"Consulting Article {idx}",
+                slug=f"consulting-article-{idx}",
                 author=self.author,
                 category=self.thin_category,
                 status="published",
-                target_persona="Designer",
+                target_persona="Consultant",
                 who_should_avoid="Avoid",
                 common_expectation="Expectation",
                 actual_reality="Reality",
                 salary_reality="Salary",
                 stuck_point="Stuck",
                 verdict="Verdict",
-                meta_title=f"Design {idx}",
+                meta_title=f"Consulting {idx}",
                 meta_description=("Meta " * 8)[:160],
                 published_at=timezone.now(),
             )
 
     def test_thin_category_is_noindex(self):
         response = self.client.get(
-            reverse("category_detail", kwargs={"slug": "design"})
+            reverse("category_detail", kwargs={"slug": "consulting"})
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["meta_robots"], "noindex, follow")
+
+    def test_known_thin_category_redirects_to_canonical(self):
+        design = Category.objects.create(
+            name="Design",
+            slug="design",
+            description="Design roles",
+            order=2,
+        )
+        Category.objects.create(
+            name="Software Engineering",
+            slug="software-engineering",
+            description="SE roles",
+            order=3,
+        )
+        response = self.client.get(reverse("category_detail", kwargs={"slug": design.slug}))
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(
+            response.url,
+            reverse("category_detail", kwargs={"slug": "software-engineering"}),
+        )

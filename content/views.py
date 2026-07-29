@@ -9,6 +9,7 @@ from .models import Article, Category, Author
 from .seo_redirects import (
     ARTICLE_CANONICAL_REDIRECTS,
     ARTICLE_SITEMAP_EXCLUDE_SLUGS,
+    CATEGORY_CANONICAL_REDIRECTS,
     indexable_categories_queryset,
 )
 
@@ -501,6 +502,12 @@ def article_detail(request, slug):
     })
 @cache_page(60 * 15)
 def category_detail(request, slug):
+    canonical_slug = CATEGORY_CANONICAL_REDIRECTS.get(slug)
+    if canonical_slug:
+        return HttpResponsePermanentRedirect(
+            reverse("category_detail", kwargs={"slug": canonical_slug})
+        )
+
     category = get_object_or_404(Category, slug=slug)
     og_title = f"{category.name} Careers in India - Career Reality"
     og_description = f"Reality checks and insights about {category.name.lower()} careers in India. Salary expectations, trade-offs, and growth risks."

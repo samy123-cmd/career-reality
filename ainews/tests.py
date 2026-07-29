@@ -111,14 +111,15 @@ class AINewsModelAndViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('timeline_position', response.context)
 
-    def test_ai_news_detail_returns_404_for_draft(self):
+    def test_ai_news_detail_redirects_draft_to_hub(self):
         self._create_item('Draft Detail', 'draft-detail', status='draft')
 
         response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'draft-detail'}))
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, reverse('ai_news_hub'))
 
-    def test_stale_ai_news_detail_is_noindex(self):
+    def test_stale_ai_news_detail_redirects_to_hub(self):
         from datetime import timedelta
 
         stale_date = timezone.now() - timedelta(days=30)
@@ -131,7 +132,8 @@ class AINewsModelAndViewTests(TestCase):
 
         response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'stale-news'}))
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, reverse('ai_news_hub'))
 
     # --- Tag View Tests ---
 

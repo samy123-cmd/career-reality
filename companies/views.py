@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 
 from django.db.models import Avg, Count, Q
 from django.shortcuts import get_object_or_404, redirect, render

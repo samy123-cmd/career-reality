@@ -141,14 +141,19 @@ def ai_news_hub(request):
     )
 @cache_page(60 * 10)
 def ai_news_detail(request, slug):
-    item = get_object_or_404(
-        AINewsItem.objects.prefetch_related(TAG_PREFETCH),
-        slug=slug,
-        status="published",
+    from django.http import HttpResponsePermanentRedirect
+    from django.urls import reverse
+
+    item = (
+        AINewsItem.objects.prefetch_related(TAG_PREFETCH)
+        .filter(slug=slug)
+        .first()
     )
-    if not item_is_indexable(item):
-        from django.http import Http404
-        raise Http404("AI update not available.")
+    # Draft / pruned / stale items used to 404 with noindex and clutter GSC.
+    # Consolidate crawl signals onto the hub instead.
+    if item is None or item.status != "published" or not item_is_indexable(item):
+        return HttpResponsePermanentRedirect(reverse("ai_news_hub"))
+
     related_items = indexable_ai_news_queryset().exclude(id=item.id)[:4]
     effective_reviewed_at = item.last_verified_at or item.reviewed_at or item.published_at
     stale_cutoff = timezone.now() - timedelta(days=21)

@@ -10,6 +10,18 @@ from django.db.models import Count, Q
 # Minimum published articles before a category page is indexable (matches category_detail).
 MIN_INDEXABLE_CATEGORY_ARTICLES = 3
 
+# Thin category archives (< 3 articles) permanently redirect to a richer sibling.
+# Keeps AdSense safe (no thin indexable hubs) and clears GSC "Excluded by noindex".
+CATEGORY_CANONICAL_REDIRECTS = {
+    "learning": "career-strategy",
+    "marketing": "career-reality-checks",
+    "design": "software-engineering",
+    "product-management": "career-strategy",
+    "education": "career-strategy",
+    "financial-reality": "money-reality",
+    "data-science": "software-engineering",
+}
+
 # Loser slug -> canonical slug (permanent 301).
 ARTICLE_CANONICAL_REDIRECTS = {
     # Junior Data Scientist — keep the shorter, homepage-featured slug (Apr 2026).
@@ -49,5 +61,6 @@ def indexable_categories_queryset():
             pub_count=Count("article", filter=category_published_article_filter())
         )
         .filter(pub_count__gte=MIN_INDEXABLE_CATEGORY_ARTICLES)
+        .exclude(slug__in=CATEGORY_CANONICAL_REDIRECTS.keys())
         .order_by("order", "name")
     )
