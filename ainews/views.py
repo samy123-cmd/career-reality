@@ -186,6 +186,12 @@ def ai_news_by_tag(request, slug):
     items = indexable_ai_news_queryset().filter(tags=tag).prefetch_related(TAG_PREFETCH)
 
     paginator = Paginator(items, 15)
+    # Empty tag archives are soft-404 bait in GSC ("Crawled - currently not indexed").
+    # Hard 404 so Google drops them instead of keeping thin shells in the crawl queue.
+    if paginator.count == 0:
+        from django.http import Http404
+        raise Http404("No AI updates for this tag.")
+
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -195,7 +201,7 @@ def ai_news_by_tag(request, slug):
     # Noindex thin tag pages to avoid AdSense "low value content" flag
     meta_robots = "noindex, follow" if paginator.count < 3 else "index, follow"
 
-    return render(
+    response = render(
         request,
         "ainews/ai_news_by_tag.html",
         {
@@ -205,3 +211,6 @@ def ai_news_by_tag(request, slug):
             **_seo(title, description),
         },
     )
+    if meta_robots.startswith("noindex"):
+        response["X-Robots-Tag"] = "noindex, follow"
+    return response

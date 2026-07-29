@@ -97,6 +97,16 @@
             "permanent": true
         },
         {
+            "source": "/ai/gemma-2-open-lightweight-advantage/",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
+            "source": "/ai/gemma-2-open-lightweight-advantage",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
             "source": "/(.*)",
             "has": [
                 {

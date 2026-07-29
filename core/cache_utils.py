@@ -61,6 +61,8 @@ EDGE_CACHE_RULES: tuple[tuple[re.Pattern[str], int], ...] = (
     (re.compile(r"^/layoff-radar/$"), 900),
     (re.compile(r"^/companies/$"), 900),
     (re.compile(r"^/ai/$"), 900),
+    (re.compile(r"^/ai/tag/[^/]+/$"), 900),
+    (re.compile(r"^/ai/[^/]+/$"), 900),
     (re.compile(r"^/topic-clusters/$"), 3600),
     (re.compile(r"^/career-reality-index/$"), 900),
     (re.compile(r"^/contact/$"), 3600),
@@ -69,10 +71,7 @@ EDGE_CACHE_RULES: tuple[tuple[re.Pattern[str], int], ...] = (
     (re.compile(r"^/companies/[^/]+/$"), 900),
     (re.compile(r"^/author/[^/]+/$"), 900),
     (re.compile(r"^/category/[^/]+/$"), 900),
-    (re.compile(r"^/ai/[^/]+/$"), 900),
 )
-
-# Prefixes that must never receive public edge cache headers.
 EDGE_CACHE_DENY_PREFIXES: tuple[str, ...] = (
     "/admin/",
     "/accounts/",
@@ -114,15 +113,15 @@ def apply_edge_cache_headers(response, path: str, *, is_authenticated: bool) -> 
         return
     if response.get("Cache-Control", "").startswith("private"):
         return
-    if response.get("Vary") and "Cookie" in response.get("Vary", ""):
-        # Django cache_page sets Vary: Cookie — still allow CDN cache for anonymous
-        pass
     ttl = edge_cache_ttl_for_path(path)
     if ttl is None:
         return
     stale = min(ttl * 4, 86400)
+    # Overwrite Django cache_page's max-age so the CDN can share anonymously.
     response["Cache-Control"] = f"public, s-maxage={ttl}, stale-while-revalidate={stale}"
-    response.setdefault("Vary", "Accept-Encoding, Cookie")
+    # Do not Vary on Cookie for public HTML — anonymous responses are identical
+    # and Cookie-varying was fragmenting the edge cache.
+    response["Vary"] = "Accept-Encoding"
 
 
 def invalidate_sitemap_cache() -> None:

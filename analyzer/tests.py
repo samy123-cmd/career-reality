@@ -77,6 +77,7 @@ class AnalyzerFlowTests(TestCase):
         payload = response.json()
         self.assertEqual(len(payload["submissions"]), 1)
         self.assertEqual(payload["submissions"][0]["role"], "Backend Engineer")
+        self.assertIn("noindex", response.get("X-Robots-Tag", ""))
 
 
 _VALID_SALARY_PAYLOAD = {

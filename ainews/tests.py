@@ -145,6 +145,12 @@ class AINewsModelAndViewTests(TestCase):
         items = list(response.context['page_obj'].object_list)
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0].slug, 'tagged')
+        self.assertIn('noindex', response.context['meta_robots'])
+        self.assertIn('noindex', response.get('X-Robots-Tag', ''))
+
+    def test_ai_news_by_tag_empty_returns_404(self):
+        response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'model-release'}))
+        self.assertEqual(response.status_code, 404)
 
     def test_ai_news_by_tag_returns_404_for_invalid_tag(self):
         response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'nonexistent'}))

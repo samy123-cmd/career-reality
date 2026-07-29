@@ -7,7 +7,7 @@ from content.seo_redirects import (
     ARTICLE_SITEMAP_EXCLUDE_SLUGS,
     MIN_INDEXABLE_CATEGORY_ARTICLES,
 )
-from core.sitemaps import ArticleSitemap, CategorySitemap, StaticViewSitemap, ToolSitemap
+from core.sitemaps import ArticleSitemap, AuthorSitemap, CategorySitemap, StaticViewSitemap, ToolSitemap
 
 
 class SitemapHygieneTests(TestCase):
@@ -142,3 +142,35 @@ class SitemapHygieneTests(TestCase):
     def test_static_sitemap_excludes_ai_hub_when_no_published_items(self):
         urls = [StaticViewSitemap().location(item) for item in StaticViewSitemap().items()]
         self.assertNotIn(reverse("ai_news_hub"), urls)
+
+    def test_author_sitemap_includes_authors_with_two_plus_articles(self):
+        author_ids = [a.id for a in AuthorSitemap().items()]
+        self.assertIn(self.author.id, author_ids)
+
+        thin_author = Author.objects.create(
+            name="Thin",
+            display_name="Thin",
+            bio="Bio " * 10,
+            linkedin_url="https://www.linkedin.com/in/thin/",
+            experience_summary="1 year",
+            is_active=True,
+        )
+        Article.objects.create(
+            title="Only One",
+            slug="only-one-author-article",
+            author=thin_author,
+            category=self.rich_cat,
+            status="published",
+            target_persona="p",
+            who_should_avoid="a",
+            common_expectation="e",
+            actual_reality="r",
+            salary_reality="s",
+            stuck_point="st",
+            verdict="v",
+            meta_title="t",
+            meta_description="Meta description long enough for SEO purposes here.",
+            published_at=timezone.now(),
+        )
+        author_ids = [a.id for a in AuthorSitemap().items()]
+        self.assertNotIn(thin_author.id, author_ids)

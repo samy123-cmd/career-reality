@@ -39,6 +39,7 @@ def is_salary_unlocked(request, submission_id):
 
 
 def _reset_monthly_previews_if_needed(request):
+    """Persist a month rollover. Only call on write paths (consume), never on read-only context."""
     month = _current_month()
     if request.user.is_authenticated:
         profile = request.user.profile
@@ -51,14 +52,26 @@ def _reset_monthly_previews_if_needed(request):
         request.session["salary_previews_month"] = month
 
 
+def _anonymous_previews_used(request) -> int:
+    """Read preview usage without creating/mutating the session cookie."""
+    month = _current_month()
+    if request.session.get("salary_previews_month") != month:
+        return 0
+    return int(request.session.get("salary_previews_used", 0) or 0)
+
+
 def get_free_previews_remaining(request):
     if is_pro_user(request):
         return FREE_PREVIEW_LIMIT
-    _reset_monthly_previews_if_needed(request)
     if request.user.is_authenticated:
+        # Authenticated reads may persist a month rollover on the profile row.
+        _reset_monthly_previews_if_needed(request)
         used = request.user.profile.salary_previews_used
     else:
-        used = request.session.get("salary_previews_used", 0)
+        # Do NOT write the anonymous session here — this runs from a global
+        # context processor and was forcing Set-Cookie on every public page,
+        # which busts CDN cache and wastes Google crawl budget.
+        used = _anonymous_previews_used(request)
     return max(0, FREE_PREVIEW_LIMIT - used)
 
 

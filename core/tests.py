@@ -66,6 +66,7 @@ class CoreViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         body = response.content.decode("utf-8")
         self.assertIn("User-agent: *", body)
+        self.assertIn("Disallow: /api/", body)
         self.assertIn("Disallow: /resignation-risk/step/", body)
         self.assertIn("Disallow: /discussions/", body)
         self.assertIn("Sitemap: https://www.careerreality.in/sitemap.xml", body)

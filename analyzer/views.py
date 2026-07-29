@@ -354,11 +354,14 @@ def salary_feed_api(request):
         data = get_salary_ticker_items(limit=20)
         response = JsonResponse({'submissions': data})
         patch_cache_control(response, public=True, max_age=120, stale_while_revalidate=60)
+        # JSON feed is for the homepage ticker — never a search result.
+        response["X-Robots-Tag"] = "noindex, nofollow"
         return response
     except Exception:
         logger.exception("salary_feed_api failed")
         response = JsonResponse({'error': 'Service temporarily unavailable.'}, status=500)
         patch_cache_control(response, no_store=True)
+        response["X-Robots-Tag"] = "noindex, nofollow"
         return response
 
 @cache_page(60 * 15)

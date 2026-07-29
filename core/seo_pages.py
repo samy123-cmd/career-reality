@@ -123,6 +123,8 @@ SEO_TOOL_HUB = (
 )
 
 # Pillar articles to cross-link from tool pages (high intent ↔ content loop).
+# Includes several URLs Google has crawled but not indexed so internal PageRank
+# concentrates on the canonical article set we want in the index.
 SEO_PILLAR_ARTICLES = (
     {
         "label": "Layoff Recovery Timeline India",
@@ -138,5 +140,30 @@ SEO_PILLAR_ARTICLES = (
         "label": "Manager vs IC: Which Path Pays",
         "url_name": "article_detail",
         "slug": "manager-vs-ic-career-path-india",
+    },
+    {
+        "label": "Work-Life Balance Myth for High Performers",
+        "url_name": "article_detail",
+        "slug": "work-life-balance-myth-high-performers",
+    },
+    {
+        "label": "DevOps / SRE On-Call Reality",
+        "url_name": "article_detail",
+        "slug": "devops-sre-reality-india-oncall",
+    },
+    {
+        "label": "Why Upskilling Stops Working",
+        "url_name": "article_detail",
+        "slug": "why-upskilling-stops-working-career-trap",
+    },
+    {
+        "label": "MBA Reality India 2026",
+        "url_name": "article_detail",
+        "slug": "mba-reality-india-worth-it-2026",
+    },
+    {
+        "label": "Networking Reality for Introverts",
+        "url_name": "article_detail",
+        "slug": "networking-reality-india-introverts",
     },
 )

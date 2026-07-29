@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
-from django.views.decorators.http import require_GET
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
 from django.urls import reverse
 from django.db.models import Count, Q
 from content.models import Article, Category
@@ -125,6 +126,8 @@ def robots_txt(request):
         "Allow: /",
         # Hindi duplicate pages — no translations exist, identical to English
         "Disallow: /hi/",
+        # JSON/API endpoints — not HTML documents; GSC was crawling these
+        "Disallow: /api/",
         # Tool steps & results — no SEO value, contains session state
         "Disallow: /resignation-risk/step/",
         "Disallow: /resignation-risk/result/",
@@ -558,11 +561,14 @@ def run_career_index_cron(request):
 
 
 
+@csrf_exempt
+@require_POST
 def newsletter_signup(request):
-    """Handle newsletter signup form submission."""
-    if request.method != 'POST':
-        return redirect(request.META.get('HTTP_REFERER') or reverse('home'))
+    """Handle newsletter signup form submission.
 
+    CSRF-exempt because public article/tool pages are CDN-cached without
+    Set-Cookie; the form still has IP rate-limiting below.
+    """
     # Basic rate-limit: max 3 signups per IP per hour via cache counter.
     ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
     rate_key = f"newsletter_signup_ip_{ip}"

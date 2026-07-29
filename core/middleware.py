@@ -48,7 +48,11 @@ class SecurityHeadersMiddleware:
             response["X-Robots-Tag"] = "noindex, nofollow"
 
         # Block /hi/ duplicate pages — no Hindi translations exist.
-        if request.path.startswith("/hi/"):
+        if request.path.startswith("/hi/") or request.path == "/hi":
+            response["X-Robots-Tag"] = "noindex, nofollow"
+
+        # JSON/API endpoints must never appear as search documents.
+        if request.path.startswith("/api/"):
             response["X-Robots-Tag"] = "noindex, nofollow"
 
         response.setdefault("X-Content-Type-Options", "nosniff")
@@ -77,6 +81,9 @@ class EdgeCacheHeadersMiddleware:
     """
     Attach Vercel CDN cache hints for anonymous public pages.
     Works alongside Django Redis cache_page — edge caches full HTML responses.
+
+    Also strips Set-Cookie on public cacheable GETs for anonymous users so the
+    CDN can actually store the response (Set-Cookie forces cache bypass).
     """
 
     def __init__(self, get_response):
@@ -86,13 +93,33 @@ class EdgeCacheHeadersMiddleware:
         response = self.get_response(request)
         if request.method != "GET":
             return response
-        from core.cache_utils import apply_edge_cache_headers
+        from core.cache_utils import apply_edge_cache_headers, edge_cache_ttl_for_path
 
+        is_authenticated = bool(
+            getattr(request, "user", None) and request.user.is_authenticated
+        )
         apply_edge_cache_headers(
             response,
             request.path,
-            is_authenticated=bool(getattr(request, "user", None) and request.user.is_authenticated),
+            is_authenticated=is_authenticated,
         )
+
+        # Public article/tool HTML must be cookie-free for Googlebot + CDN.
+        # Session/CSRF cookies on every hit were keeping x-vercel-cache: MISS
+        # and adding multi-second TTFB to crawled URLs.
+        if (
+            not is_authenticated
+            and response.status_code in (200, 301, 308)
+            and edge_cache_ttl_for_path(request.path) is not None
+        ):
+            if hasattr(response, "cookies"):
+                response.cookies.clear()
+            if "Set-Cookie" in response:
+                try:
+                    del response["Set-Cookie"]
+                except KeyError:
+                    pass
+
         return response
 
 

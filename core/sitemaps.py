@@ -1,4 +1,5 @@
 from django.contrib.sitemaps import Sitemap
+from django.db.models import Count
 from django.urls import reverse
 from content.models import Article
 from content.seo_redirects import (
@@ -104,10 +105,35 @@ class CompanySitemap(Sitemap):
         return obj.updated_at
 
 
+class AuthorSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.5
+
+    def items(self):
+        # Match author_detail index gate: at least 2 canonical published articles.
+        from content.models import Author
+        from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS
+        from django.db.models import Q
+
+        published = Q(article__status="published") & ~Q(
+            article__slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS
+        )
+        return (
+            Author.objects.filter(is_active=True)
+            .annotate(pub_count=Count("article", filter=published))
+            .filter(pub_count__gte=2)
+            .order_by("id")
+        )
+
+    def location(self, obj):
+        return reverse("author_detail", kwargs={"author_id": obj.id})
+
+
 SITEMAPS = {
     "tools": ToolSitemap,
     "articles": ArticleSitemap,
     "categories": CategorySitemap,
+    "authors": AuthorSitemap,
     "static": StaticViewSitemap,
     "ainews": AINewsSitemap,
     "companies": CompanySitemap,

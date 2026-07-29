@@ -65,6 +65,31 @@ class EdgeCacheMiddlewareTests(TestCase):
         response = middleware(request)
         self.assertIn("s-maxage", response.get("Cache-Control", ""))
 
+    def test_middleware_strips_cookies_on_public_pages(self):
+        def get_response(request):
+            from django.http import HttpResponse
+            response = HttpResponse("home")
+            response.set_cookie("sessionid", "abc")
+            response.set_cookie("csrftoken", "xyz")
+            return response
+
+        middleware = EdgeCacheHeadersMiddleware(get_response)
+        factory = RequestFactory()
+        request = factory.get("/article/example/")
+        request.user = type("U", (), {"is_authenticated": False})()
+        response = middleware(request)
+        self.assertEqual(len(response.cookies), 0)
+        self.assertIn("s-maxage", response.get("Cache-Control", ""))
+
+    def test_apply_edge_cache_headers_drops_cookie_vary(self):
+        from django.http import HttpResponse
+
+        response = HttpResponse("ok")
+        response["Vary"] = "Accept-Language, Cookie"
+        apply_edge_cache_headers(response, "/article/foo/", is_authenticated=False)
+        self.assertNotIn("Cookie", response["Vary"])
+        self.assertIn("s-maxage=900", response["Cache-Control"])
+
 
 class WarmPageCacheTests(TestCase):
     def test_warm_page_cache_hits_core_paths(self):

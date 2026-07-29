@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ og_title|default:author.display_name }} — Career Reality Author{% endblock %}
-{% block meta_description %}{{ og_description|default:author.experience_summary }} — Editorial contributor at Career Reality.{% endblock %}
+{% block title %}{{ author.display_name }} — Career Reality Author{% endblock %}
+{% block meta_description %}{{ og_description|default:author.experience_summary }}{% endblock %}
 
 {% block content %}
 <script type="application/ld+json">

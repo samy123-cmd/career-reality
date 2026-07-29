@@ -437,23 +437,27 @@ def author_detail(request, author_id):
     has_minimum_articles = articles.values('id')[1:2].exists()
     meta_robots = "index, follow" if has_minimum_articles else "noindex, follow"
 
-    meta_title = f"{author.display_name} — Career Reality Author"
+    # Title block already appends "— Career Reality Author"; keep og_title clean.
+    meta_title = author.display_name
     meta_description = (
         f"{author.experience_summary}. "
         f"Editorial contributor covering Indian tech careers, salary data, and career risk analysis."
     )[:160]
 
-    return render(request, 'content/author_detail.html', {
+    response = render(request, 'content/author_detail.html', {
         'author': author,
         'articles': articles,
         'meta_robots': meta_robots,
         'og_title': meta_title,
         'og_description': meta_description,
-        'twitter_title': meta_title,
+        'twitter_title': f"{author.display_name} — Career Reality Author",
         'twitter_description': meta_description,
-        'article_meta_title': meta_title,
+        'article_meta_title': f"{author.display_name} — Career Reality Author",
         'article_meta_description': meta_description,
     })
+    if meta_robots.startswith("noindex"):
+        response["X-Robots-Tag"] = "noindex, follow"
+    return response
 @cache_page(60 * 60)
 def article_detail(request, slug):
     canonical_slug = ARTICLE_CANONICAL_REDIRECTS.get(slug)
