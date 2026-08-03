@@ -150,10 +150,43 @@
 }
 
 [data-theme="light"] .hp-index-card,
-[data-theme="light"] .hp-tool-card {
+[data-theme="light"] .hp-tools-panel {
     background: #fff;
     border-color: var(--cr-border);
     box-shadow: var(--shadow-md);
+}
+
+[data-theme="light"] .hp-tool-row:hover,
+[data-theme="light"] .hp-tool-row:focus-visible {
+    background: #f4f4f5;
+}
+
+[data-theme="light"] .hp-tool-mark {
+    background-color: #f4f4f5;
+}
+
+[data-theme="light"] .hp-tool-mark--ctc {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2352525b' stroke-width='1.6'%3E%3Crect x='4' y='3' width='16' height='18' rx='1.5'/%3E%3Cpath d='M8 8h8M8 12h5M8 16h6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .hp-tool-mark--risk {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2352525b' stroke-width='1.6'%3E%3Cpath d='M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z' stroke-linejoin='round'/%3E%3Cpath d='M12 11v3.5M12 17h.01' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .hp-tool-mark--radar {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2352525b' stroke-width='1.6'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 4v3M12 17v3M4 12h3M17 12h3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .hp-tool-mark--salary {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2352525b' stroke-width='1.6'%3E%3Cpath d='M4 19V5M4 19h16' stroke-linecap='round'/%3E%3Cpath d='M8 15v-3M12 15V8M16 15v-5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .hp-tool-mark--company {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2352525b' stroke-width='1.6'%3E%3Cpath d='M4 20V8l8-4 8 4v12' stroke-linejoin='round'/%3E%3Cpath d='M9 20v-6h6v6M10 10h.01M14 10h.01M10 13h.01M14 13h.01' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .hp-tool-mark--pulse {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2352525b' stroke-width='1.6'%3E%3Cpath d='M3 12h4l2.5-6 3 12 2.5-6H21' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 [data-theme="light"] .hp-ticker {

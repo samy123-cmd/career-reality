@@ -130,6 +130,8 @@ html:not([data-theme="light"]) .hp-featured-title,
 html:not([data-theme="light"]) .hp-article-card h3,
 html:not([data-theme="light"]) .hp-cluster-card h3,
 html:not([data-theme="light"]) .hp-section-title,
+html:not([data-theme="light"]) .hp-tools-title,
+html:not([data-theme="light"]) .hp-tool-name,
 html:not([data-theme="light"]) .hp-tool-card h3 {
     color: var(--cr-text);
 }
@@ -720,6 +722,7 @@ html:not([data-theme="light"]) .hp-featured-article,
 html:not([data-theme="light"]) .hp-article-card,
 html:not([data-theme="light"]) .hp-cluster-card,
 html:not([data-theme="light"]) .hp-tool-card,
+html:not([data-theme="light"]) .hp-tools-panel,
 html:not([data-theme="light"]) .hp-updates-panel,
 html:not([data-theme="light"]) .hp-faq,
 html:not([data-theme="light"]) .art-callout,

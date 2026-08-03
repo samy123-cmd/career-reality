@@ -696,6 +696,13 @@
         grid-template-columns: 1fr;
         gap: 12px;
     }
+    .hp-tools { padding: 8px 0 16px; }
+    .hp-tool-row {
+        padding: 16px 14px;
+    }
+    .hp-tool-go {
+        opacity: 0.7;
+    }
     .hp-tool-card {
         align-items: center;
         border-radius: var(--mobile-card-radius);

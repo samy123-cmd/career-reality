@@ -254,12 +254,14 @@ a:hover {
 }
 
 .hp-tool-card,
+.hp-tools-panel,
 .hp-trust,
 .hp-section {
     color: inherit;
 }
 
-.hp-tool-card {
+.hp-tool-card,
+.hp-tools-panel {
     background: var(--cr-surface-2);
     border: 1px solid var(--cr-border);
 }
@@ -268,6 +270,11 @@ a:hover {
     border-color: var(--cr-border-strong);
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
+}
+
+.hp-tool-row:hover,
+.hp-tool-row:focus-visible {
+    background: var(--cr-surface-3);
 }
 
 .hp-ticker {
@@ -518,6 +525,22 @@ select:focus {
     .container-reading {
         padding-left: max(16px, env(safe-area-inset-left, 16px));
         padding-right: max(16px, env(safe-area-inset-right, 16px));
+    }
+
+    .more-sheet-link {
+        background: var(--cr-surface-2);
+        border-color: var(--cr-border);
+        color: var(--cr-text);
+    }
+
+    .more-sheet-link--pro {
+        background: linear-gradient(135deg, #1a1a24 0%, #2a2a38 100%);
+        color: var(--cr-text);
+    }
+
+    .mobile-nav-accordion-trigger:active,
+    .mobile-nav-close:active {
+        background: var(--cr-surface-3);
     }
 }
 

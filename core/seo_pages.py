@@ -95,30 +95,31 @@ HOME = PageSEO(
 )
 
 # Internal linking hub — shown on articles and data pages.
+# icon: CSS mark key (not emoji) — see .hp-tool-mark--* in tool-hub.css
 SEO_TOOL_HUB = (
     {
         "label": "CTC to In-Hand Calculator",
         "description": "Decode your offer letter into real monthly take-home.",
         "url_name": "salary_calculator",
-        "icon": "🧮",
+        "icon": "ctc",
     },
     {
         "label": "Resignation Risk Analyzer",
         "description": "Notice period, bonds, and HR pressure — before you resign.",
         "url_name": "analyzer_home",
-        "icon": "🎯",
+        "icon": "risk",
     },
     {
         "label": "IT Layoff Radar",
         "description": "Hiring freeze and layoff signals across Indian tech.",
         "url_name": "layoff_radar",
-        "icon": "🚨",
+        "icon": "radar",
     },
     {
         "label": "Salary Reality Data",
         "description": "Median pay by role — not unicorn outliers.",
         "url_name": "salary_reality",
-        "icon": "💰",
+        "icon": "salary",
     },
 )
 

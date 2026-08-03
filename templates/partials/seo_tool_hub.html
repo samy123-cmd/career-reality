@@ -1,19 +1,29 @@
 {% if seo_tool_hub %}
-<section class="hp-section container-wide" aria-labelledby="seo-tool-hub-title" style="padding-top: 0;">
-    <div class="hp-section-header">
-        <span class="section-label">FREE CAREER TOOLS</span>
-        <h2 id="seo-tool-hub-title" class="hp-section-title">Make your next move with data</h2>
-        <p class="hp-section-sub">Calculators and trackers built for Indian tech professionals.</p>
-    </div>
-    <div class="hp-tools-grid">
+<section class="hp-tools" aria-labelledby="seo-tool-hub-title">
+    <header class="hp-tools-header">
+        <span class="hp-tools-eyebrow">Free career tools</span>
+        <h2 id="seo-tool-hub-title" class="hp-tools-title">Make your next move with data</h2>
+        <p class="hp-tools-sub">Calculators and trackers built for Indian tech professionals — not generic advice.</p>
+    </header>
+
+    <div class="hp-tools-panel" role="list">
         {% for tool in seo_tool_hub %}
-        <a href="{% url tool.url_name %}" class="hp-tool-card">
-            <div class="hp-tool-icon">{{ tool.icon }}</div>
-            <div class="hp-tool-body">
-                <h3>{{ tool.label }}</h3>
-                <p>{{ tool.description }}</p>
-            </div>
-            <span class="hp-tool-arrow">→</span>
+        <a
+            href="{% url tool.url_name %}"
+            class="hp-tool-row"
+            role="listitem"
+        >
+            <span class="hp-tool-index" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="hp-tool-mark hp-tool-mark--{{ tool.icon }}" aria-hidden="true"></span>
+            <span class="hp-tool-copy">
+                <span class="hp-tool-name">{{ tool.label }}</span>
+                <span class="hp-tool-desc">{{ tool.description }}</span>
+            </span>
+            <span class="hp-tool-go" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
         </a>
         {% endfor %}
     </div>

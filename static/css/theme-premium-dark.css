@@ -254,12 +254,14 @@ a:hover {
 }
 
 .hp-tool-card,
+.hp-tools-panel,
 .hp-trust,
 .hp-section {
     color: inherit;
 }
 
-.hp-tool-card {
+.hp-tool-card,
+.hp-tools-panel {
     background: var(--cr-surface-2);
     border: 1px solid var(--cr-border);
 }
@@ -268,6 +270,11 @@ a:hover {
     border-color: var(--cr-border-strong);
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
+}
+
+.hp-tool-row:hover,
+.hp-tool-row:focus-visible {
+    background: var(--cr-surface-3);
 }
 
 .hp-ticker {
