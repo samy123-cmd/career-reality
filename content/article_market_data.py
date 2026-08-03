@@ -9,16 +9,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-# Bump this when running a site-wide refresh (e.g. "2026-07").
-MARKET_PERIOD = "2026-07-late"
-MARKET_LABEL = "Late July 2026"
+# Bump this when running a site-wide refresh (e.g. "2026-08").
+MARKET_PERIOD = "2026-08"
+MARKET_LABEL = "August 2026"
 
-# Shared macro context for Indian tech (late July 2026 — post-appraisal switch wave).
+# Shared macro context for Indian tech (August 2026 — post-switch-wave cooling).
 MACRO_BULLETS = (
-    "Late-July switch wave: appraisal disappointment is driving notice-period exits; "
-    "relieving-letter and clawback friction is rising alongside offer volume.",
-    "AI/GenAI premiums (15–35%) remain narrow; GCCs enforce 3–4 day RTO while still "
-    "hiring selectively for platform and Staff-scope engineers.",
+    "August cooling: late-July switch volume is settling; notice and relieving backlogs "
+    "are clearing while lateral offer velocity slows versus peak appraisal exits.",
+    "Selective GCC and product hiring continues for platform, security, and Staff-scope "
+    "roles; AI/GenAI premiums (15–35%) stay narrow as early H2 campus signals begin.",
 )
 
 # Per-article insights appended to the market update block (unique per slug).
@@ -40,28 +40,28 @@ ARTICLE_SPECIFIC_UPDATES: dict[str, str] = {
         "Bengaluru after tax — validate with the CTC Decoder."
     ),
     "gcc-gold-rush-india-captive-center-reality": (
-        "GCC offers still pay a premium in late July, but 3–4 day RTO is now the norm — "
+        "GCC offers still pay a premium in August, but 3–4 day RTO is now the norm — "
         "price commute into the raise; system-design bar at 4–6 YOE remains standard."
     ),
     "campus-internship-ppo-reality-2026": (
         "Product-company PPO conversion is 40–55% this cycle; service companies remain "
-        "at 15–25% with lower fixed-pay anchors."
+        "at 15–25% with lower fixed-pay anchors as H2 campus prep starts."
     ),
     "mid-year-layoff-pulse-india-july-2026": (
-        "Mid-tier SaaS and IT services account for most July layoff signals; GCC hiring "
-        "continues but interview loops are longer."
+        "Mid-tier SaaS and IT services drove most mid-year layoff signals; August bench "
+        "trimming is quieter while GCC interview loops stay long."
     ),
     "appraisal-hike-inflation-gap-2026": (
         "Nominal hikes of 6–9% are common while urban inflation on rent and school fees "
-        "runs higher — real take-home often flat."
+        "runs higher — real take-home often flat into H2."
     ),
     "ai-job-market-midyear-reality-2026": (
-        "GenAI hiring is narrow: RAG, eval, and cost-controlled inference beat generic "
-        "'prompt engineer' titles in offer volume."
+        "GenAI hiring remains narrow: RAG, eval, and cost-controlled inference beat generic "
+        "'prompt engineer' titles in August offer volume."
     ),
     "relieving-letter-hostage-notice-period-india-2026": (
-        "July–August exit queues are longer; get start-date flexibility in writing before "
-        "resigning into a 60–90 day notice."
+        "Post-July exit queues are clearing but still slow; get start-date flexibility in writing "
+        "before resigning into a 60–90 day notice."
     ),
     "gcc-return-to-office-hybrid-reality-india-2026": (
         "Most captives enforce 3–4 office days despite 'hybrid' careers-page language; "
@@ -72,8 +72,20 @@ ARTICLE_SPECIFIC_UPDATES: dict[str, str] = {
         "in calibration packets."
     ),
     "joining-bonus-clawback-offer-letter-traps-2026": (
-        "Joining bonuses are back for mid-year hires — decode clawback months before treating "
+        "Joining bonuses remain common for mid-year hires — decode clawback months before treating "
         "headline CTC as spendable income."
+    ),
+    "cybersecurity-privacy-careers-beyond-tech-india-2026": (
+        "GRC, cloud security, and privacy analyst demand is rising outside pure tech — BFSI, "
+        "healthcare, and manufacturing are competing for the same scarce mid-level talent."
+    ),
+    "green-careers-esg-renewable-sustainability-india-2026": (
+        "ESG analyst, carbon accounting, and renewable engineering roles are expanding with "
+        "India EV and solar build-out — verify real mandates vs greenwashing titles."
+    ),
+    "portfolio-first-hiring-gig-economy-careers-india-2026": (
+        "Portfolio-first screens are reshaping design, marketing, and AI contractor hiring; "
+        "evidence of shipped work beats credential stacks in August 2026 loops."
     ),
 }
 
@@ -141,7 +153,8 @@ CLUSTER_KEYWORDS: dict[str, tuple[str, ...]] = {
         "networking", "passion", "education", "learning", "upskill", "career-switch",
         "american-dream", "culture-fit", "hr-conversation", "work-life", "manager-vs-ic",
         "hidden-cost", "7-year", "plateau", "relieving", "notice-period", "clawback",
-        "joining-bonus", "return-to-office", "gcc-return",
+        "joining-bonus", "return-to-office", "gcc-return", "cybersecurity", "privacy",
+        "grc", "green-career", "esg", "sustainability", "portfolio-first", "gig-economy",
     ),
 }
 
@@ -177,12 +190,12 @@ def salary_table_html(cluster: str) -> str:
 
 def market_update_html(cluster: str, *, article_slug: str = "") -> str:
     cluster_notes = {
-        "engineering": "Late-July switch wave: notice/relieving friction is high; Staff slots stay scarce while Senior bands compress without multi-team scope.",
+        "engineering": "August cooling after the switch wave: notice/relieving friction is easing; Staff slots stay scarce while Senior bands compress without multi-team scope.",
         "data": "Most 'data scientist' postings still map to analytics or pipeline work; true ML roles require production deployment evidence, not notebook Kaggle wins.",
-        "product": "PM hiring stays selective into August — execution and metrics ownership beat MBA pedigree in product-first companies.",
-        "design": "UI-only roles are commoditising; product design with research + metrics commands better bands.",
+        "product": "PM hiring stays selective in August — execution and metrics ownership beat MBA pedigree in product-first companies.",
+        "design": "UI-only roles are commoditising; product design with research + metrics commands better bands; portfolios beat résumés in many loops.",
         "marketing": "Performance marketing and marketing ops roles hold up; pure 'creative' agency roles remain low-leverage for long-term comp growth.",
-        "general": "Post-appraisal disappointment is driving notice-period exits; clawbacks and GCC RTO mandates change offer math in late July 2026.",
+        "general": "Post-switch-wave August: lateral velocity slows vs late July; clawbacks and GCC RTO mandates still shape offer math in 2026.",
     }
     bullets = "".join(f"<li>{b}</li>" for b in MACRO_BULLETS)
     note = cluster_notes.get(cluster, cluster_notes["general"])

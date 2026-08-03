@@ -48,11 +48,24 @@ class Command(BaseCommand):
             default=False,
             help="Run bootstrap_july_2026 (seed + full refresh) before other maintenance.",
         )
+        parser.add_argument(
+            "--bootstrap-august",
+            action="store_true",
+            default=False,
+            help="Run bootstrap_august_2026 (seed + full refresh) before other maintenance.",
+        )
 
     def handle(self, *args, **options):
         fetch_limit = options["fetch_limit"]
         warm_cache = options["warm_cache"]
         article_warm_limit = options["article_warm_limit"]
+
+        if options.get("bootstrap_august") or os.environ.get("CRON_BOOTSTRAP_AUGUST_2026", "").lower() in ("1", "true", "yes"):
+            self.stdout.write("Running August 2026 bootstrap…")
+            try:
+                call_command("bootstrap_august_2026", stdout=self.stdout)
+            except Exception as exc:
+                self.stdout.write(self.style.WARNING(f"August bootstrap skipped: {exc}"))
 
         if options.get("bootstrap_july") or os.environ.get("CRON_BOOTSTRAP_JULY_2026", "").lower() in ("1", "true", "yes"):
             self.stdout.write("Running July 2026 bootstrap…")

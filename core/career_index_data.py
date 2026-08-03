@@ -39,10 +39,18 @@ JULY_2026_BASELINE = IndexBaseline(
     layoff_risk=50,         # Quiet bench trimming continues into August pipeline
 )
 
+# August 2026 — post-switch-wave cooling, selective H2 hiring, backlog clearance.
+AUGUST_2026_BASELINE = IndexBaseline(
+    salary_pressure=72,   # Slight cooling as July offer frenzy settles
+    switch_difficulty=62,   # Exit queues clearing; lateral velocity slower than July
+    layoff_risk=49,         # Bench trimming quieter; selective cuts continue
+)
+
 # Key: (year, month) → baseline. Add new months here each review cycle.
 MONTHLY_BASELINES: dict[tuple[int, int], IndexBaseline] = {
     (2026, 6): JUNE_2026_BASELINE,
     (2026, 7): JULY_2026_BASELINE,
+    (2026, 8): AUGUST_2026_BASELINE,
 }
 
 

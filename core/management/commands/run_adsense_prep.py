@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 from content.models import Article, Author
 
 _META_SUFFIX = (
-    " Updated June 2026 with salary bands, hiring context, and career risk data for India."
+    " Updated August 2026 with salary bands, hiring context, and career risk data for India."
 )
 
 

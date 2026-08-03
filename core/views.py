@@ -201,11 +201,10 @@ def healthz(request):
         status=status_code,
     )
 
-JULY_2026_ARTICLE_SLUGS = (
-    "campus-internship-ppo-reality-2026",
-    "mid-year-layoff-pulse-india-july-2026",
-    "appraisal-hike-inflation-gap-2026",
-    "ai-job-market-midyear-reality-2026",
+AUGUST_2026_ARTICLE_SLUGS = (
+    "cybersecurity-privacy-careers-beyond-tech-india-2026",
+    "green-careers-esg-renewable-sustainability-india-2026",
+    "portfolio-first-hiring-gig-economy-careers-india-2026",
 )
 
 
@@ -225,8 +224,8 @@ def home(request):
         .order_by('-published_at')
     )
     articles = article_qs[:10]
-    july_articles = list(
-        article_qs.filter(slug__in=JULY_2026_ARTICLE_SLUGS).order_by("-published_at")
+    august_articles = list(
+        article_qs.filter(slug__in=AUGUST_2026_ARTICLE_SLUGS).order_by("-published_at")
     )
     categories = indexable_categories_queryset()
     recent_updates = article_qs.order_by('-updated_at')[:5]
@@ -254,7 +253,7 @@ def home(request):
 
     return render(request, 'core/home.html', {
         'articles': articles,
-        'july_articles': july_articles,
+        'august_articles': august_articles,
         'categories': categories,
         'recent_updates': recent_updates,
         'topic_clusters': _topic_clusters(),
@@ -437,6 +436,7 @@ def career_reality_index(request):
     ]
 
     change_log = [
+        {"date": "August 3, 2026", "note": "August 2026 scores published. Post-switch-wave cooling: salary pressure and switch difficulty ease slightly from July peaks; layoff risk holds near mid-year levels."},
         {"date": "March 8, 2026", "note": "March 2026 scores published. Salary pressure ticks up on appraisal-cycle compression; layoff risk eases slightly as Q1 hiring stabilises."},
         {"date": "February 17, 2026", "note": "Expanded methodology transparency, interpretation bands, and persona-specific playbooks."},
         {"date": "February 1, 2026", "note": "Refreshed monthly scores and revised layoff signal weighting checks."},
@@ -674,6 +674,7 @@ def run_freshness_cron(request):
     prune_ai = request.GET.get("prune_ai", os.environ.get("CRON_PRUNE_AI", "False")) == "True"
     warm_cache = request.GET.get("warm_cache", os.environ.get("CRON_WARM_CACHE", "True")) == "True"
     bootstrap_july = request.GET.get("bootstrap_july", os.environ.get("CRON_BOOTSTRAP_JULY_2026", "False")) == "True"
+    bootstrap_august = request.GET.get("bootstrap_august", os.environ.get("CRON_BOOTSTRAP_AUGUST_2026", "False")) == "True"
 
     started_at = timezone.now()
     output = io.StringIO()
@@ -689,6 +690,7 @@ def run_freshness_cron(request):
             refresh_articles=refresh_articles,
             prune_ai=prune_ai,
             bootstrap_july=bootstrap_july,
+            bootstrap_august=bootstrap_august,
             stdout=output,
         )
     except Exception as exc:

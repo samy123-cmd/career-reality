@@ -172,8 +172,18 @@ SEO_PILLAR_ARTICLES = (
         "slug": "relieving-letter-hostage-notice-period-india-2026",
     },
     {
-        "label": "Joining Bonus Clawbacks Explained",
+        "label": "Cybersecurity & Privacy Beyond Tech",
         "url_name": "article_detail",
-        "slug": "joining-bonus-clawback-offer-letter-traps-2026",
+        "slug": "cybersecurity-privacy-careers-beyond-tech-india-2026",
+    },
+    {
+        "label": "Green Careers: ESG & Renewables",
+        "url_name": "article_detail",
+        "slug": "green-careers-esg-renewable-sustainability-india-2026",
+    },
+    {
+        "label": "Portfolio-First Hiring & Gig Careers",
+        "url_name": "article_detail",
+        "slug": "portfolio-first-hiring-gig-economy-careers-india-2026",
     },
 )

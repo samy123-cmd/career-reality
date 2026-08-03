@@ -26,6 +26,8 @@ class Command(BaseCommand):
         if not options["skip_articles"]:
             self.stdout.write("Bootstrapping July 2026 articles and AI Pulse…")
             call_command("bootstrap_july_2026")
+            self.stdout.write("Bootstrapping August 2026 articles…")
+            call_command("bootstrap_august_2026")
 
         if not options["skip_companies"]:
             self.stdout.write("Seeding company intelligence…")
