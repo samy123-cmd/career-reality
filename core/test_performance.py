@@ -35,7 +35,7 @@ class CacheUtilsTests(TestCase):
 
         response = HttpResponse("ok")
         apply_edge_cache_headers(response, "/", is_authenticated=False)
-        self.assertIn("s-maxage=900", response["Cache-Control"])
+        self.assertIn("s-maxage=60", response["Cache-Control"])
 
     def test_sitemap_cache_stores_xml(self):
         invalidate_sitemap_cache()

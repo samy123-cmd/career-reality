@@ -232,6 +232,8 @@ if _REDIS_URL:
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
             'LOCATION': _REDIS_URL,
             'TIMEOUT': _CACHE_TIMEOUT,
+            # Bump to invalidate stale cache_page HTML after template deploys.
+            'KEY_PREFIX': os.environ.get('CACHE_KEY_PREFIX', 'cr-tools-v2'),
         }
     }
 elif not DEBUG:

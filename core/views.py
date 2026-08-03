@@ -208,7 +208,7 @@ AUGUST_2026_ARTICLE_SLUGS = (
 )
 
 
-@cache_page(60 * 60)
+@cache_page(60 * 60, key_prefix="home_v3")
 def home(request):
     """
     Home page view.
@@ -295,7 +295,7 @@ def editorial_standards(request):
     description = "The editorial rules, correction protocol, evidence requirements, and tone guidelines behind Career Reality."
     return render(request, 'core/editorial.html', _seo(title, description))
 
-@cache_page(60 * 60, key_prefix="salary_reality_v2")
+@cache_page(60 * 60, key_prefix="salary_reality_v3")
 def salary_reality(request):
     title = SALARY_REALITY.title
     description = SALARY_REALITY.description
