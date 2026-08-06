@@ -1,255 +1,256 @@
 {
-    "crons": [
+  "_comment": "DEPRECATED for production. Kept as rollback reference while migrating to Fly.io. See docs/migrate-off-vercel.md. Do not add new crons/routes here.",
+  "crons": [
+    {
+      "path": "/internal/cron/freshness/?warm_cache=True",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=2&refresh_articles=True&prune_ai=True&bootstrap_august=True",
+      "schedule": "30 2 * * *"
+    },
+    {
+      "path": "/internal/cron/warm-cache/",
+      "schedule": "0 */4 * * *"
+    },
+    {
+      "path": "/internal/cron/weekly-digest/",
+      "schedule": "0 9 * * 1"
+    },
+    {
+      "path": "/internal/cron/layoff-alerts/",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/internal/cron/refresh-career-index/",
+      "schedule": "0 3 1 * *"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/article/junior-data-scientist-reality-india-sql-janitor/",
+      "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
+      "permanent": true
+    },
+    {
+      "source": "/article/junior-data-scientist-reality-india-sql-janitor",
+      "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
+      "permanent": true
+    },
+    {
+      "source": "/article/digital-marketing-illusion-instagram-ads-burning-money/",
+      "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+      "permanent": true
+    },
+    {
+      "source": "/article/digital-marketing-illusion-instagram-ads-burning-money",
+      "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+      "permanent": true
+    },
+    {
+      "source": "/article/networking-myth-professional-relationships-worthless/",
+      "destination": "https://www.careerreality.in/article/networking-reality-india-introverts/",
+      "permanent": true
+    },
+    {
+      "source": "/article/networking-myth-professional-relationships-worthless",
+      "destination": "https://www.careerreality.in/article/networking-reality-india-introverts/",
+      "permanent": true
+    },
+    {
+      "source": "/article/digital-marketing-reality-india/",
+      "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+      "permanent": true
+    },
+    {
+      "source": "/article/digital-marketing-reality-india",
+      "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
+      "permanent": true
+    },
+    {
+      "source": "/article/the-product-manager-reality-coordinator-not-ceo/",
+      "destination": "https://www.careerreality.in/article/product-manager-reality-india-jira-janitor/",
+      "permanent": true
+    },
+    {
+      "source": "/article/the-product-manager-reality-coordinator-not-ceo",
+      "destination": "https://www.careerreality.in/article/product-manager-reality-india-jira-janitor/",
+      "permanent": true
+    },
+    {
+      "source": "/article/the-ux-design-reality-india-ui-factory/",
+      "destination": "https://www.careerreality.in/article/the-design-reality-beautiful-screens-do-not-save-bad-strategy/",
+      "permanent": true
+    },
+    {
+      "source": "/article/the-ux-design-reality-india-ui-factory",
+      "destination": "https://www.careerreality.in/article/the-design-reality-beautiful-screens-do-not-save-bad-strategy/",
+      "permanent": true
+    },
+    {
+      "source": "/article/the-learning-reality-upskilling-is-not-a-guarantee/",
+      "destination": "https://www.careerreality.in/article/why-upskilling-stops-working-career-trap/",
+      "permanent": true
+    },
+    {
+      "source": "/article/the-learning-reality-upskilling-is-not-a-guarantee",
+      "destination": "https://www.careerreality.in/article/why-upskilling-stops-working-career-trap/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/gemma-2-open-lightweight-advantage/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/gemma-2-open-lightweight-advantage",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/category/learning/",
+      "destination": "https://www.careerreality.in/category/career-strategy/",
+      "permanent": true
+    },
+    {
+      "source": "/category/marketing/",
+      "destination": "https://www.careerreality.in/category/career-reality-checks/",
+      "permanent": true
+    },
+    {
+      "source": "/category/design/",
+      "destination": "https://www.careerreality.in/category/software-engineering/",
+      "permanent": true
+    },
+    {
+      "source": "/category/product-management/",
+      "destination": "https://www.careerreality.in/category/career-strategy/",
+      "permanent": true
+    },
+    {
+      "source": "/category/education/",
+      "destination": "https://www.careerreality.in/category/career-strategy/",
+      "permanent": true
+    },
+    {
+      "source": "/category/financial-reality/",
+      "destination": "https://www.careerreality.in/category/money-reality/",
+      "permanent": true
+    },
+    {
+      "source": "/category/data-science/",
+      "destination": "https://www.careerreality.in/category/software-engineering/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/indiaai-mission-10371-crore-gpu-compute-nodes/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/deepseek-r1-open-reasoning-debate/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/gemini-2-5-pro-google-workspace-india-default/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/gemini-2-agent-patterns-mainstream/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/india-second-largest-ai-tool-adoption-market/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/sarvam-ai-series-a-41m-india-ai-startup/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/gpt-4o-product-ready-interface/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/sarvam-1-india-foundation-model-milestone/",
+      "destination": "https://www.careerreality.in/ai/",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
         {
-            "path": "/internal/cron/freshness/?warm_cache=True",
-            "schedule": "0 */6 * * *"
-        },
-        {
-            "path": "/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=2&refresh_articles=True&prune_ai=True&bootstrap_august=True",
-            "schedule": "30 2 * * *"
-        },
-        {
-            "path": "/internal/cron/warm-cache/",
-            "schedule": "0 */4 * * *"
-        },
-        {
-            "path": "/internal/cron/weekly-digest/",
-            "schedule": "0 9 * * 1"
-        },
-        {
-            "path": "/internal/cron/layoff-alerts/",
-            "schedule": "0 */6 * * *"
-        },
-        {
-            "path": "/internal/cron/refresh-career-index/",
-            "schedule": "0 3 1 * *"
+          "type": "host",
+          "value": "careerreality.in"
         }
-    ],
-    "redirects": [
-        {
-            "source": "/article/junior-data-scientist-reality-india-sql-janitor/",
-            "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
-            "permanent": true
-        },
-        {
-            "source": "/article/junior-data-scientist-reality-india-sql-janitor",
-            "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
-            "permanent": true
-        },
-        {
-            "source": "/article/digital-marketing-illusion-instagram-ads-burning-money/",
-            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
-            "permanent": true
-        },
-        {
-            "source": "/article/digital-marketing-illusion-instagram-ads-burning-money",
-            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
-            "permanent": true
-        },
-        {
-            "source": "/article/networking-myth-professional-relationships-worthless/",
-            "destination": "https://www.careerreality.in/article/networking-reality-india-introverts/",
-            "permanent": true
-        },
-        {
-            "source": "/article/networking-myth-professional-relationships-worthless",
-            "destination": "https://www.careerreality.in/article/networking-reality-india-introverts/",
-            "permanent": true
-        },
-        {
-            "source": "/article/digital-marketing-reality-india/",
-            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
-            "permanent": true
-        },
-        {
-            "source": "/article/digital-marketing-reality-india",
-            "destination": "https://www.careerreality.in/article/digital-marketing-reality-agency-burnout/",
-            "permanent": true
-        },
-        {
-            "source": "/article/the-product-manager-reality-coordinator-not-ceo/",
-            "destination": "https://www.careerreality.in/article/product-manager-reality-india-jira-janitor/",
-            "permanent": true
-        },
-        {
-            "source": "/article/the-product-manager-reality-coordinator-not-ceo",
-            "destination": "https://www.careerreality.in/article/product-manager-reality-india-jira-janitor/",
-            "permanent": true
-        },
-        {
-            "source": "/article/the-ux-design-reality-india-ui-factory/",
-            "destination": "https://www.careerreality.in/article/the-design-reality-beautiful-screens-do-not-save-bad-strategy/",
-            "permanent": true
-        },
-        {
-            "source": "/article/the-ux-design-reality-india-ui-factory",
-            "destination": "https://www.careerreality.in/article/the-design-reality-beautiful-screens-do-not-save-bad-strategy/",
-            "permanent": true
-        },
-        {
-            "source": "/article/the-learning-reality-upskilling-is-not-a-guarantee/",
-            "destination": "https://www.careerreality.in/article/why-upskilling-stops-working-career-trap/",
-            "permanent": true
-        },
-        {
-            "source": "/article/the-learning-reality-upskilling-is-not-a-guarantee",
-            "destination": "https://www.careerreality.in/article/why-upskilling-stops-working-career-trap/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/gemma-2-open-lightweight-advantage/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/gemma-2-open-lightweight-advantage",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/category/learning/",
-            "destination": "https://www.careerreality.in/category/career-strategy/",
-            "permanent": true
-        },
-        {
-            "source": "/category/marketing/",
-            "destination": "https://www.careerreality.in/category/career-reality-checks/",
-            "permanent": true
-        },
-        {
-            "source": "/category/design/",
-            "destination": "https://www.careerreality.in/category/software-engineering/",
-            "permanent": true
-        },
-        {
-            "source": "/category/product-management/",
-            "destination": "https://www.careerreality.in/category/career-strategy/",
-            "permanent": true
-        },
-        {
-            "source": "/category/education/",
-            "destination": "https://www.careerreality.in/category/career-strategy/",
-            "permanent": true
-        },
-        {
-            "source": "/category/financial-reality/",
-            "destination": "https://www.careerreality.in/category/money-reality/",
-            "permanent": true
-        },
-        {
-            "source": "/category/data-science/",
-            "destination": "https://www.careerreality.in/category/software-engineering/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/indiaai-mission-10371-crore-gpu-compute-nodes/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/deepseek-r1-open-reasoning-debate/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/gemini-2-5-pro-google-workspace-india-default/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/gemini-2-agent-patterns-mainstream/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/india-second-largest-ai-tool-adoption-market/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/sarvam-ai-series-a-41m-india-ai-startup/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/gpt-4o-product-ready-interface/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/ai/sarvam-1-india-foundation-model-milestone/",
-            "destination": "https://www.careerreality.in/ai/",
-            "permanent": true
-        },
-        {
-            "source": "/(.*)",
-            "has": [
-                {
-                    "type": "host",
-                    "value": "careerreality.in"
-                }
-            ],
-            "destination": "https://www.careerreality.in/$1",
-            "permanent": true
-        }
-    ],
-    "builds": [
-        {
-            "src": "api/index.py",
-            "use": "@vercel/python"
-        },
-        {
-            "src": "staticfiles/**",
-            "use": "@vercel/static"
-        }
-    ],
-    "headers": [
-        {
-            "source": "/(.*)",
-            "headers": [
-                { "key": "X-Frame-Options", "value": "DENY" },
-                { "key": "X-Content-Type-Options", "value": "nosniff" },
-                { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-                { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
-            ]
-        },
-        {
-            "source": "/static/sw.js",
-            "headers": [
-                { "key": "Service-Worker-Allowed", "value": "/" },
-                { "key": "Cache-Control", "value": "no-cache" }
-            ]
-        },
-        {
-            "source": "/sitemap.xml",
-            "headers": [
-                { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=86400" }
-            ]
-        },
-        {
-            "source": "/robots.txt",
-            "headers": [
-                { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
-            ]
-        },
-        {
-            "source": "/ads.txt",
-            "headers": [
-                { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
-            ]
-        }
-    ],
-    "routes": [
-        {
-            "src": "/static/(.*)",
-            "dest": "/staticfiles/$1",
-            "headers": {
-                "Cache-Control": "public, max-age=31536000, immutable"
-            }
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/api/index.py"
-        }
-    ]
+      ],
+      "destination": "https://www.careerreality.in/$1",
+      "permanent": true
+    }
+  ],
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "staticfiles/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    },
+    {
+      "source": "/static/sw.js",
+      "headers": [
+        { "key": "Service-Worker-Allowed", "value": "/" },
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/ads.txt",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.py"
+    }
+  ]
 }

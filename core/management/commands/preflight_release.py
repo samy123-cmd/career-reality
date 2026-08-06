@@ -61,8 +61,8 @@ class Command(BaseCommand):
 
         if not os.environ.get("REDIS_URL") and not os.environ.get("KV_URL"):
             warnings.append(
-                "REDIS_URL is not set — page cache will not persist across Vercel "
-                "serverless instances (expect 1-5s TTFB on cold hits)."
+                "REDIS_URL is not set — page cache will not be shared across "
+                "gunicorn workers/machines (expect inconsistent TTFB)."
             )
 
         if not getattr(settings, "SESSION_COOKIE_SECURE", False):

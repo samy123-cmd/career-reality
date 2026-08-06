@@ -20,12 +20,47 @@ class CanonicalHostRedirectMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if not settings.DEBUG and os.environ.get("VERCEL_ENV", "").lower() == "production":
-            host = request.get_host().split(":")[0].lower()
-            if host and host != settings.CANONICAL_HOST:
-                return HttpResponsePermanentRedirect(
-                    f"{settings.CANONICAL_BASE_URL}{request.get_full_path()}"
-                )
+        if settings.DEBUG:
+            return self.get_response(request)
+
+        host = request.get_host().split(":")[0].lower()
+        # Django test client + local loopback must never 301.
+        if host in {"testserver", "localhost", "127.0.0.1"}:
+            return self.get_response(request)
+
+        explicit = os.environ.get("ENFORCE_CANONICAL_HOST", "").lower()
+        if explicit in ("0", "false", "no"):
+            return self.get_response(request)
+
+        deploy_env = (
+            os.environ.get("DEPLOY_ENV") or os.environ.get("VERCEL_ENV") or ""
+        ).lower()
+        on_managed_host = bool(
+            os.environ.get("FLY_APP_NAME")
+            or os.environ.get("RAILWAY_ENVIRONMENT")
+            or os.environ.get("RENDER")
+        )
+        should_enforce = (
+            explicit in ("1", "true", "yes")
+            or deploy_env == "production"
+            or on_managed_host
+        )
+        if not should_enforce:
+            return self.get_response(request)
+
+        # Allow platform preview hosts without 301 loop during cutover.
+        preview_suffixes = (
+            ".fly.dev",
+            ".onrender.com",
+            ".up.railway.app",
+            ".vercel.app",
+        )
+        if any(host.endswith(sfx) for sfx in preview_suffixes):
+            return self.get_response(request)
+        if host and host != settings.CANONICAL_HOST:
+            return HttpResponsePermanentRedirect(
+                f"{settings.CANONICAL_BASE_URL}{request.get_full_path()}"
+            )
         return self.get_response(request)
 
 
@@ -41,10 +76,17 @@ class SecurityHeadersMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
         host = request.get_host().split(":")[0].lower()
-        vercel_env = os.environ.get("VERCEL_ENV", "").lower()
+        deploy_env = (
+            os.environ.get("DEPLOY_ENV")
+            or os.environ.get("VERCEL_ENV")
+            or ("production" if not settings.DEBUG else "development")
+        ).lower()
 
-        # Keep preview deployments out of indexation.
-        if host.endswith(".vercel.app") and vercel_env != "production":
+        # Keep platform preview hosts out of indexation.
+        preview_host = host.endswith(
+            (".vercel.app", ".fly.dev", ".onrender.com", ".up.railway.app")
+        )
+        if preview_host and deploy_env != "production":
             response["X-Robots-Tag"] = "noindex, nofollow"
 
         # Block /hi/ duplicate pages — no Hindi translations exist.
@@ -79,8 +121,9 @@ class SecurityHeadersMiddleware:
 
 class EdgeCacheHeadersMiddleware:
     """
-    Attach Vercel CDN cache hints for anonymous public pages.
-    Works alongside Django Redis cache_page — edge caches full HTML responses.
+    Attach CDN/proxy cache hints for anonymous public pages.
+    Works alongside Django Redis cache_page — any edge (Fly proxy, Cloudflare,
+    former Vercel CDN) can honor Cache-Control on full HTML responses.
 
     Also strips Set-Cookie on public cacheable GETs for anonymous users so the
     CDN can actually store the response (Set-Cookie forces cache bypass).
@@ -105,8 +148,7 @@ class EdgeCacheHeadersMiddleware:
         )
 
         # Public article/tool HTML must be cookie-free for Googlebot + CDN.
-        # Session/CSRF cookies on every hit were keeping x-vercel-cache: MISS
-        # and adding multi-second TTFB to crawled URLs.
+        # Session/CSRF cookies on every hit force cache bypass and inflate TTFB.
         if (
             not is_authenticated
             and response.status_code in (200, 301, 308)

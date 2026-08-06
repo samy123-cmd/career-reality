@@ -1,0 +1,65 @@
+# Fly.io — primary production host for CareerReality.in
+# Region bom (Mumbai) for India TTFB. Always-on Machines beat Vercel Python cold starts.
+#
+# First-time:
+#   fly auth login
+#   fly apps create career-reality
+#   fly secrets set SECRET_KEY=... DATABASE_URL=... REDIS_URL=... CRON_SECRET=... DEBUG=False
+#   fly deploy
+#
+# DNS: point careerreality.in + www to Fly (A/AAAA or CNAME per fly ips)
+
+app = 'career-reality'
+primary_region = 'bom'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  DEPLOY_ENV = 'production'
+  DEBUG = 'False'
+  PORT = '8000'
+  TZ = 'Asia/Kolkata'
+  PYTHONUNBUFFERED = '1'
+  WEB_CONCURRENCY = '2'
+  SECURE_SSL_REDIRECT = 'True'
+  CANONICAL_BASE_URL = 'https://www.careerreality.in'
+  ALLOWED_HOSTS = 'careerreality.in,www.careerreality.in,career-reality.fly.dev'
+  CSRF_TRUSTED_ORIGINS = 'https://careerreality.in,https://www.careerreality.in,https://career-reality.fly.dev'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'off'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['web']
+
+  [http_service.concurrency]
+    type = 'requests'
+    soft_limit = 40
+    hard_limit = 80
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '40s'
+    method = 'GET'
+    path = '/robots.txt'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'
+  cpus = 1
+  processes = ['web']
+
+# Separate lightweight process for scheduled jobs (replaces vercel.json crons).
+[processes]
+  web = 'web'
+  cron = 'cron'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '256mb'
+  cpus = 1
+  processes = ['cron']
