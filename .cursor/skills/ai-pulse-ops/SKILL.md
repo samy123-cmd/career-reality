@@ -35,12 +35,14 @@ Before promoting an AI item publicly:
 ## Ops commands
 
 ```bash
-python manage.py fetch_ai_news --limit 1   # smoke
-python manage.py prune_ai_news
+python manage.py fetch_ai_news --limit 1   # smoke; items save as draft
+python manage.py prune_ai_news             # dry-run by default; add --apply to persist
 python manage.py preflight_release --strict --check-freshness
 ```
 
-Crons in `vercel.json` already fetch/prune/refresh on a schedule — prefer fixing pipeline code over one-off prod hacks.
+`vercel.json` crons hit `/internal/cron/freshness/...` with query params (`fetch_limit`, `prune_ai`, etc.) which drive `run_production_maintenance` — they do not call `manage.py` directly. Prefer fixing pipeline code over one-off prod hacks.
+
+Related model fields (optional editorial): `last_verified_at`, `reviewed_by`, `review_notes`.
 
 ## SEO notes
 

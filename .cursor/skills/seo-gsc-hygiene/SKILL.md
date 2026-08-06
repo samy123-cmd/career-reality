@@ -32,16 +32,18 @@ paths:
 ## Checklist when adding a redirect
 
 1. Add mapping to `ARTICLE_CANONICAL_REDIRECTS` or `CATEGORY_CANONICAL_REDIRECTS`.
-2. Add matching permanent entries in `vercel.json` (with and without trailing slash if that pattern is used).
-3. Confirm loser is excluded from sitemap helpers (`published_article_q`).
+2. Mirror permanent entries in `vercel.json` for **both article and category** losers (with and without trailing slash when that pattern is used).
+3. Article sitemap exclusion is automatic: `ARTICLE_SITEMAP_EXCLUDE_SLUGS = frozenset(ARTICLE_CANONICAL_REDIRECTS.keys())` — confirm via `published_article_q`.
 4. Invalidate sitemap cache: helpers in `core/cache_utils.py` (`invalidate_sitemap_cache`).
 5. Spot-check: winner returns 200 indexable; loser returns 301 to winner.
 
 ## Useful commands
 
 ```bash
+# content/management/commands/
 python manage.py seo_audit
-python manage.py draft_redirect_losers
+python manage.py draft_redirect_losers   # dry-run by default; --apply to persist
+# core/management/commands/
 python manage.py preflight_release --strict
 ```
 

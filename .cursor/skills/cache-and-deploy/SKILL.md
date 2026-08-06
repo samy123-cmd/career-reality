@@ -21,7 +21,10 @@ Production is **Vercel serverless + Redis**. Without Redis, page cache does not 
 - Page HTML caching + `invalidate_cached_pages(paths)`
 - `warm_page_cache()` — hits `STATIC_WARM_PATHS` and recent articles
 - `invalidate_sitemap_cache()` / `invalidate_career_index_cache()`
-- `EDGE_CACHE_RULES` — CDN TTL hints by path; deny prefixes for `/admin/`, `/accounts/`, `/payments/`, etc.
+- `EDGE_CACHE_RULES` — CDN TTL hints by path regex
+- `EDGE_CACHE_DENY_PREFIXES` — separate deny list (`/admin/`, `/accounts/`, `/payments/`, `/search/`, …)
+
+Commands live in `core/management/commands/` (`warm_page_cache`, `run_production_maintenance`).
 
 ## Settings knobs (`config/settings.py`)
 

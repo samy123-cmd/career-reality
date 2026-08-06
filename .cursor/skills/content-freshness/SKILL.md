@@ -3,6 +3,7 @@ name: content-freshness
 description: Keep published Career Reality articles and market blocks current — freshness audits, reality-check dates, market period refresh, expansion commands. Use for stale content, monthly bootstrap, or refresh-published-articles work.
 paths:
   - "content/**"
+  - "content/management/commands/**"
   - "docs/article_freshness*"
   - "docs/published_core*"
   - "core/management/commands/bootstrap_*.py"
@@ -21,15 +22,20 @@ paths:
 ## Commands / scripts
 
 ```bash
+# content/management/commands/
 python manage.py refresh_published_articles
 python manage.py expand_core_articles
 python manage.py expand_low_word_articles
-python manage.py harden_content_quality
+python manage.py harden_content_quality   # dry-run by default; --apply to persist
 python manage.py append_reality_review_block
 python manage.py generate_upgrade_sheet
 python manage.py quality_audit
-python manage.py apply_release_content_fixes   # if present in release path
+# core/management/commands/
+python manage.py bootstrap_august_2026
+python manage.py bootstrap_july_2026
 ```
+
+Note: `apply_release_content_fixes` is referenced in docs but **not implemented** in this repo — use `harden_content_quality` / refresh commands instead.
 
 Monthly bootstraps (examples):
 

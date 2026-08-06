@@ -27,14 +27,16 @@ python manage.py preflight_release --strict --check-freshness
 
 Fails on unsafe production settings / freshness blockers.
 
-Optional Windows bundle (if used locally): `scripts/preprod_release_bundle.ps1 -ProductionLike [-RunTests]`
+Optional freshness threshold flags: `--article-max-age-days`, `--ai-max-age-days`, `--max-stale-percent`.
+
+Windows bundle `scripts/preprod_release_bundle.ps1` is **not in this repo** — use the manage.py commands directly.
 
 ## Release order (from AI Pulse checklist)
 
 1. Confirm env: `DEBUG=False`, `ALLOWED_HOSTS`, SSL/cookie secure flags, `SECRET_KEY`, `DATABASE_URL`/`POSTGRES_URL`, `REDIS_URL`
 2. `python manage.py migrate`
 3. `python manage.py collectstatic --noinput`
-4. Content hardening: `python manage.py apply_release_content_fixes` (when applicable)
+4. Content hardening: `python manage.py harden_content_quality --apply` (preferred). Docs may mention `apply_release_content_fixes` — that command is **not in this repo**.
 5. Spot-check AI items + a few articles for sources/dates
 6. Smoke: `python manage.py fetch_ai_news --limit 1`
 7. Maintenance/warm: `python manage.py run_production_maintenance` or `warm_page_cache`

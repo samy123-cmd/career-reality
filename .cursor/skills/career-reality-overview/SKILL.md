@@ -23,12 +23,12 @@ Site: **CareerReality.in** — India-focused career reality checks (salary truth
 | `content/` | Articles, authors, categories, expansions, SEO redirects, citations |
 | `core/` | Homepage, tools hubs, sitemaps, cache helpers, SEO pages, crons |
 | `ainews/` | AI Pulse hub, feed fetch/prune, impact filters |
-| `companies/` | Company intelligence, salaries, reviews, layoffs |
-| `analyzer/` | Salary calculator, resignation risk, layoff radar logic |
+| `companies/` | Company profiles, reviews, discussions; surfaces analyzer salary/layoff data |
+| `analyzer/` | Salary submissions/layoffs data, calculator, resignation risk, layoff radar |
 | `accounts/` | Auth, Pro access |
 | `payments/` | Pricing, Razorpay |
 | `search/` | Site search |
-| `api/` | Vercel WSGI entry (`index.py`) |
+| `api/` | Vercel WSGI deploy entry only (`index.py`) — not an `INSTALLED_APPS` app |
 
 ## Editorial voice (non-negotiable)
 

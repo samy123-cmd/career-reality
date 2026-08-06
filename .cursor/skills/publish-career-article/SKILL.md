@@ -43,7 +43,7 @@ Every published article must fill these editorial fields (HTML paragraphs OK):
 
 ## Preferred workflow
 
-1. Follow patterns in `seed_august_2026.py` / `seed_july_2026.py` (helpers `_p`, `_h3`, `_section`).
+1. Prefer `seed_august_2026.py` helpers (`_p`, `_h3`, `_section`). Older `seed_july_2026.py` uses a different pattern (`get_author`, `create_article`, `_para_block`).
 2. Use existing `Author` + `Category` (avoid creating thin categories — see `seo-gsc-hygiene`).
 3. Check slug is not a redirect loser in `content/seo_redirects.py`.
 4. After DB write, run quality commands when available:

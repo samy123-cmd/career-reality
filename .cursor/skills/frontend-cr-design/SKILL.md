@@ -15,14 +15,17 @@ Editorial product, not a SaaS dashboard. Homepage should read as one editorial c
 
 ## Design tokens
 
-Primary file: `static/css/design-system.css` (`--cr-*` colors, spacing, radii).
+Primary file: `static/css/design-system.css`
+
+- Colors: `--cr-*`
+- Spacing / radii: `--space-*`, `--radius-*` (not `--cr-*`)
 
 Also:
 
 - `static/css/mobile.css` — touch-first mobile layer
 - `static/css/style-home.css`, `style-tools.css`, `style-core.css`, `style-companies.css`
 - Theme files: `theme-dark-contrast.css`, `theme-light.css`, `theme-premium-dark.css`
-- Theme boot: `static/js/theme.js` + inline theme in `templates/partials/meta.html`
+- Theme boot: inline theme + CSS links in `templates/partials/meta.html`; deferred `static/js/theme.js` from `templates/base.html`
 
 Default document theme is dark (`theme-dark` on `<html>` in `base.html`).
 
