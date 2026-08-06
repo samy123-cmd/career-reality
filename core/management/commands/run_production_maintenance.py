@@ -1,5 +1,6 @@
 """
-Production maintenance orchestrator — invoked by Vercel cron at /internal/cron/freshness/.
+Production maintenance orchestrator — invoked by scheduled cron
+(deploy/cron-runner.sh on Fly, or /internal/cron/freshness/ HTTP).
 
 Handles:
 - Optional AI news fetch (lightweight, bounded)

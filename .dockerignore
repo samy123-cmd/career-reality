@@ -1,0 +1,14 @@
+# Fly.io ignores this; used by GitHub Actions / local checks.
+.venv/
+__pycache__/
+*.pyc
+.git
+.env
+.env.*
+!.env.example
+staticfiles/
+db.sqlite3
+*.sqlite3
+.cursor/
+docs/*.png
+node_modules/

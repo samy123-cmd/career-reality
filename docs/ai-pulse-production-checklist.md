@@ -122,11 +122,12 @@ This updates `reviewed_at`, `last_verified_at`, and (when enabled) promotes `fac
   - `CRON_REFRESH_COMMIT` (`True` to persist content refresh writes)
   - `CRON_STRICT_FRESHNESS` (`True` to fail maintenance run if stale thresholds breach)
   - `CRON_WARM_CACHE` (`True` to warm key pages after maintenance)
-- Scheduled endpoint path:
-  - `/internal/cron/freshness/`
-- Recommended Vercel cron split:
-  - Frequent lightweight run (every 6h): `/internal/cron/freshness/?fetch_limit=8&warm_cache=False`
-  - Nightly committed refresh run (02:30 daily): `/internal/cron/freshness/?commit_refresh=True&strict_freshness=True&warm_cache=True&fetch_limit=12`
+- Scheduled jobs:
+  - **Preferred:** Fly `cron` process (`deploy/cron-runner.sh`) — see `docs/migrate-off-vercel.md`
+  - **HTTP fallback:** `/internal/cron/freshness/` with `Authorization: Bearer $CRON_SECRET`
+- Former Vercel cron split (now mirrored by `deploy/cron-runner.sh`):
+  - Frequent lightweight run (every 6h)
+  - Nightly committed refresh run (02:30 Asia/Kolkata)
 - Manual maintenance run:
 
 ```bash

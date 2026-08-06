@@ -18,8 +18,8 @@ from django.core.management.utils import get_random_secret_key
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load .env for local development. In production (Vercel) env vars are injected
-# directly by the platform so this is a no-op there (file won't exist).
+# Load .env for local development. In production (Fly/Railway/Docker) env vars
+# are injected by the platform so this is a no-op there (file won't exist).
 # Never overrides variables already set in the shell environment.
 try:
     from dotenv import load_dotenv
@@ -61,11 +61,18 @@ if DEBUG:
     ALLOWED_HOSTS = _csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver")
 else:
     ALLOWED_HOSTS = _csv_env("ALLOWED_HOSTS")
+    # Legacy Vercel preview host support during cutover.
     vercel_url = os.environ.get("VERCEL_URL", "").strip()
     if vercel_url:
         ALLOWED_HOSTS.append(vercel_url)
+    # Fly.io assigns *.fly.dev; allow when FLY_APP_NAME is present.
+    fly_app = os.environ.get("FLY_APP_NAME", "").strip()
+    if fly_app:
+        fly_host = f"{fly_app}.fly.dev"
+        if fly_host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(fly_host)
 
-# Always allow the canonical domains (but NOT wildcard *.vercel.app).
+# Always allow the canonical domains (do not wildcard preview platforms).
 for host in [".careerreality.in", "careerreality.in", "www.careerreality.in"]:
     if host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(host)
@@ -82,9 +89,18 @@ if vercel_url:
     vercel_origin = f"https://{vercel_url}"
     if vercel_origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(vercel_origin)
+fly_app = os.environ.get("FLY_APP_NAME", "").strip()
+if fly_app:
+    fly_origin = f"https://{fly_app}.fly.dev"
+    if fly_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(fly_origin)
 
-# Use signed cookies for sessions to avoid writing to read-only DB on Vercel
-SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+# Signed cookies stay default (no DB session writes). Override with redis when desired:
+# SESSION_ENGINE=django.contrib.sessions.backends.cache
+SESSION_ENGINE = os.environ.get(
+    "SESSION_ENGINE",
+    "django.contrib.sessions.backends.signed_cookies",
+)
 
 
 # Application definition
@@ -196,7 +212,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-# IMPORTANT: SQLite is NOT supported on Vercel. Use PostgreSQL via DATABASE_URL.
+# Production requires PostgreSQL via DATABASE_URL (Supabase or managed Postgres).
 
 import dj_database_url
 
@@ -204,12 +220,14 @@ import dj_database_url
 DATABASE_URL = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
 
 if DATABASE_URL:
+    # Supabase transaction pooler (:6543) wants DB_CONN_MAX_AGE=0.
+    # Session pooler / direct Postgres on always-on Fly can keep a pool (default 60).
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
-            conn_max_age=int(os.environ.get('DB_CONN_MAX_AGE', '600')),
+            conn_max_age=int(os.environ.get('DB_CONN_MAX_AGE', '60')),
             conn_health_checks=True,
-            ssl_require=True
+            ssl_require=os.environ.get('DB_SSL_REQUIRE', 'True') == 'True',
         )
     }
 else:
@@ -221,8 +239,8 @@ else:
         }
     }
 
-# Cache: use Redis in production (required for shared state across Vercel
-# serverless instances). Falls back to locmem for local development only.
+# Cache: Redis recommended in production for shared HTML/page cache across
+# gunicorn workers / machines. Falls back to locmem for local development only.
 _REDIS_URL = os.environ.get('REDIS_URL') or os.environ.get('KV_URL')
 _CACHE_TIMEOUT = int(os.environ.get('CACHE_TIMEOUT_SECONDS', '300'))
 
@@ -239,11 +257,21 @@ if _REDIS_URL:
 elif not DEBUG:
     import logging as _logging
     _logging.getLogger(__name__).warning(
-        "REDIS_URL not set in production — page cache will NOT persist across "
-        "Vercel serverless instances. Set REDIS_URL for sub-second TTFB."
+        "REDIS_URL not set in production — page cache will not be shared across "
+        "gunicorn workers/machines. Set REDIS_URL for consistent sub-second TTFB."
     )
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'career-reality-cache-prod-fallback',
+            'TIMEOUT': _CACHE_TIMEOUT,
+            'OPTIONS': {
+                'MAX_ENTRIES': int(os.environ.get('CACHE_MAX_ENTRIES', '5000')),
+            },
+        }
+    }
 else:
-    # Local development fallback only — NOT suitable for multi-process/serverless.
+    # Local development fallback only — NOT suitable for multi-process production.
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
