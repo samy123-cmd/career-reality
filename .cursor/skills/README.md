@@ -14,3 +14,5 @@ Project-local Cursor skills for [CareerReality.in](https://www.careerreality.in)
 | `release-preflight` | `/release-preflight` | Ship / production checklist |
 
 These encode patterns from recent workstreams: homepage/tools UI, mobile shell, GSC cleanup, article freshness bootstraps, cache busts, and AI Pulse production ops.
+
+Verification: see [`VERIFICATION.md`](./VERIFICATION.md) (all 8 skills PASS; 10/10 command smokes).
