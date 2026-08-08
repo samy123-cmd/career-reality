@@ -7,7 +7,7 @@ from content.seo_redirects import (
     category_published_article_filter,
     indexable_categories_queryset,
 )
-from ainews.indexing import indexable_ai_news_queryset
+from ainews.indexing import indexable_ai_news_queryset, item_is_indexable
 from ainews.models import AINewsItem
 from companies.models import Company
 from companies.indexing import indexable_companies_queryset
@@ -44,7 +44,9 @@ class AINewsSitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return indexable_ai_news_queryset()
+        # Enforce full indexability (incl. minimum body words) so sitemap never
+        # advertises thin briefs that 301 to /ai/ from the detail view.
+        return [item for item in indexable_ai_news_queryset() if item_is_indexable(item)]
 
     def lastmod(self, obj):
         return obj.reviewed_at or obj.published_at

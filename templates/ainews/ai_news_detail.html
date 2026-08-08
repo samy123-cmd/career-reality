@@ -3,7 +3,7 @@
 
 {% block title %}{{ item.title }} - AI Pulse | Career Reality{% endblock %}
 
-{% block meta_description %}{{ item.summary|truncatewords:25 }}{% endblock %}
+{% block meta_description %}{{ meta_description|default:og_description }}{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/ai_pulse.css' %}?v=2">
@@ -15,7 +15,7 @@
     "url": "{{ canonical_url }}",
     "datePublished": "{{ item.event_date|default:item.published_at|date:'c' }}",
     "dateModified": "{{ item.reviewed_at|default:item.published_at|date:'c' }}",
-    "description": "{{ item.summary|truncatewords:25|escapejs }}",
+    "description": "{{ meta_description|default:og_description|escapejs }}",
     "image": {
         "@type": "ImageObject",
         "url": "{{ site_base_url }}{% static 'img/og-default.png' %}"

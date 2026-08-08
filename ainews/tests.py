@@ -24,12 +24,52 @@ class AINewsModelAndViewTests(TestCase):
     def _create_item(self, title, slug, status='published', significance='medium', **kwargs):
         default_career_angle = (
             "Indian IT teams should expect hiring and on-call workflow changes — "
-            "update skills toward production deployment and security compliance."
+            "update skills toward production deployment and security compliance. "
+            "Build an evaluation sheet, document failure modes, and show cost controls "
+            "before you claim AI ownership on your résumé. Hiring managers in GCCs and "
+            "product companies now ask for evidence artifacts, not certificate lists. "
+            "If you ignore measurement, you compete for shrinking ticket-only roles while "
+            "AI delivery clauses reduce headcount per project across services accounts."
         )
-        default_summary = (
-            kwargs.get('summary')
-            or f"Enterprise developer hiring and workplace policy update: {title}. "
-            "Affects engineering teams and IT services delivery in India."
+        default_summary = kwargs.get('summary') or (
+            f"<p>Enterprise developer hiring and workplace policy update: {title}. "
+            "Affects engineering teams and IT services delivery in India.</p>"
+            "<h2>Career Impact</h2>"
+            "<p>Indian engineers should treat this as a staffing and skills signal. "
+            "Document production constraints, evaluation discipline, and multilingual "
+            "failure cases. GCCs and product companies are hiring for implementation "
+            "and review strength, not for model-name fluency alone.</p>"
+            "<p>Prepare a portfolio artifact with metrics: latency, cost per run, "
+            "defect escape, and rollback notes. Interview loops increasingly include "
+            "system design for AI-assisted workflows and questions about when to forbid "
+            "agents in auth, payments, and migrations.</p>"
+            "<p>Services engineers at mid levels face tighter utilization when clients "
+            "renegotiate AI delivery clauses. The durable move is ownership of quality "
+            "systems, cloud architecture, or client-facing solution design with numbers.</p>"
+            "<p>Freshers should pair DSA practice with code-review drills on AI-generated "
+            "patches. Seniors should publish playbooks that keep productivity targets honest "
+            "when agents accelerate boilerplate and amplify weak review culture.</p>"
+            "<p>Compensation premiums attach to scarce proof of ownership. Negotiate with "
+            "written scope, hybrid terms, and ninety-day success metrics. Vague AI titles "
+            "without eval ownership are conventional engineering jobs with marketing labels.</p>"
+            "<p>Use this brief to decide what to learn next, which requisitions are real "
+            "headcount, and which headlines are resume bait. Update your materials with "
+            "shipped constraints and outcomes rather than another tool certificate.</p>"
+            "<p>Market context remains uneven across Bengaluru, Hyderabad, Pune, and Chennai. "
+            "Match preparation to employer type: captives buy enterprise platforms first; "
+            "startups adopt coding agents faster but hire fewer juniors; services firms "
+            "rewrite delivery math in renewals. One evidence artifact travels across all three.</p>"
+            "<p>Common mistakes include listing model names without constraints, confusing "
+            "editor plugins with applied AI ownership, and resigning before scope is written. "
+            "Committees reward dashboards, eval sheets, and architecture one-pagers tied to "
+            "business outcomes. Spend four weeks building one vertical slice with logging, "
+            "a noisy-input eval set, and a short failure taxonomy you can defend in interviews.</p>"
+            "<p>If your current role is ticket-only, treat this update as a forcing function. "
+            "Own a quality gate, a cost dashboard, or a client-facing pilot narrative with "
+            "numbers. That is the path off the bench when utilization targets tighten again.</p>"
+            "<p>Keep a weekly log of decisions: what the assistant drafted, what you changed, "
+            "what failed in review, and what shipped. That log becomes interview evidence and "
+            "stops you from confusing motion with impact when productivity targets rise.</p>"
         )
         item = AINewsItem.objects.create(
             title=title,
@@ -150,9 +190,28 @@ class AINewsModelAndViewTests(TestCase):
         self.assertIn('noindex', response.context['meta_robots'])
         self.assertIn('noindex', response.get('X-Robots-Tag', ''))
 
-    def test_ai_news_by_tag_empty_returns_404(self):
+    def test_ai_news_by_tag_empty_redirects_to_hub(self):
         response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'model-release'}))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, reverse('ai_news_hub'))
+
+    def test_ai_news_detail_meta_description_strips_html(self):
+        self._create_item(
+            'Meta Clean',
+            'meta-clean',
+            summary=(
+                "<p>Enterprise Gemini rollouts create integration roles for Indian engineers "
+                "with API, security, and Indic language testing experience on client teams.</p>"
+                + (" Production constraints, evaluation discipline, and multilingual failure "
+                   "cases matter more than model-name fluency in Indian GCC hiring loops.") * 20
+            ),
+        )
+        response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'meta-clean'}))
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode('utf-8')
+        # Meta/OG description must be plain text — never escaped HTML from summary.
+        self.assertNotIn('&lt;p&gt;', html)
+        self.assertRegex(html, r'name="description"\s+content="[^"]{20,}"')
 
     def test_ai_news_by_tag_returns_404_for_invalid_tag(self):
         response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'nonexistent'}))

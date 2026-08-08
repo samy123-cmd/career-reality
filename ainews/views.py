@@ -98,13 +98,13 @@ def _timeline_position_for_item(item_dt):
         else:
             break
     return position
-@cache_page(60 * 10, key_prefix="ainews_hub_v3")
+@cache_page(60 * 10, key_prefix="ainews_hub_v4")
 def ai_news_hub(request):
     items = indexable_ai_news_queryset().prefetch_related(TAG_PREFETCH)
-    tags = cache.get("ainews_hub_tags_v3")
+    tags = cache.get("ainews_hub_tags_v4")
     if tags is None:
         tags = list(AITag.objects.only("id", "name", "slug").order_by("name"))
-        cache.set("ainews_hub_tags_v3", tags, 900)
+        cache.set("ainews_hub_tags_v4", tags, 900)
 
     active_tag_slug = request.GET.get("tag")
     active_tag = None
@@ -156,7 +156,7 @@ def ai_news_detail(request, slug):
     return _ai_news_detail_cached(request, slug)
 
 
-@cache_page(60 * 10)
+@cache_page(60 * 10, key_prefix="ainews_detail_v4")
 def _ai_news_detail_cached(request, slug):
     item = get_object_or_404(
         AINewsItem.objects.prefetch_related(TAG_PREFETCH),
@@ -174,10 +174,13 @@ def _ai_news_detail_cached(request, slug):
         description = strip_tags(item.career_angle)[:160]
     else:
         description = strip_tags(item.summary)[:160] if item.summary else title
+    # Collapse whitespace so OG/meta never leak raw HTML fragments.
+    description = re.sub(r"\s+", " ", description).strip()
 
     faqs = _extract_faqs(item.summary) if item.summary else []
     timeline = _ai_evolution_timeline()
-    meta_robots = "noindex, follow" if content_is_stale else "index, follow"
+    # Stale or thin pages must not stay indexable after Google already crawled them.
+    meta_robots = "noindex, follow" if (content_is_stale or not item_is_indexable(item)) else "index, follow"
 
     return render(
         request,
@@ -191,29 +194,57 @@ def _ai_news_detail_cached(request, slug):
             "ai_evolution_timeline": timeline,
             "timeline_position": _timeline_position_for_item(item.event_date or item.published_at),
             "meta_robots": meta_robots,
+            "meta_description": description,
+            "og_type": "article",
             **_seo(title, description),
         },
     )
-@cache_page(60 * 10)
+
+
 def ai_news_by_tag(request, slug):
+    from django.http import HttpResponsePermanentRedirect
+    from django.urls import reverse
+
     tag = get_object_or_404(AITag, slug=slug)
     items = indexable_ai_news_queryset().filter(tags=tag).prefetch_related(TAG_PREFETCH)
 
     paginator = Paginator(items, 15)
-    # Empty tag archives are soft-404 bait in GSC ("Crawled - currently not indexed").
-    # Hard 404 so Google drops them instead of keeping thin shells in the crawl queue.
+    # Empty tag archives used to 404 and linger in GSC as crawled-not-indexed.
+    # Consolidate crawl signals onto the hub instead.
     if paginator.count == 0:
-        from django.http import Http404
-        raise Http404("No AI updates for this tag.")
+        return HttpResponsePermanentRedirect(reverse("ai_news_hub"))
+    return _ai_news_by_tag_cached(request, slug)
+
+
+@cache_page(60 * 10, key_prefix="ainews_tag_v4")
+def _ai_news_by_tag_cached(request, slug):
+    tag = get_object_or_404(AITag, slug=slug)
+    items = indexable_ai_news_queryset().filter(tags=tag).prefetch_related(TAG_PREFETCH)
+
+    paginator = Paginator(items, 15)
+    if paginator.count == 0:
+        from django.http import HttpResponsePermanentRedirect
+        from django.urls import reverse
+
+        return HttpResponsePermanentRedirect(reverse("ai_news_hub"))
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     title = f"{tag.name} - AI Pulse | Career Reality"
-    description = f"AI developments tagged '{tag.name}' - curated for career-aware tech professionals in India."
+    description = (
+        f"AI developments tagged {tag.name} — curated for career-aware tech "
+        "professionals in India. Hiring, delivery, and workplace impact only."
+    )
 
     # Noindex thin tag pages to avoid AdSense "low value content" flag
     meta_robots = "noindex, follow" if paginator.count < 3 else "index, follow"
+    tag_intro = (
+        f"This AI Pulse archive collects workplace-impact updates tagged {tag.name}. "
+        "Each brief focuses on Indian IT hiring, delivery model changes, skills, and "
+        "compensation signals — not research-paper noise. Use it to decide what to learn "
+        "next, which roles are real headcount, and which headlines are resume bait."
+    )
 
     response = render(
         request,
@@ -221,7 +252,9 @@ def ai_news_by_tag(request, slug):
         {
             "tag": tag,
             "page_obj": page_obj,
+            "tag_intro": tag_intro,
             "meta_robots": meta_robots,
+            "meta_description": description,
             **_seo(title, description),
         },
     )
