@@ -3,8 +3,7 @@
 
 {% block title %}{{ tag.name }} - AI Pulse | Career Reality{% endblock %}
 
-{% block meta_description %}AI developments tagged '{{ tag.name }}' - curated for career-aware tech professionals in
-India.{% endblock %}
+{% block meta_description %}{{ meta_description|default:og_description }}{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/ai_pulse.css' %}?v=2">
@@ -43,6 +42,9 @@ India.{% endblock %}
     <div class="ai-tag-hero">
         <span class="section-label" style="display: block; margin-bottom: 0.8rem;">AI PULSE / {{ tag.name|upper }}</span>
         <h1>{{ tag.name }}</h1>
+        {% if tag_intro %}
+        <p class="ai-tag-intro">{{ tag_intro }}</p>
+        {% endif %}
     </div>
 
     {% if page_obj.object_list %}

@@ -43,13 +43,23 @@ class AIIndexabilityTests(TestCase):
         self.assertFalse(item_is_indexable(item))
 
     def test_published_with_career_angle_indexable(self):
+        summary = " ".join(
+            [
+                "IT services firms slow fresher hiring as clients delay projects."
+                " Indian engineering orgs rewrite staffing plans around AI-assisted delivery,"
+                " evaluation discipline, and tighter utilization targets."
+            ]
+            * 40
+        )
         item = AINewsItem.objects.create(
             title="Enterprise hiring freeze for junior roles",
             slug="enterprise-hiring-freeze",
-            summary="IT services firms slow fresher hiring as clients delay projects.",
+            summary=summary,
             career_angle=(
                 "If you are a 0–2 YOE engineer in India, expect longer bench time and "
-                "stronger competition for GCC roles — update skills toward production SQL and cloud."
+                "stronger competition for GCC roles — update skills toward production SQL and cloud. "
+                "Build one evidence artifact with metrics before you switch, and treat vague AI "
+                "titles without scope as conventional engineering roles with marketing labels."
             ),
             source_name="VentureBeat AI",
             source_url="https://example.com/2",
@@ -59,3 +69,21 @@ class AIIndexabilityTests(TestCase):
             external_id="test-2",
         )
         self.assertTrue(item_is_indexable(item))
+
+    def test_thin_body_not_indexable(self):
+        item = AINewsItem.objects.create(
+            title="Enterprise hiring freeze for junior roles",
+            slug="enterprise-hiring-freeze-thin",
+            summary="IT services firms slow fresher hiring as clients delay projects.",
+            career_angle=(
+                "If you are a 0–2 YOE engineer in India, expect longer bench time and "
+                "stronger competition for GCC roles — update skills toward production SQL and cloud."
+            ),
+            source_name="VentureBeat AI",
+            source_url="https://example.com/3",
+            status="published",
+            published_at=timezone.now(),
+            reviewed_at=timezone.now(),
+            external_id="test-3",
+        )
+        self.assertFalse(item_is_indexable(item))
