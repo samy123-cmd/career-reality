@@ -27,6 +27,16 @@
     ],
     "redirects": [
         {
+            "source": "/article/ai-upskilling-trap-india-api-wrapper-reality",
+            "destination": "https://www.careerreality.in/article/ai-upskilling-trap-india-api-wrapper-reality/",
+            "permanent": true
+        },
+        {
+            "source": "/article/gcc-gold-rush-india-captive-center-reality",
+            "destination": "https://www.careerreality.in/article/gcc-gold-rush-india-captive-center-reality/",
+            "permanent": true
+        },
+        {
             "source": "/article/junior-data-scientist-reality-india-sql-janitor/",
             "destination": "https://www.careerreality.in/article/junior-data-scientist-reality-india/",
             "permanent": true
@@ -229,7 +239,7 @@
         {
             "source": "/robots.txt",
             "headers": [
-                { "key": "Cache-Control", "value": "public, s-maxage=86400, stale-while-revalidate=604800" }
+                { "key": "Cache-Control", "value": "public, s-maxage=300, stale-while-revalidate=3600" }
             ]
         },
         {

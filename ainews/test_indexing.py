@@ -87,3 +87,28 @@ class AIIndexabilityTests(TestCase):
             external_id="test-3",
         )
         self.assertFalse(item_is_indexable(item))
+
+    def test_longform_body_mentioning_benchmark_still_indexable(self):
+        summary = " ".join(
+            [
+                "Indian developers should treat coding reliability shifts as a hiring signal. "
+                "Benchmark charts are context only — production evaluation and workplace impact matter."
+            ]
+            * 40
+        )
+        item = AINewsItem.objects.create(
+            title="GPT coding reliability shift for Indian engineering teams",
+            slug="gpt-coding-reliability-longform",
+            summary=summary,
+            career_angle=(
+                "Build an evaluation log and portfolio artifact before your next switch. "
+                "Indian hiring managers want production evidence, not benchmark screenshots."
+            ),
+            source_name="OpenAI",
+            source_url="https://example.com/4",
+            status="published",
+            published_at=timezone.now(),
+            reviewed_at=timezone.now(),
+            external_id="test-4",
+        )
+        self.assertTrue(item_is_indexable(item))

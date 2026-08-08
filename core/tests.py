@@ -69,7 +69,22 @@ class CoreViewsTests(TestCase):
         self.assertIn("Disallow: /api/", body)
         self.assertIn("Disallow: /resignation-risk/step/", body)
         self.assertIn("Disallow: /discussions/", body)
+        self.assertIn("Allow: /payments/pricing/", body)
+        self.assertIn("Disallow: /payments/", body)
+        robots_lines = [line.strip() for line in body.splitlines()]
+        self.assertNotIn("Disallow: /salary-drop/", robots_lines)
+        self.assertIn("Disallow: /salary-drop/success/", robots_lines)
         self.assertIn("Sitemap: https://www.careerreality.in/sitemap.xml", body)
+
+    def test_append_slash_redirect_uses_absolute_location(self):
+        self._create_article("trailing-slash-absolute")
+        with self.settings(CANONICAL_BASE_URL="https://www.careerreality.in"):
+            response = self.client.get("/article/trailing-slash-absolute")
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(
+            response["Location"],
+            "https://www.careerreality.in/article/trailing-slash-absolute/",
+        )
 
     def test_career_reality_index_has_expected_latest_band(self):
         response = self.client.get(reverse("career_reality_index"))

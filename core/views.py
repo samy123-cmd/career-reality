@@ -131,11 +131,14 @@ def robots_txt(request):
         # Tool steps & results — no SEO value, contains session state
         "Disallow: /resignation-risk/step/",
         "Disallow: /resignation-risk/result/",
-        # Salary submission flow — private user forms
-        "Disallow: /salary-drop/",
+        # Salary submission success page only — the form itself is crawlable + noindex
+        # (robots.txt blocks were showing as GSC "Blocked by robots.txt").
         "Disallow: /salary-drop/success/",
         # Auth pages — no SEO value
         "Disallow: /accounts/",
+        # Public pricing page must stay crawlable (Allow beats /payments/ Disallow for Google).
+        "Allow: /payments/pricing",
+        "Allow: /payments/pricing/",
         # Payment/checkout — no SEO value
         "Disallow: /payments/",
         # Pro dashboard — gated content

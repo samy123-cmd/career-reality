@@ -19,8 +19,8 @@ from django.test import Client
 
 logger = logging.getLogger(__name__)
 
-SITEMAP_CACHE_KEY = "perf:sitemap:xml:v3"
-SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v3"
+SITEMAP_CACHE_KEY = "perf:sitemap:xml:v4"
+SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v4"
 NAV_CATEGORIES_CACHE_KEY = "nav_categories"
 SOCIAL_PROOF_CACHE_KEY = "perf:home:social_proof_counts:v1"
 INDEX_ROWS_CACHE_KEY = "perf:career_index_rows:v2"

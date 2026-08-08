@@ -121,6 +121,9 @@ SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'core.middleware.CanonicalHostRedirectMiddleware',
+    # Runs above CommonMiddleware so APPEND_SLASH relative Locations become absolute
+    # on the way out (fixes GSC "Redirect error" on no-trailing-slash article URLs).
+    'core.middleware.AbsoluteRedirectLocationMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', # Serve static files before GZip (avoids double-compression)
     'django.middleware.gzip.GZipMiddleware', # Compress HTML/JSON responses from Django views
     'core.middleware.SecurityHeadersMiddleware',

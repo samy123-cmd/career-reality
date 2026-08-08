@@ -87,9 +87,13 @@ def is_research_noise(title: str, summary: str = "", source: str = "") -> bool:
 
 
 def has_it_workplace_impact(title: str, summary: str = "", source: str = "", career_angle: str = "") -> bool:
+    """True when copy contains day-to-day IT / workplace signals.
+
+    Research-noise rejection is intentionally separate (see passes_ingest_filter /
+    item_is_indexable) so long-form editorial that mentions benchmarks can still
+    qualify when the title/source are clean.
+    """
     text = _haystack(title, summary, source) + " " + (career_angle or "").lower()
-    if is_research_noise(title, summary, source):
-        return False
     return any(kw in text for kw in IMPACT_KEYWORDS)
 
 

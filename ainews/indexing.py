@@ -47,7 +47,10 @@ def item_is_indexable(item: AINewsItem) -> bool:
         return False
     if _body_word_count(item) < MIN_INDEXABLE_BODY_WORDS:
         return False
-    if is_research_noise(item.title, item.summary or "", item.source_name or ""):
+    # Noise filter uses title+source only. Long-form editorial bodies often mention
+    # benchmarks while remaining workplace-impact guides; scanning the full HTML
+    # body was incorrectly 301ing curated AI Pulse URLs to the hub.
+    if is_research_noise(item.title, "", item.source_name or ""):
         return False
     if not has_it_workplace_impact(
         item.title,
