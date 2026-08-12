@@ -39,6 +39,17 @@ class FeatureTemplateShellTests(TestCase):
                 response = self.client.get(reverse(url_name))
                 self.assertContains(response, "az-calc-input")
 
+    def test_salary_reality_has_stepper(self):
+        response = self.client.get(reverse("tools:salary_reality_engine"))
+        self.assertContains(response, "cr-stepper")
+        self.assertContains(response, "az-calc-btn")
+        self.assertContains(response, "cr-form-actions")
+
+    def test_tool_pages_load_mobile_optimized_assets(self):
+        response = self.client.get(reverse("tools:salary_reality_engine"))
+        self.assertContains(response, "feature-product.css?v=3")
+        self.assertContains(response, "feature-product.js?v=3")
+
     def test_salary_reality_post_accepts_valid_csrf(self):
         url = reverse("tools:salary_reality_engine")
         response = self.client.get(url)

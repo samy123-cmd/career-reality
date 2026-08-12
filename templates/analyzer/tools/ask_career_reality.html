@@ -21,7 +21,9 @@
   {% csrf_token %}
   <div class="cr-field"><label class="az-calc-label" for="{{ form.question.id_for_label }}">{{ form.question.label }}</label>{{ form.question }}</div>
   {% if asks_remaining %}<p class="cr-help">{{ asks_remaining }} free question{{ asks_remaining|pluralize }} remaining this month.</p>{% endif %}
+  <div class="cr-form-actions">
   <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Ask CareerReality</button>
+  </div>
 </form>
 {% endif %}
 

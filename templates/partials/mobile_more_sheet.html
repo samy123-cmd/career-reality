@@ -3,6 +3,14 @@
     <div class="more-sheet-handle" aria-hidden="true"></div>
     <p class="more-sheet-title" id="more-sheet-title">More Tools</p>
     <div class="more-sheet-grid">
+        <a href="{% url 'tools:salary_reality_engine' %}" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">📈</span>
+            Salary Engine
+        </a>
+        <a href="{% url 'home' %}#seo-tool-hub-title" class="more-sheet-link">
+            <span class="ms-icon" aria-hidden="true">&rarr;</span>
+            All Tools
+        </a>
         <a href="{% url 'salary_reality' %}" class="more-sheet-link">
             <span class="ms-icon" aria-hidden="true">💰</span>
             Salary Reality

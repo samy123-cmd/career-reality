@@ -12,7 +12,9 @@
   </div>
   {% include "features/partials/_input_money.html" with field=form.current_ctc %}
   <div class="cr-field"><label class="az-calc-label" for="{{ form.skills.id_for_label }}">{{ form.skills.label }}</label>{{ form.skills }}</div>
+  <div class="cr-form-actions">
   <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Find My Next Move</button>
+  </div>
 </form>
 {% endif %}
 

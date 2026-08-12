@@ -29,6 +29,10 @@
           var pct = (current / (steps.length - 1)) * 100;
           progress.style.width = pct + '%';
         }
+        var activeStep = steps[current];
+        if (activeStep && window.matchMedia('(max-width: 768px)').matches) {
+          activeStep.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
         var prev = wizard.querySelector('[data-cr-prev]');
         var next = wizard.querySelector('[data-cr-next]');
         if (prev) prev.hidden = current === 0;
