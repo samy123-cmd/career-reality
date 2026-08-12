@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from django.core.cache import cache
 
+from analyzer.constants.career_taxonomy import normalize_role, role_search_terms
 from analyzer.models import SalarySubmission
 from content.article_market_data import SALARY_CLUSTERS
 
@@ -53,6 +54,8 @@ class SalaryRealityResult:
     pay_delta_pct: int | None
     confidence: str  # high | medium | low
     data_source: str  # crowdsourced | editorial | blended
+    gap_lpa: float | None = None
+    limitation: str | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -76,7 +79,35 @@ class SalaryRealityResult:
             "pay_delta_pct": self.pay_delta_pct,
             "confidence": self.confidence,
             "data_source": self.data_source,
+            "gap_lpa": self.gap_lpa,
+            "limitation": self.limitation,
+            "chart": self.chart_payload(),
         }
+
+    def chart_payload(self) -> dict:
+        user_marker = None
+        if self.percentile is not None:
+            user_marker = {
+                "percentile": self.percentile,
+                "position_pct": min(95, max(5, self.percentile)),
+            }
+        return {
+            "p10": self.p10,
+            "p25": self.p25,
+            "p50": self.p50,
+            "p75": self.p75,
+            "p90": self.p90,
+            "p25_pos": 25,
+            "p75_pos": 75,
+            "user_marker": user_marker,
+        }
+
+
+def _ctc_to_lpa(raw: int) -> int:
+    """Normalize SalarySubmission CTC (INR or LPA) to lakhs."""
+    if raw >= 100000:
+        return max(1, int(round(raw / 100000)))
+    return raw
 
 
 def _normalize_city(city: str) -> str:
@@ -115,16 +146,20 @@ def _editorial_fallback(role: str, yoe: float, city: str) -> tuple[int, int, int
         "remote": "remote_india",
     }.get(norm_city, "bengaluru")
 
-    role_lower = role.lower()
+    role_lower = normalize_role(role).lower()
+    search_terms = role_search_terms(role)
     best_band = None
     best_score = 0
 
     for cluster_bands in SALARY_CLUSTERS.values():
         for band in cluster_bands:
             score = 0
+            band_lower = band.role.lower()
+            if any(term in band_lower or band_lower in term for term in search_terms):
+                score += 5
             if any(kw in role_lower for kw in band.role.lower().split("/")):
                 score += 3
-            if band.role.lower() in role_lower or role_lower in band.role.lower():
+            if band_lower in role_lower or role_lower in band_lower:
                 score += 5
             # YOE band match
             yoe_str = band.experience
@@ -192,12 +227,18 @@ def _compute_salary_reality(
     company_type: str = "",
     current_ctc: int | None = None,
 ) -> SalaryRealityResult:
+    role = normalize_role(role)
     norm_city = _normalize_city(city)
     yoe_lo = max(0, yoe - 1)
     yoe_hi = yoe + 1
 
+    from django.db.models import Q
+    role_q = Q()
+    for term in role_search_terms(role)[:3]:
+        role_q |= Q(role__icontains=term)
+
     qs = SalarySubmission.objects.exclude(verification_status="flagged").filter(
-        role__icontains=role.split()[0] if role else "",
+        role_q,
         experience_years__gte=yoe_lo,
         experience_years__lte=yoe_hi,
     )
@@ -206,9 +247,10 @@ def _compute_salary_reality(
     if norm_city and norm_city != "remote":
         qs = qs.filter(city__icontains=norm_city[:4])
 
-    ctcs = sorted(s.ctc for s in qs[:500])
+    ctcs = sorted(_ctc_to_lpa(s.ctc) for s in qs[:500])
     data_source = "crowdsourced"
     confidence = "high"
+    limitation = None
 
     if len(ctcs) < MIN_SAMPLE_SIZE:
         editorial = _editorial_fallback(role, yoe, city)
@@ -253,12 +295,21 @@ def _compute_salary_reality(
     percentile = None
     pay_label = None
     pay_delta_pct = None
+    gap_lpa = None
+
+    if sample_size < MIN_SAMPLE_SIZE and data_source == "editorial":
+        limitation = (
+            "Limited crowdsourced data for this role and location. "
+            "Showing editorial benchmarks — try a broader role or national data."
+        )
+        confidence = "low"
 
     if current_ctc:
         all_values = ctcs if ctcs else [p10, p25, p50, p75, p90]
         percentile = _compute_percentile(all_values, current_ctc)
         delta_pct = int((current_ctc - p50) / p50 * 100) if p50 else 0
         pay_delta_pct = delta_pct
+        gap_lpa = round(current_ctc - p50, 1)
         if delta_pct < -10:
             pay_label = "underpaid"
         elif delta_pct > 10:
@@ -284,4 +335,6 @@ def _compute_salary_reality(
         pay_delta_pct=pay_delta_pct,
         confidence=confidence,
         data_source=data_source,
+        gap_lpa=gap_lpa,
+        limitation=limitation,
     )

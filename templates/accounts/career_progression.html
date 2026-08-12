@@ -1,44 +1,46 @@
 {% extends "base.html" %}
-{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
-{% block title %}{{ og_title }}{% endblock %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}Career Progression{% endblock %}
 {% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
 
 {% block content %}
-<div class="dash-header">
-  <h1>Career Progression Tracker</h1>
-</div>
+<div class="cr-dash">
+  <div class="cr-dash__inner">
+    {% include "accounts/partials/_career_dash_nav.html" with active="progression" %}
+    <header class="cr-dash__header">
+      <h1 class="cr-feature__title">Career Progression</h1>
+      <p class="cr-feature__subtitle">{{ narrative }}</p>
+    </header>
 
-<div class="dash-grid">
-  <div class="dash-card">
-    <p class="dash-card-title">Add Snapshot</p>
-    <form method="post" class="az-form">
-      {% csrf_token %}
-      {% for field in form %}
-      <div class="az-field">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-      </div>
-      {% endfor %}
-      <button type="submit" class="az-btn az-btn--primary">Save Snapshot</button>
-    </form>
-  </div>
+    {% if trajectory %}
+    {% include "features/partials/_trajectory_chart.html" %}
+    {% else %}
+    <p class="cr-help">Add at least two snapshots to see your salary trajectory chart.</p>
+    {% endif %}
 
-  <div class="dash-card">
-    <p class="dash-card-title">Timeline</p>
-    {% for s in snapshots %}
-    <div class="benchmark-row">
-      <div>
-        <div class="benchmark-role">{{ s.title }}{% if s.company_name %} @ {{ s.company_name }}{% endif %}</div>
-        <div class="benchmark-n">{{ s.recorded_at }}</div>
-      </div>
-      <div class="benchmark-range">
-        ₹{{ s.ctc }}L
-        {% if s.peer_comparison %}<br><small>{{ s.peer_comparison|title }}</small>{% endif %}
-      </div>
+    <div class="cr-form">
+      <h2 class="cr-section-title">Add snapshot</h2>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="cr-field"><label class="cr-label">{{ field.label }}</label>{{ field }}</div>
+        {% endfor %}
+        <button type="submit" class="cr-btn cr-btn--primary">Save Snapshot</button>
+      </form>
     </div>
-    {% empty %}
-    <p class="dash-empty-msg">No snapshots yet. Add your first career checkpoint above.</p>
-    {% endfor %}
+
+    <section class="cr-result">
+      <h2 class="cr-section-title">Timeline</h2>
+      {% for s in snapshots %}
+      <div class="cr-category-card">
+        <strong>{{ s.recorded_at }}</strong> — {{ s.title }} @ ₹{{ s.ctc }}L
+        {% if s.company_name %}({{ s.company_name }}){% endif %}
+        {% if s.peer_comparison %}<span class="cr-help"> · {{ s.get_peer_comparison_display }}</span>{% endif %}
+      </div>
+      {% empty %}
+      <p>No snapshots yet.</p>
+      {% endfor %}
+    </section>
   </div>
 </div>
 {% endblock %}

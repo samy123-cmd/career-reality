@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}Edit Career Profile{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block content %}
+<div class="cr-feature">
+  <div class="cr-feature__inner">
+    <header class="cr-feature__header">
+      <h1 class="cr-feature__title">Edit Career Profile</h1>
+      <p class="cr-feature__subtitle">Updates prefill all CareerReality tools and your dashboard.</p>
+    </header>
+    <form method="post" class="cr-form">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="cr-field"><label class="cr-label">{{ field.label }}</label>{{ field }}</div>
+      {% endfor %}
+      <button type="submit" class="cr-btn cr-btn--primary">Save Profile</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

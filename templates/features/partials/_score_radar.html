@@ -1,0 +1,17 @@
+{% if radar_data %}
+<div class="cr-radar" role="img" aria-label="Risk radar chart">
+  <svg viewBox="0 0 240 240" class="cr-radar__svg" aria-hidden="true">
+    <polygon class="cr-radar__grid" points="120,20 210,75 210,165 120,220 30,165 30,75"/>
+    <polygon class="cr-radar__grid" points="120,50 180,85 180,155 120,190 60,155 60,85"/>
+    <polygon class="cr-radar__data" id="cr-radar-polygon" data-values="{{ radar_data.values_json }}"/>
+    {% for label in radar_data.labels %}
+    <text class="cr-radar__label" x="{{ label.x }}" y="{{ label.y }}">{{ label.name }}</text>
+    {% endfor %}
+  </svg>
+  <ul class="cr-radar__fallback">
+    {% for item in radar_data.items %}
+    <li><strong>{{ item.name }}:</strong> {{ item.label }} ({{ item.score }}/100)</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

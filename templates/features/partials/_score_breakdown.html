@@ -1,0 +1,14 @@
+{% if dimensions %}
+<div class="cr-score-breakdown" role="list" aria-label="Score breakdown">
+  {% for dim in dimensions %}
+  <div class="cr-score-breakdown__row" role="listitem">
+    <span class="cr-score-breakdown__label">{{ dim.label }}</span>
+    <div class="cr-score-breakdown__bar" aria-hidden="true">
+      <div class="cr-score-breakdown__fill" style="width: {% widthratio dim.score dim.max|default:10 100 %}%;"></div>
+    </div>
+    <span class="cr-data cr-score-breakdown__value">{{ dim.score|floatformat:1 }}</span>
+    {% if dim.detail %}<span class="cr-score-breakdown__detail">{{ dim.detail }}</span>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

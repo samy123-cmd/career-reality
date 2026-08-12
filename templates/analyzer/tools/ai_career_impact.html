@@ -1,24 +1,47 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block tool_content %}
-<form method="post" class="az-form">
-    {% csrf_token %}
-    <div class="az-field">
-        <label for="{{ form.job_title.id_for_label }}">{{ form.job_title.label }}</label>
-        {{ form.job_title }}
-    </div>
-    <button type="submit" class="az-btn az-btn--primary">Assess AI Impact</button>
+{% block feature_context %}{% if not result %}{% include "features/partials/_empty_preview.html" %}{% endif %}{% endblock %}
+
+{% block feature_content %}
+<form method="post" class="cr-form" data-cr-loading="Analyzing AI exposure for your role…">
+  {% csrf_token %}
+  <div class="cr-field"><label class="cr-label">{{ form.job_title.label }}</label>{{ form.job_title }}</div>
+  <div class="cr-field"><label class="cr-label">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
+  <div class="cr-field"><label class="cr-label">{{ form.industry.label }}</label>{{ form.industry }}</div>
+  <div class="cr-field"><label class="cr-label">{{ form.seniority.label }}</label>{{ form.seniority }}</div>
+  <div class="cr-field"><label class="cr-label">{{ form.is_manager.label }}</label>{{ form.is_manager }}</div>
+  <div class="cr-field"><label class="cr-label">{{ form.tech_stack.label }}</label>{{ form.tech_stack }}</div>
+  <details class="cr-offer-section">
+    <summary>Paste job description (optional)</summary>
+    <div class="cr-field">{{ form.job_description }}</div>
+  </details>
+  <button type="submit" class="cr-btn cr-btn--primary">Assess AI Impact</button>
 </form>
 
 {% if result %}
-<section class="az-result-card">
-    <h2>AI Risk Score: {{ result.ai_risk_score }}/100</h2>
-    <p><strong>{{ result.risk_label }}</strong> · Future demand: {{ result.future_demand|title }}</p>
-    {% if llm_narrative %}<p class="az-llm-narrative">{{ llm_narrative }}</p>{% endif %}
-    <h3>Vulnerable Tasks</h3>
-    <ul class="az-feature-list">{% for t in result.vulnerable_tasks %}<li>{{ t }}</li>{% endfor %}</ul>
-    <h3>Skills to Learn</h3>
-    <ul class="az-feature-list">{% for s in result.skills_to_learn %}<li>{{ s }}</li>{% endfor %}</ul>
+<section class="cr-result" aria-live="polite">
+  <div class="cr-result__hero">
+    <h2 class="cr-result__verdict">{{ result.risk_label }}</h2>
+    <p class="cr-result__score">AI Risk Score: <strong class="cr-data" data-cr-animate-score="{{ result.ai_risk_score }}">0</strong>/100</p>
+  </div>
+  <div class="cr-stat-grid">
+    <div class="cr-stat"><span class="cr-stat__label">Automation exposure</span><span class="cr-stat__value cr-data">{{ result.automation_exposure }}%</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Augmentation opportunity</span><span class="cr-stat__value cr-data">{{ result.augmentation_opportunity }}%</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Skill durability</span><span class="cr-stat__value cr-data">{{ result.skill_durability }}%</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Future demand</span><span class="cr-stat__value">{{ result.future_demand|title }}</span></div>
+  </div>
+  <h3 class="cr-section-title">Most exposed tasks</h3>
+  <ul>{% for t in result.vulnerable_tasks %}<li>{{ t }}</li>{% endfor %}</ul>
+  <h3 class="cr-section-title">Most AI-resistant tasks</h3>
+  <ul>{% for t in result.resistant_tasks %}<li>{{ t }}</li>{% endfor %}</ul>
+  <h3 class="cr-section-title">Skills becoming more valuable</h3>
+  <ul>{% for s in result.skills_gaining %}<li>{{ s }}</li>{% endfor %}</ul>
+  <h3 class="cr-section-title">Skills becoming less valuable</h3>
+  <ul>{% for s in result.skills_declining %}<li>{{ s }}</li>{% endfor %}</ul>
+  <h3 class="cr-section-title">12-month action plan</h3>
+  <ol>{% for step in result.action_plan_12mo %}<li>{{ step }}</li>{% endfor %}</ol>
+  <p><strong>3-year outlook:</strong> {{ result.outlook_3y }}</p>
+  {% include "features/partials/_related_actions.html" %}
 </section>
 {% endif %}
 {% endblock %}

@@ -186,19 +186,35 @@
     <!-- Main Content -->
     <div class="cp-main">
         {% if reality_score %}
-        <section class="cp-reality-score" id="reality-score">
+        <section class="cp-reality-score cr-feature" id="reality-score">
             <h2>Company Reality Score</h2>
             <div class="score-big">{{ reality_score.overall|floatformat:1 }}<span>/10</span></div>
-            <p>360° view: compensation, stability, growth, WLB, culture, promotion, and work mode.</p>
+            <p>360° view across compensation, stability, growth, WLB, culture, promotion, and work mode.</p>
             <div class="cp-score-ratings">
                 {% for dim in reality_score.dimensions %}
                 <div class="score-row">
                     <span>{{ dim.label }}</span>
-                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio dim.score 10 100 %}%"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio dim.score 10 100 %}%; background: var(--feature-accent, #38bdf8);"></div></div>
                     <span>{{ dim.score|floatformat:1 }}</span>
                 </div>
+                {% if dim.detail %}<p class="cp-meta-small">{{ dim.detail }}</p>{% endif %}
                 {% endfor %}
             </div>
+            {% if user_career_role %}
+            <div class="cr-crs-personal">
+                <strong>What this means for you</strong>
+                <p>As a {{ user_career_role }}, weigh stability and growth dimensions most heavily. Overall company score is not universal — your function may face different hiring or layoff patterns.</p>
+                <p>
+                    <a href="{% url 'tools:offer_analyzer' %}">Compare offers</a> ·
+                    <a href="{% url 'tools:stay_vs_switch' %}">Stay vs Switch</a> ·
+                    <a href="{% url 'tools:salary_reality_engine' %}">Salary check</a>
+                </p>
+            </div>
+            {% endif %}
+            <details class="cr-methodology">
+                <summary>Methodology</summary>
+                <p>Composite of compensation, stability (layoffs), growth, WLB, culture, promotion proxy, and work mode. Updated when reviews/salaries change{% if company.reality_score_updated_at %} — last {{ company.reality_score_updated_at|date:"M j, Y" }}{% endif %}.</p>
+            </details>
             <p class="cp-meta-small">Stability: {{ reality_score.stability_label }} · {{ reality_score.sample_salaries }} salaries · {{ reality_score.sample_reviews }} reviews</p>
         </section>
         {% endif %}

@@ -1,65 +1,77 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block tool_content %}
-<form method="post" class="az-form">
-    {% csrf_token %}
-    <div class="az-field">
-        <label for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>
-        {{ form.role }}
-    </div>
-    <div class="az-field">
-        <label for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>
-        {{ form.experience_years }}
-    </div>
+{% block feature_context %}
+{% if not result %}{% include "features/partials/_empty_preview.html" %}{% endif %}
+{% endblock %}
 
-    <details class="az-offer-section" open>
-        <summary>Offer A</summary>
-        {% for field in form %}
-            {% if 'offer_a' in field.name %}
-            <div class="az-field">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-            </div>
-            {% endif %}
-        {% endfor %}
-    </details>
+{% block feature_content %}
+<form method="post" class="cr-form" data-cr-loading="Comparing compensation structures…">
+  {% csrf_token %}
+  <div class="cr-field"><label class="cr-label">{{ form.role.label }}</label>{{ form.role }}</div>
+  <div class="cr-field"><label class="cr-label">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
 
-    <details class="az-offer-section" open>
-        <summary>Offer B</summary>
-        {% for field in form %}
-            {% if 'offer_b' in field.name %}
-            <div class="az-field">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-            </div>
-            {% endif %}
-        {% endfor %}
-    </details>
+  <details class="cr-offer-section">
+    <summary>Your current situation (optional)</summary>
+    <div class="cr-field"><label class="cr-label">{{ form.current_company.label }}</label>{{ form.current_company }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.current_ctc.label }}</label>{{ form.current_ctc }}</div>
+  </details>
 
-    <button type="submit" class="az-btn az-btn--primary">Compare Offers</button>
+  <details class="cr-offer-section" open>
+    <summary>Offer A</summary>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_company.label }}</label>{{ form.offer_a_company }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_ctc.label }}</label>{{ form.offer_a_ctc }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_city.label }}</label>{{ form.offer_a_city }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_fixed_pct.label }}</label>{{ form.offer_a_fixed_pct }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_variable_pct.label }}</label>{{ form.offer_a_variable_pct }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_esop.label }}</label>{{ form.offer_a_esop }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_commute.label }}</label>{{ form.offer_a_commute }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_wlb.label }}</label>{{ form.offer_a_wlb }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_work_mode.label }}</label>{{ form.offer_a_work_mode }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_a_growth.label }}</label>{{ form.offer_a_growth }}</div>
+  </details>
+
+  <details class="cr-offer-section" open>
+    <summary>Offer B</summary>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_company.label }}</label>{{ form.offer_b_company }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_ctc.label }}</label>{{ form.offer_b_ctc }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_city.label }}</label>{{ form.offer_b_city }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_fixed_pct.label }}</label>{{ form.offer_b_fixed_pct }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_variable_pct.label }}</label>{{ form.offer_b_variable_pct }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_esop.label }}</label>{{ form.offer_b_esop }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_commute.label }}</label>{{ form.offer_b_commute }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_wlb.label }}</label>{{ form.offer_b_wlb }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_work_mode.label }}</label>{{ form.offer_b_work_mode }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.offer_b_growth.label }}</label>{{ form.offer_b_growth }}</div>
+  </details>
+
+  <button type="submit" class="cr-btn cr-btn--primary">Compare Offers</button>
+  {% if user.is_authenticated %}<button type="submit" name="save_offer" value="1" class="cr-btn cr-btn--secondary">Compare &amp; Save</button>{% endif %}
 </form>
 
 {% if result %}
-<section class="az-result-card">
-    <h2>{{ result.verdict_label }}</h2>
-    <ul class="az-feature-list">
-        {% for reason in result.reasoning %}
-        <li>{{ reason }}</li>
-        {% endfor %}
-    </ul>
-    <div class="az-result-grid">
-        <div class="az-stat">
-            <span class="az-stat-label">Offer A overall</span>
-            <span class="az-stat-value">{{ result.offer_a.overall|floatformat:1 }}/10</span>
-        </div>
-        <div class="az-stat">
-            <span class="az-stat-label">Offer B overall</span>
-            <span class="az-stat-value">{{ result.offer_b.overall|floatformat:1 }}/10</span>
-        </div>
-    </div>
-    {% if not is_pro %}
-    <p class="az-upgrade-nudge"><a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> to save and compare offer history.</p>
-    {% endif %}
+<section class="cr-result" aria-live="polite">
+  <div class="cr-result__hero">
+    <h2 class="cr-result__verdict">{{ result.verdict_label }}</h2>
+    <p class="cr-result__score"><span class="cr-data">{{ result.score_a_display }}</span> vs <span class="cr-data">{{ result.score_b_display }}</span></p>
+  </div>
+  <h3 class="cr-section-title">Why?</h3>
+  <ul>{% for r in result.reasoning %}<li>{{ r }}</li>{% endfor %}</ul>
+  <div class="cr-stat-grid">
+    <div class="cr-stat"><span class="cr-stat__label">Offer A overall</span><span class="cr-stat__value cr-data">{{ result.offer_a.overall|floatformat:1 }}/10</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Offer B overall</span><span class="cr-stat__value cr-data">{{ result.offer_b.overall|floatformat:1 }}/10</span></div>
+  </div>
+  <h3 class="cr-section-title">Offer A breakdown</h3>
+  {% include "features/partials/_score_breakdown.html" with dimensions=result.offer_a.dimensions %}
+  <h3 class="cr-section-title">Offer B breakdown</h3>
+  {% include "features/partials/_score_breakdown.html" with dimensions=result.offer_b.dimensions %}
+  <h3 class="cr-section-title">Trade-offs</h3>
+  <p><strong>Offer A:</strong> {{ result.tradeoffs.offer_a|join:", "|default:"No major trade-offs" }}</p>
+  <p><strong>Offer B:</strong> {{ result.tradeoffs.offer_b|join:", "|default:"No major trade-offs" }}</p>
+  <h3 class="cr-section-title">Outlook</h3>
+  <p><strong>2-year:</strong> {{ result.outlook_2y }}</p>
+  <p><strong>5-year:</strong> {{ result.outlook_5y }}</p>
+  {% include "features/partials/_methodology.html" %}
+  {% include "features/partials/_related_actions.html" %}
 </section>
 {% endif %}
 {% endblock %}

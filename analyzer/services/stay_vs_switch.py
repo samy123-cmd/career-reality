@@ -1,10 +1,8 @@
-"""
-Stay vs Switch Analyzer — current job + market → Stay / Switch / Wait recommendation.
-"""
+"""Stay vs Switch — decision framework with category breakdown."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from analyzer import logic
 from analyzer.services.salary_engine import get_salary_reality
@@ -15,28 +13,26 @@ from core.models import CareerRealityIndexSnapshot
 
 @dataclass
 class StayVsSwitchResult:
-    recommendation: str  # stay | switch | wait
+    recommendation: str
     recommendation_label: str
     confidence: str
+    confidence_pct: int
     financial_reasons: list[str]
     career_reasons: list[str]
     risk_score: int
     salary_percentile: int | None
     company_stability: str
     market_switch_difficulty: int
+    categories: list[dict] = field(default_factory=list)
+    timeline: str = ""
+    improvements: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
-        return {
-            "recommendation": self.recommendation,
-            "recommendation_label": self.recommendation_label,
-            "confidence": self.confidence,
-            "financial_reasons": self.financial_reasons,
-            "career_reasons": self.career_reasons,
-            "risk_score": self.risk_score,
-            "salary_percentile": self.salary_percentile,
-            "company_stability": self.company_stability,
-            "market_switch_difficulty": self.market_switch_difficulty,
-        }
+        return {k: getattr(self, k) for k in (
+            "recommendation", "recommendation_label", "confidence", "confidence_pct",
+            "financial_reasons", "career_reasons", "risk_score", "salary_percentile",
+            "company_stability", "market_switch_difficulty", "categories", "timeline", "improvements",
+        )}
 
 
 def _latest_switch_difficulty() -> int:
@@ -56,7 +52,6 @@ def analyze_stay_vs_switch(
     offer_ctc: int | None = None,
     wizard_data: dict | None = None,
 ) -> StayVsSwitchResult:
-    """Combine salary, company, market, and risk signals into a career decision."""
     wizard_data = wizard_data or {}
     wizard_data.setdefault("company_type", company_type)
     wizard_data.setdefault("has_offer", "yes" if has_offer else "no")
@@ -77,41 +72,39 @@ def analyze_stay_vs_switch(
     financial = []
     career = []
 
+    comp_label = "At market"
     if salary.pay_label == "underpaid":
-        financial.append(
-            f"You appear underpaid by ~{abs(salary.pay_delta_pct or 0)}% vs market median (₹{salary.p50}L)."
-        )
-        financial.append(f"Realistic switch target: ₹{salary.realistic_next}L (p75 for your band).")
+        comp_label = "Below market"
+        financial.append(f"Underpaid ~{abs(salary.pay_delta_pct or 0)}% vs median ₹{salary.p50}L")
+        financial.append(f"Realistic switch target: ₹{salary.realistic_next}L")
     elif salary.pay_label == "overpaid":
-        financial.append(f"You're above market median — switching may mean a pay cut unless role changes.")
+        comp_label = "Above market"
+        financial.append("Above market — switching may mean a pay cut")
     else:
-        financial.append(f"Compensation is near market median (₹{salary.p50}L).")
+        financial.append(f"Near market median ₹{salary.p50}L")
+
+    growth_label = "Steady"
+    if wizard_data.get("current_situation") in ("stagnant", "burned_out"):
+        growth_label = "Slowing"
+    elif wizard_data.get("performance_status") == "high_performer":
+        growth_label = "Strong"
 
     if offer_ctc and offer_ctc > current_ctc:
         hike = int((offer_ctc - current_ctc) / current_ctc * 100)
-        financial.append(f"Offer on table: ₹{offer_ctc}L is a {hike}% hike — strong financial case to switch.")
-    elif has_offer and not offer_ctc:
-        financial.append("You have an offer — quantify the hike before deciding.")
+        financial.append(f"Offer ₹{offer_ctc}L is a {hike}% hike")
 
     if company_score < 5:
-        career.append(f"Company Reality Score is low ({company_score:.1f}/10) — limited growth or stability.")
+        career.append(f"Company score low ({company_score:.1f}/10)")
     elif company_score >= 7:
-        career.append(f"Company scores well ({company_score:.1f}/10) — internal growth may beat a risky switch.")
+        career.append(f"Strong company ({company_score:.1f}/10) — internal growth viable")
 
     if stability_label in ("layoff_active", "at_risk", "freeze"):
-        career.append(f"Company stability signal: {stability_label} — prioritize exit planning.")
-    else:
-        career.append("No acute layoff signals for your company in recent reports.")
-
+        career.append(f"Stability: {stability_label}")
     if switch_difficulty >= 70:
-        career.append(f"Market switch difficulty is high ({switch_difficulty}/100) — secure offer before resigning.")
+        career.append(f"High switch difficulty ({switch_difficulty}/100)")
     elif switch_difficulty <= 40:
-        career.append(f"Market is relatively open ({switch_difficulty}/100 switch difficulty) — good window to move.")
+        career.append(f"Favourable market ({switch_difficulty}/100 difficulty)")
 
-    if risk_score >= 65:
-        career.append("Resignation risk is elevated — document everything and avoid hostile exits.")
-
-    # Decision logic
     switch_score = 0
     if salary.pay_label == "underpaid":
         switch_score += 2
@@ -123,37 +116,64 @@ def analyze_stay_vs_switch(
         switch_score += 2
     if stability_label in ("layoff_active", "at_risk"):
         switch_score += 3
-    if switch_difficulty >= 75:
-        switch_score -= 1
 
     stay_score = 0
     if salary.pay_label == "overpaid":
         stay_score += 2
     if company_score >= 7:
         stay_score += 2
-    if stability_label in ("stable", "hiring"):
-        stay_score += 1
     if risk_score >= 60 and not has_offer:
-        stay_score += 1  # risky to leave without offer
+        stay_score += 1
+
+    readiness = "High" if (has_offer or switch_difficulty <= 45) else "Moderate" if switch_difficulty <= 65 else "Low"
 
     if switch_score >= stay_score + 2:
-        rec, label = "switch", "Switch — financial and risk signals favour moving"
-        confidence = "high" if switch_score >= 4 else "medium"
+        rec, label = "switch", "Switch"
+        confidence_pct = min(92, 65 + switch_score * 5)
     elif stay_score > switch_score + 1:
-        rec, label = "stay", "Stay — current position has more upside than risk"
-        confidence = "medium"
+        rec, label = "stay", "Stay"
+        confidence_pct = min(88, 60 + stay_score * 5)
     else:
-        rec, label = "wait", "Wait — build leverage (offer, skills, savings) before deciding"
-        confidence = "medium"
+        rec, label = "wait", "Wait"
+        confidence_pct = 55
+
+    confidence = "high" if confidence_pct >= 75 else "medium" if confidence_pct >= 60 else "low"
+
+    categories = [
+        {"name": "Compensation", "value": comp_label},
+        {"name": "Career growth", "value": growth_label},
+        {"name": "Market demand", "value": "Healthy" if switch_difficulty <= 55 else "Tight"},
+        {"name": "Company risk", "value": stability_label.replace("_", " ").title()},
+        {"name": "Switch readiness", "value": readiness},
+    ]
+
+    timeline = {
+        "switch": "Begin interviewing within 1–3 months",
+        "stay": "Revisit in 6 months — focus on internal scope",
+        "wait": "Build leverage (offer, savings, skills) over 2–4 months",
+    }[rec]
+
+    improvements = []
+    if salary.pay_label == "underpaid":
+        improvements.append("Benchmark offers at ₹{}–{}L before resigning".format(salary.p50, salary.p75))
+    if not has_offer:
+        improvements.append("Secure at least one written offer before giving notice")
+    improvements.append("Update resume with quantified impact from last 12 months")
+    if switch_difficulty >= 65:
+        improvements.append("Expand target companies beyond top-tier — market is selective")
 
     return StayVsSwitchResult(
         recommendation=rec,
         recommendation_label=label,
         confidence=confidence,
+        confidence_pct=confidence_pct,
         financial_reasons=financial[:3],
         career_reasons=career[:3],
         risk_score=risk_score,
         salary_percentile=salary.percentile,
         company_stability=stability_label,
         market_switch_difficulty=switch_difficulty,
+        categories=categories,
+        timeline=timeline,
+        improvements=improvements[:3],
     )

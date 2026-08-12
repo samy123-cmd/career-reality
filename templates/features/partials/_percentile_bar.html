@@ -1,0 +1,22 @@
+{% if chart_data %}
+<div class="cr-percentile-chart" role="img" aria-label="Salary percentile chart from P10 to P90{% if chart_data.user_marker %}, your position at P{{ chart_data.user_marker.percentile }}{% endif %}">
+  <div class="cr-percentile-chart__labels">
+    <span>P10</span><span>P25</span><span>P50</span><span>P75</span><span>P90</span>
+  </div>
+  <div class="cr-percentile-chart__track">
+    <div class="cr-percentile-chart__fill" style="--p25: {{ chart_data.p25_pos|default:25 }}%; --p75: {{ chart_data.p75_pos|default:75 }}%;"></div>
+    {% if chart_data.user_marker %}
+    <div class="cr-percentile-chart__marker" style="left: {{ chart_data.user_marker.position_pct }}%;" title="You: P{{ chart_data.user_marker.percentile }}">
+      <span class="cr-percentile-chart__marker-label">You</span>
+    </div>
+    {% endif %}
+  </div>
+  <div class="cr-percentile-chart__values">
+    <span class="cr-data">₹{{ chart_data.p10 }}L</span>
+    <span class="cr-data">₹{{ chart_data.p25 }}L</span>
+    <span class="cr-data">₹{{ chart_data.p50 }}L</span>
+    <span class="cr-data">₹{{ chart_data.p75 }}L</span>
+    <span class="cr-data">₹{{ chart_data.p90 }}L</span>
+  </div>
+</div>
+{% endif %}

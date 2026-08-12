@@ -180,3 +180,27 @@ class WatchlistTests(TestCase):
         response = self.client.post(reverse("toggle_watchlist", args=[self.company.slug]))
         self.assertEqual(response.status_code, 302)
         self.assertIn("pricing", response.url)
+
+
+class CareerContextTests(TestCase):
+    def setUp(self):
+        from accounts.models import CareerProfile
+        self.user = User.objects.create_user("ctx", password="pass")
+        CareerProfile.objects.create(
+            user=self.user,
+            role="Data Engineer",
+            experience_years=7,
+            city="Pune",
+            current_ctc=16,
+            company_type="product",
+        )
+
+    def test_authenticated_profile_in_context(self):
+        from accounts.career_context import get_career_context
+        from django.test import RequestFactory
+        request = RequestFactory().get("/")
+        request.user = self.user
+        request.session = {}
+        ctx = get_career_context(request)
+        self.assertEqual(ctx["role"], "Data Engineer")
+        self.assertEqual(ctx["city"], "Pune")

@@ -1,0 +1,14 @@
+<div class="cr-preview" id="cr-empty-preview">
+  <h3 class="cr-preview__title">Your result will include</h3>
+  <ul class="cr-preview__list">
+    {% if preview_items %}
+      {% for item in preview_items %}
+      <li><span class="cr-preview__check" aria-hidden="true">✓</span> {{ item }}</li>
+      {% endfor %}
+    {% else %}
+      <li><span class="cr-preview__check" aria-hidden="true">✓</span> Data-backed analysis</li>
+      <li><span class="cr-preview__check" aria-hidden="true">✓</span> Clear recommendation</li>
+      <li><span class="cr-preview__check" aria-hidden="true">✓</span> Next steps you can act on</li>
+    {% endif %}
+  </ul>
+</div>

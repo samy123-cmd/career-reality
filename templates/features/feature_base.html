@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}{{ og_title|default:"Career Tool — Career Reality India" }}{% endblock %}
+{% block meta_description %}{{ og_description|default:"Free career tools for Indian professionals." }}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{ tool_schema_name|default:page_h1|escapejs }}",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+  "description": "{{ og_description|escapejs }}",
+  "url": "{{ canonical_url|default:request.build_absolute_uri }}"
+}
+</script>
+{% if tool_faq %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for item in tool_faq %}
+    {
+      "@type": "Question",
+      "name": "{{ item.q|escapejs }}",
+      "acceptedAnswer": { "@type": "Answer", "text": "{{ item.a|escapejs }}" }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="cr-feature">
+  <div class="cr-feature__inner">
+    {% if feature_breadcrumb %}
+    <nav class="cr-breadcrumb" aria-label="Breadcrumb">
+      {% for crumb in feature_breadcrumb %}
+        {% if crumb.url %}<a href="{{ crumb.url }}">{{ crumb.label }}</a>{% else %}<span aria-current="page">{{ crumb.label }}</span>{% endif %}
+        {% if not forloop.last %}<span class="cr-breadcrumb__sep">/</span>{% endif %}
+      {% endfor %}
+    </nav>
+    {% endif %}
+
+    <header class="cr-feature__header">
+      <h1 class="cr-feature__title">{{ page_h1 }}</h1>
+      <p class="cr-feature__subtitle">{{ og_description }}</p>
+      {% if career_context_banner %}
+      <div class="cr-profile-banner">
+        <span>Using your saved profile: {{ career_context_banner }}</span>
+        {% if user.is_authenticated %}<a href="{% url 'career_profile_edit' %}">Edit</a>{% endif %}
+      </div>
+      {% endif %}
+    </header>
+
+    <div class="cr-feature__layout">
+      <div class="cr-feature__main">
+        {% block feature_content %}{% endblock %}
+      </div>
+      {% block feature_sidebar %}
+      <aside class="cr-feature__sidebar">
+        {% block feature_context %}
+        {% include "features/partials/_empty_preview.html" %}
+        {% endblock %}
+      </aside>
+      {% endblock %}
+    </div>
+
+    {% if tool_faq %}
+    <section class="cr-faq" aria-labelledby="tool-faq-title">
+      <h2 id="tool-faq-title" class="cr-section-title">Frequently asked questions</h2>
+      {% for item in tool_faq %}
+      <details class="cr-faq__item">
+        <summary>{{ item.q }}</summary>
+        <p>{{ item.a }}</p>
+      </details>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    <div class="cr-feature__footer">
+      {% include "partials/seo_tool_hub.html" %}
+      {% include "partials/seo_pillar_links.html" %}
+    </div>
+  </div>
+</div>
+{% endblock %}

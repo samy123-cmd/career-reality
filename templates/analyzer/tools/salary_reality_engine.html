@@ -1,50 +1,66 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block tool_content %}
-<form method="post" class="az-form">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="az-field">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-        {% if field.help_text %}<small class="az-help">{{ field.help_text }}</small>{% endif %}
-        {% if field.errors %}<span class="az-error">{{ field.errors.0 }}</span>{% endif %}
-    </div>
-    {% endfor %}
-    <button type="submit" class="az-btn az-btn--primary">Check My Salary Reality</button>
-</form>
+{% block feature_context %}
+{% if not result %}
+{% include "features/partials/_empty_preview.html" %}
+{% else %}
+<div class="cr-preview">
+  <h3 class="cr-preview__title">Quick read</h3>
+  <p class="cr-data">Confidence: {{ result.confidence|title }} · {{ result.sample_size }} samples · {{ result.data_source }}</p>
+</div>
+{% endif %}
+{% endblock %}
 
-{% if result %}
-<section class="az-result-card">
-    <h2>Your Salary Reality</h2>
-    <div class="az-result-grid">
-        <div class="az-stat">
-            <span class="az-stat-label">Market Median</span>
-            <span class="az-stat-value">₹{{ result.p50 }}L</span>
-        </div>
-        <div class="az-stat">
-            <span class="az-stat-label">Market Range (p25–p75)</span>
-            <span class="az-stat-value">₹{{ result.p25 }}–₹{{ result.p75 }}L</span>
-        </div>
-        <div class="az-stat">
-            <span class="az-stat-label">Realistic Next Salary</span>
-            <span class="az-stat-value">₹{{ result.realistic_next }}L</span>
-        </div>
-        {% if result.percentile %}
-        <div class="az-stat">
-            <span class="az-stat-label">Your Percentile</span>
-            <span class="az-stat-value">{{ result.percentile }}th</span>
-        </div>
-        {% endif %}
-        {% if result.pay_label %}
-        <div class="az-stat az-stat--highlight">
-            <span class="az-stat-label">Verdict</span>
-            <span class="az-stat-value">{{ result.pay_label|title }}{% if result.pay_delta_pct %} ({{ result.pay_delta_pct }}% vs median){% endif %}</span>
-        </div>
-        {% endif %}
-    </div>
-    <p class="az-meta">Based on {{ result.sample_size }} submissions · {{ result.confidence }} confidence · {{ result.data_source }} data</p>
-    <p><a href="{% url 'submit_salary' %}">Help improve data — submit your salary anonymously</a></p>
+{% block feature_content %}
+{% if not result %}
+<form method="post" class="cr-form" data-cr-wizard data-cr-loading="Matching your profile against market data…">
+  {% csrf_token %}
+  <div class="cr-wizard__steps">
+    <button type="button" class="cr-wizard__step is-active" data-cr-step>Role</button>
+    <button type="button" class="cr-wizard__step" data-cr-step>Location</button>
+    <button type="button" class="cr-wizard__step" data-cr-step>Compensation</button>
+  </div>
+  <div data-cr-panel>
+    <div class="cr-field"><label class="cr-label">{{ form.role.label }}</label>{{ form.role }}{% if form.role.errors %}<span class="cr-error">{{ form.role.errors.0 }}</span>{% endif %}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.role_level.label }}</label>{{ form.role_level }}</div>
+  </div>
+  <div data-cr-panel hidden>
+    <div class="cr-field"><label class="cr-label">{{ form.city.label }}</label>{{ form.city }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.industry.label }}</label>{{ form.industry }}</div>
+    <div class="cr-field"><label class="cr-label">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+  </div>
+  <div data-cr-panel hidden>
+    {% include "features/partials/_input_money.html" with field=form.current_ctc %}
+  </div>
+  <div class="cr-wizard__nav">
+    <button type="button" class="cr-btn cr-btn--secondary" data-cr-prev>Back</button>
+    <button type="button" class="cr-btn cr-btn--primary" data-cr-next>Continue</button>
+  </div>
+</form>
+{% else %}
+<section class="cr-result" aria-live="polite">
+  <div class="cr-result__hero">
+    {% if result.percentile %}
+    <p class="cr-result__score">Your position: <strong class="cr-data">P{{ result.percentile }}</strong></p>
+    {% endif %}
+    {% if result.gap_lpa %}
+    <p class="cr-result__score">Salary gap: <strong class="cr-data">{% if result.gap_lpa < 0 %}−{% endif %}₹{{ result.gap_lpa|floatformat:1 }}L</strong> vs median</p>
+    {% endif %}
+    {% if result.pay_label %}
+    <p class="cr-result__verdict cr-result__verdict--{{ result.pay_label }}">{{ result.pay_label|title }}</p>
+    {% endif %}
+  </div>
+  {% include "features/partials/_percentile_bar.html" with chart_data=chart_data %}
+  <div class="cr-stat-grid">
+    <div class="cr-stat"><span class="cr-stat__label">Market Median</span><span class="cr-stat__value cr-data">₹{{ result.p50 }}L</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Range P25–P75</span><span class="cr-stat__value cr-data">₹{{ result.p25 }}–₹{{ result.p75 }}L</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Realistic Next</span><span class="cr-stat__value cr-data">₹{{ result.realistic_next }}L</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">P90 Ceiling</span><span class="cr-stat__value cr-data">₹{{ result.p90 }}L</span></div>
+  </div>
+  {% if result.limitation %}<p class="cr-help">{{ result.limitation }}</p>{% endif %}
+  {% include "features/partials/_methodology.html" %}
+  {% include "features/partials/_related_actions.html" %}
 </section>
 {% endif %}
 {% endblock %}

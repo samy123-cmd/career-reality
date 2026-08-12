@@ -1,0 +1,6 @@
+<nav class="cr-dash-nav" aria-label="Career dashboard">
+  <a href="{% url 'my_career_reality' %}" class="{% if active == 'reality' %}is-active{% endif %}">My Reality</a>
+  <a href="{% url 'career_progression' %}" class="{% if active == 'progression' %}is-active{% endif %}">Progression</a>
+  <a href="{% url 'career_risk_radar' %}" class="{% if active == 'risk' %}is-active{% endif %}">Risk Radar</a>
+  <a href="{% url 'career_profile_edit' %}">Edit Profile</a>
+</nav>

@@ -1,32 +1,53 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block tool_content %}
+{% block feature_context %}
+<div class="cr-preview">
+  <h3 class="cr-preview__title">Suggested prompts</h3>
+  <div class="cr-ask-prompts">
+    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Am I underpaid?</button>
+    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Should I leave my company?</button>
+    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Compare two offers for me</button>
+    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">What should I learn next?</button>
+    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Will AI affect my role?</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block feature_content %}
 {% if limit_reached %}
-<p class="az-error">You've used your 3 free questions this month. <a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> for unlimited access.</p>
+<p class="cr-error">You've used your 3 free questions this month. <a href="{% url 'payments:pricing' %}">Go Pro</a> for unlimited access.</p>
 {% else %}
-<form method="post" class="az-form">
-    {% csrf_token %}
-    <div class="az-field">
-        {{ form.question }}
-    </div>
-    <button type="submit" class="az-btn az-btn--primary">Ask CareerReality</button>
-    {% if asks_remaining is not None %}<p class="az-meta">{{ asks_remaining }} free questions remaining this month</p>{% endif %}
+<form method="post" class="cr-form" data-cr-loading="Searching CareerReality data…">
+  {% csrf_token %}
+  <div class="cr-field"><label class="cr-label">{{ form.question.label }}</label>{{ form.question }}</div>
+  {% if asks_remaining %}<p class="cr-help">{{ asks_remaining }} free question{{ asks_remaining|pluralize }} remaining this month.</p>{% endif %}
+  <button type="submit" class="cr-btn cr-btn--primary">Ask CareerReality</button>
 </form>
 {% endif %}
 
+{% if history %}
+<section class="cr-ask-answer">
+  <h3 class="cr-section-title">Recent questions</h3>
+  {% for h in history %}
+  <div class="cr-ask-block"><h3>Q</h3><p>{{ h.question }}</p></div>
+  <div class="cr-ask-block"><h3>A</h3><p>{{ h.answer|truncatewords:80 }}</p></div>
+  {% endfor %}
+</section>
+{% endif %}
+
 {% if answer %}
-<section class="az-result-card">
-    <h2>Answer</h2>
-    <p>{{ answer.answer }}</p>
-    {% if answer.citations %}
-    <h3>Sources</h3>
-    <ul class="az-feature-list">
-        {% for c in answer.citations %}
-        <li><a href="{{ c.url }}">{{ c.label }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <p class="az-meta">Engines: {{ answer.engines_used|join:", " }}</p>
+<section class="cr-ask-answer" aria-live="polite">
+  <div class="cr-ask-block"><h3>Answer</h3><p>{{ answer.answer }}</p></div>
+  {% if answer.citations %}
+  <div class="cr-ask-block"><h3>CareerReality data</h3>
+    <ul>{% for c in answer.citations %}<li><a href="{{ c.url }}">{{ c.label }}</a> ({{ c.type }})</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+  {% if answer.engines_used %}
+  <div class="cr-ask-block"><h3>Evidence</h3><p>Engines: {{ answer.engines_used|join:", " }}</p></div>
+  {% endif %}
+  <div class="cr-ask-block"><h3>Recommendation</h3><p>Use the related tools below to validate numbers and compare options with your full profile.</p></div>
+  {% include "features/partials/_related_actions.html" %}
 </section>
 {% endif %}
 {% endblock %}

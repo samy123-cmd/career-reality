@@ -1,0 +1,16 @@
+{% if trajectory %}
+<div class="cr-trajectory" role="img" aria-label="Career salary trajectory">
+  <svg viewBox="0 0 400 200" class="cr-trajectory__svg" preserveAspectRatio="xMidYMid meet">
+    <polyline class="cr-trajectory__line" points="{{ trajectory.points }}" fill="none"/>
+    {% for pt in trajectory.markers %}
+    <circle class="cr-trajectory__dot" cx="{{ pt.x }}" cy="{{ pt.y }}" r="5"/>
+    <text class="cr-trajectory__label" x="{{ pt.x }}" y="{{ pt.y|add:'-10' }}">{{ pt.label }}</text>
+    {% endfor %}
+  </svg>
+  <ul class="cr-trajectory__fallback">
+    {% for snap in trajectory.snapshots %}
+    <li>{{ snap.date }}: ₹{{ snap.ctc }}L — {{ snap.title }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

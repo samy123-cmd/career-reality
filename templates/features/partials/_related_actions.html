@@ -1,0 +1,11 @@
+<nav class="cr-actions" aria-label="Related tools">
+  <h3 class="cr-actions__title">Continue your analysis</h3>
+  <div class="cr-actions__grid">
+    {% for action in related_actions %}
+    <a href="{{ action.url }}" class="cr-action-card">
+      <span class="cr-action-card__label">{{ action.label }}</span>
+      <span class="cr-action-card__desc">{{ action.description }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</nav>

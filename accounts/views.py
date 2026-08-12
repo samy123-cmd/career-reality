@@ -12,7 +12,8 @@ from analyzer.services.ai_career_impact import analyze_ai_career_impact
 from companies.models import Company
 from companies.scoring import compute_company_reality_score
 from accounts.decorators import pro_required
-from accounts.models import CompanyWatchlist, CareerProfile, CareerSnapshot, CareerAlert
+from accounts.services.career_health import compute_career_health
+from accounts.services.risk_radar import compute_risk_radar
 
 
 @login_required
@@ -100,6 +101,14 @@ def my_career_reality(request):
     snapshots = list(CareerSnapshot.objects.filter(user=request.user).order_by("-recorded_at")[:5])
     latest_snapshot = snapshots[0] if snapshots else None
 
+    career_health = compute_career_health(
+        salary_insight=salary_insight,
+        company_score=company_score,
+        stay_switch=stay_switch if is_pro else None,
+        ai_impact=ai_impact if is_pro else None,
+        latest_snapshot=latest_snapshot,
+    )
+
     return render(
         request,
         "accounts/my_career_reality.html",
@@ -114,6 +123,7 @@ def my_career_reality(request):
             "alerts": alerts,
             "snapshots": snapshots,
             "latest_snapshot": latest_snapshot,
+            "career_health": career_health,
             "og_title": "My Career Reality — Career Reality India",
             "og_description": "Your personalized career dashboard.",
         },
@@ -223,8 +233,47 @@ def career_progression(request):
     return render(request, "accounts/career_progression.html", {
         "snapshots": snapshots,
         "form": form,
+        "trajectory": _build_trajectory(snapshots),
+        "narrative": _progression_narrative(snapshots, getattr(request.user, "career_profile", None)),
         "og_title": "Career Progression Tracker",
     })
+
+
+def _build_trajectory(snapshots):
+    """Build SVG trajectory data from snapshots."""
+    snaps = list(snapshots.order_by("recorded_at"))
+    if len(snaps) < 2:
+        return None
+    ctcs = [s.ctc for s in snaps]
+    mn, mx = min(ctcs), max(ctcs)
+    span = max(mx - mn, 1)
+    points = []
+    markers = []
+    for i, s in enumerate(snaps):
+        x = 40 + (i / max(len(snaps) - 1, 1)) * 320
+        y = 160 - ((s.ctc - mn) / span) * 120
+        points.append(f"{x},{y}")
+        markers.append({"x": x, "y": y, "label": f"₹{s.ctc}L"})
+    return {
+        "points": " ".join(points),
+        "markers": markers,
+        "snapshots": [{"date": s.recorded_at.isoformat(), "ctc": s.ctc, "title": s.title} for s in snaps],
+    }
+
+
+def _progression_narrative(snapshots, career=None):
+    snaps = list(snapshots.order_by("recorded_at"))
+    if len(snaps) < 2:
+        return "Add two or more snapshots to see your salary trajectory story."
+    first, last = snaps[0], snaps[-1]
+    growth = last.ctc - first.ctc
+    years = max(0.5, (last.recorded_at - first.recorded_at).days / 365)
+    cagr = int(growth / years) if years else growth
+    peer = last.peer_comparison or "on_track"
+    return (
+        f"Your CTC grew from ₹{first.ctc}L to ₹{last.ctc}L "
+        f"(~₹{cagr}L/year). Latest peer comparison: {peer.replace('_', ' ')}."
+    )
 
 
 @login_required
@@ -234,12 +283,77 @@ def career_risk_radar(request):
     alerts = CareerAlert.objects.filter(user=request.user).order_by("-created_at")[:50]
     watchlist = CompanyWatchlist.objects.filter(user=request.user).select_related("company")
 
+    career = getattr(request.user, "career_profile", None)
+    salary_insight = company_score = ai_impact = stay_switch = None
+    if career and career.role and career.current_ctc:
+        salary_insight = get_salary_reality(
+            career.role, float(career.experience_years or 5),
+            career.city or "Bengaluru", career.company_type or "", current_ctc=career.current_ctc,
+        )
+        if career.company:
+            company_score = compute_company_reality_score(career.company)
+        if is_pro := request.user.profile.is_pro:
+            ai_impact = analyze_ai_career_impact(career.title or career.role)
+            stay_switch = analyze_stay_vs_switch(
+                role=career.role, yoe=float(career.experience_years or 5),
+                city=career.city or "Bengaluru", company_type=career.company_type or "service",
+                current_ctc=career.current_ctc or 15, company=career.company,
+            )
+
+    radar = compute_risk_radar(
+        career=career,
+        salary_insight=salary_insight,
+        company_score=company_score,
+        ai_impact=ai_impact,
+        stay_switch=stay_switch,
+        alerts=alerts[:10],
+    )
+
     return render(request, "accounts/career_risk_radar.html", {
         "alerts": alerts,
         "watchlist": watchlist,
         "unread_count": alerts.filter(is_read=False).count(),
+        "radar": radar,
         "og_title": "Career Risk Radar",
     })
+
+
+@login_required
+def career_profile_edit(request):
+    """Edit career profile for tool prefill and dashboard."""
+    try:
+        career = request.user.career_profile
+    except CareerProfile.DoesNotExist:
+        return redirect("onboarding")
+
+    if request.method == "POST":
+        form = analyzer_forms.CareerProfileForm(request.POST)
+        if form.is_valid():
+            d = form.cleaned_data
+            company = Company.objects.filter(name__icontains=d["company_name"]).first() if d.get("company_name") else None
+            skills = [s.strip() for s in d.get("skills", "").split(",") if s.strip()]
+            for field, val in {
+                "role": d["role"], "title": d.get("title") or d["role"],
+                "experience_years": d["experience_years"], "city": d["city"],
+                "company_type": d["company_type"], "current_ctc": d["current_ctc"],
+                "company": company, "company_name": d.get("company_name", ""), "skills": skills,
+            }.items():
+                setattr(career, field, val)
+            career.save()
+            return redirect("my_career_reality")
+    else:
+        form = analyzer_forms.CareerProfileForm(initial={
+            "role": career.role,
+            "title": career.title,
+            "experience_years": career.experience_years,
+            "city": career.city,
+            "company_type": career.company_type,
+            "current_ctc": career.current_ctc,
+            "company_name": career.company_name,
+            "skills": ", ".join(career.skills or []),
+        })
+
+    return render(request, "accounts/career_profile_edit.html", {"form": form, "career": career})
 
 
 @login_required
