@@ -1,0 +1,36 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_content %}
+<form method="post" class="az-form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="az-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="az-btn az-btn--primary">Find My Next Move</button>
+</form>
+
+{% if result %}
+<section class="az-result-card">
+    {% if result.top_path %}
+    <h2>Top Recommendation: {{ result.top_path.title }}</h2>
+    <p>{{ result.top_path.summary }}</p>
+    <p>Timeline: {{ result.top_path.timeline }} · ROI: {{ result.top_path.roi_score|floatformat:1 }}/10</p>
+    <ul class="az-feature-list">{% for a in result.top_path.actions %}<li>{{ a }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if is_pro %}
+    <h3>All Paths (ranked)</h3>
+    {% for path in result.paths %}
+    <div class="az-path-row">
+        <strong>{{ path.title }}</strong> — ROI {{ path.roi_score|floatformat:1 }}, fit {{ path.fit_score|floatformat:1 }}
+        <p>{{ path.summary }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="az-upgrade-nudge"><a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> to see all ranked career paths.</p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

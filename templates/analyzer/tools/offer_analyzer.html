@@ -1,0 +1,52 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_content %}
+<form method="post" class="az-form">
+    {% csrf_token %}
+    <h2 class="az-section-title">Offer A</h2>
+    {% for field in form %}
+        {% if 'offer_a' in field.name or field.name == 'role' or field.name == 'experience_years' %}
+        <div class="az-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endif %}
+    {% endfor %}
+    <h2 class="az-section-title">Offer B</h2>
+    {% for field in form %}
+        {% if 'offer_b' in field.name %}
+        <div class="az-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endif %}
+    {% endfor %}
+    <button type="submit" class="az-btn az-btn--primary">Compare Offers</button>
+</form>
+
+{% if result %}
+<section class="az-result-card">
+    <h2>{{ result.verdict_label }}</h2>
+    <ul class="az-feature-list">
+        {% for reason in result.reasoning %}
+        <li>{{ reason }}</li>
+        {% endfor %}
+    </ul>
+    <div class="az-result-grid">
+        <div>
+            <h3>Offer A — {{ result.offer_a.label }}</h3>
+            <p>Overall: {{ result.offer_a.overall|floatformat:1 }}/10</p>
+            <p>Effective comp: ₹{{ result.offer_a.total_comp }}L</p>
+        </div>
+        <div>
+            <h3>Offer B — {{ result.offer_b.label }}</h3>
+            <p>Overall: {{ result.offer_b.overall|floatformat:1 }}/10</p>
+            <p>Effective comp: ₹{{ result.offer_b.total_comp }}L</p>
+        </div>
+    </div>
+    {% if not is_pro %}
+    <p class="az-upgrade-nudge"><a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> to save and compare offer history.</p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

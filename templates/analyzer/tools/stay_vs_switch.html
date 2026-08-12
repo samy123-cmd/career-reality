@@ -1,0 +1,26 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_content %}
+<form method="post" class="az-form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="az-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="az-btn az-btn--primary">Analyze Decision</button>
+</form>
+
+{% if result %}
+<section class="az-result-card">
+    <h2 class="az-result-{{ result.recommendation }}">{{ result.recommendation_label }}</h2>
+    <p>Confidence: {{ result.confidence|title }} · Risk score: {{ result.risk_score }}/100</p>
+    <h3>Financial Reasons</h3>
+    <ul class="az-feature-list">{% for r in result.financial_reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+    <h3>Career Reasons</h3>
+    <ul class="az-feature-list">{% for r in result.career_reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+    <p class="az-meta">Company stability: {{ result.company_stability }} · Market switch difficulty: {{ result.market_switch_difficulty }}/100</p>
+</section>
+{% endif %}
+{% endblock %}

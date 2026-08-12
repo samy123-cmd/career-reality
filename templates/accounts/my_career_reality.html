@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{ og_title }}{% endblock %}
+{% block content %}
+<div class="dash-header">
+  <h1>My Career Reality</h1>
+  <p>{{ career.role }} · {{ career.experience_years }} YOE · ₹{{ career.current_ctc }}L · {{ career.city }}</p>
+</div>
+
+<div class="dash-grid">
+  <!-- Salary Position -->
+  <div class="dash-card">
+    <p class="dash-card-title">Am I Underpaid?</p>
+    {% if salary_insight %}
+      <p>Market median: <strong>₹{{ salary_insight.p50 }}L</strong></p>
+      {% if salary_insight.pay_label %}
+        <p class="dash-verdict dash-verdict--{{ salary_insight.pay_label }}">{{ salary_insight.pay_label|title }}{% if salary_insight.percentile %} ({{ salary_insight.percentile }}th percentile){% endif %}</p>
+      {% endif %}
+      <p>Realistic next: ₹{{ salary_insight.realistic_next }}L</p>
+      <a href="{% url 'tools:salary_reality_engine' %}">Full analysis →</a>
+    {% else %}
+      <p>Complete your profile to see salary insights.</p>
+    {% endif %}
+  </div>
+
+  <!-- Company Risk -->
+  <div class="dash-card">
+    <p class="dash-card-title">How Risky Is My Company?</p>
+    {% if company_score %}
+      <p>Company Reality Score: <strong>{{ company_score.overall|floatformat:1 }}/10</strong></p>
+      <p>Stability: {{ company_score.stability_label }}</p>
+      <a href="{% url 'company_detail' slug=career.company.slug %}">Company profile →</a>
+    {% elif career.company_name %}
+      <p>{{ career.company_name }} — <a href="{% url 'company_directory' %}">search company data</a></p>
+    {% else %}
+      <p>Add your company in onboarding.</p>
+    {% endif %}
+  </div>
+
+  {% if is_pro %}
+  <!-- Stay vs Switch -->
+  <div class="dash-card">
+    <p class="dash-card-title">Should I Switch?</p>
+    {% if stay_switch %}
+      <p class="dash-verdict">{{ stay_switch.recommendation_label }}</p>
+      <ul>{% for r in stay_switch.financial_reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+      <a href="{% url 'tools:stay_vs_switch' %}">Full analysis →</a>
+    {% endif %}
+  </div>
+
+  <!-- AI Impact -->
+  <div class="dash-card">
+    <p class="dash-card-title">AI Career Impact</p>
+    {% if ai_impact %}
+      <p>AI Risk Score: <strong>{{ ai_impact.ai_risk_score }}/100</strong> ({{ ai_impact.risk_label }})</p>
+      <a href="{% url 'tools:ai_career_impact' %}">Full assessment →</a>
+    {% endif %}
+  </div>
+
+  <!-- Progression -->
+  <div class="dash-card">
+    <p class="dash-card-title">Am I Progressing?</p>
+    {% if latest_snapshot %}
+      <p>Latest: {{ latest_snapshot.title }} @ ₹{{ latest_snapshot.ctc }}L ({{ latest_snapshot.peer_comparison|title }})</p>
+    {% else %}
+      <p>No snapshots yet.</p>
+    {% endif %}
+    <a href="{% url 'career_progression' %}">Track progression →</a>
+  </div>
+
+  <!-- Alerts -->
+  <div class="dash-card dash-card--full">
+    <p class="dash-card-title">Career Risk Radar</p>
+    {% if alerts %}
+      <ul>{% for a in alerts %}<li class="alert-{{ a.severity }}">{{ a.message }}</li>{% endfor %}</ul>
+    {% else %}
+      <p>No active alerts.</p>
+    {% endif %}
+    <a href="{% url 'career_risk_radar' %}">View all alerts →</a>
+  </div>
+  {% else %}
+  <div class="dash-card dash-card--full">
+    <p>Upgrade to <a href="{% url 'payments:pricing' %}">Pro</a> for Stay/Switch analysis, AI impact, progression tracking, and risk alerts.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

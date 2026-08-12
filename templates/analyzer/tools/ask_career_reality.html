@@ -1,0 +1,32 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_content %}
+{% if limit_reached %}
+<p class="az-error">You've used your 3 free questions this month. <a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> for unlimited access.</p>
+{% else %}
+<form method="post" class="az-form">
+    {% csrf_token %}
+    <div class="az-field">
+        {{ form.question }}
+    </div>
+    <button type="submit" class="az-btn az-btn--primary">Ask CareerReality</button>
+    {% if asks_remaining is not None %}<p class="az-meta">{{ asks_remaining }} free questions remaining this month</p>{% endif %}
+</form>
+{% endif %}
+
+{% if answer %}
+<section class="az-result-card">
+    <h2>Answer</h2>
+    <p>{{ answer.answer }}</p>
+    {% if answer.citations %}
+    <h3>Sources</h3>
+    <ul class="az-feature-list">
+        {% for c in answer.citations %}
+        <li><a href="{{ c.url }}">{{ c.label }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <p class="az-meta">Engines: {{ answer.engines_used|join:", " }}</p>
+</section>
+{% endif %}
+{% endblock %}

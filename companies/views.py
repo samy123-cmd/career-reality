@@ -153,6 +153,9 @@ def company_detail(request, slug):
     unlocked_ids = get_unlocked_ids(request)
     user_is_pro = is_pro_user(request)
 
+    from companies.scoring import compute_company_reality_score
+    reality_score = compute_company_reality_score(company)
+
     return render(request, "companies/detail.html", {
         "company": company,
         "salaries": all_salaries[:15],
@@ -168,6 +171,7 @@ def company_detail(request, slug):
         "salary_balance": get_balance(request),
         "free_previews_remaining": get_free_previews_remaining(request),
         "unlocked_salary_ids": unlocked_ids,
+        "reality_score": reality_score,
         "og_title": f"{company.name} — Salary, Reviews & Reality Check",
         "og_description": f"Honest salary data, anonymous reviews, and layoff alerts for {company.name}. No login required.",
     })

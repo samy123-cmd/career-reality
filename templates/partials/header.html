@@ -43,6 +43,27 @@
                     </div>
                     <div class="mega-col">
                         <div class="dropdown-header">Tools</div>
+                        <a href="{% url 'tools:salary_reality_engine' %}">
+                            <span class="mega-icon">💰</span>
+                            <span class="mega-label">
+                                <strong>Salary Reality Engine</strong>
+                                <small>Am I underpaid? Percentile check</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'tools:offer_analyzer' %}">
+                            <span class="mega-icon">⚖️</span>
+                            <span class="mega-label">
+                                <strong>Offer Analyzer</strong>
+                                <small>Compare two job offers</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'tools:stay_vs_switch' %}">
+                            <span class="mega-icon">🔄</span>
+                            <span class="mega-label">
+                                <strong>Stay vs Switch</strong>
+                                <small>Should I leave my job?</small>
+                            </span>
+                        </a>
                         <a href="{% url 'salary_calculator' %}">
                             <span class="mega-icon">🧮</span>
                             <span class="mega-label">
@@ -55,6 +76,20 @@
                             <span class="mega-label">
                                 <strong>Risk Analyzer</strong>
                                 <small>Should you resign? Data-backed answer</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'tools:ai_career_impact' %}">
+                            <span class="mega-icon">🤖</span>
+                            <span class="mega-label">
+                                <strong>AI Career Impact</strong>
+                                <small>AI risk score for your role</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'tools:ask_career_reality' %}">
+                            <span class="mega-icon">💬</span>
+                            <span class="mega-label">
+                                <strong>Ask CareerReality</strong>
+                                <small>Evidence-backed career advice</small>
                             </span>
                         </a>
                         <a href="{% url 'layoff_radar' %}">
@@ -231,6 +266,21 @@
                         </svg>
                     </button>
                     <div class="mobile-nav-accordion-panel" id="nav-panel-tools">
+                        <a href="{% url 'tools:salary_reality_engine' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">💰</span> Salary Reality Engine
+                        </a>
+                        <a href="{% url 'tools:offer_analyzer' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">⚖️</span> Offer Analyzer
+                        </a>
+                        <a href="{% url 'tools:stay_vs_switch' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🔄</span> Stay vs Switch
+                        </a>
+                        <a href="{% url 'tools:ai_career_impact' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🤖</span> AI Career Impact
+                        </a>
+                        <a href="{% url 'tools:ask_career_reality' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">💬</span> Ask CareerReality
+                        </a>
                         <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
                             <span class="mnl-icon">🧮</span> CTC Calculator
                         </a>

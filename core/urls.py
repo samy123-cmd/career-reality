@@ -1,6 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from analyzer import views as analyzer_views
+from analyzer.urls import tools_urlpatterns
+from analyzer.views_tools import salary_reality_api
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -8,6 +10,7 @@ urlpatterns = [
     path('internal/cron/warm-cache/', views.run_warm_cache_cron, name='run_warm_cache_cron'),
     path('internal/cron/weekly-digest/', views.run_weekly_digest_cron, name='run_weekly_digest_cron'),
     path('internal/cron/layoff-alerts/', views.run_layoff_alerts_cron, name='run_layoff_alerts_cron'),
+    path('internal/cron/career-alerts/', views.run_career_alerts_cron, name='run_career_alerts_cron'),
     path('internal/cron/refresh-career-index/', views.run_career_index_cron, name='run_career_index_cron'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('about/', views.about, name='about'),
@@ -37,5 +40,9 @@ urlpatterns = [
     # Layoff Radar
     path('layoff-radar/', analyzer_views.layoff_radar, name='layoff_radar'),
     path('layoff-radar/report/', analyzer_views.report_layoff, name='report_layoff'),
+
+    # Career Tools (Top 10 features)
+    path('tools/', include((tools_urlpatterns, 'tools'))),
+    path('api/salary-reality/', salary_reality_api, name='salary_reality_api'),
 ]
 

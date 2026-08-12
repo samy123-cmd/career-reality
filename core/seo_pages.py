@@ -80,6 +80,70 @@ SALARY_REALITY = PageSEO(
     ),
 )
 
+SALARY_REALITY_ENGINE = PageSEO(
+    title="Salary Reality Engine — Am I Underpaid? Free India Salary Percentile Tool",
+    description=(
+        "Enter your role, YOE, city, and CTC to see your salary percentile, market range, "
+        "and realistic next salary. Built on crowdsourced Indian tech data."
+    ),
+    h1="Salary Reality Engine",
+    keywords=(
+        "am i underpaid india",
+        "salary percentile calculator india",
+        "market salary range software engineer",
+    ),
+)
+
+OFFER_ANALYZER = PageSEO(
+    title="Job Offer Analyzer India — Compare Two Offers (Free)",
+    description=(
+        "Paste two job offers and get a clear verdict comparing salary, variable pay, "
+        "commute, WLB, stability, growth, and risk."
+    ),
+    h1="Offer Analyzer",
+    keywords=("job offer comparison india", "which offer should i take", "offer analyzer"),
+)
+
+STAY_VS_SWITCH = PageSEO(
+    title="Stay vs Switch Analyzer — Should I Leave My Job? (Free India Tool)",
+    description=(
+        "Enter your current job and market situation. Get Stay, Switch, or Wait "
+        "with financial and career reasoning backed by real data."
+    ),
+    h1="Stay vs Switch Analyzer",
+    keywords=("should i switch jobs india", "stay or leave job", "career switch calculator"),
+)
+
+AI_CAREER_IMPACT = PageSEO(
+    title="AI Career Impact — AI Risk Score for Your Job Title (Free)",
+    description=(
+        "Enter your job title to get an AI Risk Score, vulnerable tasks, future demand, "
+        "and skills to learn to stay valuable in 2026."
+    ),
+    h1="AI Career Impact",
+    keywords=("ai job risk calculator", "will ai replace my job", "ai career impact india"),
+)
+
+NEXT_CAREER_MOVE = PageSEO(
+    title="Next Career Move — Highest ROI Career Paths for Indian Tech (Free)",
+    description=(
+        "Based on your skills, experience, and salary, get ranked recommendations: "
+        "promotion, company switch, GCC, management, architecture, or AI upskill."
+    ),
+    h1="Next Career Move",
+    keywords=("career path calculator india", "next career move tech", "career roi"),
+)
+
+ASK_CAREER_REALITY = PageSEO(
+    title="Ask CareerReality — AI Career Advisor for Indian Tech Professionals",
+    description=(
+        "Ask career questions like 'I make ₹18L at TCS — should I take ₹23L at a startup?' "
+        "and get evidence-backed answers using CareerReality data."
+    ),
+    h1="Ask CareerReality",
+    keywords=("career advice india", "ask career advisor", "career chatbot india"),
+)
+
 HOME = PageSEO(
     title="Career Reality India — Salary Truths, CTC Calculator & Layoff Tracker",
     description=(
@@ -98,6 +162,24 @@ HOME = PageSEO(
 # icon: CSS mark key (not emoji) — see .hp-tool-mark--* in tool-hub.css
 SEO_TOOL_HUB = (
     {
+        "label": "Salary Reality Engine",
+        "description": "Role + YOE + city → percentile, market range, under/overpaid flag.",
+        "url_name": "salary_reality_engine",
+        "icon": "salary",
+    },
+    {
+        "label": "Offer Analyzer",
+        "description": "Compare two offers — get a clear which-one-to-take verdict.",
+        "url_name": "offer_analyzer",
+        "icon": "ctc",
+    },
+    {
+        "label": "Stay vs Switch",
+        "description": "Stay, Switch, or Wait — with financial and career reasoning.",
+        "url_name": "stay_vs_switch",
+        "icon": "risk",
+    },
+    {
         "label": "CTC to In-Hand Calculator",
         "description": "Decode your offer letter into real monthly take-home.",
         "url_name": "salary_calculator",
@@ -110,16 +192,22 @@ SEO_TOOL_HUB = (
         "icon": "risk",
     },
     {
+        "label": "AI Career Impact",
+        "description": "AI risk score, vulnerable tasks, and skills to learn.",
+        "url_name": "ai_career_impact",
+        "icon": "pulse",
+    },
+    {
         "label": "IT Layoff Radar",
         "description": "Hiring freeze and layoff signals across Indian tech.",
         "url_name": "layoff_radar",
         "icon": "radar",
     },
     {
-        "label": "Salary Reality Data",
-        "description": "Median pay by role — not unicorn outliers.",
-        "url_name": "salary_reality",
-        "icon": "salary",
+        "label": "Ask CareerReality",
+        "description": "Evidence-backed career advice from our own data.",
+        "url_name": "ask_career_reality",
+        "icon": "company",
     },
 )
 

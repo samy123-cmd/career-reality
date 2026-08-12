@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ og_title }}{% endblock %}
+{% block content %}
+<div class="dash-header">
+  <h1>Career Risk Radar</h1>
+  <p>{{ unread_count }} unread alert{{ unread_count|pluralize }}</p>
+</div>
+
+<div class="dash-grid">
+  <div class="dash-card dash-card--full">
+    <p class="dash-card-title">Active Alerts</p>
+    {% for a in alerts %}
+    <div class="alert-row alert-{{ a.severity }}{% if not a.is_read %} alert-unread{% endif %}">
+      <span class="alert-type">{{ a.get_alert_type_display }}</span>
+      <p>{{ a.message }}</p>
+      <small>{{ a.created_at|date:"M d, Y" }}</small>
+      {% if not a.is_read %}
+      <form method="post" action="{% url 'mark_alert_read' alert_id=a.id %}" style="display:inline">
+        {% csrf_token %}
+        <button type="submit">Mark read</button>
+      </form>
+      {% endif %}
+    </div>
+    {% empty %}
+    <p>No alerts yet. We'll notify you about layoffs, salary stagnation, and AI disruption signals.</p>
+    {% endfor %}
+  </div>
+
+  <div class="dash-card">
+    <p class="dash-card-title">Watchlist</p>
+    {% for w in watchlist %}
+    <p><a href="{% url 'company_detail' slug=w.company.slug %}">{{ w.company.name }}</a></p>
+    {% empty %}
+    <p>Add companies to your watchlist from company pages.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

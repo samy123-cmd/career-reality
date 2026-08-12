@@ -185,6 +185,24 @@
 
     <!-- Main Content -->
     <div class="cp-main">
+        {% if reality_score %}
+        <section class="cp-reality-score" id="reality-score">
+            <h2>Company Reality Score</h2>
+            <div class="score-big">{{ reality_score.overall|floatformat:1 }}<span>/10</span></div>
+            <p>360° view: compensation, stability, growth, WLB, culture, promotion, and work mode.</p>
+            <div class="cp-score-ratings">
+                {% for dim in reality_score.dimensions %}
+                <div class="score-row">
+                    <span>{{ dim.label }}</span>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio dim.score 10 100 %}%"></div></div>
+                    <span>{{ dim.score|floatformat:1 }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <p class="cp-meta-small">Stability: {{ reality_score.stability_label }} · {{ reality_score.sample_salaries }} salaries · {{ reality_score.sample_reviews }} reviews</p>
+        </section>
+        {% endif %}
+
         {% if company.description %}
         <p class="cp-description">{{ company.description }}</p>
         {% endif %}

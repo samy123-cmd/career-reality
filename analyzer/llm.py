@@ -134,3 +134,33 @@ Write the advisory paragraph now. Be specific to this exact combination.
     except Exception:
         logger.exception("LLM narrative generation failed")
         return None
+
+
+def generate_ai_impact_narrative(result) -> str | None:
+    """Generate a short AI career impact narrative."""
+    api_key = getattr(settings, "OPENAI_API_KEY", "")
+    if not api_key:
+        return None
+    try:
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key)
+        prompt = (
+            f"Job title: {result.job_title}. AI risk score: {result.ai_risk_score}/100 "
+            f"({result.risk_label}). Future demand: {result.future_demand}. "
+            f"Vulnerable tasks: {', '.join(result.vulnerable_tasks[:2])}. "
+            "Write 2-3 sentences of direct advice for an Indian tech professional."
+        )
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": _SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            max_tokens=120,
+            temperature=0.5,
+            timeout=8,
+        )
+        return response.choices[0].message.content.strip() or None
+    except Exception:
+        logger.exception("AI impact narrative failed")
+        return None

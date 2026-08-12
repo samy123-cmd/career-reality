@@ -1,0 +1,50 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_content %}
+<form method="post" class="az-form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="az-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small class="az-help">{{ field.help_text }}</small>{% endif %}
+        {% if field.errors %}<span class="az-error">{{ field.errors.0 }}</span>{% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="az-btn az-btn--primary">Check My Salary Reality</button>
+</form>
+
+{% if result %}
+<section class="az-result-card">
+    <h2>Your Salary Reality</h2>
+    <div class="az-result-grid">
+        <div class="az-stat">
+            <span class="az-stat-label">Market Median</span>
+            <span class="az-stat-value">₹{{ result.p50 }}L</span>
+        </div>
+        <div class="az-stat">
+            <span class="az-stat-label">Market Range (p25–p75)</span>
+            <span class="az-stat-value">₹{{ result.p25 }}–₹{{ result.p75 }}L</span>
+        </div>
+        <div class="az-stat">
+            <span class="az-stat-label">Realistic Next Salary</span>
+            <span class="az-stat-value">₹{{ result.realistic_next }}L</span>
+        </div>
+        {% if result.percentile %}
+        <div class="az-stat">
+            <span class="az-stat-label">Your Percentile</span>
+            <span class="az-stat-value">{{ result.percentile }}th</span>
+        </div>
+        {% endif %}
+        {% if result.pay_label %}
+        <div class="az-stat az-stat--highlight">
+            <span class="az-stat-label">Verdict</span>
+            <span class="az-stat-value">{{ result.pay_label|title }}{% if result.pay_delta_pct %} ({{ result.pay_delta_pct }}% vs median){% endif %}</span>
+        </div>
+        {% endif %}
+    </div>
+    <p class="az-meta">Based on {{ result.sample_size }} submissions · {{ result.confidence }} confidence · {{ result.data_source }} data</p>
+    <p><a href="{% url 'submit_salary' %}">Help improve data — submit your salary anonymously</a></p>
+</section>
+{% endif %}
+{% endblock %}

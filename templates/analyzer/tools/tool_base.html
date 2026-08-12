@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
+{% block title %}{{ og_title }}{% endblock %}
+{% block meta_description %}{{ og_description }}{% endblock %}
+
+{% block content %}
+<div class="analyzer-container">
+    <header class="az-intro-header">
+        <h1 class="az-intro-title">{{ page_h1 }}</h1>
+        <p class="az-intro-subtitle">{{ og_description }}</p>
+    </header>
+    {% block tool_content %}{% endblock %}
+</div>
+{% endblock %}

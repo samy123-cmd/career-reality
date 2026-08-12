@@ -15,7 +15,7 @@ import os
 import io
 from django.core.management import call_command
 from core.cache_utils import get_career_index_rows_cached, get_social_proof_counts, fmt_count
-from core.seo_pages import HOME, SALARY_REALITY
+from core.seo_pages import HOME, SALARY_REALITY, SEO_TOOL_HUB
 
 
 def _topic_clusters():
@@ -269,6 +269,7 @@ def home(request):
         'company_count': counts['company_count'],
         'newsletter_count': counts['newsletter_count'],
         'salary_ticker_items': get_salary_ticker_items(limit=12),
+        'seo_tool_hub': SEO_TOOL_HUB,
         'page_keywords': HOME.keywords,
         **_seo(title, description),
     })
@@ -538,6 +539,31 @@ def run_layoff_alerts_cron(request):
 
     out = StringIO()
     call_command("send_layoff_alerts", stdout=out)
+    return JsonResponse({"status": "ok", "output": out.getvalue().strip()})
+
+
+@require_GET
+def run_career_alerts_cron(request):
+    """Secure internal endpoint to generate personalized career risk alerts."""
+    expected_token = os.environ.get("CRON_SECRET") or os.environ.get("FRESHNESS_CRON_TOKEN")
+    if not expected_token:
+        return JsonResponse({"status": "error", "message": "cron token not configured"}, status=503)
+
+    auth_header = request.headers.get("Authorization", "")
+    provided_token = ""
+    if auth_header.lower().startswith("bearer "):
+        provided_token = auth_header.split(" ", 1)[1].strip()
+    if not provided_token:
+        provided_token = request.GET.get("token", "").strip()
+
+    if provided_token != expected_token:
+        return JsonResponse({"status": "forbidden"}, status=403)
+
+    from django.core.management import call_command
+    from io import StringIO
+
+    out = StringIO()
+    call_command("generate_career_alerts", stdout=out)
     return JsonResponse({"status": "ok", "output": out.getvalue().strip()})
 
 

@@ -1,0 +1,24 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_content %}
+<form method="post" class="az-form">
+    {% csrf_token %}
+    <div class="az-field">
+        <label for="{{ form.job_title.id_for_label }}">{{ form.job_title.label }}</label>
+        {{ form.job_title }}
+    </div>
+    <button type="submit" class="az-btn az-btn--primary">Assess AI Impact</button>
+</form>
+
+{% if result %}
+<section class="az-result-card">
+    <h2>AI Risk Score: {{ result.ai_risk_score }}/100</h2>
+    <p><strong>{{ result.risk_label }}</strong> · Future demand: {{ result.future_demand|title }}</p>
+    {% if llm_narrative %}<p class="az-llm-narrative">{{ llm_narrative }}</p>{% endif %}
+    <h3>Vulnerable Tasks</h3>
+    <ul class="az-feature-list">{% for t in result.vulnerable_tasks %}<li>{{ t }}</li>{% endfor %}</ul>
+    <h3>Skills to Learn</h3>
+    <ul class="az-feature-list">{% for s in result.skills_to_learn %}<li>{{ s }}</li>{% endfor %}</ul>
+</section>
+{% endif %}
+{% endblock %}
