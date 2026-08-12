@@ -113,17 +113,17 @@
                 {% endwith %}
                 <div class="score-row">
                     <span>Salary</span>
-                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_salary 5 100 %}%" style="background:#38bdf8;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_salary 5 100 %}%" style="background:var(--accent);"></div></div>
                     <span>{{ review_stats.avg_salary|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
                     <span>Culture</span>
-                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_culture 5 100 %}%" style="background:#a78bfa;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_culture 5 100 %}%" style="background:var(--info);"></div></div>
                     <span>{{ review_stats.avg_culture|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
                     <span>Growth</span>
-                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_growth 5 100 %}%" style="background:#34d399;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_growth 5 100 %}%" style="background:var(--success);"></div></div>
                     <span>{{ review_stats.avg_growth|floatformat:1 }}</span>
                 </div>
                 <div class="score-row">
@@ -133,7 +133,7 @@
                 </div>
                 <div class="score-row">
                     <span>Management</span>
-                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_management 5 100 %}%" style="background:#f87171;"></div></div>
+                    <div class="score-bar"><div class="score-bar-fill" data-width="{% widthratio review_stats.avg_management 5 100 %}%" style="background:var(--danger);"></div></div>
                     <span>{{ review_stats.avg_management|floatformat:1 }}</span>
                 </div>
             </div>

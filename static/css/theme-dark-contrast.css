@@ -3,527 +3,518 @@
    Loaded after design-system + theme-premium-dark. Dark default only.
    ========================================================================== */
 
-html:not([data-theme="light"]) {
-    /* Brighter readable body copy */
-    --cr-text-secondary: #c8c8d0;
-    --cr-text-muted: #9e9ea8;
-    --c-grey-mid: #c8c8d0;
-    --c-grey-light: #9e9ea8;
-    --c-grey-dark: #e4e4e7;
-}
-
-html:not([data-theme="light"]) body,
-html:not([data-theme="light"]) p,
-html:not([data-theme="light"]) li,
-html:not([data-theme="light"]) .content {
+html[data-theme="dark"] body,
+html[data-theme="dark"] p,
+html[data-theme="dark"] li,
+html[data-theme="dark"] .content {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .section-label {
+html[data-theme="dark"] .section-label {
     color: var(--cr-text-muted);
     border-top-color: var(--cr-border-strong);
 }
 
 /* ── Navigation & header ── */
-html:not([data-theme="light"]) .nav-dropdown-content,
-html:not([data-theme="light"]) .nav-mega {
+html[data-theme="dark"] .nav-dropdown-content,
+html[data-theme="dark"] .nav-mega {
     background: var(--cr-surface-2);
     border: 1px solid var(--cr-border);
     box-shadow: var(--shadow-lg);
 }
 
-html:not([data-theme="light"]) .nav-dropdown-content a,
-html:not([data-theme="light"]) .nav-mega a {
+html[data-theme="dark"] .nav-dropdown-content a,
+html[data-theme="dark"] .nav-mega a {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .nav-dropdown-content a:hover,
-html:not([data-theme="light"]) .nav-mega a:hover {
+html[data-theme="dark"] .nav-dropdown-content a:hover,
+html[data-theme="dark"] .nav-mega a:hover {
     background: var(--cr-surface-3);
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .mega-label strong {
+html[data-theme="dark"] .mega-label strong {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .mega-label small {
+html[data-theme="dark"] .mega-label small {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .dropdown-header {
+html[data-theme="dark"] .dropdown-header {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .nav-search-toggle,
-html:not([data-theme="light"]) .theme-toggle {
+html[data-theme="dark"] .nav-search-toggle,
+html[data-theme="dark"] .theme-toggle {
     background: var(--cr-surface-3);
     border-color: var(--cr-border);
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .nav-search-form,
-html:not([data-theme="light"]) .mobile-search-panel {
+html[data-theme="dark"] .nav-search-form,
+html[data-theme="dark"] .mobile-search-panel {
     background: var(--cr-surface-2);
     border-color: var(--cr-border);
 }
 
-html:not([data-theme="light"]) .mobile-search-panel input {
+html[data-theme="dark"] .mobile-search-panel input {
     background: var(--cr-surface-3);
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .mobile-menu-toggle span {
+html[data-theme="dark"] .mobile-menu-toggle span {
     background-color: var(--cr-text);
 }
 
 /* ── Collapsible / FAQ / contact ── */
-html:not([data-theme="light"]) details.collapsible,
-html:not([data-theme="light"]) .contact-card,
-html:not([data-theme="light"]) .key-takeaway {
+html[data-theme="dark"] details.collapsible,
+html[data-theme="dark"] .contact-card,
+html[data-theme="dark"] .key-takeaway {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) details.collapsible summary {
+html[data-theme="dark"] details.collapsible summary {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) details.collapsible summary:hover {
+html[data-theme="dark"] details.collapsible summary:hover {
     background: var(--cr-surface-3);
 }
 
 /* ── Article detail ── */
-html:not([data-theme="light"]) .art-callout,
-html:not([data-theme="light"]) .art-callout--muted,
-html:not([data-theme="light"]) .art-toc,
-html:not([data-theme="light"]) .art-related-card,
-html:not([data-theme="light"]) .art-share-btn {
+html[data-theme="dark"] .art-callout,
+html[data-theme="dark"] .art-callout--muted,
+html[data-theme="dark"] .art-toc,
+html[data-theme="dark"] .art-related-card,
+html[data-theme="dark"] .art-share-btn {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .art-callout-title,
-html:not([data-theme="light"]) .art-callout-heading,
-html:not([data-theme="light"]) .art-related-card h3 {
+html[data-theme="dark"] .art-callout-title,
+html[data-theme="dark"] .art-callout-heading,
+html[data-theme="dark"] .art-related-card h3 {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .art-share-btn:hover {
+html[data-theme="dark"] .art-share-btn:hover {
     background: var(--cr-surface-3) !important;
 }
 
 /* ── Homepage ── */
-html:not([data-theme="light"]) .hp-featured-article,
-html:not([data-theme="light"]) .hp-article-card,
-html:not([data-theme="light"]) .hp-cluster-card,
-html:not([data-theme="light"]) .hp-faq,
-html:not([data-theme="light"]) .hp-drop-card {
+html[data-theme="dark"] .hp-featured-article,
+html[data-theme="dark"] .hp-article-card,
+html[data-theme="dark"] .hp-cluster-card,
+html[data-theme="dark"] .hp-faq,
+html[data-theme="dark"] .hp-drop-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .hp-featured-title,
-html:not([data-theme="light"]) .hp-article-card h3,
-html:not([data-theme="light"]) .hp-cluster-card h3,
-html:not([data-theme="light"]) .hp-section-title,
-html:not([data-theme="light"]) .hp-tools-title,
-html:not([data-theme="light"]) .hp-tool-name,
-html:not([data-theme="light"]) .hp-tool-card h3 {
+html[data-theme="dark"] .hp-featured-title,
+html[data-theme="dark"] .hp-article-card h3,
+html[data-theme="dark"] .hp-cluster-card h3,
+html[data-theme="dark"] .hp-section-title,
+html[data-theme="dark"] .hp-tools-title,
+html[data-theme="dark"] .hp-tool-name,
+html[data-theme="dark"] .hp-tool-card h3 {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .hp-ticker-exp,
-html:not([data-theme="light"]) .hp-ticker-city {
+html[data-theme="dark"] .hp-ticker-exp,
+html[data-theme="dark"] .hp-ticker-city {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .hp-ticker-role {
+html[data-theme="dark"] .hp-ticker-role {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .hp-meter-bar {
+html[data-theme="dark"] .hp-meter-bar {
     background: var(--cr-surface-3);
 }
 
-html:not([data-theme="light"]) .hp-index-preview {
+html[data-theme="dark"] .hp-index-preview {
     background: var(--cr-surface-3);
 }
 
-html:not([data-theme="light"]) .hp-pro-mockup {
+html[data-theme="dark"] .hp-pro-mockup {
     background: var(--cr-surface-2);
     border-color: var(--cr-border);
 }
 
-html:not([data-theme="light"]) .hp-faq summary {
+html[data-theme="dark"] .hp-faq summary {
     color: var(--cr-text);
 }
 
 /* ── Tools / analyzer / calculator ── */
-html:not([data-theme="light"]) .az-calc-card,
-html:not([data-theme="light"]) .az-calc-noscript,
-html:not([data-theme="light"]) .az-intro-card,
-html:not([data-theme="light"]) .az-result-card,
-html:not([data-theme="light"]) .az-form-card,
-html:not([data-theme="light"]) .az-radar-card,
-html:not([data-theme="light"]) .az-radar-row,
-html:not([data-theme="light"]) .sal-summary-box,
-html:not([data-theme="light"]) .sal-explainer,
-html:not([data-theme="light"]) .ep-quiz-card,
-html:not([data-theme="light"]) .ep-result-card,
-html:not([data-theme="light"]) .share-btn,
-html:not([data-theme="light"]) .az-share-box {
+html[data-theme="dark"] .az-calc-card,
+html[data-theme="dark"] .az-calc-noscript,
+html[data-theme="dark"] .az-intro-card,
+html[data-theme="dark"] .az-result-card,
+html[data-theme="dark"] .az-form-card,
+html[data-theme="dark"] .az-radar-card,
+html[data-theme="dark"] .az-radar-row,
+html[data-theme="dark"] .sal-summary-box,
+html[data-theme="dark"] .sal-explainer,
+html[data-theme="dark"] .ep-quiz-card,
+html[data-theme="dark"] .ep-result-card,
+html[data-theme="dark"] .share-btn,
+html[data-theme="dark"] .az-share-box {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .az-calc-label,
-html:not([data-theme="light"]) .az-form-label,
-html:not([data-theme="light"]) .sal-page-intro {
+html[data-theme="dark"] .az-calc-label,
+html[data-theme="dark"] .az-form-label,
+html[data-theme="dark"] .sal-page-intro {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .az-calc-row--subtotal {
+html[data-theme="dark"] .az-calc-row--subtotal {
     background: var(--cr-surface-3) !important;
 }
 
-html:not([data-theme="light"]) .az-calc-row--ghost td {
+html[data-theme="dark"] .az-calc-row--ghost td {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .bg-red,
-html:not([data-theme="light"]) .bg-yellow,
-html:not([data-theme="light"]) .bg-green {
+html[data-theme="dark"] .bg-red,
+html[data-theme="dark"] .bg-yellow,
+html[data-theme="dark"] .bg-green {
     background: var(--cr-surface-3) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .badge-warn {
+html[data-theme="dark"] .badge-warn {
     background: var(--cr-warning-bg);
     color: var(--cr-warning-text);
 }
 
-html:not([data-theme="light"]) .az-calc-pro-upsell,
-html:not([data-theme="light"]) .salary-submit-cta {
+html[data-theme="dark"] .az-calc-pro-upsell,
+html[data-theme="dark"] .salary-submit-cta {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .az-calc-pro-upsell p,
-html:not([data-theme="light"]) .salary-submit-cta p {
+html[data-theme="dark"] .az-calc-pro-upsell p,
+html[data-theme="dark"] .salary-submit-cta p {
     color: var(--cr-text-secondary) !important;
 }
 
 /* ── Companies directory & detail ── */
-html:not([data-theme="light"]) .dir-controls select,
-html:not([data-theme="light"]) .dir-controls input {
+html[data-theme="dark"] .dir-controls select,
+html[data-theme="dark"] .dir-controls input {
     background: var(--cr-surface-3) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .comp-card,
-html:not([data-theme="light"]) .cc-card,
-html:not([data-theme="light"]) .sidebar-card,
-html:not([data-theme="light"]) .review-card,
-html:not([data-theme="light"]) .rc-card,
-html:not([data-theme="light"]) .salary-stats-grid .stat-card,
-html:not([data-theme="light"]) .cp-disc-item,
-html:not([data-theme="light"]) .review-form,
-html:not([data-theme="light"]) .disc-create-card,
-html:not([data-theme="light"]) .disc-reply-card {
+html[data-theme="dark"] .comp-card,
+html[data-theme="dark"] .cc-card,
+html[data-theme="dark"] .sidebar-card,
+html[data-theme="dark"] .review-card,
+html[data-theme="dark"] .rc-card,
+html[data-theme="dark"] .salary-stats-grid .stat-card,
+html[data-theme="dark"] .cp-disc-item,
+html[data-theme="dark"] .review-form,
+html[data-theme="dark"] .disc-create-card,
+html[data-theme="dark"] .disc-reply-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .cc-name,
-html:not([data-theme="light"]) .cc-stat-val,
-html:not([data-theme="light"]) .score-big,
-html:not([data-theme="light"]) .cp-main h2,
-html:not([data-theme="light"]) .rc-card h3 {
+html[data-theme="dark"] .cc-name,
+html[data-theme="dark"] .cc-stat-val,
+html[data-theme="dark"] .score-big,
+html[data-theme="dark"] .cp-main h2,
+html[data-theme="dark"] .rc-card h3 {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .cc-sector,
-html:not([data-theme="light"]) .cc-stats,
-html:not([data-theme="light"]) .sidebar-card h3,
-html:not([data-theme="light"]) .score-label,
-html:not([data-theme="light"]) .rc-meta,
-html:not([data-theme="light"]) .rc-section strong {
+html[data-theme="dark"] .cc-sector,
+html[data-theme="dark"] .cc-stats,
+html[data-theme="dark"] .sidebar-card h3,
+html[data-theme="dark"] .score-label,
+html[data-theme="dark"] .rc-meta,
+html[data-theme="dark"] .rc-section strong {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .cc-logo-wrap,
-html:not([data-theme="light"]) .cc-logo-placeholder {
+html[data-theme="dark"] .cc-logo-wrap,
+html[data-theme="dark"] .cc-logo-placeholder {
     background: var(--cr-surface-3) !important;
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .cc-score.low {
+html[data-theme="dark"] .cc-score.low {
     background: var(--cr-danger-bg) !important;
     color: var(--cr-danger-text) !important;
 }
 
-html:not([data-theme="light"]) .cc-score.mid {
+html[data-theme="dark"] .cc-score.mid {
     background: var(--cr-warning-bg) !important;
     color: var(--cr-warning-text) !important;
 }
 
-html:not([data-theme="light"]) .cc-score.high,
-html:not([data-theme="light"]) .cc-score.good {
+html[data-theme="dark"] .cc-score.high,
+html[data-theme="dark"] .cc-score.good {
     background: var(--cr-success-bg) !important;
     color: var(--cr-success-text) !important;
 }
 
-html:not([data-theme="light"]) .pagination a {
+html[data-theme="dark"] .pagination a {
     color: var(--cr-text-secondary);
     border-color: var(--cr-border);
 }
 
-html:not([data-theme="light"]) .dir-empty,
-html:not([data-theme="light"]) .dir-empty-link {
+html[data-theme="dark"] .dir-empty,
+html[data-theme="dark"] .dir-empty-link {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .dir-empty-link {
+html[data-theme="dark"] .dir-empty-link {
     color: var(--cr-accent);
 }
 
 /* ── Search results ── */
-html:not([data-theme="light"]) .search-hero {
+html[data-theme="dark"] .search-hero {
     background: var(--cr-surface-2);
 }
 
-html:not([data-theme="light"]) .search-bar input {
+html[data-theme="dark"] .search-bar input {
     background: var(--cr-surface-3);
     border-color: var(--cr-border);
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .sr-card,
-html:not([data-theme="light"]) .search-result-card {
+html[data-theme="dark"] .sr-card,
+html[data-theme="dark"] .search-result-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .sr-title {
+html[data-theme="dark"] .sr-title {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .sr-snippet {
+html[data-theme="dark"] .sr-snippet {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .sr-type.news {
+html[data-theme="dark"] .sr-type.news {
     background: var(--cr-warning-bg);
     color: var(--cr-warning-text);
 }
 
-html:not([data-theme="light"]) .sr-type.salary {
+html[data-theme="dark"] .sr-type.salary {
     background: rgba(167, 139, 250, 0.15);
     color: #c4b5fd;
 }
 
 /* ── Pricing / dashboard / onboarding ── */
-html:not([data-theme="light"]) .pricing-card,
-html:not([data-theme="light"]) .dash-card,
-html:not([data-theme="light"]) .onboard-card,
-html:not([data-theme="light"]) .onboard-tool {
+html[data-theme="dark"] .pricing-card,
+html[data-theme="dark"] .dash-card,
+html[data-theme="dark"] .onboard-card,
+html[data-theme="dark"] .onboard-tool {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .pricing-card h3,
-html:not([data-theme="light"]) .dash-card h3 {
+html[data-theme="dark"] .pricing-card h3,
+html[data-theme="dark"] .dash-card h3 {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .btn-plan-outline {
+html[data-theme="dark"] .btn-plan-outline {
     background: transparent;
     color: var(--cr-text);
     border-color: var(--cr-border-strong);
 }
 
-html:not([data-theme="light"]) .btn-plan-disabled {
+html[data-theme="dark"] .btn-plan-disabled {
     background: var(--cr-surface-3);
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .quick-link {
+html[data-theme="dark"] .quick-link {
     background: var(--cr-surface-3);
     color: var(--cr-text);
     border-color: var(--cr-border);
 }
 
 /* ── Tables ── */
-html:not([data-theme="light"]) .editorial-table,
-html:not([data-theme="light"]) .data-table,
-html:not([data-theme="light"]) .salary-table {
+html[data-theme="dark"] .editorial-table,
+html[data-theme="dark"] .data-table,
+html[data-theme="dark"] .salary-table {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .editorial-table th,
-html:not([data-theme="light"]) .editorial-table td {
+html[data-theme="dark"] .editorial-table th,
+html[data-theme="dark"] .editorial-table td {
     border-color: var(--cr-border) !important;
 }
 
-html:not([data-theme="light"]) .editorial-table tr:nth-child(even) {
+html[data-theme="dark"] .editorial-table tr:nth-child(even) {
     background: var(--cr-surface-3) !important;
 }
 
 /* ── Footer newsletter ── */
-html:not([data-theme="light"]) .newsletter-section {
+html[data-theme="dark"] .newsletter-section {
     background: var(--cr-surface-2);
     border: 1px solid var(--cr-border);
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .newsletter-desc {
+html[data-theme="dark"] .newsletter-desc {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .footer-tagline,
-html:not([data-theme="light"]) .footer-copy {
+html[data-theme="dark"] .footer-tagline,
+html[data-theme="dark"] .footer-copy {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .footer-nav a {
+html[data-theme="dark"] .footer-nav a {
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .footer-nav a:hover {
+html[data-theme="dark"] .footer-nav a:hover {
     color: var(--cr-accent);
 }
 
 /* ── Toasts (dark semantic) ── */
-html:not([data-theme="light"]) .cr-toast--success {
+html[data-theme="dark"] .cr-toast--success {
     background: var(--cr-success-bg);
     color: var(--cr-success-text);
     border-color: rgba(74, 222, 128, 0.25);
 }
 
-html:not([data-theme="light"]) .cr-toast--error {
+html[data-theme="dark"] .cr-toast--error {
     background: var(--cr-danger-bg);
     color: var(--cr-danger-text);
     border-color: rgba(248, 113, 113, 0.25);
 }
 
-html:not([data-theme="light"]) .cr-toast--warning {
+html[data-theme="dark"] .cr-toast--warning {
     background: var(--cr-warning-bg);
     color: var(--cr-warning-text);
     border-color: rgba(251, 191, 36, 0.25);
 }
 
-html:not([data-theme="light"]) .cr-toast--info {
+html[data-theme="dark"] .cr-toast--info {
     background: var(--cr-info-bg);
     color: var(--cr-info-text);
     border-color: rgba(56, 189, 248, 0.25);
 }
 
 /* ── Design system components (re-assert after design-system.css) ── */
-html:not([data-theme="light"]) .card {
+html[data-theme="dark"] .card {
     background: var(--cr-surface-2);
     border-color: var(--cr-border);
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .input,
-html:not([data-theme="light"]) select.input,
-html:not([data-theme="light"]) textarea.input {
+html[data-theme="dark"] .input,
+html[data-theme="dark"] select.input,
+html[data-theme="dark"] textarea.input {
     background: var(--cr-surface-3);
     border-color: var(--cr-border);
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .form-label {
+html[data-theme="dark"] .form-label {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .form-help,
-html:not([data-theme="light"]) .text-muted {
+html[data-theme="dark"] .form-help,
+html[data-theme="dark"] .text-muted {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .stat-block {
+html[data-theme="dark"] .stat-block {
     background: var(--cr-surface-2);
 }
 
-html:not([data-theme="light"]) .stat-block .stat-value {
+html[data-theme="dark"] .stat-block .stat-value {
     color: var(--cr-text);
 }
 
-html:not([data-theme="light"]) .table th {
+html[data-theme="dark"] .table th {
     background: var(--cr-surface-3);
     color: var(--cr-text-muted);
     border-color: var(--cr-border);
 }
 
-html:not([data-theme="light"]) .table td {
+html[data-theme="dark"] .table td {
     border-color: var(--cr-border);
     color: var(--cr-text-secondary);
 }
 
-html:not([data-theme="light"]) .table tbody tr:hover {
+html[data-theme="dark"] .table tbody tr:hover {
     background: var(--cr-surface-3);
 }
 
-html:not([data-theme="light"]) .section-header {
+html[data-theme="dark"] .section-header {
     color: var(--cr-text);
     border-bottom-color: var(--cr-border);
 }
 
-html:not([data-theme="light"]) .search-suggestion,
-html:not([data-theme="light"]) .search-suggestion-item {
+html[data-theme="dark"] .search-suggestion,
+html[data-theme="dark"] .search-suggestion-item {
     color: var(--cr-text);
     border-color: var(--cr-border);
 }
 
-html:not([data-theme="light"]) .search-suggestion:hover,
-html:not([data-theme="light"]) .search-suggestion-item:hover {
+html[data-theme="dark"] .search-suggestion:hover,
+html[data-theme="dark"] .search-suggestion-item:hover {
     background: var(--cr-surface-3);
 }
 
 /* ── Utility dock ── */
-html:not([data-theme="light"]) .dock-item {
+html[data-theme="dark"] .dock-item {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .dock-label {
+html[data-theme="dark"] .dock-label {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .dock-item:hover .dock-label {
+html[data-theme="dark"] .dock-item:hover .dock-label {
     color: var(--cr-accent);
 }
 
 /* ── Mobile nav ── */
-html:not([data-theme="light"]) .mobile-nav-section-title {
+html[data-theme="dark"] .mobile-nav-section-title {
     color: var(--cr-text-muted);
 }
 
-html:not([data-theme="light"]) .mobile-theme-toggle {
+html[data-theme="dark"] .mobile-theme-toggle {
     background: var(--cr-surface-3);
     border-color: var(--cr-border);
     color: var(--cr-text);
 }
 
 /* ── Inline style fallbacks in templates ── */
-html:not([data-theme="light"]) [style*="background: #f8f9fa"],
-html:not([data-theme="light"]) [style*="background:#f8f9fa"],
-html:not([data-theme="light"]) [style*="background: var(--c-surface-alt"] {
+html[data-theme="dark"] [style*="background: #f8f9fa"],
+html[data-theme="dark"] [style*="background:#f8f9fa"],
+html[data-theme="dark"] [style*="background: var(--c-surface-alt"] {
     background: var(--cr-surface-2) !important;
 }
 
-html:not([data-theme="light"]) [style*="color: var(--c-grey)"] {
+html[data-theme="dark"] [style*="color: var(--c-grey)"] {
     color: var(--cr-text-muted) !important;
 }
 
@@ -532,309 +523,309 @@ html:not([data-theme="light"]) [style*="color: var(--c-grey)"] {
    ========================================================================== */
 
 /* Logo — always visible on dark header */
-html:not([data-theme="light"]) .brand-mark {
-    background: linear-gradient(145deg, #38bdf8 0%, #0ea5e9 100%) !important;
-    color: #06060b !important;
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
+html[data-theme="dark"] .brand-mark {
+    background: var(--text-primary) !important;
+    color: var(--background) !important;
+    box-shadow: none;
 }
 
-html:not([data-theme="light"]) .brand-wordmark {
+html[data-theme="dark"] .brand-wordmark {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .brand-accent {
+html[data-theme="dark"] .brand-accent {
     color: var(--cr-accent) !important;
 }
 
 /* Primary / inverted buttons (legacy c-black bg + c-ink-inverse text) */
-html:not([data-theme="light"]) .hp-btn--primary,
-html:not([data-theme="light"]) .hp-index-cta,
-html:not([data-theme="light"]) .az-btn-start,
-html:not([data-theme="light"]) .az-calc-cta-btn,
-html:not([data-theme="light"]) .az-radar-btn,
-html:not([data-theme="light"]) .az-resources-btn,
-html:not([data-theme="light"]) .upgrade-btn,
-html:not([data-theme="light"]) .sal-submit-btn,
-html:not([data-theme="light"]) .btn-analyzer,
-html:not([data-theme="light"]) .btn-plan-primary,
-html:not([data-theme="light"]) .art-topic-pill.is-active {
-    background: linear-gradient(135deg, #38bdf8, #0ea5e9) !important;
-    color: #06060b !important;
+html[data-theme="dark"] .hp-btn--primary,
+html[data-theme="dark"] .hp-index-cta,
+html[data-theme="dark"] .az-btn-start,
+html[data-theme="dark"] .az-calc-cta-btn,
+html[data-theme="dark"] .az-radar-btn,
+html[data-theme="dark"] .az-resources-btn,
+html[data-theme="dark"] .upgrade-btn,
+html[data-theme="dark"] .sal-submit-btn,
+html[data-theme="dark"] .btn-analyzer,
+html[data-theme="dark"] .btn-plan-primary,
+html[data-theme="dark"] .art-topic-pill.is-active {
+    background: var(--text-primary) !important;
+    color: var(--background) !important;
     border-color: transparent !important;
 }
 
-html:not([data-theme="light"]) .hp-btn--primary:hover,
-html:not([data-theme="light"]) .az-btn-start:hover,
-html:not([data-theme="light"]) .btn-analyzer:hover {
-    background: linear-gradient(135deg, #7dd3fc, #38bdf8) !important;
-    color: #06060b !important;
+html[data-theme="dark"] .hp-btn--primary:hover,
+html[data-theme="dark"] .az-btn-start:hover,
+html[data-theme="dark"] .btn-analyzer:hover {
+    background: var(--text-primary) !important;
+    color: var(--background) !important;
     opacity: 1 !important;
 }
 
-html:not([data-theme="light"]) .hp-btn--ghost,
-html:not([data-theme="light"]) .hp-btn--white,
-html:not([data-theme="light"]) .btn-plan-outline {
+html[data-theme="dark"] .hp-btn--ghost,
+html[data-theme="dark"] .hp-btn--white,
+html[data-theme="dark"] .btn-plan-outline {
     background: var(--cr-surface-3) !important;
     color: var(--cr-text) !important;
     border-color: var(--cr-border-strong) !important;
 }
 
-html:not([data-theme="light"]) .hp-btn--ghost:hover,
-html:not([data-theme="light"]) .hp-btn--white:hover {
+html[data-theme="dark"] .hp-btn--ghost:hover,
+html[data-theme="dark"] .hp-btn--white:hover {
     border-color: var(--cr-accent) !important;
     color: var(--cr-accent) !important;
 }
 
 /* Newsletter band */
-html:not([data-theme="light"]) .newsletter-section {
+html[data-theme="dark"] .newsletter-section {
     background: var(--cr-surface-2) !important;
     border: 1px solid var(--cr-border);
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .newsletter-title,
-html:not([data-theme="light"]) .newsletter-desc {
+html[data-theme="dark"] .newsletter-title,
+html[data-theme="dark"] .newsletter-desc {
     color: var(--cr-text-secondary) !important;
     opacity: 1 !important;
 }
 
-html:not([data-theme="light"]) .newsletter-input {
+html[data-theme="dark"] .newsletter-input {
     background: var(--cr-surface-3) !important;
     border-color: var(--cr-border-strong) !important;
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .newsletter-input::placeholder {
+html[data-theme="dark"] .newsletter-input::placeholder {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .newsletter-btn {
-    background: linear-gradient(135deg, #38bdf8, #0ea5e9) !important;
-    color: #06060b !important;
+html[data-theme="dark"] .newsletter-btn {
+    background: var(--text-primary) !important;
+    color: var(--background) !important;
     border-color: transparent !important;
 }
 
 /* Dark promo bands on homepage */
-html:not([data-theme="light"]) .hp-drop-banner,
-html:not([data-theme="light"]) .hp-pro,
-html:not([data-theme="light"]) .hp-trust {
+html[data-theme="dark"] .hp-drop-banner,
+html[data-theme="dark"] .hp-pro,
+html[data-theme="dark"] .hp-trust {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .hp-drop-title,
-html:not([data-theme="light"]) .hp-pro-title,
-html:not([data-theme="light"]) .hp-trust-title {
+html[data-theme="dark"] .hp-drop-title,
+html[data-theme="dark"] .hp-pro-title,
+html[data-theme="dark"] .hp-trust-title {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .hp-pro-mockup-val {
+html[data-theme="dark"] .hp-pro-mockup-val {
     color: var(--cr-text) !important;
 }
 
 /* Salary ticker */
-html:not([data-theme="light"]) .hp-ticker-exp,
-html:not([data-theme="light"]) .hp-ticker-city {
+html[data-theme="dark"] .hp-ticker-exp,
+html[data-theme="dark"] .hp-ticker-city {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-ctc {
+html[data-theme="dark"] .hp-ticker-ctc {
     color: var(--cr-text) !important;
 }
 
 /* Analyzer wizard (inline styles in step_base.html) */
-html:not([data-theme="light"]) .dot {
+html[data-theme="dark"] .dot {
     background: var(--cr-surface-3) !important;
 }
 
-html:not([data-theme="light"]) .dot.active {
+html[data-theme="dark"] .dot.active {
     background: var(--cr-accent) !important;
 }
 
-html:not([data-theme="light"]) .option-card {
+html[data-theme="dark"] .option-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .option-card:hover {
+html[data-theme="dark"] .option-card:hover {
     background: var(--cr-surface-3) !important;
     border-color: var(--cr-border-strong) !important;
 }
 
 /* Tools — muted labels & footers */
-html:not([data-theme="light"]) .stat-label,
-html:not([data-theme="light"]) .az-result-footer a,
-html:not([data-theme="light"]) .az-calc-regime-badge,
-html:not([data-theme="light"]) .az-calc-row--ghost td {
+html[data-theme="dark"] .stat-label,
+html[data-theme="dark"] .az-result-footer a,
+html[data-theme="dark"] .az-calc-regime-badge,
+html[data-theme="dark"] .az-calc-row--ghost td {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .az-calc-regime-badge {
+html[data-theme="dark"] .az-calc-regime-badge {
     background: var(--cr-surface-3) !important;
 }
 
-html:not([data-theme="light"]) .az-calc-row--final {
+html[data-theme="dark"] .az-calc-row--final {
     background: var(--cr-surface-3) !important;
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .badge-warn {
+html[data-theme="dark"] .badge-warn {
     background: var(--cr-warning-bg) !important;
     color: var(--cr-warning-text) !important;
 }
 
-html:not([data-theme="light"]) .bg-yellow,
-html:not([data-theme="light"]) .bg-red,
-html:not([data-theme="light"]) .bg-green {
+html[data-theme="dark"] .bg-yellow,
+html[data-theme="dark"] .bg-red,
+html[data-theme="dark"] .bg-green {
     color: var(--cr-text-secondary) !important;
 }
 
 /* Calculator / form inputs */
-html:not([data-theme="light"]) .az-calc-input,
-html:not([data-theme="light"]) .az-form-input,
-html:not([data-theme="light"]) .sal-form-input,
-html:not([data-theme="light"]) select.az-calc-input {
+html[data-theme="dark"] .az-calc-input,
+html[data-theme="dark"] .az-form-input,
+html[data-theme="dark"] .sal-form-input,
+html[data-theme="dark"] select.az-calc-input {
     background: var(--cr-surface-3) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text) !important;
 }
 
 /* Companies — form controls & cards */
-html:not([data-theme="light"]) .dir-controls select,
-html:not([data-theme="light"]) .dir-controls input,
-html:not([data-theme="light"]) .review-form input,
-html:not([data-theme="light"]) .review-form textarea,
-html:not([data-theme="light"]) .review-form select {
+html[data-theme="dark"] .dir-controls select,
+html[data-theme="dark"] .dir-controls input,
+html[data-theme="dark"] .review-form input,
+html[data-theme="dark"] .review-form textarea,
+html[data-theme="dark"] .review-form select {
     background: var(--cr-surface-3) !important;
     border-color: var(--cr-border) !important;
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .cp-layoff-wrap,
-html:not([data-theme="light"]) .comp-card,
-html:not([data-theme="light"]) .cc-card {
+html[data-theme="dark"] .cp-layoff-wrap,
+html[data-theme="dark"] .comp-card,
+html[data-theme="dark"] .cc-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
 }
 
 /* Catch-all: light gray backgrounds in page bundles */
-html:not([data-theme="light"]) .hp-featured-article,
-html:not([data-theme="light"]) .hp-article-card,
-html:not([data-theme="light"]) .hp-cluster-card,
-html:not([data-theme="light"]) .hp-tool-card,
-html:not([data-theme="light"]) .hp-tools-panel,
-html:not([data-theme="light"]) .hp-updates-panel,
-html:not([data-theme="light"]) .hp-faq,
-html:not([data-theme="light"]) .art-callout,
-html:not([data-theme="light"]) .art-toc,
-html:not([data-theme="light"]) .az-calc-card,
-html:not([data-theme="light"]) .az-intro-card,
-html:not([data-theme="light"]) .az-result-card,
-html:not([data-theme="light"]) .az-form-card,
-html:not([data-theme="light"]) .sal-summary-box,
-html:not([data-theme="light"]) .az-calc-noscript,
-html:not([data-theme="light"]) .pricing-card,
-html:not([data-theme="light"]) .dash-card,
-html:not([data-theme="light"]) .onboard-card {
+html[data-theme="dark"] .hp-featured-article,
+html[data-theme="dark"] .hp-article-card,
+html[data-theme="dark"] .hp-cluster-card,
+html[data-theme="dark"] .hp-tool-card,
+html[data-theme="dark"] .hp-tools-panel,
+html[data-theme="dark"] .hp-updates-panel,
+html[data-theme="dark"] .hp-faq,
+html[data-theme="dark"] .art-callout,
+html[data-theme="dark"] .art-toc,
+html[data-theme="dark"] .az-calc-card,
+html[data-theme="dark"] .az-intro-card,
+html[data-theme="dark"] .az-result-card,
+html[data-theme="dark"] .az-form-card,
+html[data-theme="dark"] .sal-summary-box,
+html[data-theme="dark"] .az-calc-noscript,
+html[data-theme="dark"] .pricing-card,
+html[data-theme="dark"] .dash-card,
+html[data-theme="dark"] .onboard-card {
     background: var(--cr-surface-2) !important;
     border-color: var(--cr-border) !important;
 }
 
 /* Catch-all: low-contrast gray text */
-html:not([data-theme="light"]) .hp-ticker-exp,
-html:not([data-theme="light"]) .hp-ticker-city,
-html:not([data-theme="light"]) .az-result-footer a,
-html:not([data-theme="light"]) .stat-label,
-html:not([data-theme="light"]) [style*="color: #999"],
-html:not([data-theme="light"]) [style*="color:#999"] {
+html[data-theme="dark"] .hp-ticker-exp,
+html[data-theme="dark"] .hp-ticker-city,
+html[data-theme="dark"] .az-result-footer a,
+html[data-theme="dark"] .stat-label,
+html[data-theme="dark"] [style*="color: #999"],
+html[data-theme="dark"] [style*="color:#999"] {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) [style*="background: #fafafa"],
-html:not([data-theme="light"]) [style*="background:#fafafa"],
-html:not([data-theme="light"]) [style*="background: #f9f9f9"],
-html:not([data-theme="light"]) [style*="background:#f9f9f9"] {
+html[data-theme="dark"] [style*="background: var(--background)"],
+html[data-theme="dark"] [style*="background:var(--background)"],
+html[data-theme="dark"] [style*="background: #f9f9f9"],
+html[data-theme="dark"] [style*="background:#f9f9f9"] {
     background: var(--cr-surface-2) !important;
 }
 
 /* AI Pulse — ensure dark tokens win */
-html:not([data-theme="light"]) .ai-page,
-html:not([data-theme="light"]) .ai-detail-page,
-html:not([data-theme="light"]) .ai-tag-page {
-    --ai-ink: #f4f4f5;
+html[data-theme="dark"] .ai-page,
+html[data-theme="dark"] .ai-detail-page,
+html[data-theme="dark"] .ai-tag-page {
+    --ai-ink: var(--surface-muted);
     --ai-soft-ink: #c8c8d0;
     --ai-muted: #9e9ea8;
     --ai-paper: #14141f;
-    --ai-panel: #0e0e16;
+    --ai-panel: var(--surface);
     --ai-card: #14141f;
     --ai-card-muted: #1c1c28;
 }
 
-html:not([data-theme="light"]) .significance-low {
+html[data-theme="dark"] .significance-low {
     background: var(--cr-text-muted) !important;
 }
 
 /* ── Homepage UI — editorial layout ── */
-html:not([data-theme="light"]) .nav-utilities {
+html[data-theme="dark"] .nav-utilities {
     /* spacing only, no divider */
 }
 
-html:not([data-theme="light"]) .hp-ticker {
+html[data-theme="dark"] .hp-ticker {
     background: var(--cr-surface) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-role {
+html[data-theme="dark"] .hp-ticker-role {
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-meta,
-html:not([data-theme="light"]) .hp-ticker-sep {
+html[data-theme="dark"] .hp-ticker-meta,
+html[data-theme="dark"] .hp-ticker-sep {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .hp-ticker-ctc {
+html[data-theme="dark"] .hp-ticker-ctc {
     color: var(--cr-accent) !important;
 }
 
-html:not([data-theme="light"]) .hp-editorial-featured-title a {
+html[data-theme="dark"] .hp-editorial-featured-title a {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .hp-editorial-list-title {
+html[data-theme="dark"] .hp-editorial-list-title {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .footer-brand-name {
+html[data-theme="dark"] .footer-brand-name {
     color: var(--cr-text) !important;
 }
 
-html:not([data-theme="light"]) .site-footer {
+html[data-theme="dark"] .site-footer {
     background: #111116 !important;
 }
 
-html:not([data-theme="light"]) .footer-col-heading {
+html[data-theme="dark"] .footer-col-heading {
     color: #878787 !important;
 }
 
-html:not([data-theme="light"]) .footer-col-list a,
-html:not([data-theme="light"]) .footer-bottom-link {
-    color: #fff !important;
+html[data-theme="dark"] .footer-col-list a,
+html[data-theme="dark"] .footer-bottom-link {
+    color: var(--surface) !important;
 }
 
-html:not([data-theme="light"]) .footer-col-list a:hover,
-html:not([data-theme="light"]) .footer-bottom-link:hover {
+html[data-theme="dark"] .footer-col-list a:hover,
+html[data-theme="dark"] .footer-bottom-link:hover {
     color: var(--cr-accent) !important;
 }
 
-html:not([data-theme="light"]) .footer-col-heading,
-html:not([data-theme="light"]) .footer-copy {
+html[data-theme="dark"] .footer-col-heading,
+html[data-theme="dark"] .footer-copy {
     color: var(--cr-text-muted) !important;
 }
 
-html:not([data-theme="light"]) .footer-links a {
+html[data-theme="dark"] .footer-links a {
     color: var(--cr-text-secondary) !important;
 }
 
-html:not([data-theme="light"]) .footer-links a:hover {
+html[data-theme="dark"] .footer-links a:hover {
     color: var(--cr-accent) !important;
 }

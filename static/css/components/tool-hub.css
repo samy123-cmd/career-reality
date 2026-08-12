@@ -78,7 +78,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: var(--cr-accent, var(--c-blue-accent, #38bdf8));
+    background: var(--cr-accent, var(--c-blue-accent, var(--accent)));
     opacity: 0;
     transition: opacity 0.22s ease;
 }
@@ -190,8 +190,8 @@
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--cr-accent, #38bdf8);
-    border: 1px solid color-mix(in srgb, var(--cr-accent, #38bdf8) 35%, transparent);
+    color: var(--cr-accent, var(--accent));
+    border: 1px solid color-mix(in srgb, var(--cr-accent, var(--accent)) 35%, transparent);
     border-radius: 2px;
     vertical-align: middle;
 }

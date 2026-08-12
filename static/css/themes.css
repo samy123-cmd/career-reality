@@ -54,6 +54,7 @@ html[data-theme="light"]:not([data-palette]) {
     --warning: #A46E22;
     --danger: #B33B36;
     --info: #526B83;
+    --on-accent: #ffffff;
 
     /* Semantic soft fills */
     --success-soft: color-mix(in srgb, var(--success) 12%, var(--surface));
@@ -465,4 +466,91 @@ body,
 
 .cr-theme-toggle-wrap {
     position: relative;
+}
+
+
+/* ==========================================================================
+   Global editorial polish overrides
+   ========================================================================== */
+.btn-analyzer,
+.az-calc-btn,
+.sal-submit-btn,
+.az-btn-start,
+.upgrade-btn,
+.dir-cta-btn,
+.btn-submit {
+    background: var(--text-primary) !important;
+    color: var(--background) !important;
+    border: 1px solid var(--text-primary) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: none !important;
+    background-image: none !important;
+}
+
+.btn-analyzer:hover,
+.az-calc-btn:hover,
+.sal-submit-btn:hover {
+    background: var(--text-secondary) !important;
+    border-color: var(--text-secondary) !important;
+    color: var(--background) !important;
+}
+
+.score-bar,
+.score-bar-fill,
+.hp-meter-bar,
+.hp-meter-fill {
+    border-radius: 2px !important;
+}
+
+.score-bar {
+    background: var(--surface-muted);
+    border: 1px solid var(--border-subtle);
+    height: 6px;
+    overflow: hidden;
+}
+
+.score-bar-fill {
+    background: var(--text-primary);
+    height: 100%;
+}
+
+.badge,
+.status-badge,
+.category-badge,
+.art-topic-pill,
+.plan-badge,
+.hp-tool-badge,
+.cc-score,
+.nav-badge {
+    border-radius: var(--radius-sm) !important;
+}
+
+.company-card,
+.dash-card,
+.az-calc-card,
+.radar-card,
+.paywall-card,
+.sidebar-card,
+.stat-card,
+.onboard-tool-card,
+.art-related-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: none;
+}
+
+.pricing-hero,
+.dash-header,
+.onboard-hero {
+    background: var(--surface-muted) !important;
+    color: var(--text-primary) !important;
+    background-image: none !important;
+}
+
+.pricing-hero h1,
+.pricing-hero p,
+.dash-header h1,
+.dash-header p {
+    color: var(--text-primary) !important;
 }
