@@ -417,7 +417,7 @@ html[data-theme="dark"] .cr-toast--warning {
 html[data-theme="dark"] .cr-toast--info {
     background: var(--cr-info-bg);
     color: var(--cr-info-text);
-    border-color: rgba(56, 189, 248, 0.25);
+    border-color: var(--accent-soft);
 }
 
 /* ── Design system components (re-assert after design-system.css) ── */

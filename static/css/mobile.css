@@ -570,7 +570,7 @@
 
     .option-card:has(input:checked) {
         border-color: var(--c-blue-accent, var(--accent));
-        background: rgba(56, 189, 248, 0.08);
+        background: var(--accent-soft);
     }
 
     input[type="text"],
