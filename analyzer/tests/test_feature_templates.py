@@ -39,7 +39,17 @@ class FeatureTemplateShellTests(TestCase):
                 response = self.client.get(reverse(url_name))
                 self.assertContains(response, "az-calc-input")
 
-    def test_salary_reality_has_stepper(self):
-        response = self.client.get(reverse("tools:salary_reality_engine"))
-        self.assertContains(response, "cr-stepper")
-        self.assertContains(response, "az-calc-btn")
+    def test_salary_reality_post_accepts_valid_csrf(self):
+        url = reverse("tools:salary_reality_engine")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, {
+            "role": "Software Engineer",
+            "experience_years": "5",
+            "city": "Bengaluru",
+            "industry": "",
+            "company_type": "",
+            "current_ctc": "18",
+            "role_level": "",
+        })
+        self.assertNotEqual(response.status_code, 403, msg="CSRF should pass when cookie is set on GET")

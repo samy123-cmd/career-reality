@@ -23,6 +23,25 @@ class CacheUtilsTests(TestCase):
         self.assertEqual(edge_cache_ttl_for_path("/article/foo/"), 900)
         self.assertIsNone(edge_cache_ttl_for_path("/accounts/login/"))
 
+    def test_edge_cache_ttl_skips_tool_paths(self):
+        self.assertIsNone(edge_cache_ttl_for_path("/tools/salary-reality-engine/"))
+        self.assertIsNone(edge_cache_ttl_for_path("/tools/ask/"))
+
+    def test_middleware_preserves_csrf_cookie_on_tool_pages(self):
+        def get_response(request):
+            from django.http import HttpResponse
+            response = HttpResponse("tool")
+            response.set_cookie("csrftoken", "xyz")
+            return response
+
+        middleware = EdgeCacheHeadersMiddleware(get_response)
+        factory = RequestFactory()
+        request = factory.get("/tools/salary-reality-engine/")
+        request.user = type("U", (), {"is_authenticated": False})()
+        response = middleware(request)
+        self.assertIn("csrftoken", response.cookies)
+        self.assertNotIn("s-maxage", response.get("Cache-Control", ""))
+
     def test_apply_edge_cache_headers_skips_authenticated(self):
         from django.http import HttpResponse
 

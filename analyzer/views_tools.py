@@ -7,9 +7,7 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.cache import patch_cache_control
-from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET, require_POST
-from django.views.decorators.vary import vary_on_cookie
 from django.utils import timezone
 
 from accounts.career_context import feature_view_context, prefill_form, save_career_context
@@ -87,7 +85,6 @@ def _company_lookup(name: str):
     return Company.objects.filter(name__icontains=name).first() if name else None
 
 
-@cache_page(60 * 30)
 def salary_reality_engine(request):
     result = None
     form = prefill_form(forms.SalaryRealityEngineForm, request)
@@ -135,7 +132,6 @@ def salary_reality_api(request):
     return response
 
 
-@cache_page(60 * 30)
 def offer_analyzer(request):
     result = None
     form = prefill_form(forms.OfferAnalyzerForm, request)
@@ -217,7 +213,6 @@ def offer_analyzer(request):
     })
 
 
-@cache_page(60 * 30)
 def stay_vs_switch(request):
     result = None
     form = prefill_form(forms.StayVsSwitchForm, request)
@@ -248,7 +243,6 @@ def stay_vs_switch(request):
     })
 
 
-@cache_page(60 * 30)
 def ai_career_impact(request):
     result = None
     form = prefill_form(forms.AICareerImpactForm, request)
@@ -275,8 +269,6 @@ def ai_career_impact(request):
     })
 
 
-@cache_page(60 * 30)
-@vary_on_cookie
 def next_career_move(request):
     result = None
     form = prefill_form(forms.NextCareerMoveForm, request)
@@ -302,8 +294,6 @@ def next_career_move(request):
     })
 
 
-@cache_page(60 * 15)
-@vary_on_cookie
 def ask_career_reality(request):
     answer = None
     form = forms.AskCareerRealityForm()
