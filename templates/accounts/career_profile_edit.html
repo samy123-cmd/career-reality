@@ -5,18 +5,24 @@
 
 {% block content %}
 <div class="cr-feature">
-  <div class="cr-feature__inner">
-    <header class="cr-feature__header">
-      <h1 class="cr-feature__title">Edit Career Profile</h1>
-      <p class="cr-feature__subtitle">Updates prefill all CareerReality tools and your dashboard.</p>
-    </header>
-    <form method="post" class="cr-form">
-      {% csrf_token %}
-      {% for field in form %}
-      <div class="cr-field"><label class="cr-label">{{ field.label }}</label>{{ field }}</div>
-      {% endfor %}
-      <button type="submit" class="cr-btn cr-btn--primary">Save Profile</button>
-    </form>
+  <div class="cr-feature__inner cr-feature__inner--centered">
+    <section class="container-reading cr-tool-page">
+      <div class="az-calc-hero">
+        <h1 class="az-calc-title">Edit Career Profile</h1>
+        <p class="az-calc-subtitle">Updates prefill all CareerReality tools and your dashboard.</p>
+      </div>
+      <div class="az-calc-card cr-tool-card">
+        <form method="post" class="cr-form">
+          {% csrf_token %}
+          <div class="az-calc-grid">
+          {% for field in form %}
+          <div class="cr-field"><label class="az-calc-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</div>
+          {% endfor %}
+          </div>
+          <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Save Profile</button>
+        </form>
+      </div>
+    </section>
   </div>
 </div>
 {% endblock %}

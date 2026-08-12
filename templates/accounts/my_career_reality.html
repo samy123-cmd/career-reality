@@ -15,8 +15,7 @@
 
     {% if career_health %}
     <div class="cr-dash__health">
-      <div>
-        <p class="cr-help">Career Health</p>
+      <div class="cr-dash__health-ring" aria-label="Career health score">
         <p class="cr-dash__health-score"><span data-cr-animate-score="{{ career_health.overall }}">0</span><span>/100</span></p>
       </div>
       <div class="cr-dash__indicators">
@@ -45,7 +44,7 @@
     </div>
     {% endif %}
 
-    <div class="cr-stat-grid">
+    <div class="cr-metric-grid cr-stat-grid">
       <div class="cr-stat">
         <span class="cr-stat__label">Salary Position</span>
         {% if salary_insight %}
@@ -77,7 +76,7 @@
     </div>
 
     {% if is_pro and alerts %}
-    <section class="cr-result">
+    <section class="az-calc-card cr-tool-card">
       <h2 class="cr-section-title">Active alerts</h2>
       {% for a in alerts|slice:":5" %}
       <div class="alert-row alert-{{ a.severity }}"><strong>{{ a.get_alert_type_display }}</strong> — {{ a.message }}</div>

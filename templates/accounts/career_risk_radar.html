@@ -12,9 +12,11 @@
       <p class="cr-feature__subtitle">Overall risk: <strong>{{ radar.overall_label }}</strong> ({{ radar.overall_score }}/100)</p>
     </header>
 
-    {% include "features/partials/_score_radar.html" with radar_data=radar %}
+    <div class="az-calc-card cr-tool-card cr-trajectory">
+      {% include "features/partials/_score_radar.html" with radar_data=radar %}
+    </div>
 
-    <section class="cr-result">
+    <section class="az-calc-card cr-tool-card" style="margin-top: 1.25rem;">
       <h2 class="cr-section-title">What triggered this</h2>
       {% if radar.signals %}
       <ul>{% for s in radar.signals %}<li>{{ s }}</li>{% endfor %}</ul>
@@ -26,7 +28,7 @@
       <ol>{% for a in radar.actions %}<li>{{ a }}</li>{% endfor %}</ol>
     </section>
 
-    <section class="cr-result">
+    <section class="az-calc-card cr-tool-card" style="margin-top: 1.25rem;">
       <h2 class="cr-section-title">Alerts ({{ unread_count }} unread)</h2>
       {% for a in alerts %}
       <div class="alert-row alert-{{ a.severity }}">

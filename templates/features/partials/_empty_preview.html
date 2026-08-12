@@ -1,14 +1,14 @@
-<div class="cr-preview" id="cr-empty-preview">
-  <h3 class="cr-preview__title">Your result will include</h3>
-  <ul class="cr-preview__list">
+<div class="cr-preview-strip" id="cr-empty-preview" aria-label="What you'll get">
+  <span class="cr-preview-strip__label">You'll get</span>
+  <div class="cr-preview-strip__chips">
     {% if preview_items %}
       {% for item in preview_items %}
-      <li><span class="cr-preview__check" aria-hidden="true">✓</span> {{ item }}</li>
+      <span class="cr-preview-strip__chip">{{ item }}</span>
       {% endfor %}
     {% else %}
-      <li><span class="cr-preview__check" aria-hidden="true">✓</span> Data-backed analysis</li>
-      <li><span class="cr-preview__check" aria-hidden="true">✓</span> Clear recommendation</li>
-      <li><span class="cr-preview__check" aria-hidden="true">✓</span> Next steps you can act on</li>
+      <span class="cr-preview-strip__chip">Data-backed analysis</span>
+      <span class="cr-preview-strip__chip">Clear recommendation</span>
+      <span class="cr-preview-strip__chip">Next steps</span>
     {% endif %}
-  </ul>
+  </div>
 </div>

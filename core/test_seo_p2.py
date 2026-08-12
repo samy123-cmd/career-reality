@@ -209,3 +209,11 @@ class CareerToolSEOTests(TestCase):
             with self.subTest(url_name=url_name):
                 response = self.client.get(reverse(url_name))
                 self.assertContains(response, h1)
+
+    def test_career_tool_pages_have_premium_shell(self):
+        for url_name, _ in self.TOOL_CASES:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertContains(response, "feature-product.css")
+                content = response.content.decode()
+                self.assertTrue("az-calc-card" in content or "cr-tool-card" in content)

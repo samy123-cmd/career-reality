@@ -4,7 +4,7 @@
 {% block title %}{{ company.name }} — Salary, Reviews & Reality Check{% endblock %}
 {% block meta_description %}{{ og_description }}{% endblock %}
 
-{% block page_css %}{% include "partials/css_companies.html" %}{% endblock %}
+{% block page_css %}{% include "partials/css_companies.html" %}{% if reality_score %}{% include "partials/css_feature_product.html" %}{% endif %}{% endblock %}
 
 {% block extra_head %}
 <script type="application/ld+json">
@@ -190,14 +190,22 @@
             <h2>Company Reality Score</h2>
             <div class="score-big">{{ reality_score.overall|floatformat:1 }}<span>/10</span></div>
             <p>360° view across compensation, stability, growth, WLB, culture, promotion, and work mode.</p>
-            <div class="cp-score-ratings">
+
+            <div class="cr-crs-tabs" role="tablist" data-cr-crs-tabs>
+                <button type="button" class="cr-crs-tab is-active" data-cr-crs-tab="all" role="tab" aria-selected="true">All dimensions</button>
                 {% for dim in reality_score.dimensions %}
-                <div class="score-row">
+                <button type="button" class="cr-crs-tab" data-cr-crs-tab="{{ forloop.counter0 }}" role="tab" aria-selected="false">{{ dim.label }}</button>
+                {% endfor %}
+            </div>
+
+            <div class="cp-score-ratings" data-cr-crs-panels>
+                {% for dim in reality_score.dimensions %}
+                <div class="score-row" data-cr-crs-panel="{{ forloop.counter0 }}">
                     <span>{{ dim.label }}</span>
                     <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio dim.score 10 100 %}%; background: var(--feature-accent, #38bdf8);"></div></div>
-                    <span>{{ dim.score|floatformat:1 }}</span>
+                    <span class="cr-data">{{ dim.score|floatformat:1 }}</span>
                 </div>
-                {% if dim.detail %}<p class="cp-meta-small">{{ dim.detail }}</p>{% endif %}
+                {% if dim.detail %}<p class="cp-meta-small cr-crs-detail" data-cr-crs-panel="{{ forloop.counter0 }}">{{ dim.detail }}</p>{% endif %}
                 {% endfor %}
             </div>
             {% if user_career_role %}

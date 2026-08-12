@@ -12,24 +12,28 @@
       <p class="cr-feature__subtitle">{{ narrative }}</p>
     </header>
 
-    {% if trajectory %}
-    {% include "features/partials/_trajectory_chart.html" %}
-    {% else %}
-    <p class="cr-help">Add at least two snapshots to see your salary trajectory chart.</p>
-    {% endif %}
+    <div class="cr-trajectory">
+      {% if trajectory %}
+      {% include "features/partials/_trajectory_chart.html" %}
+      {% else %}
+      <p class="cr-help">Add at least two snapshots to see your salary trajectory chart.</p>
+      {% endif %}
+    </div>
 
-    <div class="cr-form">
+    <div class="az-calc-card cr-tool-card">
       <h2 class="cr-section-title">Add snapshot</h2>
-      <form method="post">
+      <form method="post" class="cr-form">
         {% csrf_token %}
+        <div class="az-calc-grid">
         {% for field in form %}
-        <div class="cr-field"><label class="cr-label">{{ field.label }}</label>{{ field }}</div>
+        <div class="cr-field"><label class="az-calc-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</div>
         {% endfor %}
-        <button type="submit" class="cr-btn cr-btn--primary">Save Snapshot</button>
+        </div>
+        <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Save Snapshot</button>
       </form>
     </div>
 
-    <section class="cr-result">
+    <section class="az-calc-card cr-tool-card" style="margin-top: 1.25rem;">
       <h2 class="cr-section-title">Timeline</h2>
       {% for s in snapshots %}
       <div class="cr-category-card">

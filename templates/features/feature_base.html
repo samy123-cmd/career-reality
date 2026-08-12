@@ -37,7 +37,7 @@
 
 {% block content %}
 <div class="cr-feature">
-  <div class="cr-feature__inner">
+  <div class="cr-feature__inner cr-feature__inner--centered">
     {% if feature_breadcrumb %}
     <nav class="cr-breadcrumb" aria-label="Breadcrumb">
       {% for crumb in feature_breadcrumb %}
@@ -47,29 +47,7 @@
     </nav>
     {% endif %}
 
-    <header class="cr-feature__header">
-      <h1 class="cr-feature__title">{{ page_h1 }}</h1>
-      <p class="cr-feature__subtitle">{{ og_description }}</p>
-      {% if career_context_banner %}
-      <div class="cr-profile-banner">
-        <span>Using your saved profile: {{ career_context_banner }}</span>
-        {% if user.is_authenticated %}<a href="{% url 'career_profile_edit' %}">Edit</a>{% endif %}
-      </div>
-      {% endif %}
-    </header>
-
-    <div class="cr-feature__layout">
-      <div class="cr-feature__main">
-        {% block feature_content %}{% endblock %}
-      </div>
-      {% block feature_sidebar %}
-      <aside class="cr-feature__sidebar">
-        {% block feature_context %}
-        {% include "features/partials/_empty_preview.html" %}
-        {% endblock %}
-      </aside>
-      {% endblock %}
-    </div>
+    {% block feature_content %}{% endblock %}
 
     {% if tool_faq %}
     <section class="cr-faq" aria-labelledby="tool-faq-title">

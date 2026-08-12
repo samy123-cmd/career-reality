@@ -1,25 +1,27 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block feature_context %}{% if not result %}{% include "features/partials/_empty_preview.html" %}{% endif %}{% endblock %}
-
-{% block feature_content %}
+{% block tool_body %}
+{% if not result %}
 <form method="post" class="cr-form" data-cr-loading="Ranking career paths for your profile…">
   {% csrf_token %}
-  <div class="cr-field"><label class="cr-label">{{ form.role.label }}</label>{{ form.role }}</div>
-  <div class="cr-field"><label class="cr-label">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
-  <div class="cr-field"><label class="cr-label">{{ form.city.label }}</label>{{ form.city }}</div>
-  <div class="cr-field"><label class="cr-label">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+  <div class="az-calc-grid">
+    <div class="cr-field"><label class="az-calc-label" for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>{{ form.role }}</div>
+    <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
+    <div class="cr-field"><label class="az-calc-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>{{ form.city }}</div>
+    <div class="cr-field"><label class="az-calc-label" for="{{ form.company_type.id_for_label }}">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+  </div>
   {% include "features/partials/_input_money.html" with field=form.current_ctc %}
-  <div class="cr-field"><label class="cr-label">{{ form.skills.label }}</label>{{ form.skills }}</div>
-  <button type="submit" class="cr-btn cr-btn--primary">Find My Next Move</button>
+  <div class="cr-field"><label class="az-calc-label" for="{{ form.skills.id_for_label }}">{{ form.skills.label }}</label>{{ form.skills }}</div>
+  <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Find My Next Move</button>
 </form>
+{% endif %}
 
 {% if result %}
 <section class="cr-result" aria-live="polite">
   {% if result.top_path %}
-  <div class="cr-result__hero">
-    <h2 class="cr-section-title">Best-fit path</h2>
-    <p class="cr-result__verdict">{{ result.top_path.title }}</p>
+  <div class="cr-result-hero">
+    <p class="cr-help">Best-fit path</p>
+    <h2 class="cr-result__verdict">{{ result.top_path.title }}</h2>
     <p>{{ result.best_fit_reason }}</p>
   </div>
   <div class="cr-path-card cr-path-card--best">

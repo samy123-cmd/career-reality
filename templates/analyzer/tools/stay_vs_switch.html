@@ -1,47 +1,57 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block feature_context %}{% if not result %}{% include "features/partials/_empty_preview.html" %}{% endif %}{% endblock %}
+{% block workspace_preview %}{% endblock %}
 
-{% block feature_content %}
+{% block tool_body %}
 {% if not result %}
-<form method="post" class="cr-form" data-cr-wizard data-cr-loading="Assessing company stability and market fit…">
+<form method="post" class="cr-form" data-cr-wizard data-cr-submit-label="Analyze Decision" data-cr-loading="Assessing company stability and market fit…">
   {% csrf_token %}
-  <div class="cr-wizard__steps">
-    <button type="button" class="cr-wizard__step is-active" data-cr-step>Profile</button>
-    <button type="button" class="cr-wizard__step" data-cr-step>Compensation</button>
-    <button type="button" class="cr-wizard__step" data-cr-step>Context</button>
-    <button type="button" class="cr-wizard__step" data-cr-step>Offers</button>
-  </div>
+  <nav class="cr-stepper" aria-label="Form steps">
+    <div class="cr-stepper__track"><div class="cr-stepper__progress" data-cr-stepper-progress style="width:0%"></div></div>
+    <ol class="cr-stepper__steps">
+      <li><button type="button" class="cr-stepper__step is-active" data-cr-step><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Profile</span></button></li>
+      <li><button type="button" class="cr-stepper__step" data-cr-step><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Pay</span></button></li>
+      <li><button type="button" class="cr-stepper__step" data-cr-step><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Context</span></button></li>
+      <li><button type="button" class="cr-stepper__step" data-cr-step><span class="cr-stepper__num">4</span><span class="cr-stepper__label">Offers</span></button></li>
+    </ol>
+  </nav>
+
   <div data-cr-panel>
-    <div class="cr-field"><label class="cr-label">{{ form.role.label }}</label>{{ form.role }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.city.label }}</label>{{ form.city }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.company_name.label }}</label>{{ form.company_name }}</div>
+    <div class="az-calc-grid">
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>{{ form.role }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>{{ form.city }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.company_type.id_for_label }}">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+    </div>
+    <div class="cr-field"><label class="az-calc-label" for="{{ form.company_name.id_for_label }}">{{ form.company_name.label }}</label>{{ form.company_name }}</div>
   </div>
   <div data-cr-panel hidden>{% include "features/partials/_input_money.html" with field=form.current_ctc %}</div>
   <div data-cr-panel hidden>
-    <div class="cr-field"><label class="cr-label">{{ form.tenure_band.label }}</label>{{ form.tenure_band }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.ctc_vs_market.label }}</label>{{ form.ctc_vs_market }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.current_situation.label }}</label>{{ form.current_situation }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.performance_status.label }}</label>{{ form.performance_status }}</div>
+    <div class="az-calc-grid">
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.tenure_band.id_for_label }}">{{ form.tenure_band.label }}</label>{{ form.tenure_band }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.ctc_vs_market.id_for_label }}">{{ form.ctc_vs_market.label }}</label>{{ form.ctc_vs_market }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.current_situation.id_for_label }}">{{ form.current_situation.label }}</label>{{ form.current_situation }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.performance_status.id_for_label }}">{{ form.performance_status.label }}</label>{{ form.performance_status }}</div>
+    </div>
   </div>
   <div data-cr-panel hidden>
-    <div class="cr-field"><label class="cr-label">{{ form.has_offer.label }}</label>{{ form.has_offer }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.offer_ctc.label }}</label>{{ form.offer_ctc }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.notice_period.label }}</label>{{ form.notice_period }}</div>
-    <div class="cr-field"><label class="cr-label">{{ form.bond_status.label }}</label>{{ form.bond_status }}</div>
+    <div class="az-calc-grid">
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.has_offer.id_for_label }}">{{ form.has_offer.label }}</label>{{ form.has_offer }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_ctc.id_for_label }}">{{ form.offer_ctc.label }}</label>{{ form.offer_ctc }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.notice_period.id_for_label }}">{{ form.notice_period.label }}</label>{{ form.notice_period }}</div>
+      <div class="cr-field"><label class="az-calc-label" for="{{ form.bond_status.id_for_label }}">{{ form.bond_status.label }}</label>{{ form.bond_status }}</div>
+    </div>
   </div>
   <div class="cr-wizard__nav">
-    <button type="button" class="cr-btn cr-btn--secondary" data-cr-prev>Back</button>
-    <button type="button" class="cr-btn cr-btn--primary" data-cr-next>Analyze Decision</button>
+    <button type="button" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Analyze Decision</button>
+    <button type="button" class="cr-btn cr-btn--secondary cr-wizard__back" data-cr-prev hidden>Back</button>
   </div>
 </form>
 {% else %}
 <section class="cr-result" aria-live="polite">
-  <div class="cr-result__hero">
+  <div class="cr-result-hero">
     <h2 class="cr-result__verdict cr-result__verdict--{{ result.recommendation }}">{{ result.recommendation_label|upper }}</h2>
-    <p class="cr-result__score">Confidence: <strong class="cr-data">{{ result.confidence_pct }}%</strong></p>
+    <p class="cr-result-hero__metric">Confidence: <strong class="cr-data">{{ result.confidence_pct }}%</strong></p>
     <div class="cr-risk-meter" aria-hidden="true"><div class="cr-risk-meter__fill" style="width: {{ result.risk_score }}%;"></div></div>
     <p class="cr-help">Risk score {{ result.risk_score }}/100</p>
   </div>

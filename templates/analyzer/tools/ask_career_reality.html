@@ -1,27 +1,27 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
-{% block feature_context %}
-<div class="cr-preview">
-  <h3 class="cr-preview__title">Suggested prompts</h3>
-  <div class="cr-ask-prompts">
-    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Am I underpaid?</button>
-    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Should I leave my company?</button>
-    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Compare two offers for me</button>
-    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">What should I learn next?</button>
-    <button type="button" class="cr-ask-prompt" data-cr-prompt data-cr-target="#id_question">Will AI affect my role?</button>
+{% block workspace_preview %}
+<div class="cr-preview-strip" aria-label="Suggested prompts">
+  <span class="cr-preview-strip__label">Try asking</span>
+  <div class="cr-preview-strip__chips cr-ask-prompts">
+    <button type="button" class="cr-ask-prompt cr-preview-strip__chip" data-cr-prompt data-cr-target="#id_question">Am I underpaid?</button>
+    <button type="button" class="cr-ask-prompt cr-preview-strip__chip" data-cr-prompt data-cr-target="#id_question">Should I leave my company?</button>
+    <button type="button" class="cr-ask-prompt cr-preview-strip__chip" data-cr-prompt data-cr-target="#id_question">Compare two offers</button>
+    <button type="button" class="cr-ask-prompt cr-preview-strip__chip" data-cr-prompt data-cr-target="#id_question">What should I learn next?</button>
+    <button type="button" class="cr-ask-prompt cr-preview-strip__chip" data-cr-prompt data-cr-target="#id_question">Will AI affect my role?</button>
   </div>
 </div>
 {% endblock %}
 
-{% block feature_content %}
+{% block tool_body %}
 {% if limit_reached %}
 <p class="cr-error">You've used your 3 free questions this month. <a href="{% url 'payments:pricing' %}">Go Pro</a> for unlimited access.</p>
 {% else %}
 <form method="post" class="cr-form" data-cr-loading="Searching CareerReality data…">
   {% csrf_token %}
-  <div class="cr-field"><label class="cr-label">{{ form.question.label }}</label>{{ form.question }}</div>
+  <div class="cr-field"><label class="az-calc-label" for="{{ form.question.id_for_label }}">{{ form.question.label }}</label>{{ form.question }}</div>
   {% if asks_remaining %}<p class="cr-help">{{ asks_remaining }} free question{{ asks_remaining|pluralize }} remaining this month.</p>{% endif %}
-  <button type="submit" class="cr-btn cr-btn--primary">Ask CareerReality</button>
+  <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Ask CareerReality</button>
 </form>
 {% endif %}
 
@@ -36,7 +36,7 @@
 {% endif %}
 
 {% if answer %}
-<section class="cr-ask-answer" aria-live="polite">
+<section class="cr-ask-answer cr-result" aria-live="polite">
   <div class="cr-ask-block"><h3>Answer</h3><p>{{ answer.answer }}</p></div>
   {% if answer.citations %}
   <div class="cr-ask-block"><h3>CareerReality data</h3>
