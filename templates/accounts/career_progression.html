@@ -1,5 +1,8 @@
 {% extends "base.html" %}
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 {% block title %}{{ og_title }}{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
 {% block content %}
 <div class="dash-header">
   <h1>Career Progression Tracker</h1>
@@ -8,11 +11,11 @@
 <div class="dash-grid">
   <div class="dash-card">
     <p class="dash-card-title">Add Snapshot</p>
-    <form method="post">
+    <form method="post" class="az-form">
       {% csrf_token %}
       {% for field in form %}
       <div class="az-field">
-        <label>{{ field.label }}</label>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
       </div>
       {% endfor %}
@@ -25,7 +28,7 @@
     {% for s in snapshots %}
     <div class="benchmark-row">
       <div>
-        <div class="benchmark-role">{{ s.title }} @ {{ s.company_name }}</div>
+        <div class="benchmark-role">{{ s.title }}{% if s.company_name %} @ {{ s.company_name }}{% endif %}</div>
         <div class="benchmark-n">{{ s.recorded_at }}</div>
       </div>
       <div class="benchmark-range">
@@ -34,7 +37,7 @@
       </div>
     </div>
     {% empty %}
-    <p>No snapshots yet. Add your first career checkpoint above.</p>
+    <p class="dash-empty-msg">No snapshots yet. Add your first career checkpoint above.</p>
     {% endfor %}
   </div>
 </div>

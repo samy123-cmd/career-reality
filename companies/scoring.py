@@ -177,3 +177,37 @@ def compute_company_reality_score(company) -> CompanyRealityScore:
         sample_reviews=review_count,
         layoff_reports=layoff_count,
     )
+
+
+def reality_score_from_dict(data: dict) -> CompanyRealityScore:
+    """Reconstruct CompanyRealityScore from denormalized JSON."""
+    dimensions = [
+        DimensionScore(
+            name=d["name"],
+            score=float(d["score"]),
+            weight=float(d["weight"]),
+            label=d["label"],
+            detail=d["detail"],
+        )
+        for d in data.get("dimensions", [])
+    ]
+    return CompanyRealityScore(
+        company_id=data.get("company_id", 0),
+        company_name=data.get("company_name", ""),
+        overall=float(data.get("overall", 0)),
+        dimensions=dimensions,
+        stability_label=data.get("stability_label", "unknown"),
+        sample_salaries=data.get("sample_salaries", 0),
+        sample_reviews=data.get("sample_reviews", 0),
+        layoff_reports=data.get("layoff_reports", 0),
+    )
+
+
+def get_company_reality_score(company) -> CompanyRealityScore:
+    """Read denormalized score when available; compute on miss."""
+    if company.reality_score_json:
+        try:
+            return reality_score_from_dict(company.reality_score_json)
+        except (TypeError, KeyError, ValueError):
+            pass
+    return compute_company_reality_score(company)

@@ -2,21 +2,16 @@
 
 import json
 
-from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.utils.cache import patch_cache_control
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.vary import vary_on_cookie
 from django.utils import timezone
 
-from accounts.decorators import pro_required
-from accounts.models import (
-    AdvisorConversation,
-    AdvisorMessage,
-    CareerAlert,
-    CareerProfile,
-    CareerSnapshot,
-)
+from accounts.models import AdvisorConversation, AdvisorMessage
 from analyzer import forms
 from analyzer.services.salary_engine import get_salary_reality
 from analyzer.services.offer_analyzer import OfferInput, compare_offers
@@ -32,16 +27,57 @@ from core.seo_pages import (
     AI_CAREER_IMPACT,
     NEXT_CAREER_MOVE,
     ASK_CAREER_REALITY,
+    TOOL_FAQS,
 )
 
+ASK_MONTHLY_LIMIT = 3
 
-def _seo_ctx(seo):
+
+def _seo_ctx(seo, faq_key: str):
     return {
         "og_title": seo.title,
         "og_description": seo.description,
+        "twitter_title": seo.title,
+        "twitter_description": seo.description,
         "page_h1": seo.h1,
         "page_keywords": seo.keywords,
+        "tool_faq": TOOL_FAQS.get(faq_key, ()),
+        "tool_schema_name": seo.h1,
     }
+
+
+def _ask_limit_state(request):
+    is_pro = request.user.is_authenticated and getattr(request.user.profile, "is_pro", False)
+    month_key = timezone.now().strftime("%Y-%m")
+    session_key = f"ask_count_{month_key}"
+    ask_count = request.session.get(session_key, 0)
+    return is_pro, session_key, ask_count
+
+
+def _check_ask_rate_limit(request, *, increment=False):
+    """Session + IP rate limit for Ask CareerReality (HTML + API)."""
+    is_pro, session_key, ask_count = _ask_limit_state(request)
+    if is_pro:
+        return True, is_pro, session_key, ask_count
+
+    if ask_count >= ASK_MONTHLY_LIMIT:
+        return False, is_pro, session_key, ask_count
+
+    ip = (
+        request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR", ""))
+        .split(",")[0]
+        .strip()
+    )
+    ip_key = f"ask_api:{timezone.now().strftime('%Y-%m')}:{ip}"
+    ip_count = cache.get(ip_key, 0)
+    if ip_count >= ASK_MONTHLY_LIMIT:
+        return False, is_pro, session_key, ask_count
+
+    if increment:
+        request.session[session_key] = ask_count + 1
+        cache.set(ip_key, ip_count + 1, timeout=60 * 60 * 24 * 32)
+
+    return True, is_pro, session_key, ask_count
 
 
 @cache_page(60 * 30)
@@ -60,12 +96,11 @@ def salary_reality_engine(request):
                 company_type=d.get("company_type") or "",
                 current_ctc=d.get("current_ctc"),
             )
-    ctx = {
+    return render(request, "analyzer/tools/salary_reality_engine.html", {
         "form": form,
         "result": result,
-        **_seo_ctx(SALARY_REALITY_ENGINE),
-    }
-    return render(request, "analyzer/tools/salary_reality_engine.html", ctx)
+        **_seo_ctx(SALARY_REALITY_ENGINE, "salary_reality_engine"),
+    })
 
 
 @require_GET
@@ -85,10 +120,12 @@ def salary_reality_api(request):
 
     result = get_salary_reality(role, yoe, city, company_type, current_ctc=current_ctc)
     response = JsonResponse(result.to_dict())
+    patch_cache_control(response, public=True, max_age=300, stale_while_revalidate=120)
     response["X-Robots-Tag"] = "noindex"
     return response
 
 
+@cache_page(60 * 30)
 def offer_analyzer(request):
     """Compare two job offers."""
     result = None
@@ -133,10 +170,11 @@ def offer_analyzer(request):
         "form": form,
         "result": result,
         "is_pro": is_pro,
-        **_seo_ctx(OFFER_ANALYZER),
+        **_seo_ctx(OFFER_ANALYZER, "offer_analyzer"),
     })
 
 
+@cache_page(60 * 30)
 def stay_vs_switch(request):
     """Stay vs Switch career decision tool."""
     result = None
@@ -169,31 +207,30 @@ def stay_vs_switch(request):
     return render(request, "analyzer/tools/stay_vs_switch.html", {
         "form": form,
         "result": result,
-        **_seo_ctx(STAY_VS_SWITCH),
+        **_seo_ctx(STAY_VS_SWITCH, "stay_vs_switch"),
     })
 
 
+@cache_page(60 * 30)
 def ai_career_impact(request):
     """AI career impact assessment."""
     result = None
+    llm_narrative = None
     form = forms.AICareerImpactForm()
     if request.method == "POST":
         form = forms.AICareerImpactForm(request.POST)
         if form.is_valid():
             result = analyze_ai_career_impact(form.cleaned_data["job_title"])
-            from analyzer.llm import generate_ai_impact_narrative
-            llm_narrative = generate_ai_impact_narrative(result)
-    else:
-        llm_narrative = None
-
     return render(request, "analyzer/tools/ai_career_impact.html", {
         "form": form,
         "result": result,
-        "llm_narrative": llm_narrative if form.is_bound and form.is_valid() else None,
-        **_seo_ctx(AI_CAREER_IMPACT),
+        "llm_narrative": llm_narrative,
+        **_seo_ctx(AI_CAREER_IMPACT, "ai_career_impact"),
     })
 
 
+@cache_page(60 * 30)
+@vary_on_cookie
 def next_career_move(request):
     """Next career move recommendations."""
     result = None
@@ -218,54 +255,57 @@ def next_career_move(request):
         "form": form,
         "result": result,
         "is_pro": is_pro,
-        **_seo_ctx(NEXT_CAREER_MOVE),
+        **_seo_ctx(NEXT_CAREER_MOVE, "next_career_move"),
     })
 
 
+@cache_page(60 * 15)
+@vary_on_cookie
 def ask_career_reality(request):
     """Conversational career advisor."""
     answer = None
     form = forms.AskCareerRealityForm()
-    is_pro = request.user.is_authenticated and getattr(request.user.profile, "is_pro", False)
-
-    # Rate limit free users
-    month_key = timezone.now().strftime("%Y-%m")
-    session_key = f"ask_count_{month_key}"
-    ask_count = request.session.get(session_key, 0)
-    limit_reached = not is_pro and ask_count >= 3
+    is_pro, session_key, ask_count = _ask_limit_state(request)
+    limit_reached = not is_pro and ask_count >= ASK_MONTHLY_LIMIT
 
     if request.method == "POST" and not limit_reached:
-        form = forms.AskCareerRealityForm(request.POST)
-        if form.is_valid():
-            question = form.cleaned_data["question"]
-            answer = answer_career_question(question)
-            request.session[session_key] = ask_count + 1
+        allowed, is_pro, session_key, ask_count = _check_ask_rate_limit(request, increment=False)
+        if allowed:
+            form = forms.AskCareerRealityForm(request.POST)
+            if form.is_valid():
+                question = form.cleaned_data["question"]
+                answer = answer_career_question(question)
+                _check_ask_rate_limit(request, increment=True)
 
-            conv = AdvisorConversation.objects.create(
-                user=request.user if request.user.is_authenticated else None,
-                session_key=request.session.session_key or "",
-            )
-            AdvisorMessage.objects.create(conversation=conv, role="user", content=question)
-            AdvisorMessage.objects.create(
-                conversation=conv,
-                role="assistant",
-                content=answer.answer,
-                citations=[c.__dict__ for c in answer.citations],
-            )
+                conv = AdvisorConversation.objects.create(
+                    user=request.user if request.user.is_authenticated else None,
+                    session_key=request.session.session_key or "",
+                )
+                AdvisorMessage.objects.create(conversation=conv, role="user", content=question)
+                AdvisorMessage.objects.create(
+                    conversation=conv,
+                    role="assistant",
+                    content=answer.answer,
+                    citations=[{"type": c.type, "label": c.label, "url": c.url} for c in answer.citations],
+                )
 
     return render(request, "analyzer/tools/ask_career_reality.html", {
         "form": form,
         "answer": answer,
         "is_pro": is_pro,
         "limit_reached": limit_reached,
-        "asks_remaining": max(0, 3 - ask_count) if not is_pro else None,
-        **_seo_ctx(ASK_CAREER_REALITY),
+        "asks_remaining": max(0, ASK_MONTHLY_LIMIT - ask_count) if not is_pro else None,
+        **_seo_ctx(ASK_CAREER_REALITY, "ask_career_reality"),
     })
 
 
 @require_POST
 def ask_career_reality_api(request):
     """JSON API for Ask CareerReality."""
+    allowed, _, _, _ = _check_ask_rate_limit(request, increment=False)
+    if not allowed:
+        return JsonResponse({"error": "rate_limit_exceeded"}, status=429)
+
     try:
         payload = json.loads(request.body.decode("utf-8") or "{}")
     except json.JSONDecodeError:
@@ -273,5 +313,9 @@ def ask_career_reality_api(request):
     question = (payload.get("question") or "").strip()
     if not question:
         return JsonResponse({"error": "question required"}, status=400)
+
     answer = answer_career_question(question)
-    return JsonResponse(answer.to_dict())
+    _check_ask_rate_limit(request, increment=True)
+    response = JsonResponse(answer.to_dict())
+    response["X-Robots-Tag"] = "noindex"
+    return response

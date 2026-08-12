@@ -3,12 +3,51 @@
 {% block tool_content %}
 <form method="post" class="az-form">
     {% csrf_token %}
-    {% for field in form %}
     <div class="az-field">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
+        <label for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>
+        {{ form.role }}
     </div>
-    {% endfor %}
+    <div class="az-field">
+        <label for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>
+        {{ form.experience_years }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+        {{ form.city }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.company_type.id_for_label }}">{{ form.company_type.label }}</label>
+        {{ form.company_type }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.company_name.id_for_label }}">{{ form.company_name.label }}</label>
+        {{ form.company_name }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.current_ctc.id_for_label }}">{{ form.current_ctc.label }}</label>
+        {{ form.current_ctc }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.has_offer.id_for_label }}">{{ form.has_offer.label }}</label>
+        {{ form.has_offer }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.offer_ctc.id_for_label }}">{{ form.offer_ctc.label }}</label>
+        {{ form.offer_ctc }}
+    </div>
+
+    <details class="az-offer-section">
+        <summary>More context (optional)</summary>
+        <div class="az-field"><label for="{{ form.company_type_wizard.id_for_label }}">{{ form.company_type_wizard.label }}</label>{{ form.company_type_wizard }}</div>
+        <div class="az-field"><label for="{{ form.role_level.id_for_label }}">{{ form.role_level.label }}</label>{{ form.role_level }}</div>
+        <div class="az-field"><label for="{{ form.tenure_band.id_for_label }}">{{ form.tenure_band.label }}</label>{{ form.tenure_band }}</div>
+        <div class="az-field"><label for="{{ form.bond_status.id_for_label }}">{{ form.bond_status.label }}</label>{{ form.bond_status }}</div>
+        <div class="az-field"><label for="{{ form.notice_period.id_for_label }}">{{ form.notice_period.label }}</label>{{ form.notice_period }}</div>
+        <div class="az-field"><label for="{{ form.ctc_vs_market.id_for_label }}">{{ form.ctc_vs_market.label }}</label>{{ form.ctc_vs_market }}</div>
+        <div class="az-field"><label for="{{ form.current_situation.id_for_label }}">{{ form.current_situation.label }}</label>{{ form.current_situation }}</div>
+        <div class="az-field"><label for="{{ form.performance_status.id_for_label }}">{{ form.performance_status.label }}</label>{{ form.performance_status }}</div>
+    </details>
+
     <button type="submit" class="az-btn az-btn--primary">Analyze Decision</button>
 </form>
 

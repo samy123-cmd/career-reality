@@ -1,5 +1,8 @@
 {% extends "base.html" %}
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 {% block title %}{{ og_title }}{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
 {% block content %}
 <div class="dash-header">
   <h1>My Career Reality</h1>
@@ -7,28 +10,43 @@
 </div>
 
 <div class="dash-grid">
-  <!-- Salary Position -->
   <div class="dash-card">
     <p class="dash-card-title">Am I Underpaid?</p>
     {% if salary_insight %}
-      <p>Market median: <strong>₹{{ salary_insight.p50 }}L</strong></p>
+      <div class="az-result-grid">
+        <div class="az-stat">
+          <span class="az-stat-label">Market Median</span>
+          <span class="az-stat-value">₹{{ salary_insight.p50 }}L</span>
+        </div>
+        {% if salary_insight.percentile %}
+        <div class="az-stat">
+          <span class="az-stat-label">Percentile</span>
+          <span class="az-stat-value">{{ salary_insight.percentile }}th</span>
+        </div>
+        {% endif %}
+        <div class="az-stat">
+          <span class="az-stat-label">Realistic Next</span>
+          <span class="az-stat-value">₹{{ salary_insight.realistic_next }}L</span>
+        </div>
+      </div>
       {% if salary_insight.pay_label %}
-        <p class="dash-verdict dash-verdict--{{ salary_insight.pay_label }}">{{ salary_insight.pay_label|title }}{% if salary_insight.percentile %} ({{ salary_insight.percentile }}th percentile){% endif %}</p>
+        <p class="dash-verdict dash-verdict--{{ salary_insight.pay_label }}">{{ salary_insight.pay_label|title }}</p>
       {% endif %}
-      <p>Realistic next: ₹{{ salary_insight.realistic_next }}L</p>
       <a href="{% url 'tools:salary_reality_engine' %}">Full analysis →</a>
     {% else %}
       <p>Complete your profile to see salary insights.</p>
     {% endif %}
   </div>
 
-  <!-- Company Risk -->
   <div class="dash-card">
     <p class="dash-card-title">How Risky Is My Company?</p>
     {% if company_score %}
-      <p>Company Reality Score: <strong>{{ company_score.overall|floatformat:1 }}/10</strong></p>
+      <div class="az-stat">
+        <span class="az-stat-label">Company Reality Score</span>
+        <span class="az-stat-value">{{ company_score.overall|floatformat:1 }}/10</span>
+      </div>
       <p>Stability: {{ company_score.stability_label }}</p>
-      <a href="{% url 'company_detail' slug=career.company.slug %}">Company profile →</a>
+      {% if career.company %}<a href="{% url 'company_detail' slug=career.company.slug %}">Company profile →</a>{% endif %}
     {% elif career.company_name %}
       <p>{{ career.company_name }} — <a href="{% url 'company_directory' %}">search company data</a></p>
     {% else %}
@@ -37,7 +55,6 @@
   </div>
 
   {% if is_pro %}
-  <!-- Stay vs Switch -->
   <div class="dash-card">
     <p class="dash-card-title">Should I Switch?</p>
     {% if stay_switch %}
@@ -47,31 +64,38 @@
     {% endif %}
   </div>
 
-  <!-- AI Impact -->
   <div class="dash-card">
     <p class="dash-card-title">AI Career Impact</p>
     {% if ai_impact %}
-      <p>AI Risk Score: <strong>{{ ai_impact.ai_risk_score }}/100</strong> ({{ ai_impact.risk_label }})</p>
+      <div class="az-stat">
+        <span class="az-stat-label">AI Risk Score</span>
+        <span class="az-stat-value">{{ ai_impact.ai_risk_score }}/100</span>
+      </div>
+      <p>{{ ai_impact.risk_label }}</p>
       <a href="{% url 'tools:ai_career_impact' %}">Full assessment →</a>
     {% endif %}
   </div>
 
-  <!-- Progression -->
   <div class="dash-card">
     <p class="dash-card-title">Am I Progressing?</p>
     {% if latest_snapshot %}
-      <p>Latest: {{ latest_snapshot.title }} @ ₹{{ latest_snapshot.ctc }}L ({{ latest_snapshot.peer_comparison|title }})</p>
+      <p>{{ latest_snapshot.title }} @ ₹{{ latest_snapshot.ctc }}L</p>
+      <p class="dash-verdict dash-verdict--{{ latest_snapshot.peer_comparison }}">{{ latest_snapshot.peer_comparison|title }}</p>
     {% else %}
       <p>No snapshots yet.</p>
     {% endif %}
     <a href="{% url 'career_progression' %}">Track progression →</a>
   </div>
 
-  <!-- Alerts -->
   <div class="dash-card dash-card--full">
     <p class="dash-card-title">Career Risk Radar</p>
     {% if alerts %}
-      <ul>{% for a in alerts %}<li class="alert-{{ a.severity }}">{{ a.message }}</li>{% endfor %}</ul>
+      {% for a in alerts %}
+      <div class="alert-row alert-{{ a.severity }}">
+        <span class="alert-type">{{ a.get_alert_type_display }}</span>
+        <p>{{ a.message }}</p>
+      </div>
+      {% endfor %}
     {% else %}
       <p>No active alerts.</p>
     {% endif %}

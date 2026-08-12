@@ -85,6 +85,13 @@
                                 <small>AI risk score for your role</small>
                             </span>
                         </a>
+                        <a href="{% url 'tools:next_career_move' %}">
+                            <span class="mega-icon">🧭</span>
+                            <span class="mega-label">
+                                <strong>Next Career Move</strong>
+                                <small>Highest-ROI paths for your profile</small>
+                            </span>
+                        </a>
                         <a href="{% url 'tools:ask_career_reality' %}">
                             <span class="mega-icon">💬</span>
                             <span class="mega-label">
@@ -278,6 +285,9 @@
                         <a href="{% url 'tools:ai_career_impact' %}" class="mobile-nav-link">
                             <span class="mnl-icon">🤖</span> AI Career Impact
                         </a>
+                        <a href="{% url 'tools:next_career_move' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🧭</span> Next Career Move
+                        </a>
                         <a href="{% url 'tools:ask_career_reality' %}" class="mobile-nav-link">
                             <span class="mnl-icon">💬</span> Ask CareerReality
                         </a>
@@ -332,6 +342,28 @@
                         <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
                     </div>
                 </div>
+
+                {% if user.is_authenticated and user.profile.is_pro %}
+                <div class="mobile-nav-section">
+                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-pro">
+                        Pro
+                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="mobile-nav-accordion-panel" id="nav-panel-pro">
+                        <a href="{% url 'my_career_reality' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">◆</span> My Career Reality
+                        </a>
+                        <a href="{% url 'career_progression' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">📈</span> Career Progression
+                        </a>
+                        <a href="{% url 'career_risk_radar' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🛡️</span> Risk Radar
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
 
                 <!-- Mobile Pro CTA -->
                 <div class="mobile-nav-cta">

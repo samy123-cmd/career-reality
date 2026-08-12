@@ -3,24 +3,39 @@
 {% block tool_content %}
 <form method="post" class="az-form">
     {% csrf_token %}
-    <h2 class="az-section-title">Offer A</h2>
-    {% for field in form %}
-        {% if 'offer_a' in field.name or field.name == 'role' or field.name == 'experience_years' %}
-        <div class="az-field">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-        </div>
-        {% endif %}
-    {% endfor %}
-    <h2 class="az-section-title">Offer B</h2>
-    {% for field in form %}
-        {% if 'offer_b' in field.name %}
-        <div class="az-field">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-        </div>
-        {% endif %}
-    {% endfor %}
+    <div class="az-field">
+        <label for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>
+        {{ form.role }}
+    </div>
+    <div class="az-field">
+        <label for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>
+        {{ form.experience_years }}
+    </div>
+
+    <details class="az-offer-section" open>
+        <summary>Offer A</summary>
+        {% for field in form %}
+            {% if 'offer_a' in field.name %}
+            <div class="az-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </details>
+
+    <details class="az-offer-section" open>
+        <summary>Offer B</summary>
+        {% for field in form %}
+            {% if 'offer_b' in field.name %}
+            <div class="az-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </details>
+
     <button type="submit" class="az-btn az-btn--primary">Compare Offers</button>
 </form>
 
@@ -33,15 +48,13 @@
         {% endfor %}
     </ul>
     <div class="az-result-grid">
-        <div>
-            <h3>Offer A — {{ result.offer_a.label }}</h3>
-            <p>Overall: {{ result.offer_a.overall|floatformat:1 }}/10</p>
-            <p>Effective comp: ₹{{ result.offer_a.total_comp }}L</p>
+        <div class="az-stat">
+            <span class="az-stat-label">Offer A overall</span>
+            <span class="az-stat-value">{{ result.offer_a.overall|floatformat:1 }}/10</span>
         </div>
-        <div>
-            <h3>Offer B — {{ result.offer_b.label }}</h3>
-            <p>Overall: {{ result.offer_b.overall|floatformat:1 }}/10</p>
-            <p>Effective comp: ₹{{ result.offer_b.total_comp }}L</p>
+        <div class="az-stat">
+            <span class="az-stat-label">Offer B overall</span>
+            <span class="az-stat-value">{{ result.offer_b.overall|floatformat:1 }}/10</span>
         </div>
     </div>
     {% if not is_pro %}

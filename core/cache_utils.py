@@ -43,6 +43,12 @@ STATIC_WARM_PATHS: tuple[str, ...] = (
     "/contact/",
     "/privacy-policy/",
     "/terms/",
+    "/tools/salary-reality-engine/",
+    "/tools/offer-analyzer/",
+    "/tools/stay-vs-switch/",
+    "/tools/ai-career-impact/",
+    "/tools/next-career-move/",
+    "/tools/ask/",
 )
 
 # CDN cache hints for anonymous public HTML/XML (seconds).
@@ -59,6 +65,12 @@ EDGE_CACHE_RULES: tuple[tuple[re.Pattern[str], int], ...] = (
     (re.compile(r"^/salary-calculator/$"), 60),
     (re.compile(r"^/resignation-risk/$"), 60),
     (re.compile(r"^/layoff-radar/$"), 60),
+    (re.compile(r"^/tools/salary-reality-engine/$"), 60),
+    (re.compile(r"^/tools/offer-analyzer/$"), 60),
+    (re.compile(r"^/tools/stay-vs-switch/$"), 60),
+    (re.compile(r"^/tools/ai-career-impact/$"), 60),
+    (re.compile(r"^/tools/next-career-move/$"), 60),
+    (re.compile(r"^/tools/ask/$"), 60),
     (re.compile(r"^/companies/$"), 900),
     (re.compile(r"^/ai/$"), 900),
     (re.compile(r"^/ai/tag/[^/]+/$"), 900),

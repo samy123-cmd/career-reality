@@ -144,6 +144,40 @@ ASK_CAREER_REALITY = PageSEO(
     keywords=("career advice india", "ask career advisor", "career chatbot india"),
 )
 
+# Per-tool FAQ content for JSON-LD and visible accordions on tool pages.
+TOOL_FAQS: dict[str, tuple[dict[str, str], ...]] = {
+    "salary_reality_engine": (
+        {"q": "How accurate is the salary percentile?", "a": "We blend crowdsourced submissions with editorial bands. Sample size and confidence are shown on every result."},
+        {"q": "What does underpaid mean?", "a": "Your CTC is more than 10% below the market median for your role, YOE, and city band."},
+        {"q": "Is my data stored?", "a": "No login required. Inputs are used only to compute your result in this session."},
+    ),
+    "offer_analyzer": (
+        {"q": "How do you compare two offers?", "a": "We score effective comp, company stability, market fit, WLB, commute, and growth on a 0–10 scale."},
+        {"q": "Should I include ESOP in CTC?", "a": "Enter ESOP value separately if known. We amortize it over 4 years in effective comp."},
+        {"q": "What if the company is not in your database?", "a": "We use conservative stability estimates and still compare compensation and commute factors."},
+    ),
+    "stay_vs_switch": (
+        {"q": "What does Wait mean?", "a": "Signals are mixed — build leverage (offer, savings, skills) before resigning."},
+        {"q": "Does this replace financial advice?", "a": "No. This is decision support based on market data, not personalized financial planning."},
+        {"q": "How is company risk factored in?", "a": "We use layoff reports, review scores, and the Company Reality Score when available."},
+    ),
+    "ai_career_impact": (
+        {"q": "What is an AI Risk Score?", "a": "A 0–100 measure of how exposed your role's tasks are to automation and AI tooling in 2026."},
+        {"q": "Is my job safe if the score is low?", "a": "Low exposure means core work involves judgment and scope AI cannot easily replace — still upskill proactively."},
+        {"q": "Where does the data come from?", "a": "Rule-based mapping from editorial research plus AI Pulse career impact signals."},
+    ),
+    "next_career_move": (
+        {"q": "How are paths ranked?", "a": "By ROI score (comp upside) weighted with fit score (your YOE, company type, and skills)."},
+        {"q": "Why only one path on free?", "a": "Pro unlocks the full ranked list with action plans for every path."},
+        {"q": "Is GCC always better than IT services?", "a": "Not always — we factor your current company type and typical GCC premiums at your YOE."},
+    ),
+    "ask_career_reality": (
+        {"q": "What can I ask?", "a": "Salary comparisons, offer decisions, switch timing — include role, YOE, CTC, and city for best answers."},
+        {"q": "How many free questions?", "a": "Three per month for free users. Pro gets unlimited access."},
+        {"q": "Does it use ChatGPT?", "a": "We use CareerReality's own salary, company, and layoff data first; optional AI narration when an API key is configured."},
+    ),
+}
+
 HOME = PageSEO(
     title="Career Reality India — Salary Truths, CTC Calculator & Layoff Tracker",
     description=(
@@ -164,19 +198,19 @@ SEO_TOOL_HUB = (
     {
         "label": "Salary Reality Engine",
         "description": "Role + YOE + city → percentile, market range, under/overpaid flag.",
-        "url_name": "salary_reality_engine",
+        "url_name": "tools:salary_reality_engine",
         "icon": "salary",
     },
     {
         "label": "Offer Analyzer",
         "description": "Compare two offers — get a clear which-one-to-take verdict.",
-        "url_name": "offer_analyzer",
+        "url_name": "tools:offer_analyzer",
         "icon": "ctc",
     },
     {
         "label": "Stay vs Switch",
         "description": "Stay, Switch, or Wait — with financial and career reasoning.",
-        "url_name": "stay_vs_switch",
+        "url_name": "tools:stay_vs_switch",
         "icon": "risk",
     },
     {
@@ -194,8 +228,14 @@ SEO_TOOL_HUB = (
     {
         "label": "AI Career Impact",
         "description": "AI risk score, vulnerable tasks, and skills to learn.",
-        "url_name": "ai_career_impact",
+        "url_name": "tools:ai_career_impact",
         "icon": "pulse",
+    },
+    {
+        "label": "Next Career Move",
+        "description": "Highest-ROI paths: switch, promotion, GCC, AI upskill.",
+        "url_name": "tools:next_career_move",
+        "icon": "company",
     },
     {
         "label": "IT Layoff Radar",
@@ -206,7 +246,7 @@ SEO_TOOL_HUB = (
     {
         "label": "Ask CareerReality",
         "description": "Evidence-backed career advice from our own data.",
-        "url_name": "ask_career_reality",
+        "url_name": "tools:ask_career_reality",
         "icon": "company",
     },
 )

@@ -66,7 +66,6 @@ def company_directory(request):
     })
 
 
-@cache_page(60 * 15, key_prefix="company_detail_v2")
 def company_detail(request, slug):
     """Deep-dive company profile with aggregated intelligence."""
     company = get_object_or_404(Company, slug=slug)
@@ -153,8 +152,8 @@ def company_detail(request, slug):
     unlocked_ids = get_unlocked_ids(request)
     user_is_pro = is_pro_user(request)
 
-    from companies.scoring import compute_company_reality_score
-    reality_score = compute_company_reality_score(company)
+    from companies.scoring import get_company_reality_score
+    reality_score = get_company_reality_score(company)
 
     return render(request, "companies/detail.html", {
         "company": company,

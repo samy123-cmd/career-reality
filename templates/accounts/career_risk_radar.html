@@ -1,5 +1,8 @@
 {% extends "base.html" %}
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 {% block title %}{{ og_title }}{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
 {% block content %}
 <div class="dash-header">
   <h1>Career Risk Radar</h1>
@@ -15,14 +18,14 @@
       <p>{{ a.message }}</p>
       <small>{{ a.created_at|date:"M d, Y" }}</small>
       {% if not a.is_read %}
-      <form method="post" action="{% url 'mark_alert_read' alert_id=a.id %}" style="display:inline">
+      <form method="post" action="{% url 'mark_alert_read' alert_id=a.id %}">
         {% csrf_token %}
-        <button type="submit">Mark read</button>
+        <button type="submit" class="az-btn az-btn--primary">Mark read</button>
       </form>
       {% endif %}
     </div>
     {% empty %}
-    <p>No alerts yet. We'll notify you about layoffs, salary stagnation, and AI disruption signals.</p>
+    <p class="dash-empty-msg">No alerts yet. We'll notify you about layoffs, salary stagnation, and AI disruption signals.</p>
     {% endfor %}
   </div>
 
@@ -31,7 +34,7 @@
     {% for w in watchlist %}
     <p><a href="{% url 'company_detail' slug=w.company.slug %}">{{ w.company.name }}</a></p>
     {% empty %}
-    <p>Add companies to your watchlist from company pages.</p>
+    <p class="dash-empty-msg">Add companies to your watchlist from company pages.</p>
     {% endfor %}
   </div>
 </div>

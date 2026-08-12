@@ -14,6 +14,12 @@ class ToolSitemapTests(TestCase):
         self.assertIn("salary_calculator", names)
         self.assertIn("analyzer_home", names)
         self.assertIn("layoff_radar", names)
+        self.assertIn("tools:salary_reality_engine", names)
+        self.assertIn("tools:offer_analyzer", names)
+        self.assertIn("tools:stay_vs_switch", names)
+        self.assertIn("tools:ai_career_impact", names)
+        self.assertIn("tools:next_career_move", names)
+        self.assertIn("tools:ask_career_reality", names)
 
     def test_static_sitemap_excludes_tools_to_avoid_duplicates(self):
         static = StaticViewSitemap().items()
@@ -166,3 +172,40 @@ class SEOContextProcessorTests(TestCase):
 
         ctx = seo_internal_links(RequestFactory().get("/"))
         self.assertEqual(len(ctx["seo_tool_hub"]), len(SEO_TOOL_HUB))
+
+
+class CareerToolSEOTests(TestCase):
+    """SEO coverage for /tools/* career feature pages."""
+
+    TOOL_CASES = (
+        ("tools:salary_reality_engine", "Salary Reality Engine"),
+        ("tools:offer_analyzer", "Offer Analyzer"),
+        ("tools:stay_vs_switch", "Stay vs Switch Analyzer"),
+        ("tools:ai_career_impact", "AI Career Impact"),
+        ("tools:next_career_move", "Next Career Move"),
+        ("tools:ask_career_reality", "Ask CareerReality"),
+    )
+
+    def test_career_tool_pages_return_200(self):
+        for url_name, _ in self.TOOL_CASES:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertEqual(response.status_code, 200)
+
+    def test_career_tool_pages_have_software_application_schema(self):
+        for url_name, _ in self.TOOL_CASES:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertContains(response, '"@type": "SoftwareApplication"')
+
+    def test_career_tool_pages_have_faq_schema(self):
+        for url_name, _ in self.TOOL_CASES:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertContains(response, '"@type": "FAQPage"')
+
+    def test_career_tool_pages_render_h1(self):
+        for url_name, h1 in self.TOOL_CASES:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertContains(response, h1)

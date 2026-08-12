@@ -7,6 +7,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from django.core.cache import cache
+
 from analyzer.models import SalarySubmission
 from content.article_market_data import SALARY_CLUSTERS
 
@@ -170,6 +172,26 @@ def get_salary_reality(
     Compute salary reality for a role + experience + city combination.
     Falls back to editorial bands when crowdsourced n < MIN_SAMPLE_SIZE.
     """
+    cache_key = (
+        f"salary_reality:v1:{role.lower()}:{yoe}:{_normalize_city(city)}:"
+        f"{company_type}:{current_ctc or 0}"
+    )
+    cached = cache.get(cache_key)
+    if cached:
+        return SalaryRealityResult(**cached)
+
+    result = _compute_salary_reality(role, yoe, city, company_type, current_ctc)
+    cache.set(cache_key, result.__dict__, timeout=3600)
+    return result
+
+
+def _compute_salary_reality(
+    role: str,
+    yoe: float,
+    city: str,
+    company_type: str = "",
+    current_ctc: int | None = None,
+) -> SalaryRealityResult:
     norm_city = _normalize_city(city)
     yoe_lo = max(0, yoe - 1)
     yoe_hi = yoe + 1
