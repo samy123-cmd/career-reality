@@ -108,6 +108,55 @@ class ValidationFeedbackTests(TestCase):
         self.assertContains(response, 'aria-invalid="true"')
 
 
+class ResultPresentationTests(TestCase):
+    """Raw internal values must never surface in the interface."""
+
+    def _result(self):
+        return self.client.post(
+            reverse("tools:salary_reality_engine"),
+            {
+                "role": "Software Engineer",
+                "experience_years": "5",
+                "city": "Bengaluru",
+                "current_ctc": "18",
+            },
+        )
+
+    def test_pay_label_is_humanised(self):
+        content = self._result().content.decode()
+        self.assertNotIn("AT_MARKET", content)
+        self.assertNotIn("At_Market", content)
+
+    def test_confidence_line_explains_itself_without_data(self):
+        content = self._result().content.decode()
+        self.assertNotIn("0 samples", content)
+
+    def test_pay_label_display_covers_every_engine_value(self):
+        from analyzer.services.salary_engine import SalaryRealityResult
+
+        for raw in ("underpaid", "at_market", "overpaid"):
+            with self.subTest(pay_label=raw):
+                display = SalaryRealityResult.PAY_LABEL_DISPLAY[raw]
+                self.assertNotIn("_", display)
+                self.assertTrue(display[0].isupper())
+
+    def test_badge_variant_has_matching_style(self):
+        from pathlib import Path
+
+        from django.conf import settings
+
+        from analyzer.services.salary_engine import SalaryRealityResult
+
+        css = (Path(settings.BASE_DIR) / "static" / "css" / "feature-product.css").read_text()
+        for raw in SalaryRealityResult.PAY_LABEL_DISPLAY:
+            with self.subTest(pay_label=raw):
+                self.assertIn(
+                    f".cr-result-hero__badge--{raw}",
+                    css,
+                    msg=f"badge variant for {raw!r} renders unstyled",
+                )
+
+
 class AccessibilityContractTests(TestCase):
     """Structural a11y guarantees that are easy to regress on."""
 
@@ -131,6 +180,32 @@ class AccessibilityContractTests(TestCase):
                 hidden = set(re.findall(r'<input[^>]*type="hidden"[^>]*id="(id_[^"]+)"', content))
                 unlabelled = rendered - labelled - hidden
                 self.assertEqual(unlabelled, set(), msg=f"{url_name} unlabelled inputs: {unlabelled}")
+
+    def test_primary_cta_survives_the_button_reset(self):
+        """`all: unset` must not out-specify the rules that paint the CTA.
+
+        The reset names the element (0,3,1); a class-only fill rule (0,3,0)
+        loses to it and the main call to action renders as bare text.
+        """
+        from pathlib import Path
+
+        from django.conf import settings
+
+        css = (Path(settings.BASE_DIR) / "static" / "css" / "feature-product.css").read_text()
+        reset_index = css.find("all: unset")
+        self.assertNotEqual(reset_index, -1)
+        fill = css.find("button.az-calc-btn", reset_index)
+        self.assertNotEqual(fill, -1, msg="CTA fill rules must also name `button` to beat the reset")
+
+    def test_hidden_attribute_still_hides(self):
+        """Setting `display` on buttons beats the UA `[hidden]` rule."""
+        from pathlib import Path
+
+        from django.conf import settings
+
+        css = (Path(settings.BASE_DIR) / "static" / "css" / "feature-product.css").read_text()
+        self.assertIn(".cr-feature [hidden]", css)
+        self.assertIn("display: none !important", css)
 
     def test_results_region_is_announced(self):
         response = self.client.post(

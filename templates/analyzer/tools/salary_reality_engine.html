@@ -53,9 +53,9 @@
     <p class="cr-result-hero__metric">Salary gap: <strong class="cr-data">{% if result.gap_lpa < 0 %}−{% endif %}₹{{ result.gap_lpa|floatformat:1 }}L</strong> vs median</p>
     {% endif %}
     {% if result.pay_label %}
-    <span class="cr-result-hero__badge cr-result-hero__badge--{{ result.pay_label }}">{{ result.pay_label|title }}</span>
+    <span class="cr-result-hero__badge cr-result-hero__badge--{{ result.pay_label }}">{{ result.pay_label_display }}</span>
     {% endif %}
-    <p class="cr-help">Confidence: {{ result.confidence|title }} · {{ result.sample_size }} samples · {{ result.data_source }}</p>
+    <p class="cr-help">{{ result.confidence_display }}</p>
   </div>
   {% include "features/partials/_percentile_bar.html" with chart_data=chart_data %}
   <div class="cr-metric-grid cr-stat-grid">

@@ -91,10 +91,21 @@
   font-family: inherit;
 }
 
-.cr-feature .cr-tool-card .az-calc-btn,
-.cr-dash .cr-tool-card .az-calc-btn,
-.cr-feature .cr-tool-card .cr-btn--primary,
-.cr-dash .cr-tool-card .cr-btn--primary {
+/* The button rules below set `display`, which out-specifies the user-agent
+   `[hidden] { display: none }` and would leave hidden controls on screen. */
+.cr-feature [hidden],
+.cr-dash [hidden] {
+  display: none !important;
+}
+
+/* The reset above uses `all: unset` at specificity (0,3,1), so every rule that
+   restores appearance must also name the element to avoid being wiped. */
+.cr-feature .cr-tool-card button.az-calc-btn,
+.cr-dash .cr-tool-card button.az-calc-btn,
+.cr-feature .cr-tool-card button.cr-btn--primary,
+.cr-dash .cr-tool-card button.cr-btn--primary,
+.cr-feature .cr-tool-card .cr-wizard__nav button.cr-btn--primary,
+.cr-dash .cr-tool-card .cr-wizard__nav button.cr-btn--primary {
   width: 100%;
   min-height: 48px;
   padding: 0.75rem 1.25rem;
@@ -105,31 +116,32 @@
   color: var(--feature-bg);
   border: none;
   margin-top: 0.5rem;
+  transition: opacity 0.15s ease, transform 0.1s ease;
 }
-.cr-feature .cr-tool-card .az-calc-btn:hover,
-.cr-dash .cr-tool-card .az-calc-btn:hover,
-.cr-feature .cr-tool-card .cr-btn--primary:hover,
-.cr-dash .cr-tool-card .cr-btn--primary:hover { opacity: 0.92; }
+.cr-feature .cr-tool-card button.az-calc-btn:hover,
+.cr-dash .cr-tool-card button.az-calc-btn:hover,
+.cr-feature .cr-tool-card button.cr-btn--primary:hover,
+.cr-dash .cr-tool-card button.cr-btn--primary:hover { opacity: 0.9; }
 
-.cr-feature .cr-tool-card .cr-btn--secondary,
-.cr-dash .cr-tool-card .cr-btn--secondary,
-.cr-feature .cr-tool-card .cr-wizard__back,
-.cr-dash .cr-tool-card .cr-wizard__back {
+.cr-feature .cr-tool-card button.cr-btn--secondary,
+.cr-dash .cr-tool-card button.cr-btn--secondary,
+.cr-feature .cr-tool-card .cr-wizard__nav button.cr-wizard__back,
+.cr-dash .cr-tool-card .cr-wizard__nav button.cr-wizard__back {
   width: auto;
-  min-height: auto;
-  padding: 0.5rem 0;
+  min-height: 44px;
+  margin: 0 auto;
+  padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--feature-text-secondary);
   background: transparent;
+  border: none;
   text-decoration: underline;
   text-underline-offset: 3px;
-  margin-top: 0;
 }
-.cr-feature .cr-tool-card .cr-btn--secondary:hover,
-.cr-dash .cr-tool-card .cr-btn--secondary:hover,
-.cr-feature .cr-tool-card .cr-wizard__back:hover,
-.cr-dash .cr-tool-card .cr-wizard__back:hover { color: var(--feature-accent); }
+.cr-feature .cr-tool-card button.cr-btn--secondary:hover,
+.cr-dash .cr-tool-card button.cr-btn--secondary:hover,
+.cr-feature .cr-tool-card .cr-wizard__nav button.cr-wizard__back:hover { color: var(--feature-accent); }
 
 /* Preview strip */
 .cr-preview-strip {
@@ -579,9 +591,21 @@
   border: 1px solid var(--feature-border);
   color: var(--feature-text-secondary);
 }
-.cr-result-hero__badge--underpaid { border-color: var(--feature-danger); color: var(--feature-danger); }
-.cr-result-hero__badge--fair { border-color: var(--feature-warning); color: var(--feature-warning); }
-.cr-result-hero__badge--overpaid { border-color: var(--feature-positive); color: var(--feature-positive); }
+.cr-result-hero__badge--underpaid {
+  border-color: var(--feature-danger);
+  color: var(--feature-danger);
+  background: rgba(248, 113, 113, 0.1);
+}
+.cr-result-hero__badge--at_market {
+  border-color: var(--feature-warning);
+  color: var(--feature-warning);
+  background: rgba(251, 191, 36, 0.1);
+}
+.cr-result-hero__badge--overpaid {
+  border-color: var(--feature-positive);
+  color: var(--feature-positive);
+  background: rgba(52, 211, 153, 0.1);
+}
 
 .cr-result__verdict {
   font-size: clamp(1.75rem, 4vw, 2.25rem);
@@ -601,10 +625,12 @@
   font-family: ui-monospace, 'Cascadia Code', monospace;
 }
 
+/* Fixed 2-up rather than auto-fit: auto-fit produced an orphaned tile on a
+   4-item grid at card width, which reads as a rendering fault. */
 .cr-metric-grid,
 .cr-stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
 }
 .cr-stat {

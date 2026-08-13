@@ -57,6 +57,29 @@ class SalaryRealityResult:
     gap_lpa: float | None = None
     limitation: str | None = None
 
+    PAY_LABEL_DISPLAY = {
+        "underpaid": "Underpaid",
+        "at_market": "At market",
+        "overpaid": "Above market",
+    }
+
+    @property
+    def pay_label_display(self) -> str:
+        """Human-readable pay label; raw enum values must never reach the UI."""
+        if not self.pay_label:
+            return ""
+        return self.PAY_LABEL_DISPLAY.get(
+            self.pay_label, self.pay_label.replace("_", " ").capitalize()
+        )
+
+    @property
+    def confidence_display(self) -> str:
+        """Explains what the confidence rating is based on, in plain language."""
+        if self.sample_size:
+            noun = "submission" if self.sample_size == 1 else "submissions"
+            return f"{self.confidence.title()} confidence · {self.sample_size} community {noun}"
+        return f"{self.confidence.title()} confidence · editorial benchmark, no community data yet"
+
     def to_dict(self) -> dict:
         return {
             "role": self.role,
