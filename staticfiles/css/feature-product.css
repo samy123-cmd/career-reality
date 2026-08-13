@@ -1,6 +1,11 @@
-/* CareerReality Feature Product — scoped design system (.cr-feature root) */
+/* CareerReality Feature Product — scoped design system.
+   Two roots share it: .cr-feature (tools) and .cr-dash (Pro dashboards).
+   The tokens must be declared on both; when they were on .cr-feature alone
+   every dashboard silently lost its accent, borders and surfaces, which is
+   what made the trajectory chart render as unlabelled dots on black. */
 
-.cr-feature {
+.cr-feature,
+.cr-dash {
   --feature-bg: var(--cr-bg, #0a0a0b);
   --feature-surface: var(--cr-surface, #141416);
   --feature-surface-elevated: var(--cr-surface-2, #1c1c1f);
@@ -14,6 +19,9 @@
   --feature-danger: #f87171;
   --feature-radius: 10px;
   --feature-radius-lg: 14px;
+}
+
+.cr-feature {
   background: var(--feature-bg);
   color: var(--feature-text-primary);
   padding: 1.5rem 0 3rem;
@@ -933,7 +941,6 @@
 
 /* Dashboard (Pro pages) */
 .cr-dash {
-  --feature-bg: var(--cr-bg, #0a0a0b);
   padding: 1.5rem 0 3rem;
   background: var(--feature-bg);
   color: var(--feature-text-primary);
@@ -1072,9 +1079,9 @@
 
 /* Radar */
 .cr-radar__svg { width: 100%; max-width: 280px; margin: 0 auto; display: block; }
-.cr-radar__grid { fill: none; stroke: var(--feature-border); stroke-width: 1; }
-.cr-radar__data { fill: rgba(56, 189, 248, 0.25); stroke: var(--feature-accent); stroke-width: 2; }
-.cr-radar__label { fill: var(--feature-text-muted); font-size: 9px; text-anchor: middle; }
+.cr-radar__grid { fill: none; stroke: var(--feature-border, rgba(255, 255, 255, 0.08)); stroke-width: 1; }
+.cr-radar__data { fill: rgba(56, 189, 248, 0.25); stroke: var(--feature-accent, #38bdf8); stroke-width: 2; }
+.cr-radar__label { fill: var(--feature-text-secondary, #a1a1aa); font-size: 10px; text-anchor: middle; }
 .cr-radar__fallback { list-style: none; padding: 0; margin: 1rem 0 0; font-size: 0.875rem; }
 
 /* Trajectory */
@@ -1086,11 +1093,63 @@
   border-radius: var(--feature-radius-lg);
   margin-bottom: 1.25rem;
 }
-.cr-trajectory__svg { width: 100%; height: auto; min-height: 180px; }
-.cr-trajectory__line { stroke: var(--feature-accent); stroke-width: 2; }
-.cr-trajectory__dot { fill: var(--feature-accent); }
-.cr-trajectory__label { fill: var(--feature-text-muted); font-size: 10px; text-anchor: middle; }
-.cr-trajectory__fallback { list-style: none; padding: 0; font-size: 0.875rem; color: var(--feature-text-secondary); }
+.cr-trajectory { margin: 0 0 1.25rem; }
+.cr-trajectory__svg {
+  width: 100%;
+  height: auto;
+  min-height: 180px;
+  overflow: visible;
+}
+/* Explicit hex fallbacks: an SVG presentation attribute resolves to nothing if
+   the custom property is missing, which silently hides the line. */
+.cr-trajectory__line {
+  stroke: var(--feature-accent, #38bdf8);
+  stroke-width: 2.5;
+  fill: none;
+}
+.cr-trajectory__dot {
+  fill: var(--feature-accent, #38bdf8);
+  stroke: var(--feature-bg, #0a0a0b);
+  stroke-width: 2;
+}
+.cr-trajectory__label {
+  fill: var(--feature-text-secondary, #a1a1aa);
+  font-size: 11px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+.cr-trajectory__caption {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--feature-border);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--feature-text-muted);
+}
+.cr-trajectory__fallback {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  font-size: 0.875rem;
+  color: var(--feature-text-secondary);
+}
+.cr-trajectory__fallback li {
+  display: grid;
+  grid-template-columns: 7rem auto 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--feature-border);
+}
+.cr-trajectory__fallback li:last-child { border-bottom: none; }
+.cr-trajectory__date { color: var(--feature-text-muted); }
+.cr-trajectory__ctc { font-weight: 600; color: var(--feature-text-primary); }
+@media (max-width: 480px) {
+  .cr-trajectory__fallback li { grid-template-columns: 1fr auto; }
+  .cr-trajectory__title { grid-column: 1 / -1; color: var(--feature-text-muted); }
+}
 
 /* Offer tabs */
 .cr-offer-tabs {
