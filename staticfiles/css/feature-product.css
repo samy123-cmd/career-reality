@@ -6,19 +6,64 @@
 
 .cr-feature,
 .cr-dash {
-  --feature-bg: var(--cr-bg, #0a0a0b);
-  --feature-surface: var(--cr-surface, #141416);
-  --feature-surface-elevated: var(--cr-surface-2, #1c1c1f);
-  --feature-text-primary: var(--cr-text, #f4f4f5);
-  --feature-text-secondary: var(--cr-text-muted, #a1a1aa);
-  --feature-text-muted: #71717a;
-  --feature-border: rgba(255, 255, 255, 0.08);
-  --feature-accent: #38bdf8;
+  /* Inherit the site palette so both themes drive these surfaces.
+     The base names must match the tokens the theme files actually define:
+     --cr-bg does not exist, and reading it made every value fall back to a
+     dark literal, which rendered near-black text on a near-black panel in
+     light mode at a contrast ratio of 1.01:1. */
+  --feature-bg: var(--cr-page, #06060b);
+  --feature-surface: var(--cr-surface, #0e0e16);
+  --feature-surface-elevated: var(--cr-surface-2, #14141f);
+  --feature-text-primary: var(--cr-text, #fafafa);
+  --feature-text-secondary: var(--cr-text-secondary, #c8c8d0);
+  --feature-text-muted: var(--cr-text-muted, #9e9ea8);
+  --feature-border: var(--cr-border, rgba(255, 255, 255, 0.08));
+
+  /* Dark-mode semantics. Every value clears 4.5:1 on --feature-surface. */
+  --feature-accent: var(--cr-accent, #38bdf8);
+  --feature-accent-strong: #7dd3fc;
   --feature-positive: #34d399;
   --feature-warning: #fbbf24;
   --feature-danger: #f87171;
+
+  /* Tints stay hue-matched to the mode's accent rather than a fixed blue. */
+  --feature-accent-tint: rgba(56, 189, 248, 0.12);
+  --feature-accent-tint-soft: rgba(56, 189, 248, 0.06);
+  --feature-positive-tint: rgba(52, 211, 153, 0.12);
+  --feature-warning-tint: rgba(251, 191, 36, 0.1);
+  --feature-danger-tint: rgba(248, 113, 113, 0.1);
+  --feature-chart-fill: rgba(56, 189, 248, 0.35);
+  --feature-focus-ring: rgba(56, 189, 248, 0.35);
+  --feature-focus-ring-danger: rgba(248, 113, 113, 0.3);
+  --feature-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
   --feature-radius: 10px;
   --feature-radius-lg: 14px;
+}
+
+/* Light mode. The shared --cr-accent (#0284c7) only reaches 4.10:1 on white,
+   so feature text and links step one shade darker to clear 4.5:1 while
+   staying on the brand's sky-blue hue. */
+[data-theme="light"] .cr-feature,
+[data-theme="light"] .cr-dash {
+  /* Shades chosen so each clears 4.5:1 against the lightest surface these
+     tokens land on (--cr-surface-2, #f4f4f5), not just against white. */
+  --feature-text-muted: #63636b;
+  --feature-accent: #0369a1;
+  --feature-accent-strong: #075985;
+  --feature-positive: #166534;
+  --feature-warning: #92400e;
+  --feature-danger: #b91c1c;
+
+  --feature-accent-tint: rgba(3, 105, 161, 0.1);
+  --feature-accent-tint-soft: rgba(3, 105, 161, 0.05);
+  --feature-positive-tint: rgba(21, 128, 61, 0.1);
+  --feature-warning-tint: rgba(161, 98, 7, 0.1);
+  --feature-danger-tint: rgba(220, 38, 38, 0.08);
+  --feature-chart-fill: rgba(3, 105, 161, 0.28);
+  --feature-focus-ring: rgba(3, 105, 161, 0.3);
+  --feature-focus-ring-danger: rgba(185, 28, 28, 0.25);
+  --feature-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .cr-feature {
@@ -43,7 +88,7 @@
 .cr-dash .cr-tool-card {
   background: var(--cr-surface-2, var(--feature-surface-elevated));
   border: 1px solid var(--cr-border, var(--feature-border));
-  box-shadow: var(--shadow-lg, 0 10px 40px rgba(0, 0, 0, 0.35));
+  box-shadow: var(--feature-shadow);
   border-radius: var(--feature-radius-lg);
   padding: 2rem;
   max-width: 720px;
@@ -205,8 +250,8 @@
 .cr-engine-error {
   padding: 1rem 1.125rem;
   margin-bottom: 1.5rem;
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: var(--feature-warning-tint);
+  border: 1px solid var(--feature-warning);
   border-left: 3px solid var(--feature-warning);
   border-radius: var(--feature-radius);
 }
@@ -375,13 +420,13 @@
 .cr-stepper__step.is-active .cr-stepper__num {
   border-color: var(--feature-accent);
   color: var(--feature-accent);
-  background: rgba(56, 189, 248, 0.12);
+  background: var(--feature-accent-tint);
 }
 .cr-stepper__step.is-active .cr-stepper__label { color: var(--feature-accent); }
 .cr-stepper__step.is-complete .cr-stepper__num {
   border-color: var(--feature-positive);
   color: var(--feature-positive);
-  background: rgba(52, 211, 153, 0.12);
+  background: var(--feature-positive-tint);
 }
 .cr-stepper__step.is-complete .cr-stepper__label { color: var(--feature-text-secondary); }
 
@@ -420,7 +465,7 @@
 .cr-feature .cr-tool-card .az-calc-input:focus,
 .cr-dash .cr-tool-card .az-calc-input:focus {
   border-color: var(--feature-accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+  box-shadow: 0 0 0 3px var(--feature-focus-ring);
   outline: none;
 }
 
@@ -435,14 +480,14 @@
   border-color: var(--feature-danger) !important;
 }
 .cr-feature .cr-tool-card .az-calc-input[aria-invalid="true"]:focus {
-  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+  box-shadow: 0 0 0 3px var(--feature-focus-ring-danger);
 }
 
 .cr-form-error-summary {
   padding: 1rem 1.125rem;
   margin-bottom: 1.5rem;
-  background: rgba(248, 113, 113, 0.08);
-  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: var(--feature-danger-tint);
+  border: 1px solid var(--feature-danger);
   border-left: 3px solid var(--feature-danger);
   border-radius: var(--feature-radius);
 }
@@ -592,7 +637,7 @@
 .cr-input:focus, .cr-select:focus, .cr-textarea:focus {
   outline: none;
   border-color: var(--feature-accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 0 3px var(--feature-focus-ring);
 }
 .cr-help { display: block; font-size: 0.8125rem; color: var(--feature-text-muted); margin-top: 0.25rem; }
 .cr-error { display: block; font-size: 0.8125rem; color: var(--feature-danger); margin-top: 0.25rem; }
@@ -608,7 +653,7 @@
 }
 .cr-input-money__wrap:focus-within {
   border-color: var(--feature-accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 0 3px var(--feature-focus-ring);
 }
 .cr-input-money__wrap .az-calc-input,
 .cr-input-money__wrap input {
@@ -668,7 +713,7 @@
 .cr-wizard__step.is-active {
   border-color: var(--feature-accent);
   color: var(--feature-accent);
-  background: rgba(56, 189, 248, 0.08);
+  background: var(--feature-accent-tint-soft);
 }
 .cr-wizard__nav {
   display: flex;
@@ -719,17 +764,17 @@
 .cr-result-hero__badge--underpaid {
   border-color: var(--feature-danger);
   color: var(--feature-danger);
-  background: rgba(248, 113, 113, 0.1);
+  background: var(--feature-danger-tint);
 }
 .cr-result-hero__badge--at_market {
   border-color: var(--feature-warning);
   color: var(--feature-warning);
-  background: rgba(251, 191, 36, 0.1);
+  background: var(--feature-warning-tint);
 }
 .cr-result-hero__badge--overpaid {
   border-color: var(--feature-positive);
   color: var(--feature-positive);
-  background: rgba(52, 211, 153, 0.1);
+  background: var(--feature-positive-tint);
 }
 
 .cr-result__verdict {
@@ -799,7 +844,7 @@
   left: var(--p25, 25%);
   width: calc(var(--p75, 75%) - var(--p25, 25%));
   height: 100%;
-  background: rgba(56, 189, 248, 0.35);
+  background: var(--feature-chart-fill);
   border-radius: 999px;
 }
 .cr-percentile-chart__marker {
@@ -955,7 +1000,7 @@
   padding: 1.5rem;
   background: var(--cr-surface-2, var(--feature-surface-elevated));
   border: 1px solid var(--cr-border, var(--feature-border));
-  box-shadow: var(--shadow-lg, 0 10px 40px rgba(0, 0, 0, 0.35));
+  box-shadow: var(--feature-shadow);
   border-radius: var(--feature-radius-lg);
   margin-bottom: 1.25rem;
 }
@@ -967,7 +1012,7 @@
   height: 96px;
   border-radius: 50%;
   border: 4px solid var(--feature-accent);
-  background: rgba(56, 189, 248, 0.08);
+  background: var(--feature-accent-tint-soft);
   flex-shrink: 0;
 }
 .cr-dash__health-score {
@@ -1025,7 +1070,7 @@
 .cr-dash-nav a.is-active {
   border-color: var(--feature-accent);
   color: var(--feature-accent);
-  background: rgba(56, 189, 248, 0.1);
+  background: var(--feature-accent-tint);
 }
 .cr-dash-nav a:hover:not(.is-active) {
   color: var(--feature-text-primary);
@@ -1079,8 +1124,8 @@
 
 /* Radar */
 .cr-radar__svg { width: 100%; max-width: 280px; margin: 0 auto; display: block; }
-.cr-radar__grid { fill: none; stroke: var(--feature-border, rgba(255, 255, 255, 0.08)); stroke-width: 1; }
-.cr-radar__data { fill: rgba(56, 189, 248, 0.25); stroke: var(--feature-accent, #38bdf8); stroke-width: 2; }
+.cr-radar__grid { fill: none; stroke: var(--feature-border, #d4d4d8); stroke-width: 1; }
+.cr-radar__data { fill: var(--feature-chart-fill); stroke: var(--feature-accent, #38bdf8); stroke-width: 2; }
 .cr-radar__label { fill: var(--feature-text-secondary, #a1a1aa); font-size: 10px; text-anchor: middle; }
 .cr-radar__fallback { list-style: none; padding: 0; margin: 1rem 0 0; font-size: 0.875rem; }
 
@@ -1276,8 +1321,8 @@
 .cr-crs-personal {
   margin-top: 1rem;
   padding: 1rem;
-  background: rgba(56, 189, 248, 0.06);
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  background: var(--feature-accent-tint-soft);
+  border: 1px solid var(--feature-accent);
   border-radius: var(--feature-radius);
 }
 
@@ -1390,7 +1435,7 @@
     min-height: 52px;
     border-radius: 12px;
     font-size: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--feature-shadow);
   }
 
   .cr-form-actions .cr-btn--secondary,
