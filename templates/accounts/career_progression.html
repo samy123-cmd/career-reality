@@ -12,15 +12,16 @@
       <p class="cr-feature__subtitle">{{ narrative }}</p>
     </header>
 
+    {% if trajectory %}
     <div class="cr-trajectory">
-      {% if trajectory %}
       {% include "features/partials/_trajectory_chart.html" %}
-      {% else %}
-      <p class="cr-help">Add at least two snapshots to see your salary trajectory chart.</p>
-      {% endif %}
     </div>
+    {% else %}
+    {% url 'tools:salary_reality_engine' as salary_engine_url %}
+    {% include "features/partials/_empty_state.html" with title="Your salary trajectory starts here" body="Record where you are today, then add a snapshot after each raise or switch. Two points is all it takes to see your real growth rate against the market." cta_url="#add-snapshot" cta_label="Add your first snapshot" secondary_url=salary_engine_url secondary_label="Check my market rate first" %}
+    {% endif %}
 
-    <div class="az-calc-card cr-tool-card">
+    <div class="az-calc-card cr-tool-card" id="add-snapshot">
       <h2 class="cr-section-title">Add snapshot</h2>
       <form method="post" class="cr-form" novalidate>
         {% csrf_token %}
@@ -45,7 +46,7 @@
         {% if s.peer_comparison %}<span class="cr-help"> · {{ s.get_peer_comparison_display }}</span>{% endif %}
       </div>
       {% empty %}
-      <p>No snapshots yet.</p>
+      {% include "features/partials/_empty_state.html" with title="No snapshots recorded" body="Each snapshot is a dated point in your career: title, CTC and company. Over time they become the evidence you bring to your next negotiation." %}
       {% endfor %}
     </section>
   </div>

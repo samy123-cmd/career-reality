@@ -143,6 +143,56 @@
 .cr-dash .cr-tool-card button.cr-btn--secondary:hover,
 .cr-feature .cr-tool-card .cr-wizard__nav button.cr-wizard__back:hover { color: var(--feature-accent); }
 
+/* Guided empty states */
+.cr-empty {
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  border: 1px dashed var(--feature-border);
+  border-radius: var(--feature-radius);
+  background: var(--feature-surface);
+}
+.cr-empty__title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--feature-text-primary);
+}
+.cr-empty__body {
+  margin: 0 auto;
+  max-width: 42ch;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--feature-text-secondary);
+}
+.cr-empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.125rem;
+}
+.cr-empty__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  background: var(--feature-text-primary);
+  color: var(--feature-bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.cr-empty__cta:hover { opacity: 0.9; }
+.cr-empty__secondary {
+  font-size: 0.875rem;
+  color: var(--feature-accent);
+  text-decoration: none;
+}
+.cr-empty__secondary:hover { text-decoration: underline; }
+
 /* Engine failure notice */
 .cr-engine-error {
   padding: 1rem 1.125rem;

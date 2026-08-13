@@ -21,7 +21,8 @@
       {% if radar.signals %}
       <ul>{% for s in radar.signals %}<li>{{ s }}</li>{% endfor %}</ul>
       {% else %}
-      <p>No critical signals — continue monitoring.</p>
+      {% url 'tools:ai_career_impact' as ai_impact_url %}
+      {% include "features/partials/_empty_state.html" with title="No risk signals right now" body="We watch your company's layoff reports, your pay position against the market, and AI exposure for your role. You will see a signal here the moment any of those move." cta_url=ai_impact_url cta_label="Check my AI exposure" %}
       {% endif %}
 
       <h2 class="cr-section-title">What you should do</h2>
@@ -39,7 +40,8 @@
         {% endif %}
       </div>
       {% empty %}
-      <p>No alerts.</p>
+      {% url 'company_directory' as company_directory_url %}
+      {% include "features/partials/_empty_state.html" with title="No alerts yet" body="Add companies to your watchlist and we will alert you here when layoff or hiring-freeze reports come in." cta_url=company_directory_url cta_label="Browse companies to watch" %}
       {% endfor %}
     </section>
   </div>
