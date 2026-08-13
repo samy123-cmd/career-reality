@@ -143,6 +143,51 @@
 .cr-dash .cr-tool-card button.cr-btn--secondary:hover,
 .cr-feature .cr-tool-card .cr-wizard__nav button.cr-wizard__back:hover { color: var(--feature-accent); }
 
+/* Priority sliders (Offer Analyzer) */
+.cr-priorities {
+  margin: 1.5rem 0 0;
+  padding: 1.125rem;
+  border: 1px solid var(--feature-border);
+  border-radius: var(--feature-radius);
+  background: var(--feature-surface);
+}
+.cr-priorities__legend {
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--feature-text-secondary);
+}
+.cr-priority { margin-top: 0.875rem; }
+.cr-priority__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--feature-text-secondary);
+  margin-bottom: 0.35rem;
+}
+.cr-priority__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--feature-accent);
+}
+.cr-feature .cr-tool-card input.cr-slider {
+  width: 100%;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  accent-color: var(--feature-accent);
+  cursor: pointer;
+}
+.cr-feature .cr-tool-card input.cr-slider:focus-visible {
+  outline: 2px solid var(--feature-accent);
+  outline-offset: 4px;
+}
+
 /* Preview strip */
 .cr-preview-strip {
   display: flex;

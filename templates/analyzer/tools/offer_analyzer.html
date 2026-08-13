@@ -55,6 +55,20 @@
     </div>
   </div>
 
+  <fieldset class="cr-priorities">
+    <legend class="cr-priorities__legend">What matters most to you?</legend>
+    <p class="cr-help">We weight the verdict against these. Defaults suit most people.</p>
+    {% for field in form %}{% if field.name|slice:":9" == "priority_" %}
+    <div class="cr-priority">
+      <label class="cr-priority__label" for="{{ field.id_for_label }}">
+        {{ field.label }}
+        <output class="cr-priority__value" data-cr-priority-out="{{ field.name }}">{{ field.value|default:0 }}</output>
+      </label>
+      {{ field }}
+    </div>
+    {% endif %}{% endfor %}
+  </fieldset>
+
   <div class="cr-form-actions">
   <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Compare Offers</button>
   {% if user.is_authenticated %}<button type="submit" name="save_offer" value="1" class="cr-btn cr-btn--secondary">Compare &amp; Save</button>{% endif %}

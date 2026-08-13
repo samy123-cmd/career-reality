@@ -142,11 +142,13 @@ def offer_analyzer(request):
             save_career_context(request, {"role": d["role"], "experience_years": d["experience_years"], "current_ctc": d.get("current_ctc")})
             yoe = d["experience_years"]
             role = d["role"]
+            # Sliders are optional, so an omitted value must fall back rather
+            # than reach the engine as None.
             weights = {
-                "salary": d.get("priority_salary", 30),
-                "stability": d.get("priority_stability", 20),
-                "growth": d.get("priority_growth", 10),
-                "wlb": d.get("priority_wlb", 15),
+                "salary": d.get("priority_salary") or DEFAULT_WEIGHTS["salary"],
+                "stability": d.get("priority_stability") or DEFAULT_WEIGHTS["stability"],
+                "growth": d.get("priority_growth") or DEFAULT_WEIGHTS["growth"],
+                "wlb": d.get("priority_wlb") or DEFAULT_WEIGHTS["wlb"],
             }
             offer_a = OfferInput(
                 label="Offer A",

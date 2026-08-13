@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -66,10 +67,9 @@ def onboarding(request):
 def my_career_reality(request):
     """Personalized dashboard — underpaid? progressing? switch? company risk?"""
     user_profile = request.user.profile
-    try:
-        career = request.user.career_profile
-    except CareerProfile.DoesNotExist:
-        return redirect("onboarding")
+    career = CareerProfile.objects.filter(user=request.user).first()
+    if career is None:
+        return redirect("career_profile_edit")
 
     is_pro = user_profile.is_pro
     salary_insight = None
@@ -138,11 +138,8 @@ def my_career_reality(request):
 @pro_required
 def pro_dashboard(request):
     """Redirect Pro users to My Career Reality when profile exists."""
-    try:
-        request.user.career_profile
+    if CareerProfile.objects.filter(user=request.user).exists():
         return redirect("my_career_reality")
-    except CareerProfile.DoesNotExist:
-        pass
     return _legacy_pro_dashboard(request)
 
 
@@ -285,7 +282,10 @@ def _progression_narrative(snapshots, career=None):
 @pro_required
 def career_risk_radar(request):
     """Personalized career risk alerts."""
-    alerts = CareerAlert.objects.filter(user=request.user).order_by("-created_at")[:50]
+    alert_qs = CareerAlert.objects.filter(user=request.user)
+    # Counted before slicing; a sliced queryset cannot be filtered again.
+    unread_count = alert_qs.filter(is_read=False).count()
+    alerts = list(alert_qs.order_by("-created_at")[:50])
     watchlist = CompanyWatchlist.objects.filter(user=request.user).select_related("company")
 
     career = getattr(request.user, "career_profile", None)
@@ -317,7 +317,7 @@ def career_risk_radar(request):
     return render(request, "accounts/career_risk_radar.html", {
         "alerts": alerts,
         "watchlist": watchlist,
-        "unread_count": alerts.filter(is_read=False).count(),
+        "unread_count": unread_count,
         "radar": radar,
         "og_title": "Career Risk Radar",
     })
@@ -325,11 +325,12 @@ def career_risk_radar(request):
 
 @login_required
 def career_profile_edit(request):
-    """Edit career profile for tool prefill and dashboard."""
-    try:
-        career = request.user.career_profile
-    except CareerProfile.DoesNotExist:
-        return redirect("onboarding")
+    """Create or edit the career profile that powers every personalized view.
+
+    This must work for users who have no profile yet; it is the only route
+    Pro members have to build one, since onboarding sends them to the dashboard.
+    """
+    career = CareerProfile.objects.filter(user=request.user).first()
 
     if request.method == "POST":
         form = analyzer_forms.CareerProfileForm(request.POST)
@@ -337,16 +338,27 @@ def career_profile_edit(request):
             d = form.cleaned_data
             company = Company.objects.filter(name__icontains=d["company_name"]).first() if d.get("company_name") else None
             skills = [s.strip() for s in d.get("skills", "").split(",") if s.strip()]
-            for field, val in {
-                "role": d["role"], "title": d.get("title") or d["role"],
-                "experience_years": d["experience_years"], "city": d["city"],
-                "company_type": d["company_type"], "current_ctc": d["current_ctc"],
-                "company": company, "company_name": d.get("company_name", ""), "skills": skills,
-            }.items():
-                setattr(career, field, val)
-            career.save()
+            CareerProfile.objects.update_or_create(
+                user=request.user,
+                defaults={
+                    "role": d["role"],
+                    "title": d.get("title") or d["role"],
+                    "experience_years": d["experience_years"],
+                    "city": d["city"],
+                    "company_type": d["company_type"],
+                    "current_ctc": d["current_ctc"],
+                    "company": company,
+                    "company_name": d.get("company_name", ""),
+                    "skills": skills,
+                },
+            )
+            messages.success(
+                request,
+                "Career profile saved. Your tools and dashboard now use it." if career
+                else "Career profile created. Your dashboard is ready.",
+            )
             return redirect("my_career_reality")
-    else:
+    elif career:
         form = analyzer_forms.CareerProfileForm(initial={
             "role": career.role,
             "title": career.title,
@@ -357,6 +369,8 @@ def career_profile_edit(request):
             "company_name": career.company_name,
             "skills": ", ".join(career.skills or []),
         })
+    else:
+        form = analyzer_forms.CareerProfileForm()
 
     return render(request, "accounts/career_profile_edit.html", {"form": form, "career": career})
 

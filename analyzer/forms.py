@@ -144,6 +144,7 @@ _AZ_INPUT = {"class": "az-calc-input"}
 _AZ_SELECT = {"class": "az-calc-input"}
 _AZ_TEXTAREA = {"class": "az-calc-input", "rows": 4}
 _AZ_NUMBER = {"class": "az-calc-input", "inputmode": "decimal"}
+_AZ_SLIDER = {"class": "cr-slider", "type": "range", "min": 0, "max": 100, "step": 5}
 
 
 class AccessibleForm(forms.Form):
@@ -243,10 +244,24 @@ class OfferAnalyzerForm(AccessibleForm):
     offer_b_work_mode = forms.ChoiceField(choices=[("hybrid", "Hybrid"), ("remote", "Remote"), ("office", "Office")], initial="hybrid", widget=forms.Select(attrs=_AZ_SELECT))
     offer_b_growth = forms.IntegerField(required=False, initial=3, min_value=1, max_value=5, widget=forms.NumberInput(attrs=_AZ_NUMBER))
 
-    priority_salary = forms.IntegerField(initial=30, min_value=0, max_value=100, widget=forms.HiddenInput())
-    priority_stability = forms.IntegerField(initial=20, min_value=0, max_value=100, widget=forms.HiddenInput())
-    priority_growth = forms.IntegerField(initial=10, min_value=0, max_value=100, widget=forms.HiddenInput())
-    priority_wlb = forms.IntegerField(initial=15, min_value=0, max_value=100, widget=forms.HiddenInput())
+    # Weightings the comparison engine applies. Optional so a submission can
+    # never fail on them; the view falls back to DEFAULT_WEIGHTS.
+    priority_salary = forms.IntegerField(
+        required=False, initial=30, min_value=0, max_value=100, label="Pay",
+        widget=forms.NumberInput(attrs={**_AZ_SLIDER, "data-cr-priority": ""}),
+    )
+    priority_stability = forms.IntegerField(
+        required=False, initial=20, min_value=0, max_value=100, label="Stability",
+        widget=forms.NumberInput(attrs={**_AZ_SLIDER, "data-cr-priority": ""}),
+    )
+    priority_growth = forms.IntegerField(
+        required=False, initial=10, min_value=0, max_value=100, label="Growth",
+        widget=forms.NumberInput(attrs={**_AZ_SLIDER, "data-cr-priority": ""}),
+    )
+    priority_wlb = forms.IntegerField(
+        required=False, initial=15, min_value=0, max_value=100, label="Work-life balance",
+        widget=forms.NumberInput(attrs={**_AZ_SLIDER, "data-cr-priority": ""}),
+    )
 
 
 class StayVsSwitchForm(AccessibleForm):
