@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
 {% if limit_reached %}
 <p class="cr-error">You've used your 3 free questions this month. <a href="{% url 'payments:pricing' %}">Go Pro</a> for unlimited access.</p>
 {% else %}

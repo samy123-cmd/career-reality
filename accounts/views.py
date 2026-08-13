@@ -12,6 +12,7 @@ from analyzer.services.stay_vs_switch import analyze_stay_vs_switch
 from analyzer.services.ai_career_impact import analyze_ai_career_impact
 from companies.models import Company
 from companies.scoring import compute_company_reality_score
+from analyzer.engine_guard import safe_engine
 from accounts.decorators import pro_required
 from accounts.models import (
     CareerAlert,
@@ -79,7 +80,8 @@ def my_career_reality(request):
     alerts = []
 
     if career.role and career.current_ctc:
-        salary_insight = get_salary_reality(
+        salary_insight = safe_engine(
+            "salary_reality", get_salary_reality,
             career.role,
             float(career.experience_years or 5),
             career.city or "Bengaluru",
@@ -88,7 +90,8 @@ def my_career_reality(request):
         )
 
     if is_pro:
-        stay_switch = analyze_stay_vs_switch(
+        stay_switch = safe_engine(
+            "stay_vs_switch", analyze_stay_vs_switch,
             role=career.role,
             yoe=float(career.experience_years or 5),
             city=career.city or "Bengaluru",
@@ -97,16 +100,17 @@ def my_career_reality(request):
             company=career.company,
         )
         if career.title or career.role:
-            ai_impact = analyze_ai_career_impact(career.title or career.role)
+            ai_impact = safe_engine("ai_career_impact", analyze_ai_career_impact, career.title or career.role)
         alerts = list(CareerAlert.objects.filter(user=request.user, is_read=False)[:10])
 
     if career.company:
-        company_score = compute_company_reality_score(career.company)
+        company_score = safe_engine("company_reality_score", compute_company_reality_score, career.company)
 
     snapshots = list(CareerSnapshot.objects.filter(user=request.user).order_by("-recorded_at")[:5])
     latest_snapshot = snapshots[0] if snapshots else None
 
-    career_health = compute_career_health(
+    career_health = safe_engine(
+        "career_health", compute_career_health,
         salary_insight=salary_insight,
         company_score=company_score,
         stay_switch=stay_switch if is_pro else None,
@@ -213,7 +217,7 @@ def career_progression(request):
             role = career.role if career else "Software Engineer"
             yoe = float(career.experience_years) if career else 5
             city = career.city if career else "Bengaluru"
-            salary = get_salary_reality(role, yoe, city, current_ctc=d["ctc"])
+            salary = safe_engine("salary_reality", get_salary_reality, role, yoe, city, current_ctc=d["ctc"])
             peer = "on_track"
             if salary.percentile and salary.percentile >= 70:
                 peer = "ahead"
@@ -291,21 +295,24 @@ def career_risk_radar(request):
     career = getattr(request.user, "career_profile", None)
     salary_insight = company_score = ai_impact = stay_switch = None
     if career and career.role and career.current_ctc:
-        salary_insight = get_salary_reality(
+        salary_insight = safe_engine(
+            "salary_reality", get_salary_reality,
             career.role, float(career.experience_years or 5),
             career.city or "Bengaluru", career.company_type or "", current_ctc=career.current_ctc,
         )
         if career.company:
-            company_score = compute_company_reality_score(career.company)
+            company_score = safe_engine("company_reality_score", compute_company_reality_score, career.company)
         if is_pro := request.user.profile.is_pro:
-            ai_impact = analyze_ai_career_impact(career.title or career.role)
-            stay_switch = analyze_stay_vs_switch(
+            ai_impact = safe_engine("ai_career_impact", analyze_ai_career_impact, career.title or career.role)
+            stay_switch = safe_engine(
+                "stay_vs_switch", analyze_stay_vs_switch,
                 role=career.role, yoe=float(career.experience_years or 5),
                 city=career.city or "Bengaluru", company_type=career.company_type or "service",
                 current_ctc=career.current_ctc or 15, company=career.company,
             )
 
-    radar = compute_risk_radar(
+    radar = safe_engine(
+        "risk_radar", compute_risk_radar,
         career=career,
         salary_insight=salary_insight,
         company_score=company_score,

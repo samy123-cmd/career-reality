@@ -143,6 +143,28 @@
 .cr-dash .cr-tool-card button.cr-btn--secondary:hover,
 .cr-feature .cr-tool-card .cr-wizard__nav button.cr-wizard__back:hover { color: var(--feature-accent); }
 
+/* Engine failure notice */
+.cr-engine-error {
+  padding: 1rem 1.125rem;
+  margin-bottom: 1.5rem;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-left: 3px solid var(--feature-warning);
+  border-radius: var(--feature-radius);
+}
+.cr-engine-error__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--feature-warning);
+}
+.cr-engine-error__body {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--feature-text-secondary);
+}
+
 /* Priority sliders (Offer Analyzer) */
 .cr-priorities {
   margin: 1.5rem 0 0;

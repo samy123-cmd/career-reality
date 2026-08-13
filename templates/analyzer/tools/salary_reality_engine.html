@@ -3,6 +3,7 @@
 {% block workspace_preview %}{% endblock %}
 
 {% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
 {% if not result %}
 <form method="post" class="cr-form cr-wizard" data-cr-wizard data-cr-submit-label="Check My Salary" data-cr-loading="Matching your profile against market data…" novalidate>
   {% csrf_token %}

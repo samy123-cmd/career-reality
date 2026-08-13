@@ -1,6 +1,7 @@
 {% extends "analyzer/tools/tool_base.html" %}
 
 {% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
 {% if not result %}
 <form method="post" class="cr-form" data-cr-loading="Analyzing AI exposure for your role…" novalidate>
   {% csrf_token %}

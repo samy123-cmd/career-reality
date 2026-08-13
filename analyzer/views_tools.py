@@ -13,6 +13,7 @@ from django.utils import timezone
 from accounts.career_context import feature_view_context, prefill_form, save_career_context
 from accounts.models import AdvisorConversation, AdvisorMessage, JobOffer
 from analyzer import forms
+from analyzer.engine_guard import run_engine
 from analyzer.feature_helpers import (
     METHODOLOGY_OFFER,
     METHODOLOGY_SALARY,
@@ -87,13 +88,15 @@ def _company_lookup(name: str):
 
 def salary_reality_engine(request):
     result = None
+    engine_error = None
     form = prefill_form(forms.SalaryRealityEngineForm, request)
     if request.method == "POST":
         form = forms.SalaryRealityEngineForm(request.POST)
         if form.is_valid():
             d = form.cleaned_data
             save_career_context(request, d)
-            result = get_salary_reality(
+            result, engine_error = run_engine(
+                "salary_reality", get_salary_reality,
                 role=d["role"],
                 yoe=d["experience_years"],
                 city=d["city"],
@@ -108,6 +111,7 @@ def salary_reality_engine(request):
         "methodology": METHODOLOGY_SALARY,
         "related_actions": tool_actions("salary"),
         "preview_items": ["Salary percentile", "Market range P25–P90", "Under/overpaid estimate", "Realistic next salary", "Confidence indicator"],
+        "engine_error": engine_error,
         **ctx,
     })
 
@@ -134,6 +138,7 @@ def salary_reality_api(request):
 
 def offer_analyzer(request):
     result = None
+    engine_error = None
     form = prefill_form(forms.OfferAnalyzerForm, request)
     if request.method == "POST":
         form = forms.OfferAnalyzerForm(request.POST)
@@ -182,7 +187,9 @@ def offer_analyzer(request):
                 work_mode=d.get("offer_b_work_mode") or "hybrid",
                 growth_potential=d.get("offer_b_growth") or 3,
             )
-            result = compare_offers(offer_a, offer_b, yoe, weights=weights)
+            result, engine_error = run_engine(
+                "offer_analyzer", compare_offers, offer_a, offer_b, yoe, weights=weights
+            )
             if request.user.is_authenticated and request.POST.get("save_offer"):
                 for label, inp in [("A", offer_a), ("B", offer_b)]:
                     JobOffer.objects.create(
@@ -211,12 +218,14 @@ def offer_analyzer(request):
         "related_actions": tool_actions("offer"),
         "default_weights": DEFAULT_WEIGHTS,
         "preview_items": ["Weighted verdict", "Dimension breakdown", "Trade-offs", "2-year outlook", "5-year outlook"],
+        "engine_error": engine_error,
         **ctx,
     })
 
 
 def stay_vs_switch(request):
     result = None
+    engine_error = None
     form = prefill_form(forms.StayVsSwitchForm, request)
     if request.method == "POST":
         form = forms.StayVsSwitchForm(request.POST)
@@ -229,7 +238,8 @@ def stay_vs_switch(request):
                 "notice_period", "ctc_vs_market", "current_situation",
                 "performance_status", "has_offer",
             ) if d.get(k)}
-            result = analyze_stay_vs_switch(
+            result, engine_error = run_engine(
+                "stay_vs_switch", analyze_stay_vs_switch,
                 role=d["role"], yoe=d["experience_years"], city=d["city"],
                 company_type=d["company_type"], current_ctc=d["current_ctc"],
                 company=company, has_offer=d.get("has_offer") == "yes",
@@ -241,19 +251,22 @@ def stay_vs_switch(request):
         "methodology": METHODOLOGY_STAY,
         "related_actions": tool_actions("stay"),
         "preview_items": ["Stay / Switch / Wait verdict", "Category breakdown", "Recommended timeline", "Improvement checklist"],
+        "engine_error": engine_error,
         **ctx,
     })
 
 
 def ai_career_impact(request):
     result = None
+    engine_error = None
     form = prefill_form(forms.AICareerImpactForm, request)
     if request.method == "POST":
         form = forms.AICareerImpactForm(request.POST)
         if form.is_valid():
             d = form.cleaned_data
             save_career_context(request, {"role": d["job_title"], "experience_years": d["experience_years"]})
-            result = analyze_ai_career_impact(
+            result, engine_error = run_engine(
+                "ai_career_impact", analyze_ai_career_impact,
                 d["job_title"],
                 experience_years=d["experience_years"],
                 industry=d.get("industry") or "",
@@ -267,12 +280,14 @@ def ai_career_impact(request):
         "form": form, "result": result,
         "related_actions": tool_actions("ai"),
         "preview_items": ["AI impact level", "Task exposure analysis", "Skills gaining vs declining", "12-month action plan"],
+        "engine_error": engine_error,
         **ctx,
     })
 
 
 def next_career_move(request):
     result = None
+    engine_error = None
     form = prefill_form(forms.NextCareerMoveForm, request)
     is_pro = request.user.is_authenticated and getattr(request.user.profile, "is_pro", False)
     if request.method == "POST":
@@ -281,23 +296,26 @@ def next_career_move(request):
             d = form.cleaned_data
             save_career_context(request, d)
             skills = [s.strip() for s in d.get("skills", "").split(",") if s.strip()]
-            result = recommend_next_moves(
+            result, engine_error = run_engine(
+                "next_career_move", recommend_next_moves,
                 role=d["role"], yoe=d["experience_years"], city=d["city"],
                 company_type=d["company_type"], current_ctc=d["current_ctc"], skills=skills,
             )
-            if not is_pro and result.paths:
+            if result and not is_pro and result.paths:
                 result.paths = result.paths[:1]
     ctx = feature_view_context(request, _seo_ctx(NEXT_CAREER_MOVE, "next_career_move"))
     return render(request, "analyzer/tools/next_career_move.html", {
         "form": form, "result": result, "is_pro": is_pro,
         "related_actions": tool_actions("move"),
         "preview_items": ["3–5 career paths", "Salary potential", "Difficulty & timeline", "Best-fit recommendation"],
+        "engine_error": engine_error,
         **ctx,
     })
 
 
 def ask_career_reality(request):
     answer = None
+    engine_error = None
     form = forms.AskCareerRealityForm()
     is_pro, session_key, ask_count = _ask_limit_state(request)
     limit_reached = not is_pro and ask_count >= ASK_MONTHLY_LIMIT
@@ -316,17 +334,22 @@ def ask_career_reality(request):
             form = forms.AskCareerRealityForm(request.POST)
             if form.is_valid():
                 question = form.cleaned_data["question"]
-                answer = answer_career_question(question)
-                _check_ask_rate_limit(request, increment=True)
-                conv = AdvisorConversation.objects.create(
-                    user=request.user if request.user.is_authenticated else None,
-                    session_key=request.session.session_key or "",
+                answer, engine_error = run_engine(
+                    "career_advisor", answer_career_question, question
                 )
-                AdvisorMessage.objects.create(conversation=conv, role="user", content=question)
-                AdvisorMessage.objects.create(
-                    conversation=conv, role="assistant", content=answer.answer,
-                    citations=[{"type": c.type, "label": c.label, "url": c.url} for c in answer.citations],
-                )
+                if answer is not None:
+                    # A failed answer must not consume the user's monthly quota
+                    # or leave a half-written conversation behind.
+                    _check_ask_rate_limit(request, increment=True)
+                    conv = AdvisorConversation.objects.create(
+                        user=request.user if request.user.is_authenticated else None,
+                        session_key=request.session.session_key or "",
+                    )
+                    AdvisorMessage.objects.create(conversation=conv, role="user", content=question)
+                    AdvisorMessage.objects.create(
+                        conversation=conv, role="assistant", content=answer.answer,
+                        citations=[{"type": c.type, "label": c.label, "url": c.url} for c in answer.citations],
+                    )
 
     ctx = feature_view_context(request, _seo_ctx(ASK_CAREER_REALITY, "ask_career_reality"))
     return render(request, "analyzer/tools/ask_career_reality.html", {
@@ -336,6 +359,7 @@ def ask_career_reality(request):
         "history": history,
         "related_actions": tool_actions("ask"),
         "preview_items": ["Evidence-backed answer", "CareerReality data citations", "Assumptions stated", "Recommended next steps"],
+        "engine_error": engine_error,
         **ctx,
     })
 

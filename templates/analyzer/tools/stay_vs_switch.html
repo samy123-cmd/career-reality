@@ -3,6 +3,7 @@
 {% block workspace_preview %}{% endblock %}
 
 {% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
 {% if not result %}
 <form method="post" class="cr-form cr-wizard" data-cr-wizard data-cr-submit-label="Analyze Decision" data-cr-loading="Assessing company stability and market fit…" novalidate>
   {% csrf_token %}
