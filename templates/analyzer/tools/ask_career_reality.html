@@ -17,9 +17,10 @@
 {% if limit_reached %}
 <p class="cr-error">You've used your 3 free questions this month. <a href="{% url 'payments:pricing' %}">Go Pro</a> for unlimited access.</p>
 {% else %}
-<form method="post" class="cr-form" data-cr-loading="Searching CareerReality data…">
+<form method="post" class="cr-form" data-cr-loading="Searching CareerReality data…" novalidate>
   {% csrf_token %}
-  <div class="cr-field"><label class="az-calc-label" for="{{ form.question.id_for_label }}">{{ form.question.label }}</label>{{ form.question }}</div>
+  {% include "features/partials/_form_errors.html" %}
+  {% include "features/partials/_field.html" with field=form.question %}
   {% if asks_remaining %}<p class="cr-help">{{ asks_remaining }} free question{{ asks_remaining|pluralize }} remaining this month.</p>{% endif %}
   <div class="cr-form-actions">
   <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Ask CareerReality</button>
@@ -38,7 +39,7 @@
 {% endif %}
 
 {% if answer %}
-<section class="cr-ask-answer cr-result" aria-live="polite">
+<section class="cr-ask-answer cr-result" aria-live="polite" tabindex="-1" data-cr-result>
   <div class="cr-ask-block"><h3>Answer</h3><p>{{ answer.answer }}</p></div>
   {% if answer.citations %}
   <div class="cr-ask-block"><h3>CareerReality data</h3>

@@ -12,6 +12,10 @@
       var progress = wizard.querySelector('[data-cr-stepper-progress]');
       var current = 0;
 
+      if (!steps.length || !panels.length) return;
+      // Signals to CSS that JS can drive navigation, so panels may collapse.
+      wizard.classList.add('is-enhanced');
+
       function showStep(idx) {
         current = Math.max(0, Math.min(idx, steps.length - 1));
         steps.forEach(function (s, i) {
@@ -35,11 +39,14 @@
         }
         var prev = wizard.querySelector('[data-cr-prev]');
         var next = wizard.querySelector('[data-cr-next]');
+        var isLast = current === panels.length - 1;
         if (prev) prev.hidden = current === 0;
         if (next) {
-          next.textContent = current === panels.length - 1
+          next.textContent = isLast
             ? (wizard.getAttribute('data-cr-submit-label') || 'Analyze')
             : 'Continue';
+          // Only the final step should submit; earlier steps just advance.
+          next.setAttribute('type', isLast ? 'submit' : 'button');
         }
       }
 
@@ -49,15 +56,56 @@
       var prevBtn = wizard.querySelector('[data-cr-prev]');
       var nextBtn = wizard.querySelector('[data-cr-next]');
       if (prevBtn) prevBtn.addEventListener('click', function () { showStep(current - 1); });
-      if (nextBtn) nextBtn.addEventListener('click', function () {
-        if (current < panels.length - 1) showStep(current + 1);
-        else {
-          var form = wizard.closest('form') || wizard;
-          if (form && form.tagName === 'FORM') form.requestSubmit();
+      if (nextBtn) nextBtn.addEventListener('click', function (event) {
+        if (current < panels.length - 1) {
+          event.preventDefault();
+          showStep(current + 1);
         }
       });
-      showStep(0);
+
+      // Land the user on the first step that actually has a problem.
+      var firstErrorPanel = -1;
+      panels.forEach(function (panel, i) {
+        if (firstErrorPanel === -1 && panel.querySelector('.cr-error, [aria-invalid="true"]')) {
+          firstErrorPanel = i;
+        }
+      });
+      showStep(firstErrorPanel === -1 ? 0 : firstErrorPanel);
     });
+  }
+
+  function initErrorSummary() {
+    var summary = document.querySelector('[data-cr-error-summary]');
+    if (!summary) return;
+    summary.focus();
+    summary.querySelectorAll('[data-cr-error-link]').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        var target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        event.preventDefault();
+        var panel = target.closest('[data-cr-panel]');
+        if (panel && panel.hidden) {
+          var wizard = panel.closest('[data-cr-wizard]');
+          var panels = wizard ? Array.prototype.slice.call(wizard.querySelectorAll('[data-cr-panel]')) : [];
+          var steps = wizard ? wizard.querySelectorAll('[data-cr-step]') : [];
+          var idx = panels.indexOf(panel);
+          if (idx > -1 && steps[idx]) steps[idx].click();
+        }
+        target.focus();
+      });
+    });
+  }
+
+  function initResultFocus() {
+    var result = document.querySelector('[data-cr-result]');
+    if (!result) return;
+    // Only pull focus after a submission, never on a fresh page load.
+    if (!document.referrer || document.referrer.split('?')[0] !== location.href.split('?')[0]) {
+      if (!window.performance || !performance.getEntriesByType) return;
+      var nav = performance.getEntriesByType('navigation')[0];
+      if (!nav || nav.type !== 'navigate') return;
+    }
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function initOfferTabs() {
@@ -177,6 +225,8 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initStepWizards();
+    initErrorSummary();
+    initResultFocus();
     initOfferTabs();
     initCrsTabs();
     initFormLoading();

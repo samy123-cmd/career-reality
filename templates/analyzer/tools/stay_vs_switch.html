@@ -4,51 +4,60 @@
 
 {% block tool_body %}
 {% if not result %}
-<form method="post" class="cr-form" data-cr-wizard data-cr-submit-label="Analyze Decision" data-cr-loading="Assessing company stability and market fit…">
+<form method="post" class="cr-form cr-wizard" data-cr-wizard data-cr-submit-label="Analyze Decision" data-cr-loading="Assessing company stability and market fit…" novalidate>
   {% csrf_token %}
-  <nav class="cr-stepper" aria-label="Form steps">
+  {% include "features/partials/_form_errors.html" %}
+
+  <nav class="cr-stepper" aria-label="Progress">
     <div class="cr-stepper__track"><div class="cr-stepper__progress" data-cr-stepper-progress style="width:0%"></div></div>
-    <ol class="cr-stepper__steps">
-      <li><button type="button" class="cr-stepper__step is-active" data-cr-step><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Profile</span></button></li>
-      <li><button type="button" class="cr-stepper__step" data-cr-step><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Pay</span></button></li>
-      <li><button type="button" class="cr-stepper__step" data-cr-step><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Context</span></button></li>
-      <li><button type="button" class="cr-stepper__step" data-cr-step><span class="cr-stepper__num">4</span><span class="cr-stepper__label">Offers</span></button></li>
+    <ol class="cr-stepper__steps" role="tablist">
+      <li role="presentation"><button type="button" class="cr-stepper__step is-active" data-cr-step role="tab" id="svs-tab-1" aria-controls="svs-panel-1" aria-selected="true"><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Profile</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="svs-tab-2" aria-controls="svs-panel-2" aria-selected="false"><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Pay</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="svs-tab-3" aria-controls="svs-panel-3" aria-selected="false"><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Context</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="svs-tab-4" aria-controls="svs-panel-4" aria-selected="false"><span class="cr-stepper__num">4</span><span class="cr-stepper__label">Offers</span></button></li>
     </ol>
   </nav>
 
-  <div data-cr-panel>
+  <div data-cr-panel id="svs-panel-1" role="tabpanel" aria-labelledby="svs-tab-1" tabindex="-1">
+    <h2 class="cr-panel-title">Profile</h2>
     <div class="az-calc-grid">
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>{{ form.role }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>{{ form.city }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.company_type.id_for_label }}">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+      {% include "features/partials/_field.html" with field=form.role %}
+      {% include "features/partials/_field.html" with field=form.experience_years %}
+      {% include "features/partials/_field.html" with field=form.city %}
+      {% include "features/partials/_field.html" with field=form.company_type %}
     </div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.company_name.id_for_label }}">{{ form.company_name.label }}</label>{{ form.company_name }}</div>
+    {% include "features/partials/_field.html" with field=form.company_name %}
   </div>
-  <div data-cr-panel hidden>{% include "features/partials/_input_money.html" with field=form.current_ctc %}</div>
-  <div data-cr-panel hidden>
-    <div class="az-calc-grid">
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.tenure_band.id_for_label }}">{{ form.tenure_band.label }}</label>{{ form.tenure_band }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.ctc_vs_market.id_for_label }}">{{ form.ctc_vs_market.label }}</label>{{ form.ctc_vs_market }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.current_situation.id_for_label }}">{{ form.current_situation.label }}</label>{{ form.current_situation }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.performance_status.id_for_label }}">{{ form.performance_status.label }}</label>{{ form.performance_status }}</div>
-    </div>
+  <div data-cr-panel id="svs-panel-2" role="tabpanel" aria-labelledby="svs-tab-2" tabindex="-1">
+    <h2 class="cr-panel-title">Pay</h2>
+    {% include "features/partials/_input_money.html" with field=form.current_ctc %}
   </div>
-  <div data-cr-panel hidden>
+  <div data-cr-panel id="svs-panel-3" role="tabpanel" aria-labelledby="svs-tab-3" tabindex="-1">
+    <h2 class="cr-panel-title">Context</h2>
     <div class="az-calc-grid">
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.has_offer.id_for_label }}">{{ form.has_offer.label }}</label>{{ form.has_offer }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_ctc.id_for_label }}">{{ form.offer_ctc.label }}</label>{{ form.offer_ctc }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.notice_period.id_for_label }}">{{ form.notice_period.label }}</label>{{ form.notice_period }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.bond_status.id_for_label }}">{{ form.bond_status.label }}</label>{{ form.bond_status }}</div>
+      {% include "features/partials/_field.html" with field=form.tenure_band %}
+      {% include "features/partials/_field.html" with field=form.ctc_vs_market %}
+      {% include "features/partials/_field.html" with field=form.current_situation %}
+      {% include "features/partials/_field.html" with field=form.performance_status %}
     </div>
   </div>
+  <div data-cr-panel id="svs-panel-4" role="tabpanel" aria-labelledby="svs-tab-4" tabindex="-1">
+    <h2 class="cr-panel-title">Offers</h2>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.has_offer %}
+      {% include "features/partials/_field.html" with field=form.offer_ctc %}
+      {% include "features/partials/_field.html" with field=form.notice_period %}
+      {% include "features/partials/_field.html" with field=form.bond_status %}
+    </div>
+  </div>
+
   <div class="cr-wizard__nav cr-form-actions">
-    <button type="button" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Analyze Decision</button>
+    <button type="submit" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Analyze Decision</button>
     <button type="button" class="cr-btn cr-btn--secondary cr-wizard__back" data-cr-prev hidden>Back</button>
   </div>
 </form>
 {% else %}
-<section class="cr-result" aria-live="polite">
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
   <div class="cr-result-hero">
     <h2 class="cr-result__verdict cr-result__verdict--{{ result.recommendation }}">{{ result.recommendation_label|upper }}</h2>
     <p class="cr-result-hero__metric">Confidence: <strong class="cr-data">{{ result.confidence_pct }}%</strong></p>
@@ -70,6 +79,7 @@
   <p>{{ result.timeline }}</p>
   <h3 class="cr-section-title">What to improve first</h3>
   <ol>{% for i in result.improvements %}<li>{{ i }}</li>{% endfor %}</ol>
+  <p class="cr-result__again"><a href="{{ request.path }}">Run another analysis</a></p>
   {% include "features/partials/_methodology.html" %}
   {% include "features/partials/_related_actions.html" %}
 </section>

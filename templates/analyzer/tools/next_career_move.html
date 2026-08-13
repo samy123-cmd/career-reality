@@ -2,16 +2,17 @@
 
 {% block tool_body %}
 {% if not result %}
-<form method="post" class="cr-form" data-cr-loading="Ranking career paths for your profile…">
+<form method="post" class="cr-form" data-cr-loading="Ranking career paths for your profile…" novalidate>
   {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
   <div class="az-calc-grid">
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>{{ form.role }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>{{ form.city }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.company_type.id_for_label }}">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+    {% include "features/partials/_field.html" with field=form.role %}
+    {% include "features/partials/_field.html" with field=form.experience_years %}
+    {% include "features/partials/_field.html" with field=form.city %}
+    {% include "features/partials/_field.html" with field=form.company_type %}
   </div>
   {% include "features/partials/_input_money.html" with field=form.current_ctc %}
-  <div class="cr-field"><label class="az-calc-label" for="{{ form.skills.id_for_label }}">{{ form.skills.label }}</label>{{ form.skills }}</div>
+  {% include "features/partials/_field.html" with field=form.skills %}
   <div class="cr-form-actions">
   <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Find My Next Move</button>
   </div>
@@ -19,7 +20,7 @@
 {% endif %}
 
 {% if result %}
-<section class="cr-result" aria-live="polite">
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
   {% if result.top_path %}
   <div class="cr-result-hero">
     <p class="cr-help">Best-fit path</p>
@@ -59,6 +60,7 @@
   {% if not is_pro and result.paths|length <= 1 %}
   <p class="cr-help"><a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> to see all ranked paths.</p>
   {% endif %}
+  <p class="cr-result__again"><a href="{{ request.path }}">Try a different profile</a></p>
   {% include "features/partials/_related_actions.html" %}
 </section>
 {% endif %}

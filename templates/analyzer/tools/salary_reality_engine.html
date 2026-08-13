@@ -4,41 +4,47 @@
 
 {% block tool_body %}
 {% if not result %}
-<form method="post" class="cr-form" data-cr-wizard data-cr-submit-label="Check My Salary" data-cr-loading="Matching your profile against market data…">
+<form method="post" class="cr-form cr-wizard" data-cr-wizard data-cr-submit-label="Check My Salary" data-cr-loading="Matching your profile against market data…" novalidate>
   {% csrf_token %}
-  <nav class="cr-stepper" aria-label="Form steps">
+  {% include "features/partials/_form_errors.html" %}
+
+  <nav class="cr-stepper" aria-label="Progress">
     <div class="cr-stepper__track"><div class="cr-stepper__progress" data-cr-stepper-progress style="width:0%"></div></div>
-    <ol class="cr-stepper__steps">
-      <li><button type="button" class="cr-stepper__step is-active" data-cr-step aria-selected="true"><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Role</span></button></li>
-      <li><button type="button" class="cr-stepper__step" data-cr-step aria-selected="false"><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Location</span></button></li>
-      <li><button type="button" class="cr-stepper__step" data-cr-step aria-selected="false"><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Compensation</span></button></li>
+    <ol class="cr-stepper__steps" role="tablist">
+      <li role="presentation"><button type="button" class="cr-stepper__step is-active" data-cr-step role="tab" id="srn-tab-1" aria-controls="srn-panel-1" aria-selected="true"><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Role</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="srn-tab-2" aria-controls="srn-panel-2" aria-selected="false"><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Location</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="srn-tab-3" aria-controls="srn-panel-3" aria-selected="false"><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Compensation</span></button></li>
     </ol>
   </nav>
 
-  <div data-cr-panel class="cr-wizard__panel">
+  <div data-cr-panel id="srn-panel-1" role="tabpanel" aria-labelledby="srn-tab-1" tabindex="-1">
+    <h2 class="cr-panel-title">Role</h2>
     <div class="az-calc-grid">
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>{{ form.role }}{% if form.role.errors %}<span class="cr-error">{{ form.role.errors.0 }}</span>{% endif %}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.role_level.id_for_label }}">{{ form.role_level.label }}</label>{{ form.role_level }}</div>
+      {% include "features/partials/_field.html" with field=form.role %}
+      {% include "features/partials/_field.html" with field=form.experience_years %}
+      {% include "features/partials/_field.html" with field=form.role_level %}
     </div>
   </div>
-  <div data-cr-panel hidden>
+  <div data-cr-panel id="srn-panel-2" role="tabpanel" aria-labelledby="srn-tab-2" tabindex="-1">
+    <h2 class="cr-panel-title">Location</h2>
     <div class="az-calc-grid">
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>{{ form.city }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.industry.id_for_label }}">{{ form.industry.label }}</label>{{ form.industry }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.company_type.id_for_label }}">{{ form.company_type.label }}</label>{{ form.company_type }}</div>
+      {% include "features/partials/_field.html" with field=form.city %}
+      {% include "features/partials/_field.html" with field=form.industry %}
+      {% include "features/partials/_field.html" with field=form.company_type %}
     </div>
   </div>
-  <div data-cr-panel hidden>
+  <div data-cr-panel id="srn-panel-3" role="tabpanel" aria-labelledby="srn-tab-3" tabindex="-1">
+    <h2 class="cr-panel-title">Compensation</h2>
     {% include "features/partials/_input_money.html" with field=form.current_ctc %}
   </div>
+
   <div class="cr-wizard__nav cr-form-actions">
-    <button type="button" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Continue</button>
+    <button type="submit" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Check My Salary</button>
     <button type="button" class="cr-btn cr-btn--secondary cr-wizard__back" data-cr-prev hidden>Back</button>
   </div>
 </form>
 {% else %}
-<section class="cr-result" aria-live="polite">
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
   <div class="cr-result-hero">
     {% if result.percentile %}
     <p class="cr-result-hero__metric">Your position: <strong class="cr-data">P{{ result.percentile }}</strong></p>
@@ -59,6 +65,7 @@
     <div class="cr-stat"><span class="cr-stat__label">P90 Ceiling</span><span class="cr-stat__value cr-data">₹{{ result.p90 }}L</span></div>
   </div>
   {% if result.limitation %}<p class="cr-help">{{ result.limitation }}</p>{% endif %}
+  <p class="cr-result__again"><a href="{{ request.path }}">Run another check</a></p>
   {% include "features/partials/_methodology.html" %}
   {% include "features/partials/_related_actions.html" %}
 </section>

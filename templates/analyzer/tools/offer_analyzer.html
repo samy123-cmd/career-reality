@@ -2,18 +2,19 @@
 
 {% block tool_body %}
 {% if not result %}
-<form method="post" class="cr-form" data-cr-loading="Comparing compensation structures…">
+<form method="post" class="cr-form" data-cr-loading="Comparing compensation structures…" novalidate>
   {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
   <div class="az-calc-grid">
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>{{ form.role }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
+    {% include "features/partials/_field.html" with field=form.role %}
+    {% include "features/partials/_field.html" with field=form.experience_years %}
   </div>
 
   <details class="cr-offer-section">
     <summary>Your current situation (optional)</summary>
     <div class="az-calc-grid">
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.current_company.id_for_label }}">{{ form.current_company.label }}</label>{{ form.current_company }}</div>
-      <div class="cr-field"><label class="az-calc-label" for="{{ form.current_ctc.id_for_label }}">{{ form.current_ctc.label }}</label>{{ form.current_ctc }}</div>
+      {% include "features/partials/_field.html" with field=form.current_company %}
+      {% include "features/partials/_field.html" with field=form.current_ctc %}
     </div>
   </details>
 
@@ -25,31 +26,31 @@
 
     <div class="cr-offer-panel is-active" data-cr-offer-panel role="tabpanel">
       <div class="az-calc-grid">
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_company.id_for_label }}">{{ form.offer_a_company.label }}</label>{{ form.offer_a_company }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_ctc.id_for_label }}">{{ form.offer_a_ctc.label }}</label>{{ form.offer_a_ctc }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_city.id_for_label }}">{{ form.offer_a_city.label }}</label>{{ form.offer_a_city }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_fixed_pct.id_for_label }}">{{ form.offer_a_fixed_pct.label }}</label>{{ form.offer_a_fixed_pct }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_variable_pct.id_for_label }}">{{ form.offer_a_variable_pct.label }}</label>{{ form.offer_a_variable_pct }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_esop.id_for_label }}">{{ form.offer_a_esop.label }}</label>{{ form.offer_a_esop }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_commute.id_for_label }}">{{ form.offer_a_commute.label }}</label>{{ form.offer_a_commute }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_wlb.id_for_label }}">{{ form.offer_a_wlb.label }}</label>{{ form.offer_a_wlb }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_work_mode.id_for_label }}">{{ form.offer_a_work_mode.label }}</label>{{ form.offer_a_work_mode }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_a_growth.id_for_label }}">{{ form.offer_a_growth.label }}</label>{{ form.offer_a_growth }}</div>
+        {% include "features/partials/_field.html" with field=form.offer_a_company %}
+        {% include "features/partials/_field.html" with field=form.offer_a_ctc %}
+        {% include "features/partials/_field.html" with field=form.offer_a_city %}
+        {% include "features/partials/_field.html" with field=form.offer_a_fixed_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_a_variable_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_a_esop %}
+        {% include "features/partials/_field.html" with field=form.offer_a_commute %}
+        {% include "features/partials/_field.html" with field=form.offer_a_wlb %}
+        {% include "features/partials/_field.html" with field=form.offer_a_work_mode %}
+        {% include "features/partials/_field.html" with field=form.offer_a_growth %}
       </div>
     </div>
 
     <div class="cr-offer-panel" data-cr-offer-panel role="tabpanel" hidden>
       <div class="az-calc-grid">
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_company.id_for_label }}">{{ form.offer_b_company.label }}</label>{{ form.offer_b_company }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_ctc.id_for_label }}">{{ form.offer_b_ctc.label }}</label>{{ form.offer_b_ctc }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_city.id_for_label }}">{{ form.offer_b_city.label }}</label>{{ form.offer_b_city }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_fixed_pct.id_for_label }}">{{ form.offer_b_fixed_pct.label }}</label>{{ form.offer_b_fixed_pct }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_variable_pct.id_for_label }}">{{ form.offer_b_variable_pct.label }}</label>{{ form.offer_b_variable_pct }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_esop.id_for_label }}">{{ form.offer_b_esop.label }}</label>{{ form.offer_b_esop }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_commute.id_for_label }}">{{ form.offer_b_commute.label }}</label>{{ form.offer_b_commute }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_wlb.id_for_label }}">{{ form.offer_b_wlb.label }}</label>{{ form.offer_b_wlb }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_work_mode.id_for_label }}">{{ form.offer_b_work_mode.label }}</label>{{ form.offer_b_work_mode }}</div>
-        <div class="cr-field"><label class="az-calc-label" for="{{ form.offer_b_growth.id_for_label }}">{{ form.offer_b_growth.label }}</label>{{ form.offer_b_growth }}</div>
+        {% include "features/partials/_field.html" with field=form.offer_b_company %}
+        {% include "features/partials/_field.html" with field=form.offer_b_ctc %}
+        {% include "features/partials/_field.html" with field=form.offer_b_city %}
+        {% include "features/partials/_field.html" with field=form.offer_b_fixed_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_b_variable_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_b_esop %}
+        {% include "features/partials/_field.html" with field=form.offer_b_commute %}
+        {% include "features/partials/_field.html" with field=form.offer_b_wlb %}
+        {% include "features/partials/_field.html" with field=form.offer_b_work_mode %}
+        {% include "features/partials/_field.html" with field=form.offer_b_growth %}
       </div>
     </div>
   </div>
@@ -62,7 +63,7 @@
 {% endif %}
 
 {% if result %}
-<section class="cr-result" aria-live="polite">
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
   <div class="cr-result-hero">
     <h2 class="cr-result__verdict">{{ result.verdict_label }}</h2>
     <p class="cr-result-hero__metric"><span class="cr-data">{{ result.score_a_display }}</span> vs <span class="cr-data">{{ result.score_b_display }}</span></p>

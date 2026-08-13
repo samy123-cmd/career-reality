@@ -12,19 +12,26 @@ from analyzer.services.ai_career_impact import analyze_ai_career_impact
 from companies.models import Company
 from companies.scoring import compute_company_reality_score
 from accounts.decorators import pro_required
+from accounts.models import (
+    CareerAlert,
+    CareerProfile,
+    CareerSnapshot,
+    CompanyWatchlist,
+)
 from accounts.services.career_health import compute_career_health
 from accounts.services.risk_radar import compute_risk_radar
 
 
 @login_required
 def onboarding(request):
-    """Post-signup onboarding — capture career profile."""
+    """Post-signup onboarding — capture career profile for new free users."""
     profile = request.user.profile
-    try:
-        request.user.career_profile
-        return redirect("my_career_reality" if profile.is_pro else "pro_dashboard")
-    except CareerProfile.DoesNotExist:
-        pass
+    # Pro users are onboarded through the dashboard, never this page.
+    if profile.is_pro:
+        return redirect("pro_dashboard")
+    # Anyone who already has a profile has nothing left to fill in.
+    if CareerProfile.objects.filter(user=request.user).exists():
+        return redirect("pro_dashboard")
 
     if request.method == "POST":
         form = analyzer_forms.CareerProfileForm(request.POST)
@@ -48,8 +55,6 @@ def onboarding(request):
                     "skills": skills,
                 },
             )
-            if profile.is_pro:
-                return redirect("my_career_reality")
             return redirect("pro_dashboard")
     else:
         form = analyzer_forms.CareerProfileForm()

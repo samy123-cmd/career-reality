@@ -2,19 +2,25 @@
 
 {% block tool_body %}
 {% if not result %}
-<form method="post" class="cr-form" data-cr-loading="Analyzing AI exposure for your role…">
+<form method="post" class="cr-form" data-cr-loading="Analyzing AI exposure for your role…" novalidate>
   {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
   <div class="az-calc-grid">
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.job_title.id_for_label }}">{{ form.job_title.label }}</label>{{ form.job_title }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.experience_years.id_for_label }}">{{ form.experience_years.label }}</label>{{ form.experience_years }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.industry.id_for_label }}">{{ form.industry.label }}</label>{{ form.industry }}</div>
-    <div class="cr-field"><label class="az-calc-label" for="{{ form.seniority.id_for_label }}">{{ form.seniority.label }}</label>{{ form.seniority }}</div>
+    {% include "features/partials/_field.html" with field=form.job_title %}
+    {% include "features/partials/_field.html" with field=form.experience_years %}
+    {% include "features/partials/_field.html" with field=form.industry %}
+    {% include "features/partials/_field.html" with field=form.seniority %}
   </div>
-  <div class="cr-field"><label class="az-calc-label" for="{{ form.is_manager.id_for_label }}">{{ form.is_manager.label }}</label>{{ form.is_manager }}</div>
-  <div class="cr-field"><label class="az-calc-label" for="{{ form.tech_stack.id_for_label }}">{{ form.tech_stack.label }}</label>{{ form.tech_stack }}</div>
+  <div class="cr-field cr-field--check">
+    <label class="cr-check" for="{{ form.is_manager.id_for_label }}">{{ form.is_manager }}<span>{{ form.is_manager.label }}</span></label>
+  </div>
+  {% include "features/partials/_field.html" with field=form.tech_stack %}
   <details class="cr-offer-section">
     <summary>Paste job description (optional)</summary>
-    <div class="cr-field">{{ form.job_description }}</div>
+    <div class="cr-field">
+      <label class="az-calc-label" for="{{ form.job_description.id_for_label }}">{{ form.job_description.label }}</label>
+      {{ form.job_description }}
+    </div>
   </details>
   <div class="cr-form-actions">
   <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Assess AI Impact</button>
@@ -23,7 +29,7 @@
 {% endif %}
 
 {% if result %}
-<section class="cr-result" aria-live="polite">
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
   <div class="cr-result-hero">
     <h2 class="cr-result__verdict">{{ result.risk_label }}</h2>
     <p class="cr-result-hero__metric">AI Risk Score: <strong class="cr-data" data-cr-animate-score="{{ result.ai_risk_score }}">0</strong>/100</p>
@@ -45,6 +51,7 @@
   <h3 class="cr-section-title">12-month action plan</h3>
   <ol>{% for step in result.action_plan_12mo %}<li>{{ step }}</li>{% endfor %}</ol>
   <p><strong>3-year outlook:</strong> {{ result.outlook_3y }}</p>
+  <p class="cr-result__again"><a href="{{ request.path }}">Run another assessment</a></p>
   {% include "features/partials/_related_actions.html" %}
 </section>
 {% endif %}

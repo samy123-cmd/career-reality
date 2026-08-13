@@ -1,0 +1,13 @@
+{% comment %}
+Renders one form field with label, widget, help text and validation error.
+ARIA wiring (aria-invalid / aria-describedby) is applied on the widget by
+AccessibleForm, so ids here must match that convention.
+{% endcomment %}
+<div class="cr-field{% if field.errors %} cr-field--error{% endif %}">
+  <label class="az-calc-label" for="{{ field.id_for_label }}">
+    {{ field.label }}{% if field.field.required %}<span class="cr-field__required" title="Required">*</span>{% endif %}
+  </label>
+  {{ field }}
+  {% if field.help_text %}<small class="cr-help" id="{{ field.auto_id }}-help">{{ field.help_text }}</small>{% endif %}
+  {% if field.errors %}<span class="cr-error" id="{{ field.auto_id }}-error">{{ field.errors.0 }}</span>{% endif %}
+</div>

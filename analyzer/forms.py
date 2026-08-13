@@ -146,7 +146,32 @@ _AZ_TEXTAREA = {"class": "az-calc-input", "rows": 4}
 _AZ_NUMBER = {"class": "az-calc-input", "inputmode": "decimal"}
 
 
-class SalaryRealityEngineForm(forms.Form):
+class AccessibleForm(forms.Form):
+    """Base form that wires validation state into assistive-technology attributes.
+
+    Screen readers only announce a field as invalid when the widget itself
+    carries aria-invalid, so the attributes are applied after validation rather
+    than in the template where the widget is already rendered.
+    """
+
+    def full_clean(self):
+        super().full_clean()
+        for name in self.fields:
+            field = self.fields[name]
+            field.widget.attrs.pop("aria-invalid", None)
+            described_by = []
+            if field.help_text:
+                described_by.append(f"{self[name].auto_id}-help")
+            if self._errors and name in self._errors:
+                field.widget.attrs["aria-invalid"] = "true"
+                described_by.append(f"{self[name].auto_id}-error")
+            if described_by:
+                field.widget.attrs["aria-describedby"] = " ".join(described_by)
+            else:
+                field.widget.attrs.pop("aria-describedby", None)
+
+
+class SalaryRealityEngineForm(AccessibleForm):
     role = forms.ChoiceField(
         label="Job Role",
         choices=[(r, r) for cat, roles in role_choices_grouped() for r, _ in roles],
@@ -181,7 +206,7 @@ class SalaryRealityEngineForm(forms.Form):
     )
 
 
-class OfferAnalyzerForm(forms.Form):
+class OfferAnalyzerForm(AccessibleForm):
     role = forms.ChoiceField(
         label="Role",
         choices=[(r, r) for cat, roles in role_choices_grouped() for r, _ in roles],
@@ -224,7 +249,7 @@ class OfferAnalyzerForm(forms.Form):
     priority_wlb = forms.IntegerField(initial=15, min_value=0, max_value=100, widget=forms.HiddenInput())
 
 
-class StayVsSwitchForm(forms.Form):
+class StayVsSwitchForm(AccessibleForm):
     role = forms.ChoiceField(choices=[(r, r) for cat, roles in role_choices_grouped() for r, _ in roles], widget=forms.Select(attrs=_AZ_SELECT))
     experience_years = forms.FloatField(validators=[MinValueValidator(0), MaxValueValidator(50)], initial=5, widget=forms.NumberInput(attrs=_AZ_NUMBER))
     city = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs=_AZ_SELECT))
@@ -242,7 +267,7 @@ class StayVsSwitchForm(forms.Form):
     performance_status = forms.ChoiceField(choices=copy.PERFORMANCE_STATUS, required=False, initial="good", widget=forms.Select(attrs=_AZ_SELECT))
 
 
-class AICareerImpactForm(forms.Form):
+class AICareerImpactForm(AccessibleForm):
     job_title = forms.ChoiceField(
         label="Your Role",
         choices=[(r, r) for cat, roles in role_choices_grouped() for r, _ in roles],
@@ -261,7 +286,7 @@ class AICareerImpactForm(forms.Form):
     job_description = forms.CharField(required=False, label="Job description (optional paste)", widget=forms.Textarea(attrs={**_AZ_TEXTAREA, "rows": 3}))
 
 
-class NextCareerMoveForm(forms.Form):
+class NextCareerMoveForm(AccessibleForm):
     role = forms.ChoiceField(choices=[(r, r) for cat, roles in role_choices_grouped() for r, _ in roles], widget=forms.Select(attrs=_AZ_SELECT))
     experience_years = forms.FloatField(validators=[MinValueValidator(0), MaxValueValidator(50)], initial=5, widget=forms.NumberInput(attrs=_AZ_NUMBER))
     city = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs=_AZ_SELECT))
@@ -270,7 +295,7 @@ class NextCareerMoveForm(forms.Form):
     skills = forms.CharField(required=False, label="Skills (comma-separated)", widget=forms.TextInput(attrs=_AZ_INPUT))
 
 
-class AskCareerRealityForm(forms.Form):
+class AskCareerRealityForm(AccessibleForm):
     question = forms.CharField(
         widget=forms.Textarea(attrs={**_AZ_TEXTAREA, "rows": 4, "placeholder": "I make ₹18L at TCS with 6 YOE — should I take ₹23L at a startup?"}),
         max_length=1000,
@@ -278,7 +303,7 @@ class AskCareerRealityForm(forms.Form):
     )
 
 
-class CareerProfileForm(forms.Form):
+class CareerProfileForm(AccessibleForm):
     role = forms.ChoiceField(choices=[(r, r) for cat, roles in role_choices_grouped() for r, _ in roles], widget=forms.Select(attrs=_AZ_SELECT))
     title = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs=_AZ_INPUT))
     experience_years = forms.FloatField(validators=[MinValueValidator(0), MaxValueValidator(50)], widget=forms.NumberInput(attrs=_AZ_NUMBER))
@@ -289,7 +314,7 @@ class CareerProfileForm(forms.Form):
     skills = forms.CharField(required=False, label="Skills (comma-separated)", widget=forms.TextInput(attrs=_AZ_INPUT))
 
 
-class CareerSnapshotForm(forms.Form):
+class CareerSnapshotForm(AccessibleForm):
     recorded_at = forms.DateField(widget=forms.DateInput(attrs={**_AZ_INPUT, "type": "date"}))
     title = forms.CharField(max_length=100, widget=forms.TextInput(attrs=_AZ_INPUT))
     ctc = forms.IntegerField(label="CTC (LPA)", widget=forms.NumberInput(attrs=_AZ_NUMBER))

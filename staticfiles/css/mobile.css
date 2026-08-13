@@ -818,6 +818,16 @@
         align-items: center;
     }
 
+    .benchmark-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+
+    .benchmark-range {
+        align-self: flex-start;
+    }
+
     /* ── Static pages ── */
     .static-page-content {
         padding: 24px 0 40px;
