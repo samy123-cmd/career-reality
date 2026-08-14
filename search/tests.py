@@ -1,9 +1,32 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from ainews.models import AINewsItem
 from companies.models import Company
 from content.models import Article, Author, Category
+
+# Search uses indexable_ai_news_queryset(), which requires a career_angle
+# and a recent published/reviewed timestamp — not just status=published.
+INDEXABLE_CAREER_ANGLE = (
+    "This changes hiring and staffing for Indian software engineers: expect "
+    "tighter benches, more AI-assisted delivery, and stronger evidence bars "
+    "on mid-level IC switches."
+)
+
+
+def _published_ai_news(**kwargs):
+    defaults = {
+        "summary": "A major AI development affecting software engineers in India.",
+        "career_angle": INDEXABLE_CAREER_ANGLE,
+        "source_name": "OpenAI",
+        "source_url": "https://example.com/ai-news",
+        "status": "published",
+        "published_at": timezone.now(),
+        "reviewed_at": timezone.now(),
+    }
+    defaults.update(kwargs)
+    return AINewsItem.objects.create(**defaults)
 
 
 class SearchViewTests(TestCase):
@@ -37,13 +60,12 @@ class SearchViewTests(TestCase):
             name="Infosys India",
             slug="infosys-india",
         )
-        self.news_item = AINewsItem.objects.create(
+        self.news_item = _published_ai_news(
             title="GPT-5 Impacts Software Jobs",
             slug="gpt-5-impacts-software-jobs",
             summary="A major AI development affecting software engineers.",
             source_name="OpenAI",
             source_url="https://example.com/gpt5",
-            status="published",
         )
         self.draft_news = AINewsItem.objects.create(
             title="Draft GPT News",
@@ -123,13 +145,12 @@ class SearchSuggestApiTests(TestCase):
             status="published",
         )
         self.company = Company.objects.create(name="Wipro Tech", slug="wipro-tech")
-        self.news_item = AINewsItem.objects.create(
+        self.news_item = _published_ai_news(
             title="Engineer Replaced by AI",
             slug="engineer-replaced-by-ai",
             summary="Summary.",
             source_name="TechCrunch",
             source_url="https://example.com/eng",
-            status="published",
         )
 
     def test_suggest_returns_json(self):

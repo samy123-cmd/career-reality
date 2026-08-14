@@ -25,7 +25,7 @@ CTC_CALCULATOR = PageSEO(
         "in-hand salary instantly with PF, gratuity, variable pay, and new vs old tax "
         "regime deductions."
     ),
-    h1="CTC Calculator India — CTC to In-Hand Salary",
+    h1="CTC Calculator India — In-Hand Salary Calculator",
     keywords=(
         "ctc to in hand salary calculator india",
         "in hand salary calculator",

@@ -71,8 +71,11 @@ class CoreViewsTests(TestCase):
         self.assertIn("Disallow: /discussions/", body)
         self.assertIn("Allow: /payments/pricing/", body)
         self.assertIn("Disallow: /payments/", body)
+        self.assertIn("Disallow: /pro/", body)
+        self.assertIn("Disallow: /pro/dashboard/", body)
         robots_lines = [line.strip() for line in body.splitlines()]
         self.assertNotIn("Disallow: /salary-drop/", robots_lines)
+        self.assertNotIn("Disallow: /tools/", robots_lines)
         self.assertIn("Disallow: /salary-drop/success/", robots_lines)
         self.assertIn("Sitemap: https://www.careerreality.in/sitemap.xml", body)
 
@@ -87,11 +90,15 @@ class CoreViewsTests(TestCase):
         )
 
     def test_career_reality_index_has_expected_latest_band(self):
+        from core.career_index_data import editorial_baseline, latest_baseline_month
+        from core.views import _index_band
+
         response = self.client.get(reverse("career_reality_index"))
+        latest = editorial_baseline(*latest_baseline_month())
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["latest_row"]["overall"], 63)
-        self.assertEqual(response.context["latest_band"], "Elevated Pressure")
+        self.assertEqual(response.context["latest_row"]["overall"], latest.overall)
+        self.assertEqual(response.context["latest_band"], _index_band(latest.overall))
 
     def test_newsletter_signup_creates_subscriber_and_redirects(self):
         response = self.client.post(
@@ -209,10 +216,13 @@ class CareerRealityIndexTests(TestCase):
         self.assertIn("latest_band", response.context)
 
     def test_index_fallback_when_no_snapshots(self):
-        """Without any DB snapshots, falls back to editorial July 2026 baseline."""
+        """Without any DB snapshots, falls back to the latest editorial baseline."""
+        from core.career_index_data import editorial_baseline, latest_baseline_month
+
         self.assertEqual(CareerRealityIndexSnapshot.objects.count(), 0)
         response = self.client.get(reverse("career_reality_index"))
-        self.assertEqual(response.context["latest_row"]["overall"], 63)
+        latest = editorial_baseline(*latest_baseline_month())
+        self.assertEqual(response.context["latest_row"]["overall"], latest.overall)
 
     def test_index_reads_from_db_snapshots(self):
         """When snapshots exist, the view reports from the DB."""
@@ -304,4 +314,28 @@ class LayoffAlertsCronTests(TestCase):
         self.assertEqual(response.json()["status"], "ok")
         mock_cmd.assert_called_once()
         self.assertEqual(mock_cmd.call_args.args[0], "send_layoff_alerts")
+
+
+class CareerIndexBaselineTests(TestCase):
+    def test_latest_baseline_is_the_newest_published_month(self):
+        from core.career_index_data import MONTHLY_BASELINES, latest_baseline_month
+
+        self.assertEqual(latest_baseline_month(), max(MONTHLY_BASELINES))
+
+    def test_editorial_baseline_carries_forward_past_latest_month(self):
+        from core.career_index_data import editorial_baseline, latest_baseline_month
+
+        year, month = latest_baseline_month()
+        latest = editorial_baseline(year, month)
+        future_year = year + 1 if month == 12 else year
+        future_month = 1 if month == 12 else month + 1
+        self.assertEqual(editorial_baseline(future_year, future_month), latest)
+
+    def test_editorial_baseline_is_none_before_first_published_month(self):
+        from core.career_index_data import MONTHLY_BASELINES, editorial_baseline
+
+        first_year, first_month = min(MONTHLY_BASELINES)
+        prior_year = first_year - 1 if first_month == 1 else first_year
+        prior_month = 12 if first_month == 1 else first_month - 1
+        self.assertIsNone(editorial_baseline(prior_year, prior_month))
 

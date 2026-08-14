@@ -10,7 +10,6 @@ from django.db.models import Count, Q
 from content.models import Article, Category
 from django.utils import timezone
 from django.conf import settings
-from datetime import date
 import os
 import io
 from django.core.management import call_command
@@ -57,53 +56,8 @@ def _topic_clusters():
 
 
 def _career_reality_index_rows():
-    """
-    Return the last 4 months of Career Reality Index data.
-    Reads from CareerRealityIndexSnapshot (computed from real crowdsourced data).
-    Falls back to hardcoded baseline if no snapshots exist yet.
-    """
-    from core.models import CareerRealityIndexSnapshot
-
-    snapshots = list(
-        CareerRealityIndexSnapshot.objects.order_by("-month_date")[:4]
-    )
-
-    if snapshots:
-        return [
-            {
-                "month": s.month,
-                "salary_pressure": s.salary_pressure,
-                "switch_difficulty": s.switch_difficulty,
-                "layoff_risk": s.layoff_risk,
-                "overall": s.overall,
-            }
-            for s in snapshots
-        ]
-
-    # Fallback until first `refresh_career_index` run
-    def _shift_month(d, months_back):
-        year = d.year
-        month = d.month - months_back
-        while month <= 0:
-            month += 12
-            year -= 1
-        return date(year, month, 1)
-
-    base = timezone.localdate()
-    from core.career_index_data import editorial_baseline
-
-    def _row(months_back):
-        d = _shift_month(base, months_back)
-        bl = editorial_baseline(d.year, d.month) or editorial_baseline(2026, 6)
-        return {
-            "month": d.strftime("%B %Y"),
-            "salary_pressure": bl.salary_pressure,
-            "switch_difficulty": bl.switch_difficulty,
-            "layoff_risk": bl.layoff_risk,
-            "overall": bl.overall,
-        }
-
-    return [_row(i) for i in range(4)]
+    """Last 4 months of Career Reality Index data (cached, DB then editorial)."""
+    return get_career_index_rows_cached()
 
 
 def _index_band(score):
@@ -142,6 +96,7 @@ def robots_txt(request):
         # Payment/checkout — no SEO value
         "Disallow: /payments/",
         # Pro dashboard — gated content
+        "Disallow: /pro/",
         "Disallow: /pro/dashboard/",
         # Community UGC — thin, user-generated; not editorial content
         "Disallow: /discussions/",

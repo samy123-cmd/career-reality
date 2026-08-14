@@ -151,7 +151,7 @@ class InternalLinkingTests(TestCase):
 
     def test_article_page_includes_tool_hub(self):
         response = self.client.get(reverse("article_detail", kwargs={"slug": "test-seo-hub-article"}))
-        self.assertContains(response, "FREE CAREER TOOLS")
+        self.assertContains(response, "Free career tools")
         self.assertContains(response, reverse("salary_calculator"))
 
     def test_article_links_resignation_tool_to_landing_page(self):
@@ -217,3 +217,13 @@ class CareerToolSEOTests(TestCase):
                 self.assertContains(response, "feature-product.css")
                 content = response.content.decode()
                 self.assertTrue("az-calc-card" in content or "cr-tool-card" in content)
+
+    def test_career_tool_pages_are_indexable_with_canonical(self):
+        for url_name, h1 in self.TOOL_CASES:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(response, 'name="robots" content="index, follow"')
+                self.assertContains(response, 'rel="canonical"')
+                self.assertContains(response, 'property="og:title"')
+                self.assertContains(response, h1)
