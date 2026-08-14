@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils.cache import patch_cache_control
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import timezone
@@ -50,6 +51,11 @@ def _seo_ctx(seo, faq_key: str):
         "page_keywords": seo.keywords,
         "tool_faq": TOOL_FAQS.get(faq_key, ()),
         "tool_schema_name": seo.h1,
+        "feature_breadcrumb": [
+            {"label": "Home", "url": reverse("home")},
+            {"label": "Career tools", "url": f"{reverse('home')}#seo-tool-hub-title"},
+            {"label": seo.h1, "url": ""},
+        ],
     }
 
 

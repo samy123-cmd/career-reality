@@ -63,6 +63,23 @@
 }
 </script>
 {% endif %}
+{% if reality_score %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "{{ company.name|escapejs }} Company Reality Score",
+    "description": "Composite career reality score for {{ company.name|escapejs }} covering compensation, stability, growth, WLB, culture, promotion, and work mode.",
+    "url": "{{ canonical_url|default:request.build_absolute_uri }}#reality-score",
+    "creator": {
+        "@type": "Organization",
+        "name": "Career Reality India",
+        "url": "{{ site_base_url }}"
+    },
+    "license": "{{ site_base_url }}/terms/"
+}
+</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}

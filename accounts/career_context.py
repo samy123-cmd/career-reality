@@ -22,9 +22,10 @@ def get_career_context(request) -> dict:
     """Merged career context: CareerProfile → session → defaults."""
     ctx = dict(DEFAULTS)
 
-    if request.user.is_authenticated:
+    user = getattr(request, "user", None)
+    if user is not None and getattr(user, "is_authenticated", False):
         try:
-            cp = request.user.career_profile
+            cp = user.career_profile
             ctx.update({
                 "role": cp.role or ctx["role"],
                 "experience_years": float(cp.experience_years) if cp.experience_years is not None else ctx["experience_years"],
@@ -39,7 +40,8 @@ def get_career_context(request) -> dict:
         except Exception:
             pass
 
-    session_ctx = request.session.get(SESSION_KEY, {})
+    session = getattr(request, "session", None)
+    session_ctx = session.get(SESSION_KEY, {}) if session is not None else {}
     if isinstance(session_ctx, dict):
         for k, v in session_ctx.items():
             if v is not None and v != "":

@@ -4,6 +4,7 @@ Salary Reality Engine — role + YOE + city + company type → percentile, marke
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass
 
@@ -219,6 +220,27 @@ def _editorial_fallback(role: str, yoe: float, city: str) -> tuple[int, int, int
     )
 
 
+def _salary_reality_cache_key(
+    role: str,
+    yoe: float,
+    city: str,
+    company_type: str,
+    current_ctc: int | None,
+) -> str:
+    """Memcached-safe key — role/city strings contain spaces."""
+    raw = "|".join(
+        [
+            role.lower().strip(),
+            str(yoe),
+            _normalize_city(city),
+            (company_type or "").lower().strip(),
+            str(current_ctc or 0),
+        ]
+    )
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
+    return f"sr:v2:{digest}"
+
+
 def get_salary_reality(
     role: str,
     yoe: float,
@@ -230,10 +252,7 @@ def get_salary_reality(
     Compute salary reality for a role + experience + city combination.
     Falls back to editorial bands when crowdsourced n < MIN_SAMPLE_SIZE.
     """
-    cache_key = (
-        f"salary_reality:v1:{role.lower()}:{yoe}:{_normalize_city(city)}:"
-        f"{company_type}:{current_ctc or 0}"
-    )
+    cache_key = _salary_reality_cache_key(role, yoe, city, company_type, current_ctc)
     cached = cache.get(cache_key)
     if cached:
         return SalaryRealityResult(**cached)

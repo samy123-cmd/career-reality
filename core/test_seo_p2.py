@@ -227,3 +227,4 @@ class CareerToolSEOTests(TestCase):
                 self.assertContains(response, 'rel="canonical"')
                 self.assertContains(response, 'property="og:title"')
                 self.assertContains(response, h1)
+                self.assertContains(response, '"@type": "BreadcrumbList"')
