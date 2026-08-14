@@ -1,0 +1,106 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
+{% if not result %}
+<form method="post" class="cr-form" data-cr-loading="Comparing compensation structures…" novalidate>
+  {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
+  <div class="az-calc-grid">
+    {% include "features/partials/_field.html" with field=form.role %}
+    {% include "features/partials/_field.html" with field=form.experience_years %}
+  </div>
+
+  <details class="cr-offer-section">
+    <summary>Your current situation (optional)</summary>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.current_company %}
+      {% include "features/partials/_field.html" with field=form.current_ctc %}
+    </div>
+  </details>
+
+  <div data-cr-offer-tabs>
+    <div class="cr-offer-tabs" role="tablist">
+      <button type="button" class="cr-offer-tab is-active" data-cr-offer-tab role="tab" aria-selected="true">Offer A</button>
+      <button type="button" class="cr-offer-tab" data-cr-offer-tab role="tab" aria-selected="false">Offer B</button>
+    </div>
+
+    <div class="cr-offer-panel is-active" data-cr-offer-panel role="tabpanel">
+      <div class="az-calc-grid">
+        {% include "features/partials/_field.html" with field=form.offer_a_company %}
+        {% include "features/partials/_field.html" with field=form.offer_a_ctc %}
+        {% include "features/partials/_field.html" with field=form.offer_a_city %}
+        {% include "features/partials/_field.html" with field=form.offer_a_fixed_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_a_variable_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_a_esop %}
+        {% include "features/partials/_field.html" with field=form.offer_a_commute %}
+        {% include "features/partials/_field.html" with field=form.offer_a_wlb %}
+        {% include "features/partials/_field.html" with field=form.offer_a_work_mode %}
+        {% include "features/partials/_field.html" with field=form.offer_a_growth %}
+      </div>
+    </div>
+
+    <div class="cr-offer-panel" data-cr-offer-panel role="tabpanel" hidden>
+      <div class="az-calc-grid">
+        {% include "features/partials/_field.html" with field=form.offer_b_company %}
+        {% include "features/partials/_field.html" with field=form.offer_b_ctc %}
+        {% include "features/partials/_field.html" with field=form.offer_b_city %}
+        {% include "features/partials/_field.html" with field=form.offer_b_fixed_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_b_variable_pct %}
+        {% include "features/partials/_field.html" with field=form.offer_b_esop %}
+        {% include "features/partials/_field.html" with field=form.offer_b_commute %}
+        {% include "features/partials/_field.html" with field=form.offer_b_wlb %}
+        {% include "features/partials/_field.html" with field=form.offer_b_work_mode %}
+        {% include "features/partials/_field.html" with field=form.offer_b_growth %}
+      </div>
+    </div>
+  </div>
+
+  <fieldset class="cr-priorities">
+    <legend class="cr-priorities__legend">What matters most to you?</legend>
+    <p class="cr-help">We weight the verdict against these. Defaults suit most people.</p>
+    {% for field in form %}{% if field.name|slice:":9" == "priority_" %}
+    <div class="cr-priority">
+      <label class="cr-priority__label" for="{{ field.id_for_label }}">
+        {{ field.label }}
+        <output class="cr-priority__value" data-cr-priority-out="{{ field.name }}">{{ field.value|default:0 }}</output>
+      </label>
+      {{ field }}
+    </div>
+    {% endif %}{% endfor %}
+  </fieldset>
+
+  <div class="cr-form-actions">
+  <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Compare Offers</button>
+  {% if user.is_authenticated %}<button type="submit" name="save_offer" value="1" class="cr-btn cr-btn--secondary">Compare &amp; Save</button>{% endif %}
+  </div>
+</form>
+{% endif %}
+
+{% if result %}
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
+  <div class="cr-result-hero">
+    <h2 class="cr-result__verdict">{{ result.verdict_label }}</h2>
+    <p class="cr-result-hero__metric"><span class="cr-data">{{ result.score_a_display }}</span> vs <span class="cr-data">{{ result.score_b_display }}</span></p>
+  </div>
+  <h3 class="cr-section-title">Why?</h3>
+  <ul>{% for r in result.reasoning %}<li>{{ r }}</li>{% endfor %}</ul>
+  <div class="cr-metric-grid cr-stat-grid">
+    <div class="cr-stat"><span class="cr-stat__label">Offer A overall</span><span class="cr-stat__value cr-data">{{ result.offer_a.overall|floatformat:1 }}/10</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Offer B overall</span><span class="cr-stat__value cr-data">{{ result.offer_b.overall|floatformat:1 }}/10</span></div>
+  </div>
+  <h3 class="cr-section-title">Offer A breakdown</h3>
+  {% include "features/partials/_score_breakdown.html" with dimensions=result.offer_a.dimensions %}
+  <h3 class="cr-section-title">Offer B breakdown</h3>
+  {% include "features/partials/_score_breakdown.html" with dimensions=result.offer_b.dimensions %}
+  <h3 class="cr-section-title">Trade-offs</h3>
+  <p><strong>Offer A:</strong> {{ result.tradeoffs.offer_a|join:", "|default:"No major trade-offs" }}</p>
+  <p><strong>Offer B:</strong> {{ result.tradeoffs.offer_b|join:", "|default:"No major trade-offs" }}</p>
+  <h3 class="cr-section-title">Outlook</h3>
+  <p><strong>2-year:</strong> {{ result.outlook_2y }}</p>
+  <p><strong>5-year:</strong> {{ result.outlook_5y }}</p>
+  {% include "features/partials/_methodology.html" %}
+  {% include "features/partials/_related_actions.html" %}
+</section>
+{% endif %}
+{% endblock %}

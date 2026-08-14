@@ -4,7 +4,7 @@
 {% block title %}{{ company.name }} — Salary, Reviews & Reality Check{% endblock %}
 {% block meta_description %}{{ og_description }}{% endblock %}
 
-{% block page_css %}{% include "partials/css_companies.html" %}{% endblock %}
+{% block page_css %}{% include "partials/css_companies.html" %}{% if reality_score %}{% include "partials/css_feature_product.html" %}{% endif %}{% endblock %}
 
 {% block extra_head %}
 <script type="application/ld+json">
@@ -60,6 +60,23 @@
         "median": {{ company.avg_ctc }}
     },
     "description": "Average CTC at {{ company.name|escapejs }} based on {{ company.salary_count }} reported salaries."
+}
+</script>
+{% endif %}
+{% if reality_score %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "{{ company.name|escapejs }} Company Reality Score",
+    "description": "Composite career reality score for {{ company.name|escapejs }} covering compensation, stability, growth, WLB, culture, promotion, and work mode.",
+    "url": "{{ canonical_url|default:request.build_absolute_uri }}#reality-score",
+    "creator": {
+        "@type": "Organization",
+        "name": "Career Reality India",
+        "url": "{{ site_base_url }}"
+    },
+    "license": "{{ site_base_url }}/terms/"
 }
 </script>
 {% endif %}
@@ -185,6 +202,48 @@
 
     <!-- Main Content -->
     <div class="cp-main">
+        {% if reality_score %}
+        <section class="cp-reality-score cr-feature" id="reality-score">
+            <h2>Company Reality Score</h2>
+            <div class="score-big">{{ reality_score.overall|floatformat:1 }}<span>/10</span></div>
+            <p>360° view across compensation, stability, growth, WLB, culture, promotion, and work mode.</p>
+
+            <div class="cr-crs-tabs" role="tablist" data-cr-crs-tabs>
+                <button type="button" class="cr-crs-tab is-active" data-cr-crs-tab="all" role="tab" aria-selected="true">All dimensions</button>
+                {% for dim in reality_score.dimensions %}
+                <button type="button" class="cr-crs-tab" data-cr-crs-tab="{{ forloop.counter0 }}" role="tab" aria-selected="false">{{ dim.label }}</button>
+                {% endfor %}
+            </div>
+
+            <div class="cp-score-ratings" data-cr-crs-panels>
+                {% for dim in reality_score.dimensions %}
+                <div class="score-row" data-cr-crs-panel="{{ forloop.counter0 }}">
+                    <span>{{ dim.label }}</span>
+                    <div class="score-bar"><div class="score-bar-fill" style="width:{% widthratio dim.score 10 100 %}%; background: var(--feature-accent, #38bdf8);"></div></div>
+                    <span class="cr-data">{{ dim.score|floatformat:1 }}</span>
+                </div>
+                {% if dim.detail %}<p class="cp-meta-small cr-crs-detail" data-cr-crs-panel="{{ forloop.counter0 }}">{{ dim.detail }}</p>{% endif %}
+                {% endfor %}
+            </div>
+            {% if user_career_role %}
+            <div class="cr-crs-personal">
+                <strong>What this means for you</strong>
+                <p>As a {{ user_career_role }}, weigh stability and growth dimensions most heavily. Overall company score is not universal — your function may face different hiring or layoff patterns.</p>
+                <p>
+                    <a href="{% url 'tools:offer_analyzer' %}">Compare offers</a> ·
+                    <a href="{% url 'tools:stay_vs_switch' %}">Stay vs Switch</a> ·
+                    <a href="{% url 'tools:salary_reality_engine' %}">Salary check</a>
+                </p>
+            </div>
+            {% endif %}
+            <details class="cr-methodology">
+                <summary>Methodology</summary>
+                <p>Composite of compensation, stability (layoffs), growth, WLB, culture, promotion proxy, and work mode. Updated when reviews/salaries change{% if company.reality_score_updated_at %} — last {{ company.reality_score_updated_at|date:"M j, Y" }}{% endif %}.</p>
+            </details>
+            <p class="cp-meta-small">Stability: {{ reality_score.stability_label }} · {{ reality_score.sample_salaries }} salaries · {{ reality_score.sample_reviews }} reviews</p>
+        </section>
+        {% endif %}
+
         {% if company.description %}
         <p class="cp-description">{{ company.description }}</p>
         {% endif %}

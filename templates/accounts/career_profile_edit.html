@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}Edit Career Profile{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block content %}
+<div class="cr-feature">
+  <div class="cr-feature__inner cr-feature__inner--centered">
+    <section class="container-reading cr-tool-page">
+      <div class="az-calc-hero">
+        <h1 class="az-calc-title">Edit Career Profile</h1>
+        <p class="az-calc-subtitle">Updates prefill all CareerReality tools and your dashboard.</p>
+      </div>
+      <div class="az-calc-card cr-tool-card">
+        <form method="post" class="cr-form" novalidate>
+          {% csrf_token %}
+          {% include "features/partials/_form_errors.html" %}
+          <div class="az-calc-grid">
+          {% for field in form %}
+          {% include "features/partials/_field.html" %}
+          {% endfor %}
+          </div>
+          <div class="cr-form-actions">
+          <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Save Profile</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

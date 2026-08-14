@@ -60,6 +60,15 @@ class Company(models.Model):
         max_digits=3, decimal_places=1, null=True, blank=True,
         help_text="Composite score 0-10 based on salary, culture, stability"
     )
+    reality_score_overall = models.DecimalField(
+        max_digits=3, decimal_places=1, null=True, blank=True,
+        help_text="Denormalized Company Reality Score 0-10",
+    )
+    reality_score_json = models.JSONField(
+        null=True, blank=True,
+        help_text="Cached dimension breakdown for Company Reality Score",
+    )
+    reality_score_updated_at = models.DateTimeField(null=True, blank=True)
 
     is_verified = models.BooleanField(default=False, help_text="Manually verified by editorial team")
     created_at = models.DateTimeField(auto_now_add=True)

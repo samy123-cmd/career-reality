@@ -25,7 +25,7 @@ CTC_CALCULATOR = PageSEO(
         "in-hand salary instantly with PF, gratuity, variable pay, and new vs old tax "
         "regime deductions."
     ),
-    h1="CTC Calculator India — CTC to In-Hand Salary",
+    h1="CTC Calculator India — In-Hand Salary Calculator",
     keywords=(
         "ctc to in hand salary calculator india",
         "in hand salary calculator",
@@ -80,6 +80,104 @@ SALARY_REALITY = PageSEO(
     ),
 )
 
+SALARY_REALITY_ENGINE = PageSEO(
+    title="Salary Reality Engine — Am I Underpaid? Free India Salary Percentile Tool",
+    description=(
+        "Enter your role, YOE, city, and CTC to see your salary percentile, market range, "
+        "and realistic next salary. Built on crowdsourced Indian tech data."
+    ),
+    h1="Salary Reality Engine",
+    keywords=(
+        "am i underpaid india",
+        "salary percentile calculator india",
+        "market salary range software engineer",
+    ),
+)
+
+OFFER_ANALYZER = PageSEO(
+    title="Job Offer Analyzer India — Compare Two Offers (Free)",
+    description=(
+        "Paste two job offers and get a clear verdict comparing salary, variable pay, "
+        "commute, WLB, stability, growth, and risk."
+    ),
+    h1="Offer Analyzer",
+    keywords=("job offer comparison india", "which offer should i take", "offer analyzer"),
+)
+
+STAY_VS_SWITCH = PageSEO(
+    title="Stay vs Switch Analyzer — Should I Leave My Job? (Free India Tool)",
+    description=(
+        "Enter your current job and market situation. Get Stay, Switch, or Wait "
+        "with financial and career reasoning backed by real data."
+    ),
+    h1="Stay vs Switch Analyzer",
+    keywords=("should i switch jobs india", "stay or leave job", "career switch calculator"),
+)
+
+AI_CAREER_IMPACT = PageSEO(
+    title="AI Career Impact — AI Risk Score for Your Job Title (Free)",
+    description=(
+        "Enter your job title to get an AI Risk Score, vulnerable tasks, future demand, "
+        "and skills to learn to stay valuable in 2026."
+    ),
+    h1="AI Career Impact",
+    keywords=("ai job risk calculator", "will ai replace my job", "ai career impact india"),
+)
+
+NEXT_CAREER_MOVE = PageSEO(
+    title="Next Career Move — Highest ROI Career Paths for Indian Tech (Free)",
+    description=(
+        "Based on your skills, experience, and salary, get ranked recommendations: "
+        "promotion, company switch, GCC, management, architecture, or AI upskill."
+    ),
+    h1="Next Career Move",
+    keywords=("career path calculator india", "next career move tech", "career roi"),
+)
+
+ASK_CAREER_REALITY = PageSEO(
+    title="Ask CareerReality — AI Career Advisor for Indian Tech Professionals",
+    description=(
+        "Ask career questions like 'I make ₹18L at TCS — should I take ₹23L at a startup?' "
+        "and get evidence-backed answers using CareerReality data."
+    ),
+    h1="Ask CareerReality",
+    keywords=("career advice india", "ask career advisor", "career chatbot india"),
+)
+
+# Per-tool FAQ content for JSON-LD and visible accordions on tool pages.
+TOOL_FAQS: dict[str, tuple[dict[str, str], ...]] = {
+    "salary_reality_engine": (
+        {"q": "How accurate is the salary percentile?", "a": "We blend crowdsourced submissions with editorial bands. Sample size and confidence are shown on every result."},
+        {"q": "What does underpaid mean?", "a": "Your CTC is more than 10% below the market median for your role, YOE, and city band."},
+        {"q": "Is my data stored?", "a": "No login required. Inputs are used only to compute your result in this session."},
+    ),
+    "offer_analyzer": (
+        {"q": "How do you compare two offers?", "a": "We score effective comp, company stability, market fit, WLB, commute, and growth on a 0–10 scale."},
+        {"q": "Should I include ESOP in CTC?", "a": "Enter ESOP value separately if known. We amortize it over 4 years in effective comp."},
+        {"q": "What if the company is not in your database?", "a": "We use conservative stability estimates and still compare compensation and commute factors."},
+    ),
+    "stay_vs_switch": (
+        {"q": "What does Wait mean?", "a": "Signals are mixed — build leverage (offer, savings, skills) before resigning."},
+        {"q": "Does this replace financial advice?", "a": "No. This is decision support based on market data, not personalized financial planning."},
+        {"q": "How is company risk factored in?", "a": "We use layoff reports, review scores, and the Company Reality Score when available."},
+    ),
+    "ai_career_impact": (
+        {"q": "What is an AI Risk Score?", "a": "A 0–100 measure of how exposed your role's tasks are to automation and AI tooling in 2026."},
+        {"q": "Is my job safe if the score is low?", "a": "Low exposure means core work involves judgment and scope AI cannot easily replace — still upskill proactively."},
+        {"q": "Where does the data come from?", "a": "Rule-based mapping from editorial research plus AI Pulse career impact signals."},
+    ),
+    "next_career_move": (
+        {"q": "How are paths ranked?", "a": "By ROI score (comp upside) weighted with fit score (your YOE, company type, and skills)."},
+        {"q": "Why only one path on free?", "a": "Pro unlocks the full ranked list with action plans for every path."},
+        {"q": "Is GCC always better than IT services?", "a": "Not always — we factor your current company type and typical GCC premiums at your YOE."},
+    ),
+    "ask_career_reality": (
+        {"q": "What can I ask?", "a": "Salary comparisons, offer decisions, switch timing — include role, YOE, CTC, and city for best answers."},
+        {"q": "How many free questions?", "a": "Three per month for free users. Pro gets unlimited access."},
+        {"q": "Does it use ChatGPT?", "a": "We use CareerReality's own salary, company, and layoff data first; optional AI narration when an API key is configured."},
+    ),
+}
+
 HOME = PageSEO(
     title="Career Reality India — Salary Truths, CTC Calculator & Layoff Tracker",
     description=(
@@ -98,6 +196,24 @@ HOME = PageSEO(
 # icon: CSS mark key (not emoji) — see .hp-tool-mark--* in tool-hub.css
 SEO_TOOL_HUB = (
     {
+        "label": "Salary Reality Engine",
+        "description": "Role + YOE + city → percentile, market range, under/overpaid flag.",
+        "url_name": "tools:salary_reality_engine",
+        "icon": "salary",
+    },
+    {
+        "label": "Offer Analyzer",
+        "description": "Compare two offers — get a clear which-one-to-take verdict.",
+        "url_name": "tools:offer_analyzer",
+        "icon": "ctc",
+    },
+    {
+        "label": "Stay vs Switch",
+        "description": "Stay, Switch, or Wait — with financial and career reasoning.",
+        "url_name": "tools:stay_vs_switch",
+        "icon": "risk",
+    },
+    {
         "label": "CTC to In-Hand Calculator",
         "description": "Decode your offer letter into real monthly take-home.",
         "url_name": "salary_calculator",
@@ -110,16 +226,28 @@ SEO_TOOL_HUB = (
         "icon": "risk",
     },
     {
+        "label": "AI Career Impact",
+        "description": "AI risk score, vulnerable tasks, and skills to learn.",
+        "url_name": "tools:ai_career_impact",
+        "icon": "pulse",
+    },
+    {
+        "label": "Next Career Move",
+        "description": "Highest-ROI paths: switch, promotion, GCC, AI upskill.",
+        "url_name": "tools:next_career_move",
+        "icon": "company",
+    },
+    {
         "label": "IT Layoff Radar",
         "description": "Hiring freeze and layoff signals across Indian tech.",
         "url_name": "layoff_radar",
         "icon": "radar",
     },
     {
-        "label": "Salary Reality Data",
-        "description": "Median pay by role — not unicorn outliers.",
-        "url_name": "salary_reality",
-        "icon": "salary",
+        "label": "Ask CareerReality",
+        "description": "Evidence-backed career advice from our own data.",
+        "url_name": "tools:ask_career_reality",
+        "icon": "company",
     },
 )
 

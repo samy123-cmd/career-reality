@@ -54,8 +54,25 @@ MONTHLY_BASELINES: dict[tuple[int, int], IndexBaseline] = {
 }
 
 
+def latest_baseline_month() -> tuple[int, int]:
+    """The most recent (year, month) an editor has published a baseline for."""
+    return max(MONTHLY_BASELINES)
+
+
 def editorial_baseline(year: int, month: int) -> IndexBaseline | None:
-    return MONTHLY_BASELINES.get((year, month))
+    """Baseline for a month, carrying the latest one forward when we run past it.
+
+    Baselines are written by hand each review cycle, so the calendar always
+    overtakes them eventually. Carrying the most recent month forward keeps the
+    index showing the newest editorial view instead of silently reverting to
+    whichever month happened to be hardcoded as a fallback.
+    """
+    baseline = MONTHLY_BASELINES.get((year, month))
+    if baseline is not None:
+        return baseline
+    if (year, month) > latest_baseline_month():
+        return MONTHLY_BASELINES[latest_baseline_month()]
+    return None
 
 
 def blend_with_baseline(

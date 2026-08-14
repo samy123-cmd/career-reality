@@ -1,0 +1,68 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
+{% if not result %}
+<form method="post" class="cr-form" data-cr-loading="Ranking career paths for your profile…" novalidate>
+  {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
+  <div class="az-calc-grid">
+    {% include "features/partials/_field.html" with field=form.role %}
+    {% include "features/partials/_field.html" with field=form.experience_years %}
+    {% include "features/partials/_field.html" with field=form.city %}
+    {% include "features/partials/_field.html" with field=form.company_type %}
+  </div>
+  {% include "features/partials/_input_money.html" with field=form.current_ctc %}
+  {% include "features/partials/_field.html" with field=form.skills %}
+  <div class="cr-form-actions">
+  <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Find My Next Move</button>
+  </div>
+</form>
+{% endif %}
+
+{% if result %}
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
+  {% if result.top_path %}
+  <div class="cr-result-hero">
+    <p class="cr-help">Best-fit path</p>
+    <h2 class="cr-result__verdict">{{ result.top_path.title }}</h2>
+    <p>{{ result.best_fit_reason }}</p>
+  </div>
+  <div class="cr-path-card cr-path-card--best">
+    <h3>{{ result.top_path.title }}</h3>
+    <p>{{ result.top_path.summary }}</p>
+    <div class="cr-path-card__meta">
+      <span>ROI {{ result.top_path.roi_score|floatformat:1 }}</span>
+      <span>Fit {{ result.top_path.fit_score|floatformat:1 }}</span>
+      <span>{{ result.top_path.timeline }}</span>
+      <span>{{ result.top_path.salary_potential }}</span>
+      <span>Demand: {{ result.top_path.market_demand }}</span>
+      <span>Difficulty: {{ result.top_path.difficulty }}</span>
+    </div>
+    <p><strong>Actions:</strong></p>
+    <ol>{% for a in result.top_path.actions %}<li>{{ a }}</li>{% endfor %}</ol>
+  </div>
+  {% endif %}
+  <h3 class="cr-section-title">All paths{% if not is_pro %} (Pro unlocks full list){% endif %}</h3>
+  {% for path in result.paths %}
+  <div class="cr-path-card">
+    <h3>{{ path.title }}</h3>
+    <p>{{ path.summary }}</p>
+    <div class="cr-path-card__meta">
+      <span>ROI {{ path.roi_score|floatformat:1 }}</span>
+      <span>Fit {{ path.fit_score|floatformat:1 }}</span>
+      <span>{{ path.timeline }}</span>
+      <span>AI durability: {{ path.ai_durability }}</span>
+    </div>
+    {% if path.transferable_skills %}<p><strong>Transferable:</strong> {{ path.transferable_skills|join:", " }}</p>{% endif %}
+    {% if path.missing_skills %}<p><strong>To build:</strong> {{ path.missing_skills|join:", " }}</p>{% endif %}
+  </div>
+  {% endfor %}
+  {% if not is_pro and result.paths|length <= 1 %}
+  <p class="cr-help"><a href="{% url 'payments:pricing' %}">Upgrade to Pro</a> to see all ranked paths.</p>
+  {% endif %}
+  <p class="cr-result__again"><a href="{{ request.path }}">Try a different profile</a></p>
+  {% include "features/partials/_related_actions.html" %}
+</section>
+{% endif %}
+{% endblock %}

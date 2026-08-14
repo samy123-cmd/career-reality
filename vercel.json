@@ -21,6 +21,10 @@
             "schedule": "0 */6 * * *"
         },
         {
+            "path": "/internal/cron/career-alerts/",
+            "schedule": "0 8 * * *"
+        },
+        {
             "path": "/internal/cron/refresh-career-index/",
             "schedule": "0 3 1 * *"
         }

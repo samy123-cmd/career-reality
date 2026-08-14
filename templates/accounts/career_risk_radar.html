@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}Career Risk Radar{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block content %}
+<div class="cr-dash">
+  <div class="cr-dash__inner">
+    {% include "accounts/partials/_career_dash_nav.html" with active="risk" %}
+    <header class="cr-dash__header">
+      <h1 class="cr-feature__title">Career Risk Radar</h1>
+      <p class="cr-feature__subtitle">Overall risk: <strong>{{ radar.overall_label }}</strong> ({{ radar.overall_score }}/100)</p>
+    </header>
+
+    <div class="az-calc-card cr-tool-card">
+      {% include "features/partials/_score_radar.html" with radar_data=radar %}
+    </div>
+
+    <section class="az-calc-card cr-tool-card" style="margin-top: 1.25rem;">
+      <h2 class="cr-section-title">What triggered this</h2>
+      {% if radar.signals %}
+      <ul>{% for s in radar.signals %}<li>{{ s }}</li>{% endfor %}</ul>
+      {% else %}
+      {% url 'tools:ai_career_impact' as ai_impact_url %}
+      {% include "features/partials/_empty_state.html" with title="No risk signals right now" body="We watch your company's layoff reports, your pay position against the market, and AI exposure for your role. You will see a signal here the moment any of those move." cta_url=ai_impact_url cta_label="Check my AI exposure" %}
+      {% endif %}
+
+      <h2 class="cr-section-title">What you should do</h2>
+      <ol>{% for a in radar.actions %}<li>{{ a }}</li>{% endfor %}</ol>
+    </section>
+
+    <section class="az-calc-card cr-tool-card" style="margin-top: 1.25rem;">
+      <h2 class="cr-section-title">Alerts ({{ unread_count }} unread)</h2>
+      {% for a in alerts %}
+      <div class="alert-row alert-{{ a.severity }}">
+        <span>{{ a.get_alert_type_display }}</span>
+        <p>{{ a.message }}</p>
+        {% if not a.is_read %}
+        <form method="post" action="{% url 'mark_alert_read' a.id %}">{% csrf_token %}<button type="submit" class="cr-btn cr-btn--secondary">Mark read</button></form>
+        {% endif %}
+      </div>
+      {% empty %}
+      {% url 'company_directory' as company_directory_url %}
+      {% include "features/partials/_empty_state.html" with title="No alerts yet" body="Add companies to your watchlist and we will alert you here when layoff or hiring-freeze reports come in." cta_url=company_directory_url cta_label="Browse companies to watch" %}
+      {% endfor %}
+    </section>
+  </div>
+</div>
+{% endblock %}

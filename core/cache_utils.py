@@ -43,6 +43,12 @@ STATIC_WARM_PATHS: tuple[str, ...] = (
     "/contact/",
     "/privacy-policy/",
     "/terms/",
+    "/tools/salary-reality-engine/",
+    "/tools/offer-analyzer/",
+    "/tools/stay-vs-switch/",
+    "/tools/ai-career-impact/",
+    "/tools/next-career-move/",
+    "/tools/ask/",
 )
 
 # CDN cache hints for anonymous public HTML/XML (seconds).
@@ -76,9 +82,11 @@ EDGE_CACHE_DENY_PREFIXES: tuple[str, ...] = (
     "/admin/",
     "/accounts/",
     "/payments/",
+    "/pro/",
     "/pro/dashboard/",
     "/search/",
     "/internal/",
+    "/tools/",
     "/resignation-risk/step/",
     "/resignation-risk/result/",
     "/salary-drop/",
@@ -234,13 +242,14 @@ def get_career_index_rows_cached(*, rebuild: bool = False):
             return date(year, month, 1)
 
         base = timezone.localdate()
-        from core.career_index_data import editorial_baseline
+        from core.career_index_data import editorial_baseline, latest_baseline_month
 
         def _baseline_row(months_back: int) -> dict:
             d = _shift_month(base, months_back)
             bl = editorial_baseline(d.year, d.month)
             if bl is None:
-                bl = editorial_baseline(2026, 6)  # fallback to June baseline
+                # Only reachable for months before the first published baseline.
+                bl = editorial_baseline(*latest_baseline_month())
             return {
                 "month": d.strftime("%B %Y"),
                 "salary_pressure": bl.salary_pressure,

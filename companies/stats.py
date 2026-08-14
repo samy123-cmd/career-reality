@@ -1,12 +1,14 @@
 """Recalculate denormalized company intelligence stats from live submissions."""
 
 from django.db.models import Avg, Q
+from django.utils import timezone
 
 from analyzer.models import LayoffReport, SalarySubmission
+from companies.scoring import compute_company_reality_score
 
 
 def sync_company_stats(company, *, save=True):
-    """Refresh salary_count, avg_ctc, review_count, overall_score, layoff_report_count."""
+    """Refresh salary_count, avg_ctc, review_count, overall_score, layoff_report_count, reality score."""
     salaries = SalarySubmission.objects.filter(
         Q(company=company) | Q(company_name__iexact=company.name)
     )
@@ -27,6 +29,12 @@ def sync_company_stats(company, *, save=True):
     company.overall_score = round(overall, 1) if overall is not None else company.overall_score
     company.layoff_report_count = layoff_count
 
+    reality = compute_company_reality_score(company)
+    company.reality_score_overall = round(reality.overall, 1)
+    company.reality_score_json = reality.to_dict()
+    company.reality_score_json["company_id"] = company.id
+    company.reality_score_updated_at = timezone.now()
+
     if save:
         company.save(
             update_fields=[
@@ -35,6 +43,9 @@ def sync_company_stats(company, *, save=True):
                 "review_count",
                 "overall_score",
                 "layoff_report_count",
+                "reality_score_overall",
+                "reality_score_json",
+                "reality_score_updated_at",
                 "updated_at",
             ]
         )

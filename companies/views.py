@@ -66,7 +66,6 @@ def company_directory(request):
     })
 
 
-@cache_page(60 * 15, key_prefix="company_detail_v2")
 def company_detail(request, slug):
     """Deep-dive company profile with aggregated intelligence."""
     company = get_object_or_404(Company, slug=slug)
@@ -153,6 +152,16 @@ def company_detail(request, slug):
     unlocked_ids = get_unlocked_ids(request)
     user_is_pro = is_pro_user(request)
 
+    from companies.scoring import get_company_reality_score
+    reality_score = get_company_reality_score(company)
+
+    user_career_role = ""
+    if request.user.is_authenticated:
+        try:
+            user_career_role = request.user.career_profile.role or ""
+        except Exception:
+            pass
+
     return render(request, "companies/detail.html", {
         "company": company,
         "salaries": all_salaries[:15],
@@ -168,6 +177,8 @@ def company_detail(request, slug):
         "salary_balance": get_balance(request),
         "free_previews_remaining": get_free_previews_remaining(request),
         "unlocked_salary_ids": unlocked_ids,
+        "reality_score": reality_score,
+        "user_career_role": user_career_role,
         "og_title": f"{company.name} — Salary, Reviews & Reality Check",
         "og_description": f"Honest salary data, anonymous reviews, and layoff alerts for {company.name}. No login required.",
     })

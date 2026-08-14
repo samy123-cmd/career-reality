@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}My Career Reality{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block content %}
+<div class="cr-dash">
+  <div class="cr-dash__inner">
+    {% include "accounts/partials/_career_dash_nav.html" with active="reality" %}
+
+    <header class="cr-dash__header">
+      <h1 class="cr-feature__title">Your Career Reality</h1>
+      <p class="cr-feature__subtitle">{{ career.role }} · {{ career.experience_years }} YOE · {{ career.city }} · ₹{{ career.current_ctc }}L</p>
+    </header>
+
+    {% if career_health %}
+    <div class="cr-dash__health">
+      <div class="cr-dash__health-ring" aria-label="Career health score">
+        <p class="cr-dash__health-score"><span data-cr-animate-score="{{ career_health.overall }}">0</span><span>/100</span></p>
+      </div>
+      <div class="cr-dash__indicators">
+        {% for ind in career_health.indicators %}
+        <div class="cr-dash__indicator">
+          <span class="cr-help">{{ ind.name }}</span>
+          <strong class="cr-data">{{ ind.score }}</strong>
+          <span class="cr-help">{{ ind.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="cr-dash__insight">
+      <h3>Biggest opportunity</h3>
+      <p>{{ career_health.biggest_opportunity }}</p>
+    </div>
+    <div class="cr-dash__insight">
+      <h3>Biggest risk</h3>
+      <p>{{ career_health.biggest_risk }}</p>
+    </div>
+    <div class="cr-dash__insight">
+      <h3>Recommended next move</h3>
+      <p>{{ career_health.recommended_move }}</p>
+      <p><a href="{% url 'tools:stay_vs_switch' %}">See why →</a> · <a href="{% url 'tools:next_career_move' %}">Build my plan →</a></p>
+    </div>
+    {% endif %}
+
+    <div class="cr-metric-grid cr-stat-grid">
+      <div class="cr-stat">
+        <span class="cr-stat__label">Salary Position</span>
+        {% if salary_insight %}
+        <span class="cr-stat__value cr-data">P{{ salary_insight.percentile|default:"—" }}</span>
+        <a href="{% url 'tools:salary_reality_engine' %}">Full analysis →</a>
+        {% else %}<span class="cr-help">Complete profile</span>{% endif %}
+      </div>
+      <div class="cr-stat">
+        <span class="cr-stat__label">Company Risk</span>
+        {% if company_score %}
+        <span class="cr-stat__value cr-data">{{ company_score.overall|floatformat:1 }}/10</span>
+        {% if career.company %}<a href="{% url 'company_detail' slug=career.company.slug %}#reality-score">Profile →</a>{% endif %}
+        {% else %}<span class="cr-help">Add company</span>{% endif %}
+      </div>
+      {% if is_pro and stay_switch %}
+      <div class="cr-stat">
+        <span class="cr-stat__label">Switch Signal</span>
+        <span class="cr-stat__value">{{ stay_switch.recommendation_label }}</span>
+        <a href="{% url 'tools:stay_vs_switch' %}">Details →</a>
+      </div>
+      {% endif %}
+      {% if is_pro and ai_impact %}
+      <div class="cr-stat">
+        <span class="cr-stat__label">AI Exposure</span>
+        <span class="cr-stat__value cr-data">{{ ai_impact.ai_risk_score }}/100</span>
+        <a href="{% url 'tools:ai_career_impact' %}">Assessment →</a>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if is_pro and alerts %}
+    <section class="az-calc-card cr-tool-card">
+      <h2 class="cr-section-title">Active alerts</h2>
+      {% for a in alerts|slice:":5" %}
+      <div class="alert-row alert-{{ a.severity }}"><strong>{{ a.get_alert_type_display }}</strong> — {{ a.message }}</div>
+      {% endfor %}
+      <a href="{% url 'career_risk_radar' %}">View risk radar →</a>
+    </section>
+    {% elif not is_pro %}
+    <p class="cr-help"><a href="{% url 'payments:pricing' %}">Go Pro</a> for stay/switch analysis, AI impact, and risk alerts.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

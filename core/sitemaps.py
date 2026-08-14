@@ -89,9 +89,17 @@ class ToolSitemap(Sitemap):
             'analyzer_home',
             'layoff_radar',
             'salary_reality',
+            'tools:salary_reality_engine',
+            'tools:offer_analyzer',
+            'tools:stay_vs_switch',
+            'tools:ai_career_impact',
+            'tools:next_career_move',
+            'tools:ask_career_reality',
         ]
 
     def location(self, item):
+        if ':' in item:
+            return reverse(item)
         return reverse(item)
 
 

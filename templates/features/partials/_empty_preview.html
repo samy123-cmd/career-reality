@@ -1,0 +1,14 @@
+<div class="cr-preview-strip" id="cr-empty-preview" aria-label="What you'll get">
+  <span class="cr-preview-strip__label">You'll get</span>
+  <div class="cr-preview-strip__chips">
+    {% if preview_items %}
+      {% for item in preview_items %}
+      <span class="cr-preview-strip__chip">{{ item }}</span>
+      {% endfor %}
+    {% else %}
+      <span class="cr-preview-strip__chip">Data-backed analysis</span>
+      <span class="cr-preview-strip__chip">Clear recommendation</span>
+      <span class="cr-preview-strip__chip">Next steps</span>
+    {% endif %}
+  </div>
+</div>

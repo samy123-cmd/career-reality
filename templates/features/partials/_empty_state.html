@@ -1,0 +1,17 @@
+{% comment %}
+Guided empty state. An absence of data is the highest-churn moment in the
+product, so every one of these states must explain the value and offer the
+single next action rather than simply reporting that nothing is here.
+
+Params: title, body, cta_url, cta_label, secondary_url, secondary_label
+{% endcomment %}
+<div class="cr-empty">
+  <p class="cr-empty__title">{{ title }}</p>
+  <p class="cr-empty__body">{{ body }}</p>
+  {% if cta_url %}
+  <div class="cr-empty__actions">
+    <a class="cr-empty__cta" href="{{ cta_url }}">{{ cta_label|default:"Get started" }}</a>
+    {% if secondary_url %}<a class="cr-empty__secondary" href="{{ secondary_url }}">{{ secondary_label }}</a>{% endif %}
+  </div>
+  {% endif %}
+</div>

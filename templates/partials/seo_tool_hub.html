@@ -6,7 +6,7 @@
         <p class="hp-tools-sub">Calculators and trackers built for Indian tech professionals — not generic advice.</p>
     </header>
 
-    <div class="hp-tools-panel" role="list">
+    <div class="hp-tools-panel hp-tools-grid" role="list">
         {% for tool in seo_tool_hub %}
         <a
             href="{% url tool.url_name %}"

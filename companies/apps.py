@@ -5,3 +5,6 @@ class CompaniesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "companies"
     verbose_name = "Company Intelligence"
+
+    def ready(self):
+        import companies.signals  # noqa: F401

@@ -1,0 +1,20 @@
+<details class="cr-methodology">
+  <summary>How we calculate this</summary>
+  <div class="cr-methodology__body">
+    {% if methodology.data_sources %}
+    <p><strong>Data sources:</strong> {{ methodology.data_sources }}</p>
+    {% endif %}
+    {% if methodology.assumptions %}
+    <p><strong>Assumptions:</strong> {{ methodology.assumptions }}</p>
+    {% endif %}
+    {% if methodology.limitations %}
+    <p><strong>Limitations:</strong> {{ methodology.limitations }}</p>
+    {% endif %}
+    {% if methodology.confidence %}
+    <p><strong>Confidence:</strong> {{ methodology.confidence }}</p>
+    {% endif %}
+    {% if methodology.updated %}
+    <p class="cr-methodology__meta">Last updated: {{ methodology.updated }}</p>
+    {% endif %}
+  </div>
+</details>

@@ -1,0 +1,86 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
+{% if not result %}
+<form method="post" class="cr-form cr-wizard" data-cr-wizard data-cr-submit-label="Analyze Decision" data-cr-loading="Assessing company stability and market fit…" novalidate>
+  {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
+
+  <nav class="cr-stepper" aria-label="Progress">
+    <div class="cr-stepper__track"><div class="cr-stepper__progress" data-cr-stepper-progress style="width:0%"></div></div>
+    <ol class="cr-stepper__steps" role="tablist">
+      <li role="presentation"><button type="button" class="cr-stepper__step is-active" data-cr-step role="tab" id="svs-tab-1" aria-controls="svs-panel-1" aria-selected="true"><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Profile</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="svs-tab-2" aria-controls="svs-panel-2" aria-selected="false"><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Pay</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="svs-tab-3" aria-controls="svs-panel-3" aria-selected="false"><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Context</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="svs-tab-4" aria-controls="svs-panel-4" aria-selected="false"><span class="cr-stepper__num">4</span><span class="cr-stepper__label">Offers</span></button></li>
+    </ol>
+  </nav>
+
+  <div data-cr-panel id="svs-panel-1" role="tabpanel" aria-labelledby="svs-tab-1" tabindex="-1">
+    <h2 class="cr-panel-title">Profile</h2>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.role %}
+      {% include "features/partials/_field.html" with field=form.experience_years %}
+      {% include "features/partials/_field.html" with field=form.city %}
+      {% include "features/partials/_field.html" with field=form.company_type %}
+    </div>
+    {% include "features/partials/_field.html" with field=form.company_name %}
+  </div>
+  <div data-cr-panel id="svs-panel-2" role="tabpanel" aria-labelledby="svs-tab-2" tabindex="-1">
+    <h2 class="cr-panel-title">Pay</h2>
+    {% include "features/partials/_input_money.html" with field=form.current_ctc %}
+  </div>
+  <div data-cr-panel id="svs-panel-3" role="tabpanel" aria-labelledby="svs-tab-3" tabindex="-1">
+    <h2 class="cr-panel-title">Context</h2>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.tenure_band %}
+      {% include "features/partials/_field.html" with field=form.ctc_vs_market %}
+      {% include "features/partials/_field.html" with field=form.current_situation %}
+      {% include "features/partials/_field.html" with field=form.performance_status %}
+    </div>
+  </div>
+  <div data-cr-panel id="svs-panel-4" role="tabpanel" aria-labelledby="svs-tab-4" tabindex="-1">
+    <h2 class="cr-panel-title">Offers</h2>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.has_offer %}
+      {% include "features/partials/_field.html" with field=form.offer_ctc %}
+      {% include "features/partials/_field.html" with field=form.notice_period %}
+      {% include "features/partials/_field.html" with field=form.bond_status %}
+    </div>
+  </div>
+
+  <div class="cr-wizard__nav cr-form-actions">
+    <button type="submit" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Analyze Decision</button>
+    <button type="button" class="cr-btn cr-btn--secondary cr-wizard__back" data-cr-prev hidden>Back</button>
+  </div>
+</form>
+{% else %}
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
+  <div class="cr-result-hero">
+    <h2 class="cr-result__verdict cr-result__verdict--{{ result.recommendation }}">{{ result.recommendation_label|upper }}</h2>
+    <p class="cr-result-hero__metric">Confidence: <strong class="cr-data">{{ result.confidence_pct }}%</strong></p>
+    <div class="cr-risk-meter" aria-hidden="true"><div class="cr-risk-meter__fill" style="width: {{ result.risk_score }}%;"></div></div>
+    <p class="cr-help">Risk score {{ result.risk_score }}/100</p>
+  </div>
+  <div class="cr-category-grid">
+    {% for cat in result.categories %}
+    <div class="cr-category-card">
+      <span class="cr-category-card__label">{{ cat.name }}</span>
+      <span class="cr-category-card__value">{{ cat.value }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  <h3 class="cr-section-title">Why we say this</h3>
+  <p><strong>Financial</strong></p><ul>{% for r in result.financial_reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+  <p><strong>Career</strong></p><ul>{% for r in result.career_reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+  <h3 class="cr-section-title">Recommended timeline</h3>
+  <p>{{ result.timeline }}</p>
+  <h3 class="cr-section-title">What to improve first</h3>
+  <ol>{% for i in result.improvements %}<li>{{ i }}</li>{% endfor %}</ol>
+  <p class="cr-result__again"><a href="{{ request.path }}">Run another analysis</a></p>
+  {% include "features/partials/_methodology.html" %}
+  {% include "features/partials/_related_actions.html" %}
+</section>
+{% endif %}
+{% endblock %}

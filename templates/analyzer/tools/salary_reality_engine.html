@@ -1,0 +1,72 @@
+{% extends "analyzer/tools/tool_base.html" %}
+
+{% block tool_body %}
+{% include "features/partials/_engine_error.html" %}
+{% if not result %}
+<form method="post" class="cr-form cr-wizard" data-cr-wizard data-cr-submit-label="Check My Salary" data-cr-loading="Matching your profile against market data…" novalidate>
+  {% csrf_token %}
+  {% include "features/partials/_form_errors.html" %}
+
+  <nav class="cr-stepper" aria-label="Progress">
+    <div class="cr-stepper__track"><div class="cr-stepper__progress" data-cr-stepper-progress style="width:0%"></div></div>
+    <ol class="cr-stepper__steps" role="tablist">
+      <li role="presentation"><button type="button" class="cr-stepper__step is-active" data-cr-step role="tab" id="srn-tab-1" aria-controls="srn-panel-1" aria-selected="true"><span class="cr-stepper__num">1</span><span class="cr-stepper__label">Role</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="srn-tab-2" aria-controls="srn-panel-2" aria-selected="false"><span class="cr-stepper__num">2</span><span class="cr-stepper__label">Location</span></button></li>
+      <li role="presentation"><button type="button" class="cr-stepper__step" data-cr-step role="tab" id="srn-tab-3" aria-controls="srn-panel-3" aria-selected="false"><span class="cr-stepper__num">3</span><span class="cr-stepper__label">Compensation</span></button></li>
+    </ol>
+  </nav>
+
+  <div data-cr-panel id="srn-panel-1" role="tabpanel" aria-labelledby="srn-tab-1" tabindex="-1">
+    <h2 class="cr-panel-title">Role</h2>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.role %}
+      {% include "features/partials/_field.html" with field=form.experience_years %}
+      {% include "features/partials/_field.html" with field=form.role_level %}
+    </div>
+  </div>
+  <div data-cr-panel id="srn-panel-2" role="tabpanel" aria-labelledby="srn-tab-2" tabindex="-1">
+    <h2 class="cr-panel-title">Location</h2>
+    <div class="az-calc-grid">
+      {% include "features/partials/_field.html" with field=form.city %}
+      {% include "features/partials/_field.html" with field=form.industry %}
+      {% include "features/partials/_field.html" with field=form.company_type %}
+    </div>
+  </div>
+  <div data-cr-panel id="srn-panel-3" role="tabpanel" aria-labelledby="srn-tab-3" tabindex="-1">
+    <h2 class="cr-panel-title">Compensation</h2>
+    {% include "features/partials/_input_money.html" with field=form.current_ctc %}
+  </div>
+
+  <div class="cr-wizard__nav cr-form-actions">
+    <button type="submit" class="cr-btn cr-btn--primary az-calc-btn" data-cr-next>Check My Salary</button>
+    <button type="button" class="cr-btn cr-btn--secondary cr-wizard__back" data-cr-prev hidden>Back</button>
+  </div>
+</form>
+{% else %}
+<section class="cr-result" aria-live="polite" tabindex="-1" data-cr-result>
+  <div class="cr-result-hero">
+    {% if result.percentile %}
+    <p class="cr-result-hero__metric">Your position: <strong class="cr-data">P{{ result.percentile }}</strong></p>
+    {% endif %}
+    {% if result.gap_lpa %}
+    <p class="cr-result-hero__metric">Salary gap: <strong class="cr-data">{% if result.gap_lpa < 0 %}−{% endif %}₹{{ result.gap_lpa|floatformat:1 }}L</strong> vs median</p>
+    {% endif %}
+    {% if result.pay_label %}
+    <span class="cr-result-hero__badge cr-result-hero__badge--{{ result.pay_label }}">{{ result.pay_label_display }}</span>
+    {% endif %}
+    <p class="cr-help">{{ result.confidence_display }}</p>
+  </div>
+  {% include "features/partials/_percentile_bar.html" with chart_data=chart_data %}
+  <div class="cr-metric-grid cr-stat-grid">
+    <div class="cr-stat"><span class="cr-stat__label">Market Median</span><span class="cr-stat__value cr-data">₹{{ result.p50 }}L</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Range P25–P75</span><span class="cr-stat__value cr-data">₹{{ result.p25 }}–₹{{ result.p75 }}L</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">Realistic Next</span><span class="cr-stat__value cr-data">₹{{ result.realistic_next }}L</span></div>
+    <div class="cr-stat"><span class="cr-stat__label">P90 Ceiling</span><span class="cr-stat__value cr-data">₹{{ result.p90 }}L</span></div>
+  </div>
+  {% if result.limitation %}<p class="cr-help">{{ result.limitation }}</p>{% endif %}
+  <p class="cr-result__again"><a href="{{ request.path }}">Run another check</a></p>
+  {% include "features/partials/_methodology.html" %}
+  {% include "features/partials/_related_actions.html" %}
+</section>
+{% endif %}
+{% endblock %}

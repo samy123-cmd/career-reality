@@ -10,8 +10,24 @@
     <header class="onboard-header">
         <div class="onboard-check">✓</div>
         <h1 class="onboard-title">You're in.</h1>
-        <p class="onboard-sub">Free account active. Here's what's waiting for you.</p>
+        <p class="onboard-sub">Tell us about your career so we can personalize your dashboard.</p>
     </header>
+
+    {% if form %}
+    <section class="onboard-section">
+        <h2 class="onboard-section-title">Your career profile</h2>
+        <form method="post" class="az-form az-form-card">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="az-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="az-btn az-btn--primary">Save &amp; Continue</button>
+        </form>
+    </section>
+    {% endif %}
 
     <!-- Free tools grid -->
     <section class="onboard-section">

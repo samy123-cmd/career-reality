@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block page_css %}{% include "partials/css_feature_product.html" %}{% endblock %}
+{% block title %}Career Progression{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block content %}
+<div class="cr-dash">
+  <div class="cr-dash__inner">
+    {% include "accounts/partials/_career_dash_nav.html" with active="progression" %}
+    <header class="cr-dash__header">
+      <h1 class="cr-feature__title">Career Progression</h1>
+      <p class="cr-feature__subtitle">{{ narrative }}</p>
+    </header>
+
+    {% if trajectory %}
+    <div class="az-calc-card cr-tool-card">
+      {% include "features/partials/_trajectory_chart.html" %}
+    </div>
+    {% else %}
+    {% url 'tools:salary_reality_engine' as salary_engine_url %}
+    {% include "features/partials/_empty_state.html" with title="Your salary trajectory starts here" body="Record where you are today, then add a snapshot after each raise or switch. Two points is all it takes to see your real growth rate against the market." cta_url="#add-snapshot" cta_label="Add your first snapshot" secondary_url=salary_engine_url secondary_label="Check my market rate first" %}
+    {% endif %}
+
+    <div class="az-calc-card cr-tool-card" id="add-snapshot">
+      <h2 class="cr-section-title">Add snapshot</h2>
+      <form method="post" class="cr-form" novalidate>
+        {% csrf_token %}
+        {% include "features/partials/_form_errors.html" %}
+        <div class="az-calc-grid">
+        {% for field in form %}
+        {% include "features/partials/_field.html" %}
+        {% endfor %}
+        </div>
+        <div class="cr-form-actions">
+        <button type="submit" class="cr-btn cr-btn--primary az-calc-btn">Save Snapshot</button>
+        </div>
+      </form>
+    </div>
+
+    <section class="az-calc-card cr-tool-card" style="margin-top: 1.25rem;">
+      <h2 class="cr-section-title">Timeline</h2>
+      {% for s in snapshots %}
+      <div class="cr-category-card">
+        <strong>{{ s.recorded_at }}</strong> — {{ s.title }} @ ₹{{ s.ctc }}L
+        {% if s.company_name %}({{ s.company_name }}){% endif %}
+        {% if s.peer_comparison %}<span class="cr-help"> · {{ s.get_peer_comparison_display }}</span>{% endif %}
+      </div>
+      {% empty %}
+      {% include "features/partials/_empty_state.html" with title="No snapshots recorded" body="Each snapshot is a dated point in your career: title, CTC and company. Over time they become the evidence you bring to your next negotiation." %}
+      {% endfor %}
+    </section>
+  </div>
+</div>
+{% endblock %}

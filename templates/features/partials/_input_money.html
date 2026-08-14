@@ -1,0 +1,12 @@
+<div class="cr-input-money cr-field{% if field.errors %} cr-field--error{% endif %}">
+  <label for="{{ field.id_for_label }}" class="az-calc-label">
+    {{ field.label }}{% if field.field.required %}<span class="cr-field__required" title="Required">*</span>{% endif %}
+  </label>
+  <div class="cr-input-money__wrap">
+    <span class="cr-input-money__prefix" aria-hidden="true">₹</span>
+    {{ field }}
+    <span class="cr-input-money__suffix">LPA</span>
+  </div>
+  {% if field.help_text %}<small class="cr-help" id="{{ field.auto_id }}-help">{{ field.help_text }}</small>{% endif %}
+  {% if field.errors %}<span class="cr-error" id="{{ field.auto_id }}-error">{{ field.errors.0 }}</span>{% endif %}
+</div>

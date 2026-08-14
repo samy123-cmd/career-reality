@@ -1,0 +1,25 @@
+{% extends "features/feature_base.html" %}
+
+{% block feature_content %}
+<section class="container-reading cr-tool-page">
+  <div class="az-calc-hero">
+    <h1 class="az-calc-title">{{ page_h1 }}</h1>
+    <p class="az-calc-subtitle">{{ og_description }}</p>
+    {% if career_context_banner %}
+    <div class="cr-profile-banner">
+      <span>Using your saved profile: {{ career_context_banner }}</span>
+      {% if user.is_authenticated %}<a href="{% url 'career_profile_edit' %}">Edit</a>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="az-calc-card cr-tool-card">
+    {% block workspace_preview %}
+    {% if preview_items and not result %}
+    {% include "features/partials/_empty_preview.html" %}
+    {% endif %}
+    {% endblock %}
+    {% block workspace_content %}{% endblock %}
+  </div>
+</section>
+{% endblock %}

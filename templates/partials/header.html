@@ -43,6 +43,13 @@
                     </div>
                     <div class="mega-col">
                         <div class="dropdown-header">Tools</div>
+                        <a href="{% url 'tools:salary_reality_engine' %}">
+                            <span class="mega-icon">💰</span>
+                            <span class="mega-label">
+                                <strong>Salary Reality Engine</strong>
+                                <small>Am I underpaid? Percentile check</small>
+                            </span>
+                        </a>
                         <a href="{% url 'salary_calculator' %}">
                             <span class="mega-icon">🧮</span>
                             <span class="mega-label">
@@ -62,6 +69,13 @@
                             <span class="mega-label">
                                 <strong>Layoff Radar</strong>
                                 <small>Track layoff signals by company</small>
+                            </span>
+                        </a>
+                        <a href="{% url 'home' %}#seo-tool-hub-title" class="mega-highlight">
+                            <span class="mega-icon">&rarr;</span>
+                            <span class="mega-label">
+                                <strong>All career tools</strong>
+                                <small>Offer compare, stay vs switch, AI impact & more</small>
                             </span>
                         </a>
                     </div>
@@ -231,6 +245,9 @@
                         </svg>
                     </button>
                     <div class="mobile-nav-accordion-panel" id="nav-panel-tools">
+                        <a href="{% url 'tools:salary_reality_engine' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">💰</span> Salary Reality Engine
+                        </a>
                         <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
                             <span class="mnl-icon">🧮</span> CTC Calculator
                         </a>
@@ -239,6 +256,9 @@
                         </a>
                         <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
                             <span class="mnl-icon">🚨</span> Layoff Radar
+                        </a>
+                        <a href="{% url 'home' %}#seo-tool-hub-title" class="mobile-nav-link mobile-nav-link--highlight">
+                            <span class="mnl-icon">&rarr;</span> All career tools
                         </a>
                     </div>
                 </div>
@@ -282,6 +302,28 @@
                         <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
                     </div>
                 </div>
+
+                {% if user.is_authenticated and user.profile.is_pro %}
+                <div class="mobile-nav-section">
+                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-pro">
+                        Pro
+                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="mobile-nav-accordion-panel" id="nav-panel-pro">
+                        <a href="{% url 'my_career_reality' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">◆</span> My Career Reality
+                        </a>
+                        <a href="{% url 'career_progression' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">📈</span> Career Progression
+                        </a>
+                        <a href="{% url 'career_risk_radar' %}" class="mobile-nav-link">
+                            <span class="mnl-icon">🛡️</span> Risk Radar
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
 
                 <!-- Mobile Pro CTA -->
                 <div class="mobile-nav-cta">
