@@ -64,6 +64,15 @@ class ThemeCssBundleTests(TestCase):
         self.assertGreater(premium_pos, 0)
         self.assertGreater(contrast_pos, premium_pos)
 
+    def test_modern_surface_layer_loaded_last(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        modern_pos = content.find("theme-modern.css")
+        contrast_pos = content.find("theme-dark-contrast.css")
+        self.assertGreater(modern_pos, 0)
+        self.assertGreater(modern_pos, contrast_pos)
+
     def test_homepage_includes_ink_inverse_tokens_in_critical_css(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)

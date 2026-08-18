@@ -8,6 +8,7 @@ const PRECACHE_URLS = [
     '/static/css/style-core.css',
     '/static/css/theme-premium-dark.css',
     '/static/css/theme-dark-contrast.css',
+    '/static/css/theme-modern.css',
     '/static/js/main.js',
 ];
 
