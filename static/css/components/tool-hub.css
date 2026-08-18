@@ -1,256 +1,142 @@
 /* Shared tool hub — homepage + article/tool pages
-   Product cards: numbered grid, monoline marks, no emoji tiles. */
+   Research-terminal instruments: hairline rows, no emoji tiles. */
 
 .hp-tools {
-    padding: 56px 0 72px;
-    max-width: 1100px;
-    margin: 0 auto;
+    padding: 8px 0 24px;
+    max-width: none;
+    margin: 0;
 }
 
 .hp-tools-header {
-    margin-bottom: 28px;
+    margin-bottom: 12px;
     text-align: left;
 }
 
 .hp-tools-eyebrow {
     display: block;
-    font-size: 11px;
-    font-weight: 650;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--cr-text-muted, var(--c-grey-light));
-    margin-bottom: 12px;
+    border-bottom: 1px solid var(--cr-rule, var(--cr-border, var(--c-divider)));
+    padding-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .hp-tools-title {
-    font-size: clamp(1.5rem, 2.4vw, 1.85rem);
-    font-weight: 750;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
-    color: var(--cr-text, var(--c-black));
-    margin: 0 0 10px;
+    display: none;
 }
 
 .hp-tools-sub {
-    font-size: 0.95rem;
-    line-height: 1.55;
-    color: var(--cr-text-secondary, var(--c-grey-mid));
-    margin: 0;
-    max-width: 38rem;
+    display: none;
 }
 
-/* Product cards — shadcn/Lovable-style grid */
 .hp-tools-panel {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    display: flex;
+    flex-direction: column;
     border: none;
-    border-radius: 0;
     background: none;
     overflow: visible;
 }
 
 .hp-tool-row {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 22px 20px 20px;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
     text-decoration: none;
     color: inherit;
-    border: 1px solid var(--cr-border, var(--c-divider));
-    border-radius: var(--cr-radius-lg, 1.25rem);
-    background: var(--cr-surface-2, var(--c-white));
+    border-bottom: 1px solid var(--cr-border, var(--c-divider));
+    background: transparent;
+    min-height: 0;
     position: relative;
-    min-height: 168px;
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
 }
 
-.hp-tool-row:last-child {
-    border-bottom: 1px solid var(--cr-border, var(--c-divider));
+.hp-tool-row:hover,
+.hp-tool-row:focus-visible {
+    color: var(--cr-accent, #c84b31);
+    outline: none;
 }
 
 .hp-tool-row::before {
     display: none;
 }
 
-.hp-tool-row:hover,
-.hp-tool-row:focus-visible {
-    background: var(--cr-surface-3, rgba(255, 255, 255, 0.03));
-    border-color: var(--cr-border-strong, var(--cr-border));
-    box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.2));
-    transform: translateY(-2px);
-    outline: none;
-}
-
-.hp-tool-row:hover .hp-tool-go,
-.hp-tool-row:focus-visible .hp-tool-go {
-    color: var(--cr-text, var(--c-black));
-    transform: translateX(4px);
-}
-
-.hp-tool-row:hover .hp-tool-name,
-.hp-tool-row:focus-visible .hp-tool-name {
-    color: var(--cr-text, var(--c-black));
-}
-
-.hp-tool-index {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    font-size: 12px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
-    color: var(--cr-text-muted, var(--c-grey-light));
-}
-
-.hp-tool-mark {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--cr-border-strong, var(--cr-border, var(--c-divider)));
-    border-radius: 12px;
-    background-color: var(--cr-surface-3, rgba(255, 255, 255, 0.04));
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 18px 18px;
-    flex-shrink: 0;
-}
-
-/* Monoline SVG marks (mask-friendly via background-image) */
-.hp-tool-mark--ctc {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c8c8d0' stroke-width='1.6'%3E%3Crect x='4' y='3' width='16' height='18' rx='1.5'/%3E%3Cpath d='M8 8h8M8 12h5M8 16h6' stroke-linecap='round'/%3E%3C/svg%3E");
-}
-
-.hp-tool-mark--risk {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c8c8d0' stroke-width='1.6'%3E%3Cpath d='M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z' stroke-linejoin='round'/%3E%3Cpath d='M12 11v3.5M12 17h.01' stroke-linecap='round'/%3E%3C/svg%3E");
-}
-
-.hp-tool-mark--radar {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c8c8d0' stroke-width='1.6'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 4v3M12 17v3M4 12h3M17 12h3' stroke-linecap='round'/%3E%3C/svg%3E");
-}
-
-.hp-tool-mark--salary {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c8c8d0' stroke-width='1.6'%3E%3Cpath d='M4 19V5M4 19h16' stroke-linecap='round'/%3E%3Cpath d='M8 15v-3M12 15V8M16 15v-5' stroke-linecap='round'/%3E%3C/svg%3E");
-}
-
-.hp-tool-mark--company {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c8c8d0' stroke-width='1.6'%3E%3Cpath d='M4 20V8l8-4 8 4v12' stroke-linejoin='round'/%3E%3Cpath d='M9 20v-6h6v6M10 10h.01M14 10h.01M10 13h.01M14 13h.01' stroke-linecap='round'/%3E%3C/svg%3E");
-}
-
-.hp-tool-mark--pulse {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c8c8d0' stroke-width='1.6'%3E%3Cpath d='M3 12h4l2.5-6 3 12 2.5-6H21' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+.hp-tool-index,
+.hp-tool-mark,
+.hp-tool-go {
+    display: none;
 }
 
 .hp-tool-copy {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-    margin-top: auto;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    margin: 0;
 }
 
 .hp-tool-name {
-    font-size: 0.98rem;
-    font-weight: 650;
-    letter-spacing: -0.015em;
-    color: var(--cr-text, var(--c-black));
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: inherit;
     line-height: 1.3;
-    text-decoration: none;
 }
 
 .hp-tool-desc {
-    font-size: 0.86rem;
-    line-height: 1.45;
-    color: var(--cr-text-secondary, var(--c-grey-mid));
-    padding-right: 40px;
-}
-
-.hp-tool-go {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    background: var(--cr-surface-3, rgba(255, 255, 255, 0.06));
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--cr-text-muted, var(--c-grey-light));
-    transition:
-        color 0.22s ease,
-        transform 0.22s ease,
-        background-color 0.22s ease;
-}
-
-.hp-tool-row:hover .hp-tool-go,
-.hp-tool-row:focus-visible .hp-tool-go {
-    background: var(--cr-accent, #f97316);
-    color: #09090b;
+    padding: 0;
+    text-align: right;
+    max-width: 42%;
 }
 
 .hp-tool-badge {
     display: inline-block;
     margin-left: 8px;
-    padding: 2px 7px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+    padding: 0;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--cr-accent, #f97316);
-    border: 1px solid color-mix(in srgb, var(--cr-accent, #f97316) 35%, transparent);
-    border-radius: 999px;
+    color: var(--cr-accent, #c84b31);
+    border: 0;
+    border-radius: 0;
     vertical-align: middle;
 }
 
-/* Homepage still uses .hp-section wrappers — keep spacing compatible */
 .hp-section .hp-tools {
-    padding-top: 0;
-    padding-bottom: 0;
-    max-width: none;
+    padding: 0;
 }
 
-/* Legacy class hooks kept for older overrides */
 .hp-tools-grid {
     display: block;
 }
 
-@media (max-width: 900px) {
-    .hp-tools-panel {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
 @media (max-width: 640px) {
-    .hp-tools {
-        padding: 36px 0 48px;
-    }
-
-    .hp-tools-panel {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .hp-tool-row {
-        min-height: 0;
-        padding: 18px 16px;
-        gap: 12px;
+    .hp-tool-copy {
+        flex-direction: column;
+        gap: 4px;
     }
 
     .hp-tool-desc {
-        font-size: 0.82rem;
-        padding-right: 36px;
+        max-width: none;
+        text-align: left;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .hp-tool-row,
-    .hp-tool-go {
+    .hp-tool-row {
         transition: none;
     }
 }

@@ -11,7 +11,7 @@
         } catch (e) {
             // localStorage unavailable
         }
-        return 'dark';
+        return 'light';
     }
 
     function applyTheme(theme) {
@@ -22,7 +22,7 @@
 
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) {
-            meta.setAttribute('content', isLight ? '#fafafa' : '#06060b');
+            meta.setAttribute('content', isLight ? '#f9f8f6' : '#121212');
         }
 
         document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
@@ -39,7 +39,7 @@
 
     function setTheme(theme) {
         if (theme !== 'light' && theme !== 'dark') {
-            theme = 'dark';
+            theme = 'light';
         }
         try {
             localStorage.setItem(STORAGE_KEY, theme);

@@ -1,8 +1,27 @@
 <header class="site-header">
+<div class="hp-ticker" id="salary-ticker-container">
+    <div class="hp-ticker-label">Live</div>
+    <div class="hp-ticker-track" id="salary-ticker-content">
+        {% if salary_ticker_items %}
+            {% for item in salary_ticker_items %}
+            <span class="hp-ticker-item">
+                <span class="hp-ticker-role">{{ item.role }}</span>
+                <span class="hp-ticker-sep" aria-hidden="true">·</span>
+                <span class="hp-ticker-meta">{{ item.exp }}, {{ item.city }}</span>
+                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
+            </span>
+            {% endfor %}
+        {% else %}
+            <span class="hp-ticker-placeholder">
+                No submissions yet —
+                <a href="{% url 'submit_salary' %}">drop your salary</a>
+            </span>
+        {% endif %}
+    </div>
+</div>
     <div class="container-wide nav-flex">
         <!-- Brand -->
         <a href="/" class="site-brand">
-            <span class="brand-mark">CR</span>
             <span class="brand-wordmark">Career<span class="brand-accent">Reality</span></span>
         </a>
 

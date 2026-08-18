@@ -5,15 +5,18 @@
 (function () {
     try {
         var t = localStorage.getItem('cr-theme');
-        if (t === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.classList.remove('theme-dark');
-            document.documentElement.classList.add('theme-light');
+        if (t === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.remove('theme-light');
+            document.documentElement.classList.add('theme-dark');
         }
     } catch (e) { /* no-op */ }
 })();
 </script>
-<!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
+<!-- DNS Prefetch & Preconnect for editorial fonts (Playfair + Inter + JetBrains Mono) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <!-- Google AdSense account verification (script loaded at end of body for performance) -->
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
@@ -24,7 +27,7 @@
 <!-- Hindi hreflang removed: no Hindi translations exist in the database.
      Having identical /hi/ duplicates was flagged as low-value duplicate content. -->
 <meta property="og:locale" content="en_IN">
-<meta name="theme-color" content="#09090b">
+<meta name="theme-color" content="#f9f8f6">
 <meta name="author" content="Career Reality Editorial Desk">
 {% if page_keywords %}
 <meta name="keywords" content="{{ page_keywords|join:', ' }}">
@@ -80,25 +83,25 @@
 <!-- Critical CSS - Inlined for instant FCP & Stability -->
 <style>
     :root {
-        color-scheme: dark;
-        --cr-page: #09090b;
-        --cr-surface: #0c0c0e;
-        --cr-text: #fafafa;
-        --cr-text-secondary: #a1a1aa;
-        --cr-text-muted: #71717a;
-        --cr-border: rgba(255, 255, 255, 0.08);
-        --c-page: #09090b;
-        --c-surface: #0c0c0e;
-        --c-ink: #fafafa;
-        --c-ink-inverse: #fafafa;
-        --c-white: #141416;
-        --c-black: #fafafa;
-        --c-grey-dark: #d4d4d8;
-        --c-grey-mid: #a1a1aa;
-        --c-grey-light: #71717a;
-        --c-divider: rgba(255, 255, 255, 0.08);
-        --c-bg-footer: #0c0c0e;
-        --c-blue-accent: #f97316;
+        color-scheme: light;
+        --cr-page: #f9f8f6;
+        --cr-surface: #ffffff;
+        --cr-text: #121212;
+        --cr-text-secondary: #666666;
+        --cr-text-muted: #666666;
+        --cr-border: #e6e3de;
+        --c-page: #f9f8f6;
+        --c-surface: #ffffff;
+        --c-ink: #121212;
+        --c-ink-inverse: #f9f8f6;
+        --c-white: #ffffff;
+        --c-black: #121212;
+        --c-grey-dark: #3f3f46;
+        --c-grey-mid: #666666;
+        --c-grey-light: #666666;
+        --c-divider: #e6e3de;
+        --c-bg-footer: #f9f8f6;
+        --c-blue-accent: #c84b31;
         --w-wide: 1100px;
         --w-medium: 840px;
         --w-narrow: 640px;
@@ -226,12 +229,12 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        background: linear-gradient(180deg, #fafafa 0%, #d4d4d8 100%);
-        color: #09090b;
+        background: #121212;
+        color: #f9f8f6;
         font-size: 12px;
         font-weight: 800;
         letter-spacing: -0.02em;
-        border-radius: 10px;
+        border-radius: 0;
         box-shadow: none;
         flex-shrink: 0;
     }
@@ -355,7 +358,7 @@
 <link rel="stylesheet" href="{% static 'css/theme-dark-contrast.css' %}?v=4">
 <link rel="stylesheet" href="{% static 'css/components/tool-hub.css' %}?v=5">
 <link rel="stylesheet" href="{% static 'css/mobile.css' %}?v=4">
-<link rel="stylesheet" href="{% static 'css/theme-modern.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/theme-modern.css' %}?v=2">
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">

@@ -13,6 +13,8 @@ class ThemeCssBundleTests(TestCase):
         self.assertIn("components/tool-hub.css", content)
         self.assertIn("theme.js", content)
         self.assertIn("data-theme-toggle", content)
+        self.assertIn("Stop guessing what the market pays.", content)
+        self.assertIn("Instruments", content)
         self.assertNotIn("style-tools.css", content)
         self.assertNotIn("style-companies.css", content)
 
@@ -22,7 +24,7 @@ class ThemeCssBundleTests(TestCase):
         content = response.content.decode("utf-8")
 
         self.assertIn("localStorage.getItem('cr-theme')", content)
-        self.assertIn('data-theme="dark"', content)
+        self.assertIn('data-theme="light"', content)
 
     def test_salary_calculator_loads_tools_bundle_only(self):
         response = self.client.get(reverse("salary_calculator"))
@@ -105,5 +107,5 @@ class ThemeCssBundleTests(TestCase):
         content = response.content.decode("utf-8")
 
         self.assertIn("ai_pulse.css", content)
-        self.assertIn('data-theme="dark"', content)
+        self.assertIn('data-theme="light"', content)
         self.assertIn("style-core.css", content)

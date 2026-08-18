@@ -81,105 +81,41 @@
 
 {% block content %}
 
-<!-- ═══════════════ HERO ═══════════════ -->
+<!-- Terminal: index + instruments | headline + ledger -->
 <section class="hp-hero">
     <div class="hp-hero-inner container-wide">
-        <div class="hp-hero-content">
-            <div class="hp-hero-badge">India's Most Honest Career Platform</div>
-            <h1 class="hp-hero-title">
-                Stop guessing.<br>
-                <span class="hp-hero-accent">Know the reality.</span>
-            </h1>
-            <p class="hp-hero-sub">
-                Data-backed salary truths, company intelligence, and career
-                risk analysis for Indian tech professionals.
-            </p>
-            <div class="hp-hero-actions">
-                <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">
-                    <span>🧮</span> CTC Calculator
-                </a>
-                <a href="{% url 'analyzer_home' %}" class="hp-btn hp-btn--ghost">
-                    <span>🎯</span> Analyze Risk
-                </a>
-            </div>
-            <div class="hp-hero-proof">
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ assessment_count }}</span>
-                    <span class="hp-hero-stat-label">risk assessments run</span>
-                </div>
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ salary_count }}</span>
-                    <span class="hp-hero-stat-label">salary data points</span>
-                </div>
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ layoff_count }}</span>
-                    <span class="hp-hero-stat-label">layoff reports tracked</span>
-                </div>
-            </div>
-        </div>
         <div class="hp-hero-visual">
             <div class="hp-index-card">
-                <div class="hp-index-header">
-                    <span class="hp-index-dot"></span>
-                    Career Reality Index
-                    <span class="hp-index-live">LIVE</span>
-                </div>
+                <div class="hp-index-header">Career Reality Index · {{ latest_index_row.month }}</div>
                 <div class="hp-index-month">{{ latest_index_row.month }}</div>
-                <div class="hp-index-score">{{ latest_index_row.overall }}<small>/100</small></div>
+                <div class="hp-index-score">{{ latest_index_row.overall }}<small> of 100</small></div>
                 <div class="hp-index-band hp-index-band--{{ latest_band|slugify }}">{{ latest_band }}</div>
                 <div class="hp-index-meters">
                     <div class="hp-meter">
-                        <div class="hp-meter-label">Salary Pressure</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
+                        <div class="hp-meter-label">Salary pressure</div>
                         <div class="hp-meter-val">{{ latest_index_row.salary_pressure }}</div>
+                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
                     </div>
                     <div class="hp-meter">
-                        <div class="hp-meter-label">Switch Difficulty</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
+                        <div class="hp-meter-label">Switch difficulty</div>
                         <div class="hp-meter-val">{{ latest_index_row.switch_difficulty }}</div>
+                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
                     </div>
                     <div class="hp-meter">
-                        <div class="hp-meter-label">Layoff Risk</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill hp-meter-fill--warn" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
+                        <div class="hp-meter-label">Layoff risk</div>
                         <div class="hp-meter-val">{{ latest_index_row.layoff_risk }}</div>
+                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
                     </div>
                 </div>
                 <a href="{% url 'career_reality_index' %}" class="hp-index-link">View full methodology →</a>
             </div>
-        </div>
-    </div>
-</section>
 
-<!-- ═══════════════ LIVE SALARY TICKER ═══════════════ -->
-<div class="hp-ticker" id="salary-ticker-container">
-    <div class="hp-ticker-label">Live</div>
-    <div class="hp-ticker-track" id="salary-ticker-content">
-        {% if salary_ticker_items %}
-            {% for item in salary_ticker_items %}
-            <span class="hp-ticker-item">
-                <span class="hp-ticker-role">{{ item.role }}</span>
-                <span class="hp-ticker-sep" aria-hidden="true">·</span>
-                <span class="hp-ticker-meta">{{ item.exp }}, {{ item.city }}</span>
-                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
-            </span>
-            {% endfor %}
-        {% else %}
-            <span class="hp-ticker-placeholder">
-                No submissions yet —
-                <a href="{% url 'submit_salary' %}">drop your salary</a>
-            </span>
-        {% endif %}
-    </div>
-</div>
-
-<!-- ═══════════════ TOOLS ═══════════════ -->
-<section class="hp-section container-wide">
-    <div class="hp-tools">
-        <header class="hp-tools-header">
-            <span class="hp-tools-eyebrow">Free career tools</span>
-            <h2 class="hp-tools-title">Decide with numbers, not folklore</h2>
-            <p class="hp-tools-sub">Offer math, resignation risk, layoff signals, and salary medians — built for Indian tech careers.</p>
-        </header>
+            <div class="hp-tools">
+                <header class="hp-tools-header">
+                    <span class="hp-tools-eyebrow">Instruments</span>
+                    <h2 class="hp-tools-title">Decide with numbers, not folklore</h2>
+                    <p class="hp-tools-sub">Offer math, resignation risk, layoff signals, and salary medians — built for Indian tech careers.</p>
+                </header>
         <div class="hp-tools-panel" role="list">
             <a href="{% url 'salary_calculator' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">01</span>
@@ -248,6 +184,63 @@
                 </span>
             </a>
         </div>
+            </div>
+        </div>
+
+        <div class="hp-hero-content">
+            <h1 class="hp-hero-title">
+                Stop guessing what the market pays.
+            </h1>
+            <p class="hp-hero-sub">
+                Every figure we publish carries its sample size. Nothing here is
+                sponsored, inferred from job listings, or generated. It comes from
+                verified submissions and dated signals for Indian tech careers.
+            </p>
+            <div class="hp-hero-actions">
+                <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">CTC decoder</a>
+                <a href="{% url 'analyzer_home' %}" class="hp-btn hp-btn--ghost">Analyze risk</a>
+            </div>
+            <div class="hp-hero-proof">
+                <div class="hp-hero-stat">
+                    <span class="hp-hero-stat-num">{{ assessment_count }}</span>
+                    <span class="hp-hero-stat-label">risk assessments run</span>
+                </div>
+                <div class="hp-hero-stat">
+                    <span class="hp-hero-stat-num">{{ salary_count }}</span>
+                    <span class="hp-hero-stat-label">salary data points</span>
+                </div>
+                <div class="hp-hero-stat">
+                    <span class="hp-hero-stat-num">{{ layoff_count }}</span>
+                    <span class="hp-hero-stat-label">layoff reports tracked</span>
+                </div>
+            </div>
+
+            {% if salary_ticker_items %}
+            <div class="cr-bench-wrap">
+                <table class="cr-bench">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Experience</th>
+                            <th>City</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in salary_ticker_items|slice:":6" %}
+                        <tr>
+                            <td>{{ item.role }}</td>
+                            <td>{{ item.exp }}</td>
+                            <td>{{ item.city }} · {{ item.company }}</td>
+                            <td>{{ item.ctc }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p class="cr-bench-note">Recent submissions · medians live on Salary Reality</p>
+            </div>
+            {% endif %}
+        </div>
     </div>
 </section>
 
@@ -255,10 +248,10 @@
 <section class="hp-drop-banner">
     <div class="container-wide hp-drop-inner">
         <div>
-            <h2 class="hp-drop-title">Help fix Indian salary opacity</h2>
-            <p class="hp-drop-sub">Drop your real salary. Anonymous. Takes 30 seconds. Helps thousands make better decisions.</p>
+            <h2 class="hp-drop-title">Fix the opacity you complain about.</h2>
+            <p class="hp-drop-sub">Drop your real salary. Anonymous. Takes 30 seconds. Every submission tightens the bands the next person negotiates against.</p>
         </div>
-        <a href="{% url 'submit_salary' %}" class="hp-btn hp-btn--white">+ Drop a Salary</a>
+        <a href="{% url 'submit_salary' %}" class="hp-btn hp-btn--white">Contribute a data point</a>
     </div>
 </section>
 
