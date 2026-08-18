@@ -41,7 +41,7 @@ class ThemeCssBundleTests(TestCase):
         content = response.content.decode("utf-8")
 
         self.assertIn("components/tool-hub.css", content)
-        self.assertIn("hp-tools-grid", content)
+        self.assertIn("hp-tools-panel", content)
         self.assertNotIn("style-home.css", content)
 
     def test_company_directory_loads_companies_bundle_only(self):
