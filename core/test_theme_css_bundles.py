@@ -195,4 +195,5 @@ class ThemeCssBundleTests(TestCase):
         self.assertEqual(not_found.status_code, 404)
         body = not_found.content.decode("utf-8")
         self.assertIn("Back to the terminal", body)
-        self.assertNotIn("🧮", body)
+        self.assertIn("This page isn't published.", body)
+        self.assertIn("cr-kicker", body)

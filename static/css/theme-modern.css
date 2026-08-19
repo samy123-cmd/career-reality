@@ -314,8 +314,12 @@ img, svg {
 }
 
 .mega-icon,
-.mnl-icon {
-    display: none !important;
+.mnl-icon,
+.ms-icon {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--cr-text-muted);
 }
 
 .nav-dropdown-content,
