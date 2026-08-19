@@ -332,12 +332,14 @@ img, svg {
 
 .theme-toggle {
     color: var(--cr-text);
-    background: transparent;
+    background: var(--cr-page);
     border: 1px solid var(--cr-border);
     width: 36px;
     height: 36px;
-    z-index: 1001;
+    z-index: 1100;
     position: relative;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .hp-btn,

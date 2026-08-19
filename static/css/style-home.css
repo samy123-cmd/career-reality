@@ -109,11 +109,11 @@
 
 /* ——— Index Card (Hero visual) ——— */
 .hp-index-card {
-    background: var(--c-white);
-    border: 1px solid var(--c-divider);
+    background: transparent;
+    border: 0;
     border-radius: 0;
-    padding: 28px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+    padding: 0;
+    box-shadow: none;
 }
 .hp-index-header {
     display: flex;
@@ -261,7 +261,7 @@
 
 /* ——— Drop Banner ——— */
 .hp-drop-banner {
-    background: linear-gradient(135deg, #111 0%, #222 100%);
+    background: #121212;
     padding: 56px 0;
     color: var(--c-ink-inverse);
 }
