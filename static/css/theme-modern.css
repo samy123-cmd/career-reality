@@ -627,6 +627,27 @@ img, svg {
     color: rgba(249, 248, 246, 0.6);
 }
 
+.hp-pro,
+.hp-newsletter {
+    background: #121212 !important;
+    color: #f9f8f6;
+}
+
+.hp-pro-title,
+.hp-newsletter-title {
+    color: #f9f8f6 !important;
+}
+
+.hp-pro-badge {
+    color: var(--cr-accent);
+}
+
+.hp-pro-note,
+.hp-newsletter-sub,
+.hp-newsletter-proof li {
+    color: rgba(249, 248, 246, 0.6);
+}
+
 .hp-newsletter,
 .hp-pro,
 .hp-cluster-card,
@@ -778,6 +799,7 @@ details.hp-faq,
 .hp-pro,
 .hp-newsletter {
     padding: 56px 0;
+    background: #121212 !important;
 }
 
 .hp-editorial-header,
