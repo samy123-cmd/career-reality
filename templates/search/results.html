@@ -6,7 +6,8 @@
 
 
 {% block content %}
-<section class="search-hero">
+<section class="search-hero cr-page-head">
+    <p class="cr-kicker">Search the terminal</p>
     <form method="get" action="{% url 'search' %}" class="search-bar">
         <input type="text" name="q" value="{{ query }}" placeholder="Search companies, salaries, articles, AI news…" autofocus autocomplete="off">
         <button type="submit">Search</button>

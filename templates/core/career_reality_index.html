@@ -52,7 +52,8 @@
 {% endblock %}
 
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+<section class="container-medium cr-page-head" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <p class="cr-kicker">Career Reality Index · monthly</p>
     <h1>Career Reality Index (India)</h1>
     <p class="hero-subtitle" style="max-width: 760px;">
         Our flagship monthly pressure tracker for Indian careers. Built to reduce expensive guesswork in compensation and switching decisions.
@@ -60,7 +61,7 @@
     <p style="font-size: 13px; color: var(--c-grey-light); margin-top: 0.5rem;">
         Published: {{ published_on|date:"F j, Y" }}
     </p>
-    <div style="margin-top: 1rem; border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa;">
+    <div style="margin-top: 1rem; border-left: 2px solid var(--cr-accent); padding: 1.25rem 0 1.25rem 20px; background: transparent;">
         <span class="section-label">CURRENT SIGNAL</span>
         <p style="margin: 0.75rem 0 0.35rem 0;">
             Overall Index: <strong>{{ latest_row.overall }}</strong> ({{ latest_band }})

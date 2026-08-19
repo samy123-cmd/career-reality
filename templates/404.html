@@ -4,22 +4,22 @@
 {% block meta_description %}The page you're looking for doesn't exist. Browse Career Reality for salary data, career tools, and Indian tech career analysis.{% endblock %}
 
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl); text-align: center; padding: 3rem var(--space-sm);">
-    <p style="font-size: 96px; font-weight: 900; color: var(--c-black); margin: 0; line-height: 1; letter-spacing: -0.04em;">404</p>
-    <h1 style="font-size: 28px; color: var(--c-black); margin: 1rem 0 0.75rem; font-weight: 700;">This page doesn't exist.</h1>
-    <p style="color: var(--c-grey-mid); max-width: 440px; margin: 0 auto 2.5rem; font-size: 16px; line-height: 1.6;">
-        It may have been moved, deleted, or the URL is incorrect.
+<section class="container-medium cr-page-head" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+    <p class="cr-kicker">Missing page</p>
+    <p class="num" style="font-size: 64px; color: var(--cr-text); margin: 0; line-height: 1; letter-spacing: -0.04em;">404</p>
+    <h1 style="font-size: clamp(28px, 4vw, 40px); color: var(--cr-text); margin: 1rem 0 0.75rem; font-weight: 500; max-width: 18ch;">This page isn't published.</h1>
+    <p style="color: var(--cr-text-secondary); max-width: 52ch; margin: 0 0 2rem; font-size: 16px; line-height: 1.6;">
+        It may have been moved, deleted, or the URL is incorrect. The current index and instruments remain available.
     </p>
-    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
-        <a href="/" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; background: var(--c-black); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; border-radius: 6px;">&#8592; Back to Home</a>
-        <a href="{% url 'salary_calculator' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🧮 CTC Decoder</a>
-        <a href="{% url 'analyzer_home' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🎯 Risk Analyzer</a>
-        <a href="{% url 'layoff_radar' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🚨 Layoff Radar</a>
-        <a href="{% url 'salary_reality' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">💰 Salary Data</a>
-        <a href="{% url 'company_directory' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.75rem 1.5rem; border: 1.5px solid var(--c-black); color: var(--c-black); text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 6px;">🏢 Companies</a>
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 3rem;">
+        <a href="/" class="hp-btn hp-btn--primary">Back to the terminal</a>
+        <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--ghost">CTC decoder</a>
+        <a href="{% url 'layoff_radar' %}" class="hp-btn hp-btn--ghost">Layoff radar</a>
+        <a href="{% url 'salary_reality' %}" class="hp-btn hp-btn--ghost">Salary explorer</a>
+        <a href="{% url 'company_directory' %}" class="hp-btn hp-btn--ghost">Companies</a>
     </div>
-    <p style="margin: 0; font-size: 13px; color: var(--c-grey-light);">
-        Found a broken link? <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Let us know</a>.
+    <p style="margin: 0; font-size: 13px; color: var(--cr-text-muted);">
+        Found a broken link? <a href="{% url 'contact' %}">Let us know</a>.
     </p>
 </section>
 {% endblock %}

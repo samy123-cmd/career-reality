@@ -3,12 +3,12 @@
 .az-calc-newsletter {
     margin: 2rem 0;
     border: 2px solid var(--c-black);
-    border-radius: 12px;
+    border-radius: 0;
     overflow: hidden;
 }
 
 .az-calc-newsletter-inner {
-    background: #0f172a;
+    background: var(--cr-text);
     color: #fff;
     padding: 2rem;
     text-align: center;
@@ -42,7 +42,7 @@
     background: transparent;
     color: #fff;
     font-size: 0.9rem;
-    border-radius: 8px 0 0 8px;
+    border-radius: 0;
     outline: none;
     transition: border-color 0.2s;
 }
@@ -52,10 +52,10 @@
 
 .az-calc-newsletter-btn {
     padding: 11px 20px;
-    background: #38bdf8;
-    color: #0f172a;
-    border: 2px solid #38bdf8;
-    border-radius: 0 8px 8px 0;
+    background: var(--cr-accent);
+    color: var(--cr-text);
+    border: 2px solid var(--cr-accent);
+    border-radius: 0;
     font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
@@ -64,8 +64,8 @@
 }
 
 .az-calc-newsletter-btn:hover {
-    background: #0ea5e9;
-    border-color: #0ea5e9;
+    background: var(--cr-accent);
+    border-color: var(--cr-accent);
 }
 
 .az-calc-newsletter-note {
@@ -80,25 +80,25 @@
     }
     .az-calc-newsletter-input {
         border-right: 2px solid rgba(255,255,255,0.5);
-        border-radius: 8px 8px 0 0;
+        border-radius: 0;
         border-bottom: none;
     }
     .az-calc-newsletter-input:focus { border-color: rgba(255,255,255,0.9); }
     .az-calc-newsletter-btn {
-        border-radius: 0 0 8px 8px;
+        border-radius: 0;
     }
 }
 
 /* ── Post-Risk-Result Inline Newsletter CTA ── */
 .az-result-newsletter {
-    border: 2px solid #0f172a;
-    border-radius: 12px;
+    border: 2px solid var(--cr-text);
+    border-radius: 0;
     overflow: hidden;
     margin: 1.5rem 0;
 }
 
 .az-result-newsletter-inner {
-    background: #0f172a;
+    background: var(--cr-text);
     color: #fff;
     padding: 1.5rem 2rem;
 }
@@ -131,7 +131,7 @@
     background: transparent;
     color: #fff;
     font-size: 0.875rem;
-    border-radius: 8px 0 0 8px;
+    border-radius: 0;
     outline: none;
     transition: border-color 0.2s;
 }
@@ -141,10 +141,10 @@
 
 .az-result-newsletter-btn {
     padding: 10px 18px;
-    background: #38bdf8;
-    color: #0f172a;
-    border: 2px solid #38bdf8;
-    border-radius: 0 8px 8px 0;
+    background: var(--cr-accent);
+    color: var(--cr-text);
+    border: 2px solid var(--cr-accent);
+    border-radius: 0;
     font-size: 0.8rem;
     font-weight: 700;
     cursor: pointer;
@@ -152,7 +152,7 @@
     transition: background 0.2s;
 }
 
-.az-result-newsletter-btn:hover { background: #0ea5e9; border-color: #0ea5e9; }
+.az-result-newsletter-btn:hover { background: var(--cr-accent); border-color: var(--cr-accent); }
 
 .az-result-newsletter-note {
     font-size: 0.72rem;
@@ -186,7 +186,7 @@
 .az-intro-card {
     background: #fff;
     border: 1px solid var(--c-divider);
-    border-radius: 14px;
+    border-radius: 0;
     padding: 2rem;
 }
 .az-methodology-strip {
@@ -194,7 +194,7 @@
     color: var(--c-grey-light);
     background: #fafafa;
     padding: 10px 14px;
-    border-radius: 6px;
+    border-radius: 0;
     margin-bottom: 2rem;
     text-align: center;
 }
@@ -221,7 +221,7 @@
     font-size: 14px;
     padding: 10px 14px;
     background: #fafafa;
-    border-radius: 6px;
+    border-radius: 0;
 }
 .az-feature-list li::before {
     content: "✓ ";
@@ -231,7 +231,7 @@
 .az-privacy-box {
     background: #fffbeb;
     border: 1px solid #fde68a;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 1.25rem;
     margin-bottom: 2rem;
 }
@@ -255,7 +255,7 @@
     background: var(--c-black);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     font-size: 15px;
     font-weight: 700;
     text-transform: uppercase;
@@ -273,9 +273,9 @@
     flex-wrap: wrap;
     gap: 12px;
     padding: 16px 20px;
-    background: #f8f9fa;
+    background: var(--cr-surface-3);
     border: 1px solid var(--c-divider);
-    border-radius: 10px;
+    border-radius: 0;
     margin-bottom: 16px;
 }
 .az-intro-newsletter-copy {
@@ -298,7 +298,7 @@
 .az-intro-newsletter-form {
     display: flex;
     gap: 0;
-    border-radius: 8px;
+    border-radius: 0;
     overflow: hidden;
     border: 1px solid var(--c-divider);
 }
@@ -344,13 +344,13 @@
     color: var(--c-grey-light);
     padding: 10px;
     background: #fafafa;
-    border-radius: 6px;
+    border-radius: 0;
     margin-bottom: 2rem;
 }
 .trust-strip a { color: inherit; text-decoration: underline; }
 
 .risk-banner {
-    border-radius: 12px;
+    border-radius: 0;
     padding: 2rem;
     margin-bottom: 2rem;
     text-align: center;
@@ -388,7 +388,7 @@
     letter-spacing: 0.1em;
     color: var(--c-grey-light);
     background: rgba(0,0,0,0.06);
-    border-radius: 20px;
+    border-radius: 0;
     padding: 3px 12px;
     margin-bottom: 0.75rem;
 }
@@ -407,7 +407,7 @@
 .az-narrative {
     background: #f0f9ff;
     border: 1px solid #bae6fd;
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.25rem;
     margin-bottom: 1.5rem;
 }
@@ -429,7 +429,7 @@
 .decision-panel {
     background: #fff;
     border: 1px solid var(--c-divider);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
@@ -442,7 +442,7 @@
 .share-card {
     background: #fff;
     border: 1px solid var(--c-divider);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     text-align: center;
@@ -463,7 +463,7 @@
     font-size: 13px;
     font-weight: 600;
     border: 1px solid var(--c-divider);
-    border-radius: 6px;
+    border-radius: 0;
     background: #fff;
     cursor: pointer;
     transition: background 0.15s;
@@ -473,21 +473,21 @@
 .paywall-card {
     background: #fff;
     border: 1px solid var(--c-divider);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
 .paywall-lock {
     background: #fffbeb;
     border: 1px solid #fde68a;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 1rem;
 }
 
 .interview-card {
     background: #f8fafc;
     border: 1px solid var(--c-divider);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.5rem;
     margin-bottom: 2rem;
 }
@@ -495,7 +495,7 @@
 .section-box {
     background: #fff;
     border: 1px solid var(--c-divider);
-    border-radius: 12px;
+    border-radius: 0;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
@@ -513,7 +513,7 @@
 
 .trust-block {
     background: #f5f5f5;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 1.25rem;
     font-size: 14px;
     color: var(--c-grey-mid);
@@ -528,7 +528,7 @@
     background: var(--c-black);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     font-weight: 700;
     font-size: 14px;
     text-decoration: none;
@@ -546,7 +546,7 @@
     font-size: 11px;
     font-weight: 700;
     padding: 3px 8px;
-    border-radius: 4px;
+    border-radius: 0;
     text-transform: uppercase;
 }
 .az-email-input {
@@ -555,7 +555,7 @@
     box-sizing: border-box;
     padding: 10px 12px;
     border: 1px solid #d1d5db;
-    border-radius: 6px;
+    border-radius: 0;
     font-size: 0.9rem;
     margin-bottom: 0.75rem;
 }
@@ -563,7 +563,7 @@
     width: 100%;
     padding: 14px;
     font-size: 1rem;
-    border-radius: 8px;
+    border-radius: 0;
     cursor: pointer;
     border: none;
     background: var(--c-black);
@@ -582,7 +582,7 @@
     display: none;
     background: #f0fdf4;
     border: 1px solid #86efac;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 1rem;
     margin-top: 0.5rem;
 }
@@ -594,7 +594,7 @@
     margin: 2rem 0;
     padding: 1.5rem;
     border: 1px solid var(--c-divider);
-    border-radius: 12px;
+    border-radius: 0;
     background: #fafafa;
 }
 .az-resources h3 {
@@ -613,7 +613,7 @@
     color: #fff;
     padding: 10px 20px;
     border: none;
-    border-radius: 6px;
+    border-radius: 0;
     font-weight: 600;
     text-decoration: none;
     font-size: 0.9rem;
@@ -651,7 +651,7 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .az-radar-btn:hover { opacity: 0.85; color: #fff; }
 
@@ -668,7 +668,7 @@
     padding: 1rem;
     background: #fafafa;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .stat-value { display: block; font-size: 24px; font-weight: 800; }
 .stat-label { font-size: 10px; text-transform: uppercase; color: #666; letter-spacing: 0.1em; }
@@ -682,7 +682,7 @@
     padding: 16px;
     font-size: 16px;
     border: 2px solid var(--c-black);
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 .radar-feed { max-width: 800px; margin: 0 auto; }
@@ -691,7 +691,7 @@
     background: #fff;
     border: 1px solid #eee;
     margin-bottom: 1.5rem;
-    border-radius: 4px;
+    border-radius: 0;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     transition: transform 0.2s;
@@ -734,7 +734,7 @@
     font-weight: 800;
     text-transform: uppercase;
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: 0;
     letter-spacing: 0.05em;
 }
 .badge-danger { background: #ffebee; color: #d93025; }
@@ -753,7 +753,7 @@
     background: #f5f5f5;
     display: inline-block;
     padding: 4px 8px;
-    border-radius: 2px;
+    border-radius: 0;
 }
 .report-details {
     margin: 1rem 0 0 0;
@@ -788,7 +788,7 @@
     padding: 2rem;
     max-width: 600px;
     margin: 0 auto;
-    border-radius: 10px;
+    border-radius: 0;
 }
 .az-field {
     margin-bottom: 1.5rem;
@@ -808,7 +808,7 @@
     padding: 12px;
     font-size: 15px;
     border: 2px solid var(--c-black);
-    border-radius: 4px;
+    border-radius: 0;
     background: #fff;
     box-sizing: border-box;
     font-family: inherit;
@@ -839,7 +839,7 @@
     letter-spacing: 0.1em;
     cursor: pointer;
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .az-submit-btn:hover { opacity: 0.85; }
 .az-submit-btn--danger {
@@ -872,7 +872,7 @@
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 10px;
+    border-radius: 0;
 }
 .az-calc-grid {
     display: grid;
@@ -926,7 +926,7 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .az-calc-btn:hover { opacity: 0.85; }
 
@@ -958,7 +958,7 @@
     background: white;
     border: 1px solid #eee;
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 0;
 }
 .az-calc-breakdown h3 {
     font-size: 16px;
@@ -986,8 +986,8 @@
 .az-calc-row--final td { font-weight: 700; padding: 1.5rem; color: #ffffff !important; }
 .az-calc-td-right { text-align: right; }
 .az-calc-inline-note { font-size: 11px; opacity: 0.7; }
-.az-calc-regime-badge { font-size: 10px; background: #eee; padding: 2px 4px; border-radius: 4px; }
-.az-calc-noscript { max-width: 800px; margin: 2rem auto; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa; border-radius: 8px; }
+.az-calc-regime-badge { font-size: 10px; background: #eee; padding: 2px 4px; border-radius: 0; }
+.az-calc-noscript { max-width: 800px; margin: 2rem auto; padding: 1.5rem; border: 1px solid var(--c-divider); background: #fafafa; border-radius: 0; }
 .az-calc-noscript h2 { font-size: 18px; margin-top: 0; }
 .az-calc-noscript h3 { font-size: 16px; }
 .az-calc-noscript ul { padding-left: 20px; }
@@ -1011,7 +1011,7 @@
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .az-calc-cta-btn:hover { opacity: 0.85; color: #fff; }
 
@@ -1025,7 +1025,7 @@
 /* Salary Reality page */
 .sal-role-context { font-size: 12px; color: var(--c-grey-light); }
 .sal-hype { color: #d93025; text-decoration: line-through; }
-.sal-summary-box { border: 1px solid var(--c-divider); padding: 1.5rem; background: #fafafa; border-radius: 8px; }
+.sal-summary-box { border: 1px solid var(--c-divider); padding: 1.5rem; background: #fafafa; border-radius: 0; }
 .sal-summary-box p:first-child { margin: 0 0 0.75rem; font-weight: 600; color: var(--c-black); }
 .sal-summary-box ul { margin: 0; padding-left: 20px; }
 .sal-summary-date { font-size: 12px; color: var(--c-grey-light); margin-top: 0.75rem; }
@@ -1044,14 +1044,14 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--c-black);
-    border-radius: 4px;
+    border-radius: 0;
 }
 .sal-submit-btn:hover { background: var(--c-black); color: #fff; }
 .sal-explainer {
     background-color: #f9f9f9;
     padding: var(--space-md);
     border-left: 2px solid var(--c-black);
-    border-radius: 0 8px 8px 0;
+    border-radius: 0;
 }
 .sal-explainer h3 { margin-top: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; }
 .sal-explainer p { font-size: 15px; margin-bottom: 0; }
@@ -1108,7 +1108,7 @@
     font-family: var(--font-main);
     font-size: 14px;
     transition: border-color 0.2s, background 0.2s;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .quiz-btn:hover {
     border-color: var(--c-black);
@@ -1126,7 +1126,7 @@
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: #fff;
-    border-radius: 20px;
+    border-radius: 0;
     margin-bottom: 1rem;
 }
 .ep-result-title {
@@ -1149,7 +1149,7 @@
     letter-spacing: 0.08em;
     cursor: pointer;
     border: none;
-    border-radius: 4px;
+    border-radius: 0;
     transition: opacity 0.2s;
 }
 .ep-reveal-btn:hover { opacity: 0.85; }
@@ -1249,7 +1249,7 @@
 .az-report-success {
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 1.25rem 1.5rem;
     margin-bottom: 2rem;
     font-size: 14px;
@@ -1302,24 +1302,24 @@
 .progress-bar-segment {
     flex: 1;
     height: 4px;
-    border-radius: 2px;
+    border-radius: 0;
     background: var(--cr-surface-3, #eee);
     transition: background 0.2s;
 }
 
 .progress-bar-segment.active {
-    background: var(--c-blue-accent, #38bdf8);
+    background: var(--c-blue-accent, var(--cr-accent));
 }
 
 .dot {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
+    border-radius: 0;
     background: var(--cr-surface-3, #eee);
 }
 
 .dot.active {
-    background: var(--cr-accent, #38bdf8);
+    background: var(--cr-accent, var(--cr-accent));
 }
 
 .analyzer-container .form-group {
@@ -1338,7 +1338,7 @@
     display: block;
     padding: 12px 16px;
     border: 1px solid var(--cr-border, #ddd);
-    border-radius: 8px;
+    border-radius: 0;
     margin-bottom: 10px;
     cursor: pointer;
     transition: all 0.2s;
@@ -1357,12 +1357,12 @@
 }
 
 .btn-analyzer {
-    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    background: linear-gradient(135deg, var(--cr-accent), var(--cr-accent));
     color: #06060b;
     width: 100%;
     padding: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -1370,7 +1370,7 @@
 }
 
 .btn-analyzer:hover {
-    background: linear-gradient(135deg, #7dd3fc, #38bdf8);
+    background: linear-gradient(135deg, #7dd3fc, var(--cr-accent));
 }
 
 .analyzer-footer-note {
@@ -1389,13 +1389,13 @@
 .quiz-progress-segment {
     flex: 1;
     height: 4px;
-    border-radius: 2px;
+    border-radius: 0;
     background: var(--cr-surface-3, #eee);
     transition: background 0.2s;
 }
 
 .quiz-progress-segment.done {
-    background: var(--c-blue-accent, #38bdf8);
+    background: var(--c-blue-accent, var(--cr-accent));
 }
 
 @media (max-width: 768px) {

@@ -29,7 +29,7 @@
             var label = isLight ? 'Switch to dark mode' : 'Switch to light mode';
             btn.setAttribute('aria-label', label);
             btn.setAttribute('title', label);
-            btn.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+            btn.setAttribute('aria-pressed', isLight ? 'false' : 'true');
         });
 
         document.querySelectorAll('.mobile-theme-label').forEach(function (el) {

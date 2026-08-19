@@ -91,6 +91,7 @@
 
 <article class="article-body">
     <header class="container-reading article-header">
+        <p class="cr-kicker">{% if LANGUAGE_CODE == 'hi' and article.category.name_hi %}{{ article.category.name_hi }}{% else %}{{ article.category.name }}{% endif %} · {{ reading_time }} min</p>
         <h1>{% if LANGUAGE_CODE == 'hi' and article.title_hi %}{{ article.title_hi }}{% else %}{{ article.title }}{% endif %}</h1>
         <div class="art-persona">{% if LANGUAGE_CODE == 'hi' and article.target_persona_hi %}{{ article.target_persona_hi|safe }}{% else %}{{ article.target_persona|safe }}{% endif %}</div>
         <div class="art-byline"><a

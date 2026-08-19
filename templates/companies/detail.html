@@ -82,11 +82,12 @@
                 {% endif %}
             </div>
             <div>
+                <p class="cr-kicker">{{ company.get_sector_display }}</p>
                 <h1>{{ company.name }}</h1>
                 <div class="cp-meta">
                     <span>{{ company.get_sector_display }}</span>
                     {% if company.size %}<span>{{ company.get_size_display }}</span>{% endif %}
-                    {% if company.headquarters %}<span>📍 {{ company.headquarters }}</span>{% endif %}
+                    {% if company.headquarters %}<span>{{ company.headquarters }}</span>{% endif %}
                     {% if company.founded_year %}<span>Est. {{ company.founded_year }}</span>{% endif %}
                 </div>
                 <div class="cp-badges">

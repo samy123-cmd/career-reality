@@ -4,23 +4,26 @@
 
 {% block meta_description %}Thanks for submitting anonymous salary data. It helps improve salary reality checks for everyone.{% endblock %}
 
+{% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
+
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-xl); text-align: center;">
-    <h1 style="font-size: 40px; margin-bottom: 1rem;">Thank you.</h1>
-    <h2 style="font-size: 22px; margin-bottom: 1rem;">Submission received.</h2>
-    <p style="max-width: 480px; margin: 0 auto 1rem auto;">
+<section class="container-medium cr-page-head" style="margin-top: var(--space-xl);">
+    <p class="cr-kicker">Salary drop</p>
+    <h1>Thank you.</h1>
+    <h2>Submission received.</h2>
+    <p style="max-width: 52ch;">
         Your data has been dropped into the system. It helps thousands of others know their worth.
     </p>
-    <p style="max-width: 480px; margin: 0 auto 2rem auto; font-weight: 600;">
+    <p style="max-width: 52ch; font-weight: 600;">
         You earned {{ credits_earned }} salary unlock credit{{ credits_earned|pluralize }}.
         {% if salary_credit_balance %}
         Balance: {{ salary_credit_balance }} credit{{ salary_credit_balance|pluralize }}.
         {% endif %}
     </p>
 
-    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="{% url 'company_directory' %}" class="btn">Browse Company Salaries</a>
-        <a href="{% url 'home' %}" class="btn" style="background: transparent; border: 1px solid var(--c-border);">Return to Base</a>
+    <div class="hp-hero-actions" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
+        <a href="{% url 'company_directory' %}" class="hp-btn hp-btn--primary">Browse company salaries</a>
+        <a href="{% url 'home' %}" class="hp-btn hp-btn--ghost">Back to the terminal</a>
     </div>
 </section>
 {% endblock %}

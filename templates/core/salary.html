@@ -68,7 +68,8 @@
 {% block content %}
 
 <!-- HEADER -->
-<section class="container-medium sal-page-header">
+<section class="container-medium sal-page-header cr-page-head">
+    <p class="cr-kicker">Data explorer · median bands</p>
     <h1 class="sal-page-h1">{{ page_h1|default:"The Salary Reality Check" }}</h1>
     <p class="article-list-summary sal-page-intro">
         We track the <strong>median</strong> salaries, not the "top 1%" outliers.
@@ -78,6 +79,32 @@
     <p class="sal-meta">
         Last Updated: {% now "F Y" %}
     </p>
+    <div class="cr-chips" aria-label="Explorer filters">
+        <span class="cr-chip cr-chip--on">Unit: ₹ LPA</span>
+        <span class="cr-chip">India · full-time</span>
+        <span class="cr-chip">Services + product + GCC</span>
+        <span class="cr-chip">US-remote excluded</span>
+    </div>
+</section>
+
+<section class="container-medium">
+    <div class="cr-pct">
+        <div class="cr-pct-item">
+            <div class="cr-pct-label">Typical offer</div>
+            <div class="cr-pct-value">Median</div>
+            <p class="cr-pct-note">What 80% of companies actually pay for the role, city, and years in the table.</p>
+        </div>
+        <div class="cr-pct-item cr-pct-item--accent">
+            <div class="cr-pct-label">GCC / product</div>
+            <div class="cr-pct-value">Premium</div>
+            <p class="cr-pct-note">Captives still pay up, with 3–4 office days. Price commute into the raise.</p>
+        </div>
+        <div class="cr-pct-item">
+            <div class="cr-pct-label">Influencer band</div>
+            <div class="cr-pct-value">Hype</div>
+            <p class="cr-pct-note">The right-hand column is the promise. Treat it as a ceiling, not a plan.</p>
+        </div>
+    </div>
 </section>
 
 <section class="container-medium sal-context">

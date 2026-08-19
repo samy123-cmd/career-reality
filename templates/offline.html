@@ -3,13 +3,13 @@
 {% block title %}You're Offline — Career Reality India{% endblock %}
 
 {% block content %}
-<div style="text-align:center;padding:4rem 1rem;max-width:500px;margin:0 auto;">
-    <div style="font-size:4rem;margin-bottom:1rem;">📡</div>
-    <h1 style="font-size:1.8rem;font-weight:800;margin:0 0 0.5rem;">You're Offline</h1>
-    <p style="color:#64748b;line-height:1.6;">No internet connection detected. Previously visited pages are available from cache.</p>
-    <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <button onclick="location.reload()" style="padding:0.7rem 1.5rem;background:#0f172a;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Try Again</button>
-        <a href="/" style="padding:0.7rem 1.5rem;background:#f1f5f9;color:#0f172a;border-radius:8px;font-weight:600;text-decoration:none;">Go Home</a>
+<section class="container-reading cr-page-head" style="margin-top: var(--space-lg);">
+    <p class="cr-kicker">Cached session</p>
+    <h1>You're offline.</h1>
+    <p>No internet connection detected. Previously visited pages remain available from cache.</p>
+    <div class="hp-hero-actions" style="margin-top: 1.5rem; display:flex; gap: 12px; flex-wrap:wrap;">
+        <button type="button" class="hp-btn hp-btn--primary" onclick="location.reload()">Try again</button>
+        <a href="/" class="hp-btn hp-btn--ghost">Back to the terminal</a>
     </div>
-</div>
+</section>
 {% endblock %}

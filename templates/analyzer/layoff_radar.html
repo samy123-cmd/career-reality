@@ -61,13 +61,14 @@
 </script>
 <section class="container-medium az-radar-section">
 
-    <div class="az-radar-hero">
+    <div class="az-radar-hero cr-page-head">
+        <p class="cr-kicker"><span class="cr-live-dot" aria-hidden="true"></span> Crowdsourced signals · updated {% now "j M Y" %}</p>
         <h1 class="az-radar-title">{{ page_h1|default:"Layoff Radar" }}</h1>
         <p class="hero-subtitle az-radar-subtitle">
-            Real-time market weather. Is your company safe?
-            <br>Crowdsourced from insiders.
+            Employers are grouped rather than named where a signal rests on a single
+            internal source. Every entry carries the evidence and the date we saw it.
         </p>
-        <a href="{% url 'report_layoff' %}" class="az-radar-btn">Report a Company</a>
+        <a href="{% url 'report_layoff' %}" class="az-radar-btn">Report a signal</a>
     </div>
 
     <!-- STATS BAR -->
