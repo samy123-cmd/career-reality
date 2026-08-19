@@ -11,9 +11,9 @@
 }
 .hp-hero-inner {
     display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 64px;
-    align-items: center;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: 48px 64px;
+    align-items: start;
 }
 .hp-hero-badge {
     display: none;
@@ -56,7 +56,7 @@
 .hp-hero-stat-num {
     font-size: 18px;
     font-weight: 700;
-    color: var(--c-ink-inverse);
+    color: var(--cr-text, var(--c-black));
     line-height: 1;
 }
 .hp-hero-stat-label {

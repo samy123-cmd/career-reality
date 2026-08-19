@@ -19,15 +19,14 @@
     --c-bg-footer: #0e0e16;
 
     /* WIDTH SYSTEM (THE CORE FIX) */
-    --w-wide: 1100px;
-    /* Masthead, Hero (Authority) */
-    --w-medium: 840px;
-    /* Lists, Audience (Structure) */
-    --w-narrow: 640px;
+    --w-wide: 1240px;
+    --w-medium: 1240px;
+    --w-narrow: 68ch;
     /* Reading (Intimacy) */
 
     /* Spacing */
     --space-sm: 16px;
+    --page-gutter: 32px;
     --space-md: 48px;
     --space-lg: 96px;
     --space-xl: 180px;
@@ -69,19 +68,19 @@ video {
 .container-wide {
     max-width: var(--w-wide);
     margin: 0 auto;
-    padding: 0 var(--space-sm);
+    padding: 0 var(--page-gutter, var(--space-sm));
 }
 
 .container-medium {
     max-width: var(--w-medium);
     margin: 0 auto;
-    padding: 0 var(--space-sm);
+    padding: 0 var(--page-gutter, var(--space-sm));
 }
 
 .container-reading {
     max-width: var(--w-narrow);
     margin: 0 auto;
-    padding: 0 var(--space-sm);
+    padding: 0 var(--page-gutter, var(--space-sm));
 }
 
 /* Typography */

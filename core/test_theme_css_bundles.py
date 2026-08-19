@@ -114,6 +114,26 @@ class ThemeCssBundleTests(TestCase):
         self.assertIn("--c-ink-inverse", content)
         self.assertIn("brand-mark", content)
 
+    def test_homepage_uses_unified_page_grid(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("--w-wide: 1240px", content)
+        self.assertIn("--w-medium: 1240px", content)
+        self.assertIn("--page-gutter: 32px", content)
+        self.assertIn("hp-split", content)
+        self.assertIn("hp-ticker-inner", content)
+        self.assertIn("In-hand · tax", content)
+        self.assertNotIn("container-medium hp-pro-inner", content)
+
+    def test_salary_reality_uses_wide_sections(self):
+        response = self.client.get(reverse("salary_reality"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("container-wide sal-page-header", content)
+        self.assertIn("container-wide sal-table-section", content)
+        self.assertNotIn("container-reading", content)
+
     def test_homepage_editorial_layout(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)

@@ -102,10 +102,11 @@
         --c-divider: #e6e3de;
         --c-bg-footer: #f9f8f6;
         --c-blue-accent: #c84b31;
-        --w-wide: 1100px;
-        --w-medium: 840px;
-        --w-narrow: 640px;
+        --w-wide: 1240px;
+        --w-medium: 1240px;
+        --w-narrow: 68ch;
         --space-sm: 16px;
+        --page-gutter: 32px;
         --space-md: 48px;
         --space-lg: 96px;
         --space-xl: 180px
@@ -160,13 +161,13 @@
     .container-wide {
         max-width: var(--w-wide);
         margin: 0 auto;
-        padding: 0 var(--space-sm);
+        padding: 0 var(--page-gutter, var(--space-sm));
     }
 
     .container-medium {
         max-width: var(--w-medium);
         margin: 0 auto;
-        padding: 0 var(--space-sm);
+        padding: 0 var(--page-gutter, var(--space-sm));
     }
 
     /* Typography */
@@ -350,8 +351,8 @@
 </style>
 
 <!-- Main CSS — core bundle + design system + theme layers -->
-<link rel="preload" href="{% static 'css/style-core.css' %}?v=14" as="style">
-<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=14">
+<link rel="preload" href="{% static 'css/style-core.css' %}?v=15" as="style">
+<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=15">
 <link rel="stylesheet" href="{% static 'css/design-system.css' %}?v=3">
 <link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=4">
 <link rel="stylesheet" href="{% static 'css/theme-light.css' %}?v=2">
