@@ -211,7 +211,7 @@ AUGUST_2026_ARTICLE_SLUGS = (
 )
 
 
-@cache_page(60 * 60, key_prefix="home_v4")
+@cache_page(60 * 60, key_prefix="home_v5")
 def home(request):
     """
     Home page view.
