@@ -10,113 +10,142 @@
 {% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
-
-    <div class="az-form-hero cr-page-head">
-        <p class="cr-kicker">Anonymous contribution</p>
-        <h1 class="az-form-title">The Salary Drop</h1>
-        <p class="az-form-subtitle">
-            Glassdoor is censored. LinkedIn is fake.
-            <br>Drop your real numbers anonymously. Earn <strong>3 unlock credits</strong> per submission.
-        </p>
-    </div>
-
-    <div class="az-form-card">
-        <form method="POST" action="{% url 'submit_salary' %}{% if source %}?source={{ source }}{% endif %}">
-            {% csrf_token %}
-            <input type="hidden" name="source" value="{{ source|default:form.source.value|default:'' }}">
-
-            <div class="az-field">
-                <label class="az-label">Role / Job Title</label>
-                <input type="text" name="role" placeholder="e.g. Senior Backend Engineer" required
-                    class="az-input" value="{{ form.role.value|default:'' }}">
+<div class="cr-tool-page cr-tool-page--drop">
+    <div class="container-wide">
+        <div class="cr-tool-split">
+            <header class="cr-tool-head az-form-hero">
+                <p class="cr-kicker">Anonymous contribution</p>
+                <h1 class="cr-tool-title az-form-title">The Salary Drop</h1>
+                <p class="cr-tool-lede az-form-subtitle">
+                    Glassdoor is censored. LinkedIn is fake.
+                    Drop your real numbers anonymously. Earn <strong>3 unlock credits</strong> per submission.
+                </p>
+            </header>
+            <div class="cr-tool-visual cr-tool-visual--lock" aria-hidden="true">
+                <div class="cr-lock-shackle"></div>
+                <div class="cr-lock-body"></div>
             </div>
-
-            <div class="az-field">
-                <label class="az-label">Company Name (optional)</label>
-                <input type="text" name="company_name" placeholder="e.g. Infosys, Swiggy"
-                    class="az-input az-input--light" value="{{ form.company_name.value|default:'' }}">
-            </div>
-
-            <div class="az-field">
-                <label class="az-label">Tech Stack (Optional)</label>
-                <input type="text" name="tech_stack" placeholder="e.g. Java, Spring Boot, AWS"
-                    class="az-input az-input--light" value="{{ form.tech_stack.value|default:'' }}">
-            </div>
-
-            <div class="az-grid-2">
-                <div>
-                    <label class="az-label">Experience (Years)</label>
-                    <input type="number" step="0.1" name="experience_years" placeholder="e.g. 3.5" required
-                        class="az-input" value="{{ form.experience_years.value|default:'' }}">
-                </div>
-                <div>
-                    <label class="az-label">Annual CTC (Rs)</label>
-                    <input type="number" name="ctc" placeholder="e.g. 1200000" required
-                        class="az-input" value="{{ form.ctc.value|default:'' }}">
-                </div>
-            </div>
-
-            <div class="az-grid-2">
-                <div>
-                    <label class="az-label">Company Type</label>
-                    <select name="company_type" required class="az-select az-input--light">
-                        <option value="service">Service Based (TCS/Wipro/etc)</option>
-                        <option value="product">Product Based</option>
-                        <option value="startup">Startup</option>
-                        <option value="unicorn">Unicorn / FAANG</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="az-label">City</label>
-                    <input type="text" name="city" placeholder="e.g. Bangalore" required
-                        class="az-input az-input--light" value="{{ form.city.value|default:'' }}">
-                </div>
-            </div>
-
-            <div class="az-field" style="margin-top: 1rem;">
-                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 14px; cursor: pointer;">
-                    <input type="checkbox" name="confirm_payslip" value="1" style="margin-top: 3px;">
-                    <span>I confirm this matches my offer letter or payslip (helps light verification)</span>
-                </label>
-            </div>
-
-            {% if form.errors %}
-            <div class="az-form-errors" style="color: #d93025; margin-bottom: 1rem;">
-                {% for field, errors in form.errors.items %}
-                    {% for error in errors %}<p>{{ error }}</p>{% endfor %}
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            <button type="submit" class="az-submit-btn">Submit Anonymously — Earn 3 Credits</button>
-            <p class="az-form-note">No names. No emails. Pure data.</p>
-        </form>
-    </div>
-
-<div style="max-width: 700px; margin: 2rem auto 0;">
-    <div class="key-takeaway" style="margin-bottom: var(--space-md);">
-        <h4>How Your Data Is Used</h4>
-        <p>
-            We aggregate submissions to improve salary ranges and reality checks. No personal identifiers are stored.
-            Each submission unlocks 3 full salary records for you.
-        </p>
-    </div>
-
-    <details class="collapsible" open>
-        <summary>Privacy and Safety</summary>
-        <div class="content">
-            <ul style="padding-left: 20px; margin: 0;">
-                <li>No names, emails, or employer IDs are stored.</li>
-                <li>We publish aggregated ranges only, not individual entries.</li>
-                <li>Suspicious or low-quality submissions are filtered.</li>
-            </ul>
         </div>
-    </details>
 
-    <p class="az-form-note" style="margin-top:1.5rem;">
-        Last updated: {% now "F Y" %}
-    </p>
+        <div class="cr-tool-panel az-form-card">
+            <form method="POST" action="{% url 'submit_salary' %}{% if source %}?source={{ source }}{% endif %}" class="cr-tool-form">
+                {% csrf_token %}
+                <input type="hidden" name="source" value="{{ source|default:form.source.value|default:'' }}">
+
+                <div class="cr-tool-form-col">
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-role">Role / Job Title</label>
+                        <input type="text" id="salary-role" name="role" placeholder="e.g. Senior Backend Engineer" required
+                            class="az-input" value="{{ form.role.value|default:'' }}">
+                    </div>
+
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-company">Company Name (optional)</label>
+                        <input type="text" id="salary-company" name="company_name" placeholder="e.g. Infosys, Swiggy"
+                            class="az-input" value="{{ form.company_name.value|default:'' }}">
+                    </div>
+
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-stack">Tech Stack (optional)</label>
+                        <input type="text" id="salary-stack" name="tech_stack" placeholder="e.g. Java, Spring Boot, AWS"
+                            class="az-input" value="{{ form.tech_stack.value|default:'' }}">
+                    </div>
+
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-exp">Experience (Years)</label>
+                        <input type="number" step="0.1" id="salary-exp" name="experience_years" placeholder="e.g. 3.5" required
+                            class="az-input" value="{{ form.experience_years.value|default:'' }}">
+                    </div>
+
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-ctc">Annual CTC (Rs)</label>
+                        <input type="number" id="salary-ctc" name="ctc" placeholder="e.g. 1200000" required
+                            class="az-input" value="{{ form.ctc.value|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="cr-tool-form-col">
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-company-type">Company Type</label>
+                        <select id="salary-company-type" name="company_type" required class="az-select">
+                            <option value="service">Service Based (TCS/Wipro/etc)</option>
+                            <option value="product">Product Based</option>
+                            <option value="startup">Startup</option>
+                            <option value="unicorn">Unicorn / FAANG</option>
+                        </select>
+                    </div>
+
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-label" for="salary-city">City</label>
+                        <input type="text" id="salary-city" name="city" placeholder="e.g. Bangalore" required
+                            class="az-input" value="{{ form.city.value|default:'' }}">
+                    </div>
+
+                    <div class="cr-tool-field">
+                        <label class="cr-tool-check" for="salary-confirm">
+                            <input type="checkbox" id="salary-confirm" name="confirm_payslip" value="1">
+                            <span>I confirm this matches my offer letter or payslip (helps light verification)</span>
+                        </label>
+                    </div>
+                </div>
+
+                {% if form.errors %}
+                <div class="cr-tool-form-span az-form-errors" style="color: #d93025;">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}<p style="margin: 0 0 8px;">{{ error }}</p>{% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="cr-tool-form-actions">
+                    <button type="submit" class="cr-tool-btn cr-tool-btn--primary az-submit-btn">Submit Anonymously — Earn 3 Credits</button>
+                    <p class="cr-tool-form-note az-form-note">No names. No emails. Pure data.</p>
+                </div>
+            </form>
+        </div>
+
+        <div class="cr-tool-trust">
+            <div class="cr-tool-trust-item">
+                <span class="cr-tool-trust-kicker">Privacy</span>
+                <strong>100% Anonymous</strong>
+                <span>No names, emails, or employer IDs are stored with your submission.</span>
+            </div>
+            <div class="cr-tool-trust-item">
+                <span class="cr-tool-trust-kicker">Data</span>
+                <strong>Pure Data</strong>
+                <span>We publish aggregated ranges only — never individual entries.</span>
+            </div>
+            <div class="cr-tool-trust-item">
+                <span class="cr-tool-trust-kicker">Quality</span>
+                <strong>Verified Submissions</strong>
+                <span>Payslip confirmation helps us filter low-quality or fake numbers.</span>
+            </div>
+        </div>
+
+        <div class="cr-tool-meta">
+            <div class="key-takeaway" style="margin-bottom: var(--space-md);">
+                <h4>How Your Data Is Used</h4>
+                <p>
+                    We aggregate submissions to improve salary ranges and reality checks. No personal identifiers are stored.
+                    Each submission unlocks 3 full salary records for you.
+                </p>
+            </div>
+
+            <details class="collapsible" open>
+                <summary>Privacy and Safety</summary>
+                <div class="content">
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li>No names, emails, or employer IDs are stored.</li>
+                        <li>We publish aggregated ranges only, not individual entries.</li>
+                        <li>Suspicious or low-quality submissions are filtered.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <p class="az-form-note" style="margin-top:1.5rem; text-align: left;">
+                Last updated: {% now "F Y" %}
+            </p>
+        </div>
+    </div>
 </div>
-</section>
 {% endblock %}

@@ -177,7 +177,19 @@ class ThemeCssBundleTests(TestCase):
         self.assertEqual(response.status_code, 200)
         content = response.content.decode("utf-8")
         self.assertIn("CTC decoder · new regime", content)
+        self.assertIn("cr-tool-page--calc", content)
+        self.assertIn("cr-calc-summary-grid", content)
+        self.assertIn("tool-pages.css", content)
         self.assertIn("az-calc-breakdown", content)
+
+    def test_salary_drop_has_premium_tool_layout(self):
+        response = self.client.get(reverse("submit_salary"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertIn("cr-tool-page--drop", content)
+        self.assertIn("cr-tool-trust", content)
+        self.assertIn("tool-pages.css", content)
+        self.assertIn("Submit Anonymously — Earn 3 Credits", content)
 
     def test_layoff_radar_has_terminal_copy(self):
         response = self.client.get(reverse("layoff_radar"))

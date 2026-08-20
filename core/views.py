@@ -308,7 +308,7 @@ def salary_reality(request):
         'page_keywords': SALARY_REALITY.keywords,
     })
 
-@cache_page(60 * 60)
+@cache_page(60 * 60, key_prefix="salary_calculator_v2")
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
     from core.seo_pages import CTC_CALCULATOR
