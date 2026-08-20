@@ -1,8 +1,29 @@
 <header class="site-header">
+<div class="hp-ticker" id="salary-ticker-container">
+    <div class="hp-ticker-inner">
+    <div class="hp-ticker-label">Live</div>
+    <div class="hp-ticker-track" id="salary-ticker-content">
+        {% if salary_ticker_items %}
+            {% for item in salary_ticker_items %}
+            <span class="hp-ticker-item">
+                <span class="hp-ticker-role">{{ item.role }}</span>
+                <span class="hp-ticker-sep" aria-hidden="true">·</span>
+                <span class="hp-ticker-meta">{{ item.exp }}, {{ item.city }}</span>
+                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
+            </span>
+            {% endfor %}
+        {% else %}
+            <span class="hp-ticker-placeholder">
+                No submissions yet —
+                <a href="{% url 'submit_salary' %}">drop your salary</a>
+            </span>
+        {% endif %}
+    </div>
+    </div>
+</div>
     <div class="container-wide nav-flex">
         <!-- Brand -->
         <a href="/" class="site-brand">
-            <span class="brand-mark">CR</span>
             <span class="brand-wordmark">Career<span class="brand-accent">Reality</span></span>
         </a>
 
@@ -20,21 +41,18 @@
                     <div class="mega-col">
                         <div class="dropdown-header">Intelligence</div>
                         <a href="{% url 'company_directory' %}">
-                            <span class="mega-icon">🏢</span>
                             <span class="mega-label">
                                 <strong>Companies</strong>
                                 <small>Ratings, salaries & reviews for 35+ cos</small>
                             </span>
                         </a>
                         <a href="{% url 'ai_news_hub' %}">
-                            <span class="mega-icon">⚡</span>
                             <span class="mega-label">
                                 <strong>AI Pulse</strong>
                                 <small>AI news that actually affects your career</small>
                             </span>
                         </a>
                         <a href="{% url 'career_reality_index' %}">
-                            <span class="mega-icon">📊</span>
                             <span class="mega-label">
                                 <strong>Career Index</strong>
                                 <small>Monthly pressure tracker for Indian tech</small>
@@ -44,21 +62,18 @@
                     <div class="mega-col">
                         <div class="dropdown-header">Tools</div>
                         <a href="{% url 'salary_calculator' %}">
-                            <span class="mega-icon">🧮</span>
                             <span class="mega-label">
                                 <strong>CTC Calculator</strong>
                                 <small>Convert CTC to real in-hand salary</small>
                             </span>
                         </a>
                         <a href="{% url 'analyzer_home' %}">
-                            <span class="mega-icon">🎯</span>
                             <span class="mega-label">
                                 <strong>Risk Analyzer</strong>
                                 <small>Should you resign? Data-backed answer</small>
                             </span>
                         </a>
                         <a href="{% url 'layoff_radar' %}">
-                            <span class="mega-icon">🚨</span>
                             <span class="mega-label">
                                 <strong>Layoff Radar</strong>
                                 <small>Track layoff signals by company</small>
@@ -68,21 +83,18 @@
                     <div class="mega-col">
                         <div class="dropdown-header">Data</div>
                         <a href="{% url 'salary_reality' %}">
-                            <span class="mega-icon">💰</span>
                             <span class="mega-label">
                                 <strong>Salary Reality</strong>
                                 <small>What Indian tech actually pays</small>
                             </span>
                         </a>
                         <a href="{% url 'submit_salary' %}" class="mega-highlight">
-                            <span class="mega-icon">+</span>
                             <span class="mega-label">
                                 <strong>Drop a Salary</strong>
                                 <small>Anonymous. Takes 30 seconds.</small>
                             </span>
                         </a>
                         <a href="{% url 'escape_plan' %}">
-                            <span class="mega-icon">🚀</span>
                             <span class="mega-label">
                                 <strong>Escape Plan</strong>
                                 <small>Leave your service company</small>
@@ -103,14 +115,11 @@
                 <div class="nav-dropdown-content" style="display:none;">
                     <div class="dropdown-header">Browse by Category</div>
                     {% for category in categories %}
-                    <a href="{% url 'category_detail' category.slug %}">
-                        <span class="dropdown-icon">&rarr;</span>
-                        {{ category.name }}
-                    </a>
+                    <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
                     {% empty %}
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Career Strategy</a>
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Software Engineering</a>
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Money Reality</a>
+                    <a href="{% url 'salary_reality' %}">Career Strategy</a>
+                    <a href="{% url 'salary_reality' %}">Software Engineering</a>
+                    <a href="{% url 'salary_reality' %}">Money Reality</a>
                     {% endfor %}
                 </div>
             </div>
@@ -134,7 +143,7 @@
             </div>
 
             <!-- Theme toggle -->
-            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false">
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
                 <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="4"/>
                     <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
@@ -159,7 +168,7 @@
 
         <!-- Mobile Toggle -->
         <div class="mobile-actions">
-            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false">
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
                 <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="4"/>
                     <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
@@ -212,13 +221,13 @@
                     </button>
                     <div class="mobile-nav-accordion-panel is-open" id="nav-panel-intelligence">
                         <a href="{% url 'company_directory' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🏢</span> Companies
+                            <span class="mnl-icon">10</span> Companies
                         </a>
                         <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">⚡</span> AI Pulse
+                            <span class="mnl-icon">11</span> AI Pulse
                         </a>
                         <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">📊</span> Career Index
+                            <span class="mnl-icon">12</span> Career Index
                         </a>
                     </div>
                 </div>
@@ -232,13 +241,13 @@
                     </button>
                     <div class="mobile-nav-accordion-panel" id="nav-panel-tools">
                         <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🧮</span> CTC Calculator
+                            <span class="mnl-icon">13</span> CTC Calculator
                         </a>
                         <a href="{% url 'analyzer_home' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🎯</span> Risk Analyzer
+                            <span class="mnl-icon">14</span> Risk Analyzer
                         </a>
                         <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🚨</span> Layoff Radar
+                            <span class="mnl-icon">15</span> Layoff Radar
                         </a>
                     </div>
                 </div>
@@ -252,13 +261,13 @@
                     </button>
                     <div class="mobile-nav-accordion-panel" id="nav-panel-data">
                         <a href="{% url 'salary_reality' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">💰</span> Salary Reality
+                            <span class="mnl-icon">16</span> Salary Reality
                         </a>
                         <a href="{% url 'submit_salary' %}" class="mobile-nav-link mobile-nav-link--highlight">
-                            <span class="mnl-icon">+</span> Drop a Salary
+                            <span class="mnl-icon">17</span> Drop a Salary
                         </a>
                         <a href="{% url 'escape_plan' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🚀</span> Escape Plan
+                            <span class="mnl-icon">18</span> Escape Plan
                         </a>
                     </div>
                 </div>

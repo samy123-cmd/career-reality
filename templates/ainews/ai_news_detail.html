@@ -6,7 +6,7 @@
 {% block meta_description %}{{ meta_description|default:og_description }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/ai_pulse.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/ai_pulse.css' %}?v=3">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -84,7 +84,8 @@
     <div class="ai-detail-shell">
         <a href="{% url 'ai_news_hub' %}" class="ai-back-link">&larr; Back to AI Pulse</a>
 
-        <div class="ai-detail-header">
+        <div class="ai-detail-header cr-page-head">
+            <p class="cr-kicker">AI Pulse · {{ item.source_name }}</p>
             <div class="ai-detail-meta">
                 <span class="significance-badge significance-{{ item.significance }}"></span>
                 {{ item.source_name }}

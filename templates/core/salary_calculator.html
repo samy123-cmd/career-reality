@@ -56,72 +56,79 @@
   ]
 }
 </script>
-<section class="container-reading" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+<section class="cr-tool-page cr-tool-page--calc">
+<div class="container-wide">
 
-    <div class="az-calc-hero">
-        <h1 class="az-calc-title">{{ page_h1|default:"CTC Decoder" }}</h1>
-        <p class="az-calc-subtitle">
-            See where your "20 LPA" actually goes. We deduct the "Ghost Components" (Employer PF, Gratuity, Variable
-            Pay)
-            that HR adds to inflate the number.
-        </p>
+    <div class="cr-tool-split">
+        <header class="az-calc-hero cr-page-head cr-tool-head">
+            <p class="cr-kicker">CTC decoder · new regime</p>
+            <h1 class="cr-tool-title az-calc-title">{{ page_h1|default:"CTC Decoder" }}</h1>
+            <p class="cr-tool-lede az-calc-subtitle">
+                See where your "20 LPA" actually goes. We deduct the ghost components — employer PF, gratuity, variable pay —
+                that HR adds to inflate the number.
+            </p>
+        </header>
+        <div class="cr-tool-visual cr-tool-visual--calc" aria-hidden="true">
+            <div class="cr-calc-device">
+                <div class="cr-calc-screen">In-hand</div>
+                <div class="cr-calc-keys">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Calculator Form -->
-    <div class="az-calc-card">
+    <div class="cr-tool-panel az-calc-card">
 
-        <div class="az-calc-grid">
-            <!-- CTC -->
-            <div>
-                <label class="az-calc-label">
-                    Annual CTC (Rs)
-                </label>
-                <input type="number" id="ctc-input" placeholder="e.g. 1200000"
-                    class="az-calc-input" aria-describedby="ctc-input-error">
-                <p id="ctc-input-error" class="az-calc-field-error" style="display:none;"></p>
-            </div>
-
-            <!-- Variable Pay -->
-            <div>
-                <label class="az-calc-label">
-                    Variable Pay / Bonus (%)
-                </label>
-                <input type="number" id="variable-input" value="10"
-                    class="az-calc-input">
-                <p class="az-calc-hint">Money you *might* get annually,
-                    not monthly.</p>
-            </div>
-        </div>
-
-        <div class="az-calc-divider">
-            <p class="az-calc-heading">For Old Regime Optimization (HRA):</p>
-            <div class="az-calc-grid">
-                <!-- Rent -->
-                <div>
-                    <label class="az-calc-label">
-                        Monthly Rent Paid (Rs)
-                    </label>
-                    <input type="number" id="rent-input" value="0"
-                        class="az-calc-input az-calc-input--light">
+        <div class="cr-tool-form">
+            <div class="cr-tool-form-col">
+                <div class="cr-tool-field">
+                    <label class="cr-tool-label az-calc-label" for="ctc-input">Annual CTC (Rs)</label>
+                    <input type="number" id="ctc-input" placeholder="e.g. 1200000"
+                        class="az-calc-input" aria-describedby="ctc-input-error">
+                    <p id="ctc-input-error" class="az-calc-field-error" style="display:none;"></p>
                 </div>
+            </div>
 
-                <!-- City Type -->
-                <div>
-                    <label class="az-calc-label">
-                        City Type
-                    </label>
-                    <select id="city-input"
-                        class="az-calc-input az-calc-input--light">
+            <div class="cr-tool-form-col">
+                <div class="cr-tool-field">
+                    <label class="cr-tool-label az-calc-label" for="variable-input">Variable Pay / Bonus (%)</label>
+                    <input type="number" id="variable-input" value="10" class="az-calc-input">
+                </div>
+            </div>
+
+            <p class="cr-tool-callout cr-tool-form-span">
+                Variable pay is money you <strong>might</strong> get annually — not guaranteed monthly cash flow.
+            </p>
+
+            <p class="cr-tool-section-label cr-tool-form-span">For Old Regime Optimization (HRA)</p>
+
+            <div class="cr-tool-form-col">
+                <div class="cr-tool-field">
+                    <label class="cr-tool-label az-calc-label" for="rent-input">Monthly Rent Paid (Rs)</label>
+                    <input type="number" id="rent-input" value="0" class="az-calc-input az-calc-input--light">
+                </div>
+            </div>
+
+            <div class="cr-tool-form-col">
+                <div class="cr-tool-field">
+                    <label class="cr-tool-label az-calc-label" for="city-input">City Type</label>
+                    <select id="city-input" class="az-calc-input az-calc-input--light">
                         <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
                         <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
                     </select>
                 </div>
             </div>
-        </div>
 
-        <button id="decode-btn" class="az-calc-btn">
-            Decode My Salary
-        </button>
+            <div class="cr-tool-form-actions">
+                <button id="decode-btn" type="button" class="cr-tool-btn cr-tool-btn--primary az-calc-btn">
+                    Decode My Salary
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Noscript Fallback for crawlers & no-JS users -->
@@ -147,14 +154,37 @@
     <!-- Results Section -->
     <div id="results" style="display: none;" class="az-calc-results">
 
-        <div class="az-calc-result-hero">
-            <h2 class="az-calc-result-label">The Real Monthly In-Hand</h2>
+        <div class="cr-calc-summary">
+            <p class="cr-kicker">Your in-hand breakdown</p>
+            <div class="cr-calc-summary-grid">
+                <div class="cr-calc-stat">
+                    <span class="cr-calc-stat-label">Monthly In-Hand</span>
+                    <span id="sum-monthly" class="cr-calc-stat-val">—</span>
+                </div>
+                <div class="cr-calc-stat">
+                    <span class="cr-calc-stat-label">Annual In-Hand</span>
+                    <span id="sum-annual" class="cr-calc-stat-val">—</span>
+                </div>
+                <div class="cr-calc-stat">
+                    <span class="cr-calc-stat-label">Total Deductions</span>
+                    <span id="sum-deductions" class="cr-calc-stat-val">—</span>
+                </div>
+                <div class="cr-calc-stat">
+                    <span class="cr-calc-stat-label">Effective Tax Rate</span>
+                    <span id="sum-tax-rate" class="cr-calc-stat-val">—</span>
+                </div>
+            </div>
+            <p class="az-calc-regime-note" style="margin-top: 12px;">
+                Using <span id="best-regime"><strong>New Regime</strong></span>
+            </p>
+        </div>
+
+        <div class="az-calc-result-hero" aria-hidden="true" style="display: none;">
+            <p class="cr-kicker">Monthly in-hand</p>
+            <h2 class="az-calc-result-label">The real monthly in-hand</h2>
             <div class="az-calc-result-value">
                 <span id="final-monthly">Rs 0</span>
             </div>
-            <p class="az-calc-regime-note">
-                (Using <span id="best-regime"><strong>New Regime</strong></span>)
-            </p>
         </div>
 
         <!-- The Breakdown (Waterfall) -->
@@ -232,13 +262,17 @@
     </div>
 
     <!-- CTA -->
-    <div class="az-calc-cta">
-        <p>
-            Shocked? That's the point.
-        </p>
-        <a href="{% url 'salary_reality' %}" class="az-calc-cta-btn">
-            Compare with Market Standards &rarr;
-        </a>
+    <div class="cr-tool-banner">
+        <div class="cr-tool-banner-copy">
+            <strong>Shocked? That's the point.</strong>
+            <p>We believe in transparency. If your in-hand looks wrong, drop your real numbers anonymously and help tighten the bands for everyone.</p>
+        </div>
+        <a href="{% url 'submit_salary' %}?source=ctc_decoder" class="cr-tool-btn cr-tool-btn--outline">Drop Your Salary</a>
+    </div>
+
+    <div class="az-calc-cta" hidden>
+        <p>Shocked? That's the point.</p>
+        <a href="{% url 'salary_reality' %}" class="az-calc-cta-btn">Compare with Market Standards &rarr;</a>
     </div>
 
     <!-- Post-Calculation Newsletter CTA -->
@@ -280,7 +314,7 @@
         {% include "partials/salary_submit_cta.html" with source="ctc_decoder" %}
     </div>
 
-    <div class="az-calc-bottom">
+    <div class="cr-tool-meta az-calc-bottom">
         <div class="key-takeaway" style="margin-bottom: var(--space-md);">
             <h4>What This Calculator Covers</h4>
             <p>
@@ -338,6 +372,7 @@
         </p>
     </div>
 
+</div>
 </section>
 
 <script>
@@ -435,8 +470,15 @@
 
         document.getElementById('results').style.display = 'block';
         document.getElementById('final-monthly').textContent = fmt(monthlyInHand);
-        document.getElementById('best-regime').textContent = isNewRegime ? "New Regime" : "Old Regime";
+        document.getElementById('best-regime').innerHTML = isNewRegime ? '<strong>New Regime</strong>' : '<strong>Old Regime</strong>';
         document.getElementById('tax-regime-label').textContent = isNewRegime ? "NEW REGIME" : "OLD REGIME";
+
+        var totalDeductions = employeePF + pt + finalTax;
+        var taxRate = grossSalary > 0 ? ((finalTax / grossSalary) * 100).toFixed(1) + '%' : '—';
+        document.getElementById('sum-monthly').textContent = fmt(monthlyInHand);
+        document.getElementById('sum-annual').textContent = fmt(annualInHand);
+        document.getElementById('sum-deductions').textContent = fmt(totalDeductions);
+        document.getElementById('sum-tax-rate').textContent = taxRate;
 
         document.getElementById('res-ctc').textContent = fmt(ctc);
         document.getElementById('res-variable').textContent = '-' + fmt(variablePay);

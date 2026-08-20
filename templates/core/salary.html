@@ -68,7 +68,8 @@
 {% block content %}
 
 <!-- HEADER -->
-<section class="container-medium sal-page-header">
+<section class="container-wide sal-page-header cr-page-head">
+    <p class="cr-kicker">Data explorer · median bands</p>
     <h1 class="sal-page-h1">{{ page_h1|default:"The Salary Reality Check" }}</h1>
     <p class="article-list-summary sal-page-intro">
         We track the <strong>median</strong> salaries, not the "top 1%" outliers.
@@ -78,9 +79,35 @@
     <p class="sal-meta">
         Last Updated: {% now "F Y" %}
     </p>
+    <div class="cr-chips" aria-label="Explorer filters">
+        <span class="cr-chip cr-chip--on">Unit: ₹ LPA</span>
+        <span class="cr-chip">India · full-time</span>
+        <span class="cr-chip">Services + product + GCC</span>
+        <span class="cr-chip">US-remote excluded</span>
+    </div>
 </section>
 
-<section class="container-medium sal-context">
+<section class="container-wide">
+    <div class="cr-pct">
+        <div class="cr-pct-item">
+            <div class="cr-pct-label">Typical offer</div>
+            <div class="cr-pct-value">Median</div>
+            <p class="cr-pct-note">What 80% of companies actually pay for the role, city, and years in the table.</p>
+        </div>
+        <div class="cr-pct-item cr-pct-item--accent">
+            <div class="cr-pct-label">GCC / product</div>
+            <div class="cr-pct-value">Premium</div>
+            <p class="cr-pct-note">Captives still pay up, with 3–4 office days. Price commute into the raise.</p>
+        </div>
+        <div class="cr-pct-item">
+            <div class="cr-pct-label">Influencer band</div>
+            <div class="cr-pct-value">Hype</div>
+            <p class="cr-pct-note">The right-hand column is the promise. Treat it as a ceiling, not a plan.</p>
+        </div>
+    </div>
+</section>
+
+<section class="container-wide sal-context">
     <span class="section-label">MARKET SUMMARY</span>
     <div class="sal-summary-box">
         <p>
@@ -99,7 +126,7 @@
 </section>
 
 <!-- METHODOLOGY & CONTEXT -->
-<section class="container-reading sal-methodology-section">
+<section class="container-wide sal-methodology-section">
 
     <p>
         Salary conversations in India are distorted by survivorship bias. LinkedIn posts celebrate
@@ -135,7 +162,7 @@
     </ul>
 </section>
 
-<section class="container-reading sal-methodology-section">
+<section class="container-wide sal-methodology-section">
     <h3 class="sal-subsection-title">Coverage and Limits</h3>
     <ul class="sal-coverage">
         <li>India-only, full-time roles; US-remote and contractor roles are excluded.</li>
@@ -151,7 +178,7 @@
 </section>
 
 <!-- SECTION 1: ENGINEERING -->
-<section class="container-medium sal-table-section">
+<section class="container-wide sal-table-section">
     <span class="section-label">01 // ENGINEERING</span>
 
     <div class="table-scroll">
@@ -252,7 +279,7 @@
 </section>
 
 <!-- SECTION 2: DESIGN & PRODUCT -->
-<section class="container-medium sal-table-section">
+<section class="container-wide sal-table-section">
     <span class="section-label">02 // DESIGN &amp; PRODUCT</span>
 
     <div class="table-scroll">
@@ -308,7 +335,7 @@
 </section>
 
 <!-- SECTION 3: BUSINESS & MARKETING -->
-<section class="container-medium sal-table-section">
+<section class="container-wide sal-table-section">
     <span class="section-label">03 // MARKETING &amp; SALES</span>
 
     <div class="table-scroll">
@@ -364,7 +391,7 @@
 </section>
 
 <!-- SECTION 4: DATA & AI -->
-<section class="container-medium sal-table-section">
+<section class="container-wide sal-table-section">
     <span class="section-label">04 // DATA &amp; AI</span>
 
     <div class="table-scroll">
@@ -421,7 +448,7 @@
 </section>
 
 <!-- SECTION 5: MANAGEMENT & STRATEGY -->
-<section class="container-medium sal-table-section">
+<section class="container-wide sal-table-section">
     <span class="section-label">05 // MANAGEMENT &amp; STRATEGY</span>
 
     <div class="table-scroll">
@@ -468,7 +495,7 @@
 </section>
 
 <!-- EXPLANATION -->
-<section class="container-reading sal-explainer">
+<section class="container-wide sal-explainer">
     <h3>How to read this</h3>
     <p>
         The <strong>"Hype"</strong> number is what influencers, bootcamps, and viral LinkedIn posts tell you to expect.
@@ -480,7 +507,7 @@
     </p>
 </section>
 
-<section class="container-reading sal-methodology-section">
+<section class="container-wide sal-methodology-section">
     <h3 class="sal-subsection-title">What Changed In This Update</h3>
     <ul class="sal-changelog">
         <li><strong>{% now "F j, Y" %}:</strong> Refreshed market notes, validated role bands, and rechecked methodology sources.</li>
@@ -497,7 +524,7 @@
     </p>
 </section>
 
-<div class="container-medium" style="margin-bottom: var(--space-xl);">
+<div class="container-wide" style="margin-bottom: var(--space-xl);">
     {% include "partials/seo_tool_hub.html" %}
     {% include "partials/seo_pillar_links.html" %}
 </div>

@@ -7,8 +7,8 @@
 {% block content %}
 <div class="onboard-wrap">
 
-    <header class="onboard-header">
-        <div class="onboard-check">✓</div>
+    <header class="onboard-header cr-page-head">
+        <p class="cr-kicker">Account</p>
         <h1 class="onboard-title">You're in.</h1>
         <p class="onboard-sub">Free account active. Here's what's waiting for you.</p>
     </header>
@@ -18,7 +18,7 @@
         <h2 class="onboard-section-title">Start here — free</h2>
         <div class="onboard-tools">
             <a href="{% url 'analyzer_home' %}" class="onboard-tool-card onboard-tool-card--primary">
-                <div class="onboard-tool-icon">🎯</div>
+                <div class="onboard-tool-icon num" aria-hidden="true">01</div>
                 <div class="onboard-tool-body">
                     <h3>Risk Analyzer</h3>
                     <p>Should you resign? Get a data-backed answer in 3 minutes.</p>
@@ -26,7 +26,7 @@
                 <span class="onboard-tool-cta">Start →</span>
             </a>
             <a href="{% url 'salary_calculator' %}" class="onboard-tool-card">
-                <div class="onboard-tool-icon">🧮</div>
+                <div class="onboard-tool-icon num" aria-hidden="true">02</div>
                 <div class="onboard-tool-body">
                     <h3>CTC Decoder</h3>
                     <p>Find out what your CTC actually means in-hand.</p>
@@ -34,7 +34,7 @@
                 <span class="onboard-tool-cta">Decode →</span>
             </a>
             <a href="{% url 'layoff_radar' %}" class="onboard-tool-card">
-                <div class="onboard-tool-icon">🚨</div>
+                <div class="onboard-tool-icon num" aria-hidden="true">03</div>
                 <div class="onboard-tool-body">
                     <h3>Layoff Radar</h3>
                     <p>Track hiring freezes and stability scores by company.</p>

@@ -5,15 +5,18 @@
 (function () {
     try {
         var t = localStorage.getItem('cr-theme');
-        if (t === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.classList.remove('theme-dark');
-            document.documentElement.classList.add('theme-light');
+        if (t === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.remove('theme-light');
+            document.documentElement.classList.add('theme-dark');
         }
     } catch (e) { /* no-op */ }
 })();
 </script>
-<!-- DNS Prefetch & Preconnect for fonts - REMOVED (Self-hosted) -->
+<!-- DNS Prefetch & Preconnect for editorial fonts (Playfair + Inter + JetBrains Mono) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <!-- Google AdSense account verification (script loaded at end of body for performance) -->
 <meta name="google-adsense-account" content="ca-pub-3766621537317806">
@@ -24,7 +27,7 @@
 <!-- Hindi hreflang removed: no Hindi translations exist in the database.
      Having identical /hi/ duplicates was flagged as low-value duplicate content. -->
 <meta property="og:locale" content="en_IN">
-<meta name="theme-color" content="#06060b">
+<meta name="theme-color" content="#f9f8f6">
 <meta name="author" content="Career Reality Editorial Desk">
 {% if page_keywords %}
 <meta name="keywords" content="{{ page_keywords|join:', ' }}">
@@ -80,29 +83,30 @@
 <!-- Critical CSS - Inlined for instant FCP & Stability -->
 <style>
     :root {
-        color-scheme: dark;
-        --cr-page: #06060b;
-        --cr-surface: #0e0e16;
-        --cr-text: #fafafa;
-        --cr-text-secondary: #c8c8d0;
-        --cr-text-muted: #9e9ea8;
-        --cr-border: rgba(255, 255, 255, 0.08);
-        --c-page: #06060b;
-        --c-surface: #0e0e16;
-        --c-ink: #fafafa;
-        --c-ink-inverse: #f4f4f5;
-        --c-white: #0e0e16;
-        --c-black: #fafafa;
-        --c-grey-dark: #e4e4e7;
-        --c-grey-mid: #c8c8d0;
-        --c-grey-light: #9e9ea8;
-        --c-divider: rgba(255, 255, 255, 0.08);
-        --c-bg-footer: #0e0e16;
-        --c-blue-accent: #38bdf8;
-        --w-wide: 1100px;
-        --w-medium: 840px;
-        --w-narrow: 640px;
+        color-scheme: light;
+        --cr-page: #f9f8f6;
+        --cr-surface: #ffffff;
+        --cr-text: #121212;
+        --cr-text-secondary: #666666;
+        --cr-text-muted: #666666;
+        --cr-border: #e6e3de;
+        --c-page: #f9f8f6;
+        --c-surface: #ffffff;
+        --c-ink: #121212;
+        --c-ink-inverse: #f9f8f6;
+        --c-white: #ffffff;
+        --c-black: #121212;
+        --c-grey-dark: #3f3f46;
+        --c-grey-mid: #666666;
+        --c-grey-light: #666666;
+        --c-divider: #e6e3de;
+        --c-bg-footer: #f9f8f6;
+        --c-blue-accent: #c84b31;
+        --w-wide: 1240px;
+        --w-medium: 1240px;
+        --w-narrow: 68ch;
         --space-sm: 16px;
+        --page-gutter: 32px;
         --space-md: 48px;
         --space-lg: 96px;
         --space-xl: 180px
@@ -130,40 +134,40 @@
 
     [data-theme="light"] {
         color-scheme: light;
-        --cr-page: #fafafa;
+        --cr-page: #f9f8f6;
         --cr-surface: #ffffff;
-        --cr-text: #09090b;
-        --cr-text-secondary: #52525b;
-        --cr-border: rgba(0, 0, 0, 0.08);
-        --c-page: #fafafa;
+        --cr-text: #121212;
+        --cr-text-secondary: #666666;
+        --cr-border: #e6e3de;
+        --c-page: #f9f8f6;
         --c-white: #ffffff;
-        --c-black: #09090b;
-        --c-grey-mid: #52525b;
-        --c-grey-light: #71717a;
-        --c-divider: rgba(0, 0, 0, 0.1);
-        --c-bg-footer: #f4f4f5;
-        --c-blue-accent: #0284c7;
+        --c-black: #121212;
+        --c-grey-mid: #666666;
+        --c-grey-light: #666666;
+        --c-divider: #e6e3de;
+        --c-bg-footer: #f9f8f6;
+        --c-blue-accent: #c84b31;
     }
 
     [data-theme="light"] .site-header {
-        background: rgba(255, 255, 255, 0.92);
+        background: #f9f8f6;
     }
 
     [data-theme="light"] .mobile-menu-toggle span {
-        background-color: #09090b;
+        background-color: #121212;
     }
 
     /* Layout Containers */
     .container-wide {
         max-width: var(--w-wide);
         margin: 0 auto;
-        padding: 0 var(--space-sm);
+        padding: 0 var(--page-gutter, var(--space-sm));
     }
 
     .container-medium {
         max-width: var(--w-medium);
         margin: 0 auto;
-        padding: 0 var(--space-sm);
+        padding: 0 var(--page-gutter, var(--space-sm));
     }
 
     /* Typography */
@@ -204,7 +208,7 @@
         border-bottom: 1px solid var(--cr-border);
         position: sticky;
         top: 0;
-        background: rgba(6, 6, 11, 0.9);
+        background: #f9f8f6;
         z-index: 900;
     }
 
@@ -226,13 +230,13 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        background: linear-gradient(145deg, #38bdf8 0%, #0ea5e9 100%);
-        color: #06060b;
+        background: #121212;
+        color: #f9f8f6;
         font-size: 12px;
         font-weight: 800;
         letter-spacing: -0.02em;
-        border-radius: 8px;
-        box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+        border-radius: 0;
+        box-shadow: none;
         flex-shrink: 0;
     }
 
@@ -347,13 +351,13 @@
 </style>
 
 <!-- Main CSS — core bundle + design system + theme layers -->
-<link rel="preload" href="{% static 'css/style-core.css' %}?v=14" as="style">
-<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=14">
+<link rel="preload" href="{% static 'css/style-core.css' %}?v=15" as="style">
+<link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=15">
 <link rel="stylesheet" href="{% static 'css/design-system.css' %}?v=3">
 <link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=4">
 <link rel="stylesheet" href="{% static 'css/theme-light.css' %}?v=2">
 <link rel="stylesheet" href="{% static 'css/theme-dark-contrast.css' %}?v=4">
-<link rel="stylesheet" href="{% static 'css/components/tool-hub.css' %}?v=3">
+<link rel="stylesheet" href="{% static 'css/components/tool-hub.css' %}?v=5">
 <link rel="stylesheet" href="{% static 'css/mobile.css' %}?v=4">
 
 <!-- JSON-LD Organization & WebSite Schema -->

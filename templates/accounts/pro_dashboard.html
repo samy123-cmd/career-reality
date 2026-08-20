@@ -5,7 +5,8 @@
 {% block meta_description %}Your career intelligence dashboard—salary benchmarks, layoff radar, and risk tools.{% endblock %}
 
 {% block content %}
-<div class="dash-header">
+<div class="dash-header cr-page-head">
+  <p class="cr-kicker">Pro dashboard</p>
   <h1>Welcome back{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}.</h1>
   <p>{{ request.user.email }}</p>
   {% if profile.is_pro %}

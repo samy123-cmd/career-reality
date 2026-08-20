@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load static i18n %}
 {% get_current_language as CURRENT_LANG %}
-<html lang="{% if CURRENT_LANG == 'hi' %}hi-IN{% else %}en-IN{% endif %}" class="theme-dark" data-theme="dark">
+<html lang="{% if CURRENT_LANG == 'hi' %}hi-IN{% else %}en-IN{% endif %}" class="theme-light" data-theme="light">
 
 <head>
     <title>{% block title %}Career Reality India - Salary Truths and Career Reality Checks{% endblock %}</title>
@@ -9,7 +9,7 @@
         content="{% block meta_description %}Unfiltered insights on Indian tech careers, salary stagnation, and real-world career trade-offs.{% endblock %}">
     {% include "partials/meta.html" %}
     {% block page_css %}{% endblock %}
-    <script defer src="{% static 'js/theme.js' %}?v=1"></script>
+    <script defer src="{% static 'js/theme.js' %}?v=3"></script>
     {% if GA_MEASUREMENT_ID %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_MEASUREMENT_ID }}"></script>
     <script>
@@ -26,6 +26,7 @@
     <script defer src="/_vercel/insights/script.js"></script>
     <link rel="manifest" href="{% static 'manifest.json' %}">
     {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/theme-modern.css' %}?v=7">
 </head>
 
 <body>

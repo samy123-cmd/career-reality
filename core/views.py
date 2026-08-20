@@ -211,7 +211,7 @@ AUGUST_2026_ARTICLE_SLUGS = (
 )
 
 
-@cache_page(60 * 60, key_prefix="home_v3")
+@cache_page(60 * 60, key_prefix="home_v5")
 def home(request):
     """
     Home page view.
@@ -298,7 +298,7 @@ def editorial_standards(request):
     description = "The editorial rules, correction protocol, evidence requirements, and tone guidelines behind Career Reality."
     return render(request, 'core/editorial.html', _seo(title, description))
 
-@cache_page(60 * 60, key_prefix="salary_reality_v3")
+@cache_page(60 * 60, key_prefix="salary_reality_v4")
 def salary_reality(request):
     title = SALARY_REALITY.title
     description = SALARY_REALITY.description
@@ -308,7 +308,7 @@ def salary_reality(request):
         'page_keywords': SALARY_REALITY.keywords,
     })
 
-@cache_page(60 * 60)
+@cache_page(60 * 60, key_prefix="salary_calculator_v2")
 def salary_calculator(request):
     """In-hand salary calculator for Indian professionals."""
     from core.seo_pages import CTC_CALCULATOR
