@@ -19,28 +19,28 @@ class PageSEO:
 # ── Tool pages (traffic engine — target high-volume Indian career queries) ──
 
 CTC_CALCULATOR = PageSEO(
-    title="CTC Calculator India 2026 — CTC to In-Hand Salary (Free)",
+    title="CTC to In-Hand Salary Calculator India 2026 (Free)",
     description=(
-        "Free CTC calculator and CTC salary calculator for India. Calculate CTC to "
-        "in-hand salary instantly with PF, gratuity, variable pay, and new vs old tax "
-        "regime deductions."
+        "Free CTC to in-hand salary calculator for India. Convert annual CTC to monthly "
+        "take-home after PF, gratuity, variable pay, and new vs old tax regime — updated 2026."
     ),
-    h1="CTC Calculator India — CTC to In-Hand Salary",
+    h1="CTC to In-Hand Salary Calculator India",
     keywords=(
         "ctc to in hand salary calculator india",
         "in hand salary calculator",
+        "ctc calculator india 2026",
         "ctc decoder",
         "salary calculator india 2026",
     ),
 )
 
 RESIGNATION_ANALYZER = PageSEO(
-    title="Resignation Risk Analyzer India — Notice Period & Bond Calculator (Free)",
+    title="Resignation Risk Calculator India 2026 — Notice Period & Bond (Free)",
     description=(
-        "Free resignation risk calculator for Indian employees. Assess notice period "
-        "pressure, service bonds, and HR escalation risk before you put in papers."
+        "Free resignation risk calculator for Indian employees. Check notice-period pressure, "
+        "service-bond exposure, and HR escalation risk before you resign in 2026."
     ),
-    h1="Resignation Risk Analyzer",
+    h1="Resignation Risk Calculator India",
     keywords=(
         "resignation notice period india",
         "resignation risk calculator",
@@ -50,12 +50,12 @@ RESIGNATION_ANALYZER = PageSEO(
 )
 
 LAYOFF_RADAR = PageSEO(
-    title="IT Layoffs India 2026 Tracker — Hiring Freeze & Layoff Alerts",
+    title="IT Layoffs India 2026 — Live Hiring Freeze & Layoff Tracker (Free)",
     description=(
-        "Live crowdsourced layoff and hiring freeze tracker for Indian IT and tech "
-        "companies. Check company stability signals and report anonymously."
+        "Free IT layoffs India 2026 tracker. Crowdsourced hiring-freeze and layoff signals "
+        "across Indian tech — check your company and report anonymously."
     ),
-    h1="Indian Tech Layoff Radar",
+    h1="IT Layoffs India 2026 Tracker",
     keywords=(
         "it layoffs india 2026",
         "hiring freeze india",
@@ -66,12 +66,12 @@ LAYOFF_RADAR = PageSEO(
 )
 
 SALARY_REALITY = PageSEO(
-    title="Software Engineer Salary India 2026 — Median Pay by Role & City",
+    title="Software Engineer Salary India 2026 — Median CTC by Role & City",
     description=(
-        "Median software engineer, data, and product salaries in India — not inflated "
-        "outliers. Role-wise pay bands for Bengaluru, Hyderabad, Pune, and remote."
+        "Software engineer salary India 2026: median CTC bands by role and city — Bengaluru, "
+        "Hyderabad, Pune, remote. Real ranges, not LinkedIn outliers."
     ),
-    h1="Indian Tech Salary Reality",
+    h1="Software Engineer Salary India 2026",
     keywords=(
         "software engineer salary india 2026",
         "median salary india",
@@ -81,16 +81,17 @@ SALARY_REALITY = PageSEO(
 )
 
 HOME = PageSEO(
-    title="Career Reality India — Salary Truths, CTC Calculator & Layoff Tracker",
+    title="Career Reality India — Free CTC Calculator, Salaries & Layoff Tracker",
     description=(
-        "Salary truths and career reality checks for Indian tech professionals. "
-        "Free CTC calculator, layoff radar, resignation risk tool, and honest analysis."
+        "Free CTC to in-hand calculator, software engineer salary India 2026 data, IT layoff "
+        "tracker, and honest career reality checks for Indian tech professionals."
     ),
     keywords=(
-        "career reality india",
-        "salary reality check india",
-        "indian tech career advice",
         "ctc calculator india",
+        "software engineer salary india 2026",
+        "it layoffs india 2026",
+        "career reality india",
+        "in hand salary calculator",
     ),
 )
 

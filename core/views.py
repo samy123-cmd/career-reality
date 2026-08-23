@@ -211,7 +211,7 @@ AUGUST_2026_ARTICLE_SLUGS = (
 )
 
 
-@cache_page(60 * 60, key_prefix="home_v3")
+@cache_page(60 * 60, key_prefix="home_v4")
 def home(request):
     """
     Home page view.
@@ -241,16 +241,35 @@ def home(request):
     description = HOME.description
     home_faq = [
         {
-            "q": "What makes Career Reality different from generic career blogs?",
-            "a": "We prioritize evidence-backed analysis, role-level trade-offs, and correction logs over motivational narratives."
+            "q": "How do I convert CTC to in-hand salary in India?",
+            "a": (
+                "Use a CTC to in-hand salary calculator that subtracts employer PF, gratuity, "
+                "and unpaid variable from annual CTC, then estimates tax under the new or old "
+                "regime. Career Reality’s free CTC Calculator does this for Indian offers in 2026."
+            ),
         },
         {
-            "q": "How often is content updated?",
-            "a": "Core market pages are reviewed monthly, with additional updates when salary or hiring conditions shift materially."
+            "q": "What is a realistic software engineer salary in India in 2026?",
+            "a": (
+                "Median bands vary by city and YOE. Treat LinkedIn screenshots as outliers — "
+                "use our Salary Reality tables for Bengaluru, Hyderabad, Pune, and remote medians, "
+                "then validate any offer with the CTC Decoder."
+            ),
         },
         {
-            "q": "Does advertising influence editorial conclusions?",
-            "a": "No. Editorial and commercial decisions are separated under published standards and sponsorship policy."
+            "q": "How can I check IT layoff or hiring-freeze risk at my company?",
+            "a": (
+                "Start with our free IT Layoffs India 2026 tracker for crowdsourced freeze and "
+                "layoff signals, then cross-check with notice-period and relieving-letter risk "
+                "before you resign. Treat radar data as a signal, not a verdict."
+            ),
+        },
+        {
+            "q": "Does advertising influence Career Reality’s editorial conclusions?",
+            "a": (
+                "No. Editorial and commercial decisions are separated under published standards "
+                "and our sponsorship policy. Tool pages stay free whether or not ads are approved."
+            ),
         },
     ]
 

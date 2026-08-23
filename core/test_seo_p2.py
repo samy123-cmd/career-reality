@@ -145,7 +145,7 @@ class InternalLinkingTests(TestCase):
 
     def test_article_page_includes_tool_hub(self):
         response = self.client.get(reverse("article_detail", kwargs={"slug": "test-seo-hub-article"}))
-        self.assertContains(response, "FREE CAREER TOOLS")
+        self.assertContains(response, "Free career tools")
         self.assertContains(response, reverse("salary_calculator"))
 
     def test_article_links_resignation_tool_to_landing_page(self):

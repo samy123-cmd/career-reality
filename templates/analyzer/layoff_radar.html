@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ og_title|default:"IT Layoffs India 2026 Tracker — Hiring Freeze & Layoff Alerts" }}{% endblock %}
+{% block title %}{{ og_title|default:"IT Layoffs India 2026 — Live Hiring Freeze & Layoff Tracker (Free)" }}{% endblock %}
 
-{% block meta_description %}{{ og_description|default:"Live crowdsourced layoff and hiring freeze tracker for Indian IT and tech companies. Check company stability signals and report anonymously." }}{% endblock %}
+{% block meta_description %}{{ og_description|default:"Free IT layoffs India 2026 tracker. Crowdsourced hiring-freeze and layoff signals across Indian tech — check your company and report anonymously." }}{% endblock %}
 
 {% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 
@@ -34,26 +34,34 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How fresh is the data?",
+      "name": "How do I track IT layoffs in India in 2026?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Reports are time-stamped and shown in reverse chronological order. Newer entries carry higher confidence."
+        "text": "Use a live layoff and hiring-freeze tracker that timestamps crowdsourced reports by company. Career Reality’s free IT Layoffs India 2026 tracker shows recent freeze and layoff signals so you can cross-check before switching or resigning."
       }
     },
     {
       "@type": "Question",
-      "name": "Is this verified?",
+      "name": "How fresh is the layoff radar data?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. It is crowdsourced. Treat it as a signal and cross-check with other sources."
+        "text": "Reports are time-stamped and shown newest-first. Treat recent clusters as higher priority than single old rumours, and always verify with other sources before making an irrevocable career move."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I report anonymously?",
+      "name": "Is this layoff tracker verified by employers?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Reports do not require login or personal information."
+        "text": "No. It is crowdsourced insider signal, not an official HR feed. Use it as early warning alongside notice-period risk and your own network — never as the sole reason to resign."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I report a hiring freeze anonymously?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Reports do not require login or personal information. Anonymous signals help other Indian tech workers assess company risk without exposing reporters."
       }
     }
   ]
@@ -64,8 +72,8 @@
     <div class="az-radar-hero">
         <h1 class="az-radar-title">{{ page_h1|default:"Layoff Radar" }}</h1>
         <p class="hero-subtitle az-radar-subtitle">
-            Real-time market weather. Is your company safe?
-            <br>Crowdsourced from insiders.
+            Free IT layoffs India 2026 tracker — hiring freezes and layoff signals
+            crowdsourced from insiders. Check your company before you switch.
         </p>
         <a href="{% url 'report_layoff' %}" class="az-radar-btn">Report a Company</a>
     </div>

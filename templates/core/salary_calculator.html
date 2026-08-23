@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ og_title|default:"CTC Calculator India 2026 — CTC to In-Hand Salary (Free)" }}{% endblock %}
+{% block title %}{{ og_title|default:"CTC to In-Hand Salary Calculator India 2026 (Free)" }}{% endblock %}
 
-{% block meta_description %}{{ og_description|default:"Free CTC calculator and CTC salary calculator for India. Calculate CTC to in-hand salary instantly with PF, gratuity, variable pay, and tax regime deductions." }}{% endblock %}
+{% block meta_description %}{{ og_description|default:"Free CTC to in-hand salary calculator for India. Convert annual CTC to monthly take-home after PF, gratuity, variable pay, and new vs old tax regime — updated 2026." }}{% endblock %}
 
 {% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 
@@ -31,26 +31,34 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why is my in-hand lower than expected?",
+      "name": "How do I calculate CTC to in-hand salary in India?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "CTC includes employer PF, gratuity, and variable components that are not monthly cash."
+        "text": "Start with annual CTC, subtract employer PF and gratuity, remove unpaid variable or bonus, then estimate income tax under the new or old regime. The remaining amount divided by 12 is a realistic monthly in-hand estimate. This free CTC to in-hand salary calculator India tool follows that structure for 2026 offers."
       }
     },
     {
       "@type": "Question",
-      "name": "Is this exact?",
+      "name": "Why is my in-hand salary lower than my CTC?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is a strong estimate; actual pay slips vary by company structure."
+        "text": "CTC often includes employer PF, gratuity, insurance, and variable pay that never hits your bank account monthly. A 20 LPA CTC can mean ₹1.1–1.4L monthly in-hand after tax depending on structure — decode the offer before you celebrate the headline number."
       }
     },
     {
       "@type": "Question",
-      "name": "Can you add more deductions?",
+      "name": "Is this CTC calculator exact for every Indian company?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Share edge cases on the Salary Drop page."
+        "text": "It is a strong estimate for common Indian IT and product CTC structures. Actual payslips vary with HRA proofs, special allowances, ESOP taxation, and reimbursement caps. Use it to compare offers, then verify against the draft annexure before signing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use the new or old tax regime for in-hand salary?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most mid-level Indian tech offers favour the new regime unless you have large HRA and deductions. Run both paths in this calculator: if rent is high in Bengaluru or Hyderabad and you claim HRA under the old regime, the winner can flip — compare before you accept."
       }
     }
   ]
@@ -312,12 +320,22 @@
             </div>
         </details>
 
-        <details class="collapsible">
-            <summary>FAQ</summary>
+        <details class="collapsible" open>
+            <summary>FAQ — CTC to in-hand salary calculator India</summary>
             <div class="content">
-                <p><strong>Why is my in-hand lower than expected?</strong> CTC includes employer PF, gratuity, and variable components that are not monthly cash.</p>
-                <p><strong>Is this exact?</strong> It is a strong estimate; actual pay slips vary by company structure.</p>
-                <p><strong>Can you add more deductions?</strong> Yes. Share edge cases on the Salary Drop page.</p>
+                <p><strong>How do I calculate CTC to in-hand salary in India?</strong>
+                Start with annual CTC, subtract employer PF and gratuity, remove unpaid variable,
+                then estimate tax under new vs old regime. Divide what’s left by 12 for monthly in-hand.
+                This free In-Hand Salary Calculator follows that 2026 structure.</p>
+                <p><strong>Why is my in-hand salary lower than my CTC?</strong>
+                CTC packs employer PF, gratuity, insurance, and variable that are not monthly cash.
+                A “20 LPA” offer often lands closer to ₹1.1–1.4L in-hand after tax — decode before you accept.</p>
+                <p><strong>Is this CTC calculator exact for every Indian company?</strong>
+                It is a strong estimate for common IT/product structures. Payslips still vary with HRA proofs,
+                special allowances, and ESOP tax. Compare offers here, then verify the annexure.</p>
+                <p><strong>New or old tax regime?</strong>
+                Most mid-level offers favour the new regime unless HRA and deductions are large.
+                Run both paths — metro rent in Bengaluru/Hyderabad can flip the winner.</p>
             </div>
         </details>
 
