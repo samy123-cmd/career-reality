@@ -10,7 +10,7 @@ from content.seo_redirects import (
 from ainews.indexing import indexable_ai_news_queryset, item_is_indexable
 from ainews.models import AINewsItem, AITag, AITag
 from companies.models import Company
-from companies.indexing import indexable_companies_queryset
+from companies.indexing import indexable_companies_for_sitemap
 
 
 class ArticleSitemap(Sitemap):
@@ -117,11 +117,15 @@ class CompanySitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        # Only companies with community data (reviews or salaries) — matches detail-page index gate.
-        return indexable_companies_queryset().order_by("-salary_count", "name")
+        # Only companies that pass the AdSense-safe index gate (rich description +
+        # enough community data). Thin stubs stay crawlable but noindex.
+        return indexable_companies_for_sitemap()
 
     def lastmod(self, obj):
         return obj.updated_at
+
+    def location(self, obj):
+        return reverse("company_detail", kwargs={"slug": obj.slug})
 
 
 class AuthorSitemap(Sitemap):

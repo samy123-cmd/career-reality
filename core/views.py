@@ -357,9 +357,13 @@ def terms(request):
 
 
 @cache_page(60 * 15)
+@cache_page(60 * 15, key_prefix="topic_clusters_v2")
 def topic_clusters(request):
     title = "Topic Clusters - Career Reality India"
-    description = "Explore Career Reality authority clusters: salary, career risk, and role-specific market realities."
+    description = (
+        "Editorial topic map for Career Reality India: salary truth, career risk, "
+        "role realities, and the tools that support each decision path."
+    )
     from content.seo_redirects import indexable_categories_queryset
 
     categories = indexable_categories_queryset()

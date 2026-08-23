@@ -19,8 +19,8 @@ from django.test import Client
 
 logger = logging.getLogger(__name__)
 
-SITEMAP_CACHE_KEY = "perf:sitemap:xml:v4"
-SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v4"
+SITEMAP_CACHE_KEY = "perf:sitemap:xml:v5"
+SITEMAP_STALE_CACHE_KEY = "perf:sitemap:xml:stale:v5"
 NAV_CATEGORIES_CACHE_KEY = "nav_categories"
 SOCIAL_PROOF_CACHE_KEY = "perf:home:social_proof_counts:v1"
 INDEX_ROWS_CACHE_KEY = "perf:career_index_rows:v2"
@@ -186,7 +186,7 @@ def get_social_proof_counts(*, rebuild: bool = False) -> dict[str, str]:
             return cached
 
     from analyzer.models import AssessmentLog, LayoffReport, SalarySubmission
-    from companies.indexing import indexable_companies_queryset
+    from companies.indexing import listable_companies_queryset
 
     from core.models import NewsletterSubscriber
 
@@ -194,7 +194,7 @@ def get_social_proof_counts(*, rebuild: bool = False) -> dict[str, str]:
         "assessment_count": fmt_count(AssessmentLog.objects.count()),
         "salary_count": fmt_count(SalarySubmission.objects.count()),
         "layoff_count": fmt_count(LayoffReport.objects.count()),
-        "company_count": fmt_count(indexable_companies_queryset().count()),
+        "company_count": fmt_count(listable_companies_queryset().count()),
         "newsletter_count": fmt_count(NewsletterSubscriber.objects.filter(is_active=True).count()),
     }
     cache.set(SOCIAL_PROOF_CACHE_KEY, data, social_proof_cache_timeout())

@@ -356,3 +356,43 @@ class CompanyDirectoryIndexingTests(TestCase):
         slugs = [r["slug"] for r in response.json()["results"]]
         self.assertIn(indexed.slug, slugs)
         self.assertNotIn("emptysearchco", slugs)
+
+
+class CompanyAdSenseIndexGateTests(TestCase):
+    """Thin company stubs must stay noindex for AdSense re-review."""
+
+    def setUp(self):
+        cache.clear()
+
+    def test_thin_company_detail_is_noindex(self):
+        company = Company.objects.create(
+            name="ThinCo",
+            slug="thinco",
+            sector="product",
+            review_count=1,
+            salary_count=1,
+            description="Short blurb.",
+        )
+        response = self.client.get(reverse("company_detail", kwargs={"slug": company.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["meta_robots"], "noindex, follow")
+        self.assertIn("noindex", response.get("X-Robots-Tag", ""))
+
+    def test_rich_company_detail_is_indexable(self):
+        from companies.indexing import company_is_indexable
+
+        description = " ".join(["Career reality analysis for this employer in Indian tech."] * 20)
+        company = Company.objects.create(
+            name="RichCo",
+            slug="richco",
+            sector="product",
+            review_count=5,
+            salary_count=8,
+            description=description,
+        )
+        self.assertTrue(company_is_indexable(company))
+        # Without live salary rows, detail view uses denormalized counts.
+        response = self.client.get(reverse("company_detail", kwargs={"slug": company.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["meta_robots"], "index, follow")
+

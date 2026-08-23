@@ -19,7 +19,7 @@ from analyzer.salary_access import (
 from accounts.models import CompanyWatchlist
 from .models import Company, CompanyReview, Discussion, DiscussionReply
 from .forms import CompanyReviewForm, DiscussionForm, DiscussionReplyForm
-from .indexing import company_is_indexable, indexable_companies_queryset
+from .indexing import company_is_indexable, listable_companies_queryset
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ def company_directory(request):
     }
     order = allowed_sorts.get(sort, "-salary_count")
 
-    qs = indexable_companies_queryset()
+    qs = listable_companies_queryset()
     if sector:
         qs = qs.filter(sector=sector)
     if q:
@@ -49,7 +49,7 @@ def company_directory(request):
     paginator = Paginator(qs, 30)
     page = paginator.get_page(request.GET.get("page", 1))
 
-    indexed_count = indexable_companies_queryset().count()
+    indexed_count = listable_companies_queryset().count()
 
     return render(request, "companies/directory.html", {
         "page_obj": page,
@@ -66,7 +66,7 @@ def company_directory(request):
     })
 
 
-@cache_page(60 * 15, key_prefix="company_detail_v2")
+@cache_page(60 * 15, key_prefix="company_detail_v3")
 def company_detail(request, slug):
     """Deep-dive company profile with aggregated intelligence."""
     company = get_object_or_404(Company, slug=slug)
@@ -132,7 +132,7 @@ def company_detail(request, slug):
         company=company, is_flagged=False
     ).order_by("-created_at")[:5]
 
-    # Thin company pages (no reviews, no salaries) should not be indexed.
+    # Thin company stubs (~400 words) must stay noindex for AdSense.
     has_content = company_is_indexable(
         company,
         review_total=review_stats["total"] or 0,
@@ -153,7 +153,7 @@ def company_detail(request, slug):
     unlocked_ids = get_unlocked_ids(request)
     user_is_pro = is_pro_user(request)
 
-    return render(request, "companies/detail.html", {
+    response = render(request, "companies/detail.html", {
         "company": company,
         "salaries": all_salaries[:15],
         "salary_stats": salary_stats,
@@ -171,6 +171,9 @@ def company_detail(request, slug):
         "og_title": f"{company.name} — Salary, Reviews & Reality Check",
         "og_description": f"Honest salary data, anonymous reviews, and layoff alerts for {company.name}. No login required.",
     })
+    if meta_robots.startswith("noindex"):
+        response["X-Robots-Tag"] = "noindex, follow"
+    return response
 
 
 @require_POST
@@ -213,7 +216,7 @@ def company_search_api(request):
     if len(q) < 2:
         return JsonResponse({"results": []})
 
-    companies = indexable_companies_queryset().filter(name__icontains=q).values(
+    companies = listable_companies_queryset().filter(name__icontains=q).values(
         "name", "slug", "sector", "salary_count", "overall_score"
     )[:10]
 

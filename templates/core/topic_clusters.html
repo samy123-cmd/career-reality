@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Topic Clusters - Career Reality India{% endblock %}
-{% block meta_description %}The full authority map of Career Reality: pillar pages, supporting pages, and decision paths by topic.{% endblock %}
+{% block meta_description %}Editorial topic map for Career Reality India: salary truth, career risk, role realities, and the tools that support each decision path.{% endblock %}
 
 {% block extra_head %}
 <script type="application/ld+json">
@@ -24,17 +24,32 @@
 <section class="container-medium static-page-content" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
     <h1>Topic Clusters</h1>
     <p class="hero-subtitle" style="max-width: 760px;">
-        This is our editorial map. If the internet gives you random career advice, this page gives you structure.
+        This is our editorial map. If the internet gives you random career advice, this page gives you structure —
+        which articles to read first, which tools to use after, and which claims to ignore.
     </p>
 
-    <div style="border: 1px solid var(--c-divider); padding: 1.25rem; background: #fafafa; margin-top: 1.5rem;">
+    <div style="border: 1px solid var(--c-divider); padding: 1.25rem; margin-top: 1.5rem;">
         <h2 style="font-size: 18px; margin-top: 0;">How To Use This Page</h2>
         <ol style="margin: 0; padding-left: 20px;">
-            <li>Start with a pillar page for baseline reality.</li>
-            <li>Move into role-specific or risk-specific supporting pages.</li>
-            <li>Use tools only after you understand context (not before).</li>
+            <li>Start with a pillar page for baseline reality (salary bands, risk signals, or role trade-offs).</li>
+            <li>Move into role-specific or risk-specific supporting articles — read at least two before deciding.</li>
+            <li>Use tools only after you understand context: CTC math, resignation risk, or layoff signals.</li>
+            <li>Return here when a LinkedIn post or recruiter pitch pulls you into a new rabbit hole.</li>
         </ol>
     </div>
+
+    <h2 style="margin-top: 2.5rem;">Why We Cluster Content</h2>
+    <p>
+        Indian tech careers fail less from lack of effort and more from mismatched advice. A fresher reading
+        Staff-engineer LinkedIn posts, a 7-year services engineer chasing MBA prestige, and a PM evaluating
+        GCC offers do not need the same article. Topic clusters keep signals local to the decision you are
+        actually making: compensation quality, exit timing, role depth, or market risk.
+    </p>
+    <p>
+        Each cluster below links a <strong>pillar</strong> (baseline framing) to <strong>supporting pages</strong>
+        (deeper trade-offs) and the free tools that quantify the claim. We add pages only when they change a
+        decision — not to inflate article counts for search or AdSense optics.
+    </p>
 
     <div style="display: grid; gap: 1.25rem; margin-top: 2rem;">
         {% for cluster in clusters %}
@@ -52,10 +67,33 @@
         {% endfor %}
     </div>
 
+    <h2 style="margin-top: 2.5rem;">Recommended Reading Paths</h2>
+    <p>
+        <strong>If you are evaluating an offer:</strong> start with
+        <a href="{% url 'salary_reality' %}">Salary Reality</a>, decode the letter with the
+        <a href="{% url 'salary_calculator' %}">CTC Calculator</a>, then read
+        <a href="{% url 'article_detail' 'what-20-lpa-actually-feels-like-india-purchasing-power' %}">what 20 LPA actually feels like</a>
+        and <a href="{% url 'article_detail' 'joining-bonus-clawback-offer-letter-traps-2026' %}">joining-bonus clawbacks</a>.
+    </p>
+    <p>
+        <strong>If you are thinking of resigning:</strong> run the
+        <a href="{% url 'analyzer_home' %}">Resignation Risk Analyzer</a>, check
+        <a href="{% url 'layoff_radar' %}">Layoff Radar</a> for your employer, then read
+        <a href="{% url 'article_detail' 'relieving-letter-hostage-notice-period-india-2026' %}">relieving-letter traps</a>
+        and <a href="{% url 'article_detail' 'layoff-recovery-timeline-india' %}">layoff recovery timelines</a>.
+    </p>
+    <p>
+        <strong>If your title stopped matching your growth:</strong> pick your role cluster under Role Topics,
+        then read the plateau / IC-vs-manager pieces before you pay for another course or MBA.
+        Upskilling without scope evidence is a common Indian-market trap — see
+        <a href="{% url 'article_detail' 'why-upskilling-stops-working-career-trap' %}">why upskilling stops working</a>.
+    </p>
+
     <div style="margin-top: var(--space-lg);">
         <span class="section-label">ROLE TOPICS</span>
         <p style="margin-top: 0.75rem; margin-bottom: 0.75rem; color: var(--c-grey-mid);">
-            Choose your domain, then read at least two articles before making a career decision.
+            Choose your domain, then read at least two articles before making a career decision. Thin category
+            archives are redirected or noindexed — only categories with enough canonical articles appear here.
         </p>
         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;">
             {% for cat in categories %}
@@ -69,8 +107,18 @@
 
     <div style="margin-top: var(--space-lg); border-top: 1px solid var(--c-divider); padding-top: 1.25rem;">
         <h2 style="font-size: 18px;">Quality Rule</h2>
+        <p>
+            New pages are added to this map only if they improve decision quality. We do not publish filler
+            pages to look busy, and we do not keep thin company stubs or duplicate topic URLs in the index.
+            Trust pages (<a href="{% url 'about' %}">About</a>,
+            <a href="{% url 'editorial' %}">Editorial</a>,
+            <a href="{% url 'privacy_policy' %}">Privacy</a>,
+            <a href="{% url 'terms' %}">Terms</a>,
+            <a href="{% url 'contact' %}">Contact</a>) stay linked from every footer for policy clarity.
+        </p>
         <p style="margin-bottom: 0;">
-            New pages are added to this map only if they improve decision quality. We do not publish filler pages to look busy.
+            If a page is missing from this map, it is either still in draft, redirected to a canonical article,
+            or intentionally noindexed until it meets our depth bar.
         </p>
     </div>
 </section>

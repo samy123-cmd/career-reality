@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 
 from content.models import Article
 from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS
-from companies.indexing import indexable_companies_queryset
+from companies.indexing import listable_companies_queryset
 from ainews.indexing import indexable_ai_news_queryset
 from ainews.models import AINewsItem
 from analyzer.models import SalarySubmission
@@ -38,7 +38,7 @@ def search_view(request):
         results["articles"] = articles[:20]
 
         # Companies — only those with community data (avoids linking to noindex thin pages)
-        companies = indexable_companies_queryset().filter(
+        companies = listable_companies_queryset().filter(
             Q(name__icontains=q) |
             Q(description__icontains=q) |
             Q(headquarters__icontains=q)
@@ -93,7 +93,7 @@ def search_suggest_api(request):
         suggestions.append({"type": "article", "text": a["title"], "url": f"/article/{a['slug']}/"})
 
     # Companies — indexable only
-    for c in indexable_companies_queryset().filter(name__icontains=q).values("name", "slug")[:3]:
+    for c in listable_companies_queryset().filter(name__icontains=q).values("name", "slug")[:3]:
         suggestions.append({"type": "company", "text": c["name"], "url": f"/companies/{c['slug']}/"})
 
     # AI News

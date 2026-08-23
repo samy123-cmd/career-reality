@@ -347,11 +347,12 @@ class Command(BaseCommand):
         synced = sync_all_company_stats()
         self.stdout.write(self.style.SUCCESS(f"Synced stats for {synced} companies"))
 
-        from companies.indexing import indexable_companies_queryset
+        from companies.indexing import indexable_companies_queryset, listable_companies_queryset
 
         self.stdout.write(
             f"\nDirectory totals: "
-            f"{indexable_companies_queryset().count()} indexable companies, "
+            f"{listable_companies_queryset().count()} listable companies, "
+            f"{indexable_companies_queryset().count()} index-candidate companies, "
             f"{CompanyReview.objects.count()} reviews, "
             f"{SalarySubmission.objects.count()} salary points, "
             f"{LayoffReport.objects.count()} layoff reports"
