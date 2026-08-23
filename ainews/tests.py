@@ -10,6 +10,9 @@ from django.utils import timezone
 from .models import AINewsFetchRun, AINewsItem, AITag
 
 
+_AI_HUB = "https://www.careerreality.in/ai/"
+
+
 @override_settings(
     CACHES={
         'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}
@@ -157,7 +160,7 @@ class AINewsModelAndViewTests(TestCase):
         response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'draft-detail'}))
 
         self.assertEqual(response.status_code, 301)
-        self.assertEqual(response.url, reverse('ai_news_hub'))
+        self.assertEqual(response.url, _AI_HUB)
 
     def test_stale_ai_news_detail_redirects_to_hub(self):
         from datetime import timedelta
@@ -173,27 +176,34 @@ class AINewsModelAndViewTests(TestCase):
         response = self.client.get(reverse('ai_news_detail', kwargs={'slug': 'stale-news'}))
 
         self.assertEqual(response.status_code, 301)
-        self.assertEqual(response.url, reverse('ai_news_hub'))
+        self.assertEqual(response.url, _AI_HUB)
 
     # --- Tag View Tests ---
 
     def test_ai_news_by_tag_filters_correctly(self):
-        self._create_item('Tagged', 'tagged', tags=[self.tag_release])
+        for i in range(3):
+            self._create_item(f'Tagged {i}', f'tagged-{i}', tags=[self.tag_release])
         self._create_item('Untagged', 'untagged', tags=[self.tag_research])
 
         response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'model-release'}))
 
         self.assertEqual(response.status_code, 200)
         items = list(response.context['page_obj'].object_list)
-        self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].slug, 'tagged')
-        self.assertIn('noindex', response.context['meta_robots'])
-        self.assertIn('noindex', response.get('X-Robots-Tag', ''))
+        self.assertEqual(len(items), 3)
+        self.assertEqual(response.context['meta_robots'], 'index, follow')
+
+    def test_ai_news_by_tag_thin_archive_redirects_to_hub(self):
+        self._create_item('Tagged', 'tagged-thin', tags=[self.tag_release])
+
+        response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'model-release'}))
+
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, _AI_HUB)
 
     def test_ai_news_by_tag_empty_redirects_to_hub(self):
         response = self.client.get(reverse('ai_news_by_tag', kwargs={'slug': 'model-release'}))
         self.assertEqual(response.status_code, 301)
-        self.assertEqual(response.url, reverse('ai_news_hub'))
+        self.assertEqual(response.url, _AI_HUB)
 
     def test_ai_news_detail_meta_description_strips_html(self):
         self._create_item(

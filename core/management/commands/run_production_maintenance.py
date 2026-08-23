@@ -132,6 +132,12 @@ class Command(BaseCommand):
             except Exception as exc:
                 self.stdout.write(self.style.WARNING(f"Article refresh skipped: {exc}"))
 
+            self.stdout.write("Applying GSC crawled-not-indexed fixes…")
+            try:
+                call_command("fix_gsc_crawled_not_indexed", stdout=self.stdout)
+            except Exception as exc:
+                self.stdout.write(self.style.WARNING(f"GSC indexing fix skipped: {exc}"))
+
         if options.get("prune_ai"):
             self.stdout.write("Pruning non-IT-impact AI news…")
             try:

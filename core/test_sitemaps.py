@@ -7,7 +7,7 @@ from content.seo_redirects import (
     ARTICLE_SITEMAP_EXCLUDE_SLUGS,
     MIN_INDEXABLE_CATEGORY_ARTICLES,
 )
-from core.sitemaps import ArticleSitemap, AuthorSitemap, CategorySitemap, StaticViewSitemap, ToolSitemap
+from core.sitemaps import ArticleSitemap, AuthorSitemap, CategorySitemap, StaticViewSitemap, ToolSitemap, AITagSitemap
 
 
 class SitemapHygieneTests(TestCase):

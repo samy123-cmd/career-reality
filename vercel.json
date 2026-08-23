@@ -117,6 +117,36 @@
             "permanent": true
         },
         {
+            "source": "/ai/tag/open-source/",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
+            "source": "/ai/tag/open-source",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
+            "source": "/ai/tag/model-release/",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
+            "source": "/ai/tag/model-release",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
+            "source": "/ai/tag/benchmark/",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
+            "source": "/ai/tag/benchmark",
+            "destination": "https://www.careerreality.in/ai/",
+            "permanent": true
+        },
+        {
             "source": "/category/learning/",
             "destination": "https://www.careerreality.in/category/career-strategy/",
             "permanent": true

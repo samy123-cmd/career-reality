@@ -31,11 +31,11 @@ class CanonicalHostRedirectMiddleware:
 
 class AbsoluteRedirectLocationMiddleware:
     """
-    Rewrite APPEND_SLASH-style relative Locations to absolute canonical URLs.
+    Rewrite relative Location headers on permanent redirects to absolute canonical URLs.
 
-    GSC "Redirect error" samples were no-trailing-slash article URLs. Relative
-    Locations plus host/protocol hops can confuse crawlers; absolute 301 targets
-    keep the final URL explicit. Other app redirects (e.g. post-login "/") are left alone.
+    GSC samples included no-trailing-slash URLs and duplicate-topic 301s with
+    relative Locations (/article/.../). Absolute targets avoid host/protocol hops
+    and help Google consolidate signals onto the canonical URL.
     """
 
     def __init__(self, get_response):
@@ -43,19 +43,10 @@ class AbsoluteRedirectLocationMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if response.status_code not in (301, 302, 307, 308):
+        if response.status_code not in (301, 308):
             return response
         location = response.get("Location")
         if not location or not location.startswith("/"):
-            return response
-
-        path = request.path or ""
-        location_path = location.split("?", 1)[0]
-        is_trailing_slash_fix = (
-            not path.endswith("/")
-            and location_path == f"{path}/"
-        )
-        if not is_trailing_slash_fix:
             return response
 
         base = getattr(settings, "CANONICAL_BASE_URL", "").rstrip("/")

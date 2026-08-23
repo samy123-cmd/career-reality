@@ -209,9 +209,9 @@ def ai_news_by_tag(request, slug):
     items = indexable_ai_news_queryset().filter(tags=tag).prefetch_related(TAG_PREFETCH)
 
     paginator = Paginator(items, 15)
-    # Empty tag archives used to 404 and linger in GSC as crawled-not-indexed.
-    # Consolidate crawl signals onto the hub instead.
-    if paginator.count == 0:
+    # Empty or thin tag archives linger in GSC as crawled-not-indexed noindex pages.
+    # Consolidate crawl signals onto the hub instead (matches career-impact index gate).
+    if paginator.count < 3:
         return HttpResponsePermanentRedirect(reverse("ai_news_hub"))
     return _ai_news_by_tag_cached(request, slug)
 
@@ -222,7 +222,7 @@ def _ai_news_by_tag_cached(request, slug):
     items = indexable_ai_news_queryset().filter(tags=tag).prefetch_related(TAG_PREFETCH)
 
     paginator = Paginator(items, 15)
-    if paginator.count == 0:
+    if paginator.count < 3:
         from django.http import HttpResponsePermanentRedirect
         from django.urls import reverse
 
@@ -237,8 +237,7 @@ def _ai_news_by_tag_cached(request, slug):
         "professionals in India. Hiring, delivery, and workplace impact only."
     )
 
-    # Noindex thin tag pages to avoid AdSense "low value content" flag
-    meta_robots = "noindex, follow" if paginator.count < 3 else "index, follow"
+    meta_robots = "index, follow"
     tag_intro = (
         f"This AI Pulse archive collects workplace-impact updates tagged {tag.name}. "
         "Each brief focuses on Indian IT hiring, delivery model changes, skills, and "

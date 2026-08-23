@@ -8,7 +8,7 @@ from content.seo_redirects import (
     indexable_categories_queryset,
 )
 from ainews.indexing import indexable_ai_news_queryset, item_is_indexable
-from ainews.models import AINewsItem
+from ainews.models import AINewsItem, AITag, AITag
 from companies.models import Company
 from companies.indexing import indexable_companies_queryset
 
@@ -50,6 +50,23 @@ class AINewsSitemap(Sitemap):
 
     def lastmod(self, obj):
         return obj.reviewed_at or obj.published_at
+
+
+class AITagSitemap(Sitemap):
+    """Tag archives with 3+ indexable AI Pulse items (matches ai_news_by_tag gate)."""
+    changefreq = "weekly"
+    priority = 0.55
+
+    def items(self):
+        tags = []
+        for tag in AITag.objects.only("id", "name", "slug").order_by("slug"):
+            count = indexable_ai_news_queryset().filter(tags=tag).count()
+            if count >= 3:
+                tags.append(tag)
+        return tags
+
+    def location(self, obj):
+        return reverse("ai_news_by_tag", kwargs={"slug": obj.slug})
 
 
 class StaticViewSitemap(Sitemap):
@@ -138,5 +155,6 @@ SITEMAPS = {
     "authors": AuthorSitemap,
     "static": StaticViewSitemap,
     "ainews": AINewsSitemap,
+    "ai_tags": AITagSitemap,
     "companies": CompanySitemap,
 }

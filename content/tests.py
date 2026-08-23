@@ -273,23 +273,27 @@ class ArticleCanonicalRedirectTests(TestCase):
         )
 
     def test_duplicate_slug_returns_301_to_canonical(self):
-        response = self.client.get(
-            reverse("article_detail", kwargs={"slug": self.duplicate.slug})
-        )
+        with self.settings(CANONICAL_BASE_URL="https://www.careerreality.in"):
+            response = self.client.get(
+                reverse("article_detail", kwargs={"slug": self.duplicate.slug})
+            )
         self.assertEqual(response.status_code, 301)
         self.assertEqual(
             response["Location"],
-            reverse("article_detail", kwargs={"slug": self.canonical.slug}),
+            "https://www.careerreality.in"
+            + reverse("article_detail", kwargs={"slug": self.canonical.slug}),
         )
 
     def test_duplicate_og_image_redirects_to_canonical(self):
-        response = self.client.get(
-            reverse("article_og_image", kwargs={"slug": self.duplicate.slug})
-        )
+        with self.settings(CANONICAL_BASE_URL="https://www.careerreality.in"):
+            response = self.client.get(
+                reverse("article_og_image", kwargs={"slug": self.duplicate.slug})
+            )
         self.assertEqual(response.status_code, 301)
         self.assertEqual(
             response["Location"],
-            reverse("article_og_image", kwargs={"slug": self.canonical.slug}),
+            "https://www.careerreality.in"
+            + reverse("article_og_image", kwargs={"slug": self.canonical.slug}),
         )
 
     def test_canonical_slug_renders_200(self):
@@ -344,7 +348,8 @@ class ArticleCanonicalRedirectTests(TestCase):
             self.assertEqual(response.status_code, 301, msg=loser)
             self.assertEqual(
                 response["Location"],
-                reverse("article_detail", kwargs={"slug": winner}),
+                "https://www.careerreality.in"
+                + reverse("article_detail", kwargs={"slug": winner}),
                 msg=loser,
             )
 
@@ -470,5 +475,6 @@ class CategoryIndexabilityTests(TestCase):
         self.assertEqual(response.status_code, 301)
         self.assertEqual(
             response.url,
-            reverse("category_detail", kwargs={"slug": "software-engineering"}),
+            "https://www.careerreality.in"
+            + reverse("category_detail", kwargs={"slug": "software-engineering"}),
         )

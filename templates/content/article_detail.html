@@ -14,7 +14,7 @@
     "@type": "Article",
     "headline": "{{ article.title|escapejs }}",
     "description": "{{ article.meta_description|escapejs }}",
-    "image": "{{ request.build_absolute_uri|slice:':-1' }}{% url 'article_og_image' article.slug %}",
+    "image": "{{ site_base_url }}{% url 'article_og_image' article.slug %}",
     "author": {
         "@type": "Person",
         "name": "{{ article.author.display_name|escapejs }}",
