@@ -1,90 +1,42 @@
 /* ==========================================================================
-   Career Reality Design System — CSS Custom Properties & Base Components
+   Career Reality Design System — Base Components
+   Color tokens live in themes.css. This file defines primitives only.
    ========================================================================== */
 
 :root {
-    /* Brand Colors */
-    --cr-black: #0f172a;
-    --cr-black-light: #1e293b;
-    --cr-white: #ffffff;
-    --cr-gray-50: #f8fafc;
-    --cr-gray-100: #f1f5f9;
-    --cr-gray-200: #e2e8f0;
-    --cr-gray-300: #cbd5e1;
-    --cr-gray-400: #94a3b8;
-    --cr-gray-500: #64748b;
-    --cr-gray-600: #475569;
-    --cr-gray-700: #334155;
-    --cr-gray-800: #1e293b;
-    --cr-gray-900: #0f172a;
+    /* Spacing Scale (component-local; layout uses style-core --space-*) */
+    --ds-space-xs: 0.25rem;
+    --ds-space-sm: 0.5rem;
+    --ds-space-md: 1rem;
+    --ds-space-lg: 1.5rem;
+    --ds-space-xl: 2rem;
+    --ds-space-2xl: 3rem;
+    --ds-space-3xl: 4rem;
 
-    /* Accent Colors */
-    --cr-blue: #38bdf8;
-    --cr-blue-dark: #0ea5e9;
-    --cr-red: #ef4444;
-    --cr-red-dark: #dc2626;
-    --cr-green: #22c55e;
-    --cr-green-dark: #166534;
-    --cr-amber: #f59e0b;
-    --cr-purple: #a78bfa;
-
-    /* Semantic Colors */
-    --cr-success-bg: #dcfce7;
-    --cr-success-text: #166534;
-    --cr-warning-bg: #fef3c7;
-    --cr-warning-text: #92400e;
-    --cr-danger-bg: #fef2f2;
-    --cr-danger-text: #991b1b;
-    --cr-info-bg: #dbeafe;
-    --cr-info-text: #1e40af;
-
-    /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-    /* Spacing Scale */
-    --space-xs: 0.25rem;
-    --space-sm: 0.5rem;
-    --space-md: 1rem;
-    --space-lg: 1.5rem;
-    --space-xl: 2rem;
-    --space-2xl: 3rem;
-    --space-3xl: 4rem;
-
-    /* Border Radius */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
+    /* Fallbacks if themes.css not loaded */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 14px;
     --radius-full: 9999px;
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
-    --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.04);
-
-    /* Transitions */
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
     --transition-fast: 0.15s ease;
-    --transition-normal: 0.25s ease;
+    --transition-normal: 0.18s ease;
 }
-
-/* ==========================================================================
-   Base Reset & Global Styles
-   ========================================================================== */
 
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
     font-family: var(--font-sans);
-    color: var(--cr-gray-600, #a1a1aa);
+    color: var(--text-secondary, var(--cr-text-secondary));
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* ==========================================================================
-   Component: Buttons
+   Buttons — understated, premium
    ========================================================================== */
 
 .btn {
@@ -92,106 +44,139 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.65rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    border: none;
+    font-family: var(--font-sans);
+    border: 1px solid transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
     line-height: 1.4;
 }
 
 .btn-primary {
-    background: var(--cr-black);
-    color: var(--cr-white);
+    background: var(--text-primary, var(--cr-text));
+    color: var(--background, var(--cr-page));
+    border-color: var(--text-primary, var(--cr-text));
 }
-.btn-primary:hover { background: var(--cr-black-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-primary:hover {
+    background: var(--text-secondary, var(--cr-text-secondary));
+    border-color: var(--text-secondary, var(--cr-text-secondary));
+    color: var(--background, var(--cr-page));
+}
 
 .btn-secondary {
-    background: var(--cr-gray-100);
-    color: var(--cr-black);
-    border: 1px solid var(--cr-gray-200);
+    background: transparent;
+    color: var(--text-primary, var(--cr-text));
+    border: 1px solid var(--border, var(--cr-border));
 }
-.btn-secondary:hover { background: var(--cr-gray-200); }
+.btn-secondary:hover {
+    background: var(--surface-muted, var(--cr-surface-2));
+    border-color: var(--border, var(--cr-border));
+}
+
+.btn-accent {
+    background: var(--accent, var(--cr-accent));
+    color: #fff;
+    border-color: var(--accent, var(--cr-accent));
+}
+.btn-accent:hover {
+    background: var(--accent-hover, var(--cr-accent-hover));
+    border-color: var(--accent-hover, var(--cr-accent-hover));
+    color: #fff;
+}
 
 .btn-danger {
-    background: var(--cr-red);
-    color: var(--cr-white);
+    background: var(--danger, var(--cr-danger));
+    color: #fff;
+    border-color: var(--danger, var(--cr-danger));
 }
-.btn-danger:hover { background: var(--cr-red-dark); }
+.btn-danger:hover { opacity: 0.92; }
 
-.btn-sm { padding: 0.4rem 1rem; font-size: 0.85rem; }
-.btn-lg { padding: 0.85rem 2rem; font-size: 1.1rem; }
+.btn-sm { padding: 0.35rem 0.85rem; font-size: 0.8rem; }
+.btn-lg { padding: 0.75rem 1.5rem; font-size: 1rem; }
 
 /* ==========================================================================
-   Component: Cards
+   Cards — hairline borders, restrained radius
    ========================================================================== */
 
 .card {
-    background: var(--cr-white);
-    border: 1px solid var(--cr-gray-200);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    transition: box-shadow var(--transition-normal), transform var(--transition-fast);
+    background: var(--surface, var(--cr-surface));
+    border: 1px solid var(--border, var(--cr-border));
+    border-radius: var(--radius-md);
+    padding: var(--ds-space-lg);
+    box-shadow: none;
+    transition: border-color var(--transition-normal);
 }
 
 .card-hover:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
+    border-color: var(--text-tertiary, var(--cr-text-muted));
+    box-shadow: var(--shadow-sm);
+    transform: none;
 }
 
 .card-dark {
-    background: var(--cr-black);
-    border-color: var(--cr-gray-700);
-    color: var(--cr-white);
+    background: var(--surface-muted, var(--cr-surface-2));
+    border-color: var(--border, var(--cr-border));
+    color: var(--text-primary, var(--cr-text));
 }
 
 /* ==========================================================================
-   Component: Badges / Tags
+   Badges — semantic, muted, less pill-like
    ========================================================================== */
 
 .badge {
     display: inline-flex;
     align-items: center;
-    padding: 2px 10px;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
     font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     line-height: 1.6;
+    border: 1px solid transparent;
 }
 
-.badge-success { background: var(--cr-success-bg); color: var(--cr-success-text); }
-.badge-warning { background: var(--cr-warning-bg); color: var(--cr-warning-text); }
-.badge-danger  { background: var(--cr-danger-bg);  color: var(--cr-danger-text);  }
-.badge-info    { background: var(--cr-info-bg);    color: var(--cr-info-text);    }
-.badge-neutral { background: var(--cr-gray-100);   color: var(--cr-gray-600);     }
+.badge-success { background: var(--cr-success-bg); color: var(--cr-success-text); border-color: color-mix(in srgb, var(--success) 25%, transparent); }
+.badge-warning { background: var(--cr-warning-bg); color: var(--cr-warning-text); border-color: color-mix(in srgb, var(--warning) 25%, transparent); }
+.badge-danger  { background: var(--cr-danger-bg);  color: var(--cr-danger-text);  border-color: color-mix(in srgb, var(--danger) 25%, transparent); }
+.badge-info    { background: var(--cr-info-bg);    color: var(--cr-info-text);    border-color: color-mix(in srgb, var(--info) 25%, transparent); }
+.badge-neutral { background: var(--surface-muted); color: var(--text-secondary); border-color: var(--border-subtle); }
 
 /* ==========================================================================
-   Component: Form Inputs
+   Form Inputs
    ========================================================================== */
 
 .input {
     width: 100%;
     padding: 0.65rem 0.9rem;
     font-size: 0.95rem;
-    border: 1px solid var(--cr-gray-300);
+    font-family: var(--font-sans);
+    border: 1px solid var(--border, var(--cr-border));
     border-radius: var(--radius-md);
-    background: var(--cr-white);
-    color: var(--cr-gray-900);
+    background: var(--surface, var(--cr-surface));
+    color: var(--text-primary, var(--cr-text));
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .input:focus {
     outline: none;
-    border-color: var(--cr-blue-dark);
-    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+    border-color: var(--accent, var(--cr-accent));
+    box-shadow: 0 0 0 3px var(--accent-soft, var(--cr-accent-dim));
 }
 
-.input::placeholder { color: var(--cr-gray-400); }
+.input::placeholder { color: var(--text-tertiary, var(--cr-text-muted)); }
 
-select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.8rem center; padding-right: 2.5rem; }
+select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%85827A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    padding-right: 2.5rem;
+}
 
 textarea.input { resize: vertical; min-height: 80px; }
 
@@ -200,58 +185,91 @@ textarea.input { resize: vertical; min-height: 80px; }
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 0.3rem;
-    color: var(--cr-gray-700);
+    color: var(--text-primary, var(--cr-text));
 }
 
 .form-help {
     font-size: 0.8rem;
-    color: var(--cr-gray-500);
+    color: var(--text-tertiary, var(--cr-text-muted));
     margin-top: 0.2rem;
 }
 
 /* ==========================================================================
-   Component: Stat Cards
+   Stat / Score — analytical, not KPI theater
    ========================================================================== */
 
 .stat-block {
-    background: var(--cr-gray-50);
+    background: transparent;
+    border: 1px solid var(--border-subtle, var(--cr-border));
     border-radius: var(--radius-md);
-    padding: var(--space-md);
-    text-align: center;
+    padding: var(--ds-space-md);
+    text-align: left;
 }
 
 .stat-block .stat-value {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--cr-black);
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary, var(--cr-text));
     line-height: 1.2;
+    font-variant-numeric: tabular-nums;
 }
 
 .stat-block .stat-label {
     font-size: 0.8rem;
-    color: var(--cr-gray-500);
-    margin-top: 0.2rem;
+    color: var(--text-tertiary, var(--cr-text-muted));
+    margin-top: 0.35rem;
 }
 
-/* ==========================================================================
-   Component: Score Bars
-   ========================================================================== */
+.score-meter {
+    display: grid;
+    gap: 0.4rem;
+}
 
+.score-meter__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.score-meter__value {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.score-meter__track,
 .progress-bar {
-    background: var(--cr-gray-100);
-    border-radius: var(--radius-sm);
-    height: 8px;
+    background: var(--surface-muted, var(--cr-surface-2));
+    border-radius: 2px;
+    height: 6px;
     overflow: hidden;
+    border: 1px solid var(--border-subtle, var(--cr-border));
 }
 
+.score-meter__fill,
 .progress-bar-fill {
     height: 100%;
-    border-radius: var(--radius-sm);
-    transition: width 0.6s ease;
+    border-radius: 1px;
+    background: var(--text-primary, var(--cr-text));
+    transition: width 0.4s ease;
+}
+
+.score-meter__fill--accent { background: var(--accent); }
+.score-meter__fill--success { background: var(--success); }
+.score-meter__fill--warning { background: var(--warning); }
+.score-meter__fill--danger { background: var(--danger); }
+
+.score-meter__caption {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
 }
 
 /* ==========================================================================
-   Component: Tables (Responsive)
+   Tables
    ========================================================================== */
 
 .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -265,45 +283,54 @@ textarea.input { resize: vertical; min-height: 80px; }
 .table th {
     text-align: left;
     padding: 0.7rem 0.6rem;
-    background: var(--cr-gray-50);
-    border-bottom: 2px solid var(--cr-gray-200);
-    font-size: 0.8rem;
+    background: var(--surface-muted);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--cr-gray-500);
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
     font-weight: 600;
+    font-family: var(--font-sans);
 }
 
 .table td {
     padding: 0.7rem 0.6rem;
-    border-bottom: 1px solid var(--cr-gray-100);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
 }
 
-.table tbody tr:hover { background: var(--cr-gray-50); }
+.table td.num,
+.table .mono-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+.table tbody tr:hover { background: var(--surface-muted); }
 
 /* ==========================================================================
-   Utility Classes
+   Utilities
    ========================================================================== */
 
-.text-muted { color: var(--cr-gray-500); }
+.text-muted { color: var(--text-tertiary); }
 .text-small { font-size: 0.85rem; }
 .text-xs { font-size: 0.75rem; }
 .text-center { text-align: center; }
-.font-bold { font-weight: 700; }
-.font-black { font-weight: 900; }
+.font-bold { font-weight: 600; }
+.font-display { font-family: var(--font-display); }
 
 .mt-0 { margin-top: 0; }
-.mt-1 { margin-top: var(--space-md); }
-.mt-2 { margin-top: var(--space-xl); }
+.mt-1 { margin-top: var(--ds-space-md); }
+.mt-2 { margin-top: var(--ds-space-xl); }
 .mb-0 { margin-bottom: 0; }
-.mb-1 { margin-bottom: var(--space-md); }
-.mb-2 { margin-bottom: var(--space-xl); }
+.mb-1 { margin-bottom: var(--ds-space-md); }
+.mb-2 { margin-bottom: var(--ds-space-xl); }
 
 .flex { display: flex; }
 .flex-wrap { flex-wrap: wrap; }
 .items-center { align-items: center; }
-.gap-1 { gap: var(--space-md); }
-.gap-half { gap: var(--space-sm); }
+.gap-1 { gap: var(--ds-space-md); }
+.gap-half { gap: var(--ds-space-sm); }
 
 .grid { display: grid; }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -315,7 +342,7 @@ textarea.input { resize: vertical; min-height: 80px; }
         --touch-min: 44px;
         --mobile-gap: 12px;
         --mobile-section-pad: 32px 0;
-        --mobile-card-radius: 14px;
+        --mobile-card-radius: 10px;
     }
 
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -323,22 +350,15 @@ textarea.input { resize: vertical; min-height: 80px; }
     .mobile-hide { display: none !important; }
 }
 
-/* ==========================================================================
-   Component: Section Headers
-   ========================================================================== */
-
 .section-header {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--cr-black);
-    margin: var(--space-xl) 0 var(--space-md);
-    padding-bottom: var(--space-sm);
-    border-bottom: 2px solid var(--cr-gray-100);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--ds-space-xl) 0 var(--ds-space-md);
+    padding-bottom: var(--ds-space-sm);
+    border-bottom: 1px solid var(--border);
 }
-
-/* ==========================================================================
-   Component: Search Bar (Global)
-   ========================================================================== */
 
 .global-search {
     display: flex;
@@ -351,34 +371,35 @@ textarea.input { resize: vertical; min-height: 80px; }
 .global-search input {
     flex: 1;
     padding: 0.5rem 0.8rem;
-    border: 1px solid var(--cr-gray-300);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md) 0 0 var(--radius-md);
     font-size: 0.85rem;
     outline: none;
+    background: var(--surface);
+    color: var(--text-primary);
 }
 
-.global-search input:focus { border-color: var(--cr-blue-dark); }
+.global-search input:focus { border-color: var(--accent); }
 
 .global-search button {
     padding: 0.5rem 0.8rem;
-    background: var(--cr-black);
-    color: var(--cr-white);
-    border: 1px solid var(--cr-black);
+    background: var(--text-primary);
+    color: var(--background);
+    border: 1px solid var(--text-primary);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
     cursor: pointer;
     font-size: 0.85rem;
 }
 
-/* Autocomplete dropdown */
 .search-suggestions {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--cr-white);
-    border: 1px solid var(--cr-gray-200);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     z-index: 100;
     display: none;
     max-height: 320px;
@@ -393,17 +414,47 @@ textarea.input { resize: vertical; min-height: 80px; }
     gap: 0.6rem;
     padding: 0.6rem 0.8rem;
     text-decoration: none;
-    color: var(--cr-gray-900);
+    color: var(--text-primary);
     font-size: 0.85rem;
-    border-bottom: 1px solid var(--cr-gray-50);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
-.search-suggestion:hover { background: var(--cr-gray-50); }
+.search-suggestion:hover { background: var(--surface-muted); }
 .search-suggestion .sug-type {
     font-size: 0.65rem;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 600;
     padding: 1px 6px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
+    background: var(--surface-muted);
+    color: var(--text-tertiary);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Mobile appearance options in drawer */
+.mobile-appearance-section {
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+}
+
+.mobile-appearance-section .cr-option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.mobile-appearance-section label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.mobile-appearance-section input {
+    accent-color: var(--accent);
 }

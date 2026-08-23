@@ -85,167 +85,169 @@
 <section class="hp-hero">
     <div class="hp-hero-inner container-wide">
         <div class="hp-hero-content">
-            <div class="hp-hero-badge">India's Most Honest Career Platform</div>
-            <h1 class="hp-hero-title">
-                Stop guessing.<br>
-                <span class="hp-hero-accent">Know the reality.</span>
-            </h1>
+            <p class="hp-hero-kicker">CareerReality</p>
+            <h1 class="hp-hero-title">Know what your career is really worth.</h1>
             <p class="hp-hero-sub">
-                Data-backed salary truths, company intelligence, and career
-                risk analysis for Indian tech professionals.
+                Salary intelligence, company risk and career decisions for India's professionals.
             </p>
             <div class="hp-hero-actions">
-                <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">
-                    <span>🧮</span> CTC Calculator
-                </a>
-                <a href="{% url 'analyzer_home' %}" class="hp-btn hp-btn--ghost">
-                    <span>🎯</span> Analyze Risk
-                </a>
-            </div>
-            <div class="hp-hero-proof">
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ assessment_count }}</span>
-                    <span class="hp-hero-stat-label">risk assessments run</span>
-                </div>
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ salary_count }}</span>
-                    <span class="hp-hero-stat-label">salary data points</span>
-                </div>
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ layoff_count }}</span>
-                    <span class="hp-hero-stat-label">layoff reports tracked</span>
-                </div>
-            </div>
-        </div>
-        <div class="hp-hero-visual">
-            <div class="hp-index-card">
-                <div class="hp-index-header">
-                    <span class="hp-index-dot"></span>
-                    Career Reality Index
-                    <span class="hp-index-live">LIVE</span>
-                </div>
-                <div class="hp-index-month">{{ latest_index_row.month }}</div>
-                <div class="hp-index-score">{{ latest_index_row.overall }}<small>/100</small></div>
-                <div class="hp-index-band hp-index-band--{{ latest_band|slugify }}">{{ latest_band }}</div>
-                <div class="hp-index-meters">
-                    <div class="hp-meter">
-                        <div class="hp-meter-label">Salary Pressure</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
-                        <div class="hp-meter-val">{{ latest_index_row.salary_pressure }}</div>
-                    </div>
-                    <div class="hp-meter">
-                        <div class="hp-meter-label">Switch Difficulty</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
-                        <div class="hp-meter-val">{{ latest_index_row.switch_difficulty }}</div>
-                    </div>
-                    <div class="hp-meter">
-                        <div class="hp-meter-label">Layoff Risk</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill hp-meter-fill--warn" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
-                        <div class="hp-meter-val">{{ latest_index_row.layoff_risk }}</div>
-                    </div>
-                </div>
-                <a href="{% url 'career_reality_index' %}" class="hp-index-link">View full methodology →</a>
+                <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">Check My Career Reality</a>
+                <a href="{% url 'salary_reality' %}" class="hp-btn hp-btn--ghost">Explore Salary Data</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════ LIVE SALARY TICKER ═══════════════ -->
-<div class="hp-ticker" id="salary-ticker-container">
-    <div class="hp-ticker-label">Live</div>
-    <div class="hp-ticker-track" id="salary-ticker-content">
-        {% if salary_ticker_items %}
-            {% for item in salary_ticker_items %}
-            <span class="hp-ticker-item">
-                <span class="hp-ticker-role">{{ item.role }}</span>
-                <span class="hp-ticker-sep" aria-hidden="true">·</span>
-                <span class="hp-ticker-meta">{{ item.exp }}, {{ item.city }}</span>
-                <span class="hp-ticker-ctc">{{ item.ctc }}</span>
-            </span>
-            {% endfor %}
-        {% else %}
-            <span class="hp-ticker-placeholder">
-                No submissions yet —
-                <a href="{% url 'submit_salary' %}">drop your salary</a>
-            </span>
-        {% endif %}
+<!-- ═══════════════ CAREER REALITY INDEX ═══════════════ -->
+{% if latest_index_row %}
+<section class="hp-index container-wide">
+    <div class="hp-index-panel">
+        <header class="hp-index-top">
+            <div>
+                <p class="hp-section-kicker">Career Reality Index</p>
+                <h2 class="hp-index-heading">{{ latest_index_row.month }}</h2>
+            </div>
+            <div class="hp-index-score-block">
+                <span class="hp-index-score">{{ latest_index_row.overall }}</span>
+                <span class="hp-index-score-denom">/ 100</span>
+                <span class="hp-index-band">{{ latest_band }}</span>
+            </div>
+        </header>
+        <div class="hp-index-meters">
+            <div class="score-meter">
+                <div class="score-meter__label">
+                    <span>Salary Pressure</span>
+                    <span class="score-meter__value">{{ latest_index_row.salary_pressure }}</span>
+                </div>
+                <div class="score-meter__track"><div class="score-meter__fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
+            </div>
+            <div class="score-meter">
+                <div class="score-meter__label">
+                    <span>Switch Difficulty</span>
+                    <span class="score-meter__value">{{ latest_index_row.switch_difficulty }}</span>
+                </div>
+                <div class="score-meter__track"><div class="score-meter__fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
+            </div>
+            <div class="score-meter">
+                <div class="score-meter__label">
+                    <span>Layoff Risk</span>
+                    <span class="score-meter__value">{{ latest_index_row.layoff_risk }}</span>
+                </div>
+                <div class="score-meter__track"><div class="score-meter__fill score-meter__fill--warning" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
+            </div>
+        </div>
+        <footer class="hp-index-foot">
+            <span class="hp-index-meta">Based on assessments, salary submissions, and layoff signals tracked on CareerReality.</span>
+            <a href="{% url 'career_reality_index' %}" class="hp-index-link">Methodology</a>
+        </footer>
     </div>
-</div>
+</section>
+{% endif %}
+
+<!-- ═══════════════ LIVE SALARY MARKET ═══════════════ -->
+<section class="hp-market container-wide">
+    <header class="hp-market-header">
+        <p class="hp-section-kicker">Live Salary Market</p>
+        <h2 class="hp-section-title">Recent salary signals</h2>
+    </header>
+    <div class="hp-ticker" id="salary-ticker-container">
+        <div class="hp-ticker-track" id="salary-ticker-content">
+            {% if salary_ticker_items %}
+                {% for item in salary_ticker_items %}
+                <span class="hp-ticker-item">
+                    <span class="hp-ticker-role">{{ item.role }}</span>
+                    <span class="hp-ticker-sep" aria-hidden="true">·</span>
+                    <span class="hp-ticker-meta">{{ item.exp }}, {{ item.city }}</span>
+                    <span class="hp-ticker-ctc">{{ item.ctc }}</span>
+                </span>
+                {% endfor %}
+            {% else %}
+                <span class="hp-ticker-placeholder">
+                    No submissions yet —
+                    <a href="{% url 'submit_salary' %}">drop your salary</a>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+    <p class="hp-market-proof">
+        <span class="mono-num">{{ salary_count }}</span> salary data points ·
+        <span class="mono-num">{{ assessment_count }}</span> risk assessments ·
+        <span class="mono-num">{{ layoff_count }}</span> layoff reports
+    </p>
+</section>
+
+<!-- ═══════════════ DECISION QUESTIONS ═══════════════ -->
+<section class="hp-questions container-wide">
+    <header class="hp-questions-header">
+        <p class="hp-section-kicker">Decision desk</p>
+        <h2 class="hp-section-title">What are you trying to figure out?</h2>
+    </header>
+    <ul class="hp-question-list">
+        <li><a href="{% url 'salary_reality' %}">Am I underpaid?</a></li>
+        <li><a href="{% url 'analyzer_home' %}">Should I switch?</a></li>
+        <li><a href="{% url 'company_directory' %}">Is my company safe?</a></li>
+        <li><a href="{% url 'salary_calculator' %}">Should I accept this offer?</a></li>
+        <li><a href="{% url 'ai_news_hub' %}">Will AI affect my role?</a></li>
+        <li><a href="{% url 'topic_clusters' %}">What should I learn?</a></li>
+    </ul>
+</section>
 
 <!-- ═══════════════ TOOLS ═══════════════ -->
 <section class="hp-section container-wide">
     <div class="hp-tools">
         <header class="hp-tools-header">
-            <span class="hp-tools-eyebrow">Free career tools</span>
+            <p class="hp-section-kicker">Tools</p>
             <h2 class="hp-tools-title">Decide with numbers, not folklore</h2>
             <p class="hp-tools-sub">Offer math, resignation risk, layoff signals, and salary medians — built for Indian tech careers.</p>
         </header>
         <div class="hp-tools-panel" role="list">
             <a href="{% url 'salary_calculator' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">01</span>
-                <span class="hp-tool-mark hp-tool-mark--ctc" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
                     <span class="hp-tool-name">CTC Decoder</span>
                     <span class="hp-tool-desc">Convert CTC into real in-hand with PF, gratuity, and tax logic.</span>
                 </span>
-                <span class="hp-tool-go" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+                <span class="hp-tool-go" aria-hidden="true">→</span>
             </a>
             <a href="{% url 'analyzer_home' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">02</span>
-                <span class="hp-tool-mark hp-tool-mark--risk" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
                     <span class="hp-tool-name">Resignation Risk Analyzer</span>
                     <span class="hp-tool-desc">Notice period, bonds, and HR pressure — before you resign.</span>
                 </span>
-                <span class="hp-tool-go" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+                <span class="hp-tool-go" aria-hidden="true">→</span>
             </a>
             <a href="{% url 'company_directory' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">03</span>
-                <span class="hp-tool-mark hp-tool-mark--company" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
-                    <span class="hp-tool-name">Company Intelligence <span class="hp-tool-badge">New</span></span>
+                    <span class="hp-tool-name">Company Intelligence</span>
                     <span class="hp-tool-desc">Reviews, salary signals, and culture notes across {{ company_count }} Indian employers.</span>
                 </span>
-                <span class="hp-tool-go" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+                <span class="hp-tool-go" aria-hidden="true">→</span>
             </a>
             <a href="{% url 'layoff_radar' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">04</span>
-                <span class="hp-tool-mark hp-tool-mark--radar" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
                     <span class="hp-tool-name">Layoff Radar</span>
                     <span class="hp-tool-desc">Hiring freezes, layoff signals, and stability scores.</span>
                 </span>
-                <span class="hp-tool-go" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+                <span class="hp-tool-go" aria-hidden="true">→</span>
             </a>
             <a href="{% url 'ai_news_hub' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">05</span>
-                <span class="hp-tool-mark hp-tool-mark--pulse" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
                     <span class="hp-tool-name">AI Pulse</span>
                     <span class="hp-tool-desc">AI developments that actually change hiring and role design.</span>
                 </span>
-                <span class="hp-tool-go" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+                <span class="hp-tool-go" aria-hidden="true">→</span>
             </a>
             <a href="{% url 'salary_reality' %}" class="hp-tool-row" role="listitem">
                 <span class="hp-tool-index" aria-hidden="true">06</span>
-                <span class="hp-tool-mark hp-tool-mark--salary" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
                     <span class="hp-tool-name">Salary Reality</span>
                     <span class="hp-tool-desc">What Indian tech actually pays — by role, city, and experience.</span>
                 </span>
-                <span class="hp-tool-go" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 9H14.5M14.5 9L9.5 4M14.5 9L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+                <span class="hp-tool-go" aria-hidden="true">→</span>
             </a>
         </div>
     </div>
@@ -258,7 +260,7 @@
             <h2 class="hp-drop-title">Help fix Indian salary opacity</h2>
             <p class="hp-drop-sub">Drop your real salary. Anonymous. Takes 30 seconds. Helps thousands make better decisions.</p>
         </div>
-        <a href="{% url 'submit_salary' %}" class="hp-btn hp-btn--white">+ Drop a Salary</a>
+        <a href="{% url 'submit_salary' %}" class="hp-btn hp-btn--ghost">Drop a Salary</a>
     </div>
 </section>
 
@@ -266,6 +268,7 @@
 {% if articles %}
 <section class="hp-editorial container-medium">
     <header class="hp-editorial-header">
+        <p class="hp-section-kicker">Editorial</p>
         <h2 class="hp-editorial-heading">Latest reality checks</h2>
         <p class="hp-editorial-lede">Evidence-backed analysis for Indian tech professionals.</p>
     </header>
@@ -277,7 +280,7 @@
             <a href="{% url 'article_detail' featured.slug %}">{{ featured.title }}</a>
         </h3>
         <p class="hp-editorial-featured-excerpt">{{ featured.common_expectation|striptags|truncatewords:28 }}</p>
-        <a href="{% url 'article_detail' featured.slug %}" class="hp-editorial-read">Read analysis →</a>
+        <a href="{% url 'article_detail' featured.slug %}" class="hp-editorial-read">Read analysis</a>
     </article>
     {% endwith %}
 
@@ -297,6 +300,7 @@
 {% else %}
 <section class="hp-editorial container-medium">
     <header class="hp-editorial-header">
+        <p class="hp-section-kicker">Editorial</p>
         <h2 class="hp-editorial-heading">Latest reality checks</h2>
         <p class="hp-editorial-lede">Evidence-backed analysis for Indian tech professionals.</p>
     </header>
@@ -307,7 +311,7 @@
             <a href="{% url 'topic_clusters' %}">Browse our reality-check library</a>
         </h3>
         <p class="hp-editorial-featured-excerpt">Deep dives on salary opacity, layoff risk, and career moves — written for Indian tech professionals, not recruiters.</p>
-        <a href="{% url 'topic_clusters' %}" class="hp-editorial-read">Explore topic clusters →</a>
+        <a href="{% url 'topic_clusters' %}" class="hp-editorial-read">Explore topic clusters</a>
     </article>
 
     <ol class="hp-editorial-list">
@@ -329,38 +333,28 @@
 </section>
 {% endif %}
 
-<!-- ═══════════════ PRO UPSELL ═══════════════ -->
+<!-- ═══════════════ PRO ═══════════════ -->
 <section class="hp-pro">
     <div class="container-medium hp-pro-inner">
         <div class="hp-pro-content">
-            <div class="hp-pro-badge">Career Reality Pro</div>
-            <h2 class="hp-pro-title">Get the full intelligence stack</h2>
+            <p class="hp-section-kicker">CareerReality Pro</p>
+            <h2 class="hp-pro-title">Deeper salary intelligence, saved career analysis and personalized market signals.</h2>
             <ul class="hp-pro-features">
-                <li>📊 Percentile salary benchmarks by role & city</li>
-                <li>🏢 Full company review access & comparisons</li>
-                <li>🎯 Priority tool access & saved analyses</li>
-                <li>📬 Weekly intel digest to your inbox</li>
+                <li>Percentile salary benchmarks by role and city</li>
+                <li>Full company review access and comparisons</li>
+                <li>Saved analyses and priority tool access</li>
+                <li>Weekly intelligence digest</li>
             </ul>
             <div class="hp-pro-actions">
-                <a href="{% url 'payments:pricing' %}" class="hp-btn hp-btn--primary">
-                    Start at ₹299/mo
-                </a>
-                <span class="hp-pro-note">Cancel anytime. No lock-in.</span>
+                <a href="{% url 'payments:pricing' %}" class="hp-btn hp-btn--primary">Explore Pro</a>
             </div>
         </div>
         <div class="hp-pro-visual">
-            <div class="hp-pro-mockup">
-                <div class="hp-pro-mockup-bar">
-                    <span class="hp-pro-mockup-dot" style="background:#ff5f57"></span>
-                    <span class="hp-pro-mockup-dot" style="background:#ffbd2e"></span>
-                    <span class="hp-pro-mockup-dot" style="background:#28c840"></span>
-                </div>
-                <div class="hp-pro-mockup-body">
-                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Your Percentile</span><span class="hp-pro-mockup-val">P72</span></div>
-                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Market Median</span><span class="hp-pro-mockup-val">₹18.5L</span></div>
-                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Growth Potential</span><span class="hp-pro-mockup-val hp-pro-mockup-val--green">+34%</span></div>
-                    <div class="hp-pro-mockup-row"><span class="hp-pro-mockup-label">Risk Score</span><span class="hp-pro-mockup-val hp-pro-mockup-val--amber">Medium</span></div>
-                </div>
+            <div class="hp-pro-sheet">
+                <div class="hp-pro-sheet-row"><span>Your percentile</span><span class="mono-num">72</span></div>
+                <div class="hp-pro-sheet-row"><span>Market median</span><span class="mono-num">₹18.5L</span></div>
+                <div class="hp-pro-sheet-row"><span>Growth potential</span><span class="mono-num">+34%</span></div>
+                <div class="hp-pro-sheet-row"><span>Risk reading</span><span>MEDIUM</span></div>
             </div>
         </div>
     </div>
@@ -369,7 +363,8 @@
 <!-- ═══════════════ TOPIC CLUSTERS ═══════════════ -->
 <section class="hp-section container-medium">
     <div class="hp-section-header">
-        <h2 class="hp-section-title">Browse by cluster</h2>
+        <p class="hp-section-kicker">Browse</p>
+        <h2 class="hp-section-title">Topic clusters</h2>
         <p class="hp-section-sub">Deep-dive topic areas we cover with pillar and supporting content.</p>
     </div>
     <div class="hp-clusters-grid">
@@ -377,7 +372,7 @@
         <a href="{% url cluster.pillar_url_name %}" class="hp-cluster-card">
             <h3>{{ cluster.name }}</h3>
             <p>{{ cluster.description }}</p>
-            <span class="hp-cluster-link">Explore →</span>
+            <span class="hp-cluster-link">Explore</span>
         </a>
         {% endfor %}
     </div>
@@ -396,17 +391,12 @@
     {% endfor %}
 </section>
 
-<!-- ═══════════════ NEWSLETTER CAPTURE ═══════════════ -->
+<!-- ═══════════════ NEWSLETTER ═══════════════ -->
 <section class="hp-newsletter">
     <div class="container-medium hp-newsletter-inner">
         <div class="hp-newsletter-copy">
             <h2 class="hp-newsletter-title">The Monday Reality Check</h2>
-            <p class="hp-newsletter-sub">One email a week. Salary data, layoff signals, and career moves that actually make sense for Indian tech. No recruiter spam. Ever.</p>
-            <ul class="hp-newsletter-proof">
-                <li>✓ {% if newsletter_count != "0" %}{{ newsletter_count }} subscribers{% else %}Free weekly digest{% endif %}</li>
-                <li>✓ Unsubscribe in one click</li>
-                <li>✓ No paid influence on editorial conclusions</li>
-            </ul>
+            <p class="hp-newsletter-sub">One email a week. Salary data, layoff signals, and career moves that actually make sense for Indian tech.</p>
         </div>
         <form class="hp-newsletter-form" action="{% url 'newsletter_signup' %}" method="post" id="home-newsletter-form">
             {% csrf_token %}
@@ -414,7 +404,7 @@
             <div class="hp-newsletter-field">
                 <input type="email" name="email" placeholder="your@email.com" required
                     class="hp-newsletter-input" autocomplete="email">
-                <button type="submit" class="hp-newsletter-btn">Get the Intel →</button>
+                <button type="submit" class="hp-newsletter-btn">Subscribe</button>
             </div>
         </form>
     </div>
@@ -492,43 +482,5 @@
         }
         localStorage.setItem(key, String(now));
     })();
-
-    (function () {
-        var elements = document.querySelectorAll('.reveal-on-scroll');
-        if (!elements.length) return;
-
-        function showAll() {
-            elements.forEach(function (el) {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
-        }
-
-        if (!('IntersectionObserver' in window)) {
-            showAll();
-            return;
-        }
-
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'none';
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.05 });
-
-        elements.forEach(function (el) { observer.observe(el); });
-    })();
 </script>
-<noscript>
-    <style>
-        .reveal-on-scroll {
-            opacity: 1 !important;
-            transform: none !important;
-        }
-    </style>
-</noscript>
 {% endblock %}

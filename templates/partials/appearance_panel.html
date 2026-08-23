@@ -1,0 +1,36 @@
+<div class="cr-appearance-panel" role="dialog" aria-label="Appearance and theme">
+    <h4>Appearance</h4>
+    <div class="cr-option-group" role="radiogroup" aria-label="Appearance">
+        <label>
+            <input type="radio" name="cr-appearance-{{ panel_suffix|default:'desk' }}" data-appearance-option="system" value="system">
+            System
+        </label>
+        <label>
+            <input type="radio" name="cr-appearance-{{ panel_suffix|default:'desk' }}" data-appearance-option="light" value="light">
+            Light
+        </label>
+        <label>
+            <input type="radio" name="cr-appearance-{{ panel_suffix|default:'desk' }}" data-appearance-option="dark" value="dark">
+            Dark
+        </label>
+    </div>
+    <h4>Theme</h4>
+    <div class="cr-option-group" role="radiogroup" aria-label="Theme">
+        <label>
+            <input type="radio" name="cr-palette-{{ panel_suffix|default:'desk' }}" data-palette-option="editorial-ink" value="editorial-ink">
+            Editorial Ink
+        </label>
+        <label>
+            <input type="radio" name="cr-palette-{{ panel_suffix|default:'desk' }}" data-palette-option="warm-copper" value="warm-copper">
+            Warm Copper
+        </label>
+        <label>
+            <input type="radio" name="cr-palette-{{ panel_suffix|default:'desk' }}" data-palette-option="midnight-navy" value="midnight-navy">
+            Midnight Navy
+        </label>
+        <label>
+            <input type="radio" name="cr-palette-{{ panel_suffix|default:'desk' }}" data-palette-option="olive-graphite" value="olive-graphite">
+            Olive Graphite
+        </label>
+    </div>
+</div>

@@ -248,7 +248,7 @@
     }
 
     .mobile-nav-link--highlight {
-        color: #d93025;
+        color: var(--danger);
         font-weight: 600;
     }
 
@@ -268,7 +268,7 @@
         align-items: center;
         justify-content: center;
         background: linear-gradient(135deg, var(--cr-text, #111) 0%, #333 100%);
-        color: var(--cr-page, #fff);
+        color: var(--cr-page, var(--surface));
         border-radius: 12px;
     }
 
@@ -317,7 +317,7 @@
     }
 
     .dock-item.is-active {
-        color: var(--c-blue-accent, #38bdf8);
+        color: var(--c-blue-accent, var(--accent));
     }
 
     .dock-item.is-active::after {
@@ -328,7 +328,7 @@
         transform: translateX(-50%);
         width: 24px;
         height: 3px;
-        background: var(--c-blue-accent, #38bdf8);
+        background: var(--c-blue-accent, var(--accent));
         border-radius: 0 0 3px 3px;
     }
 
@@ -466,8 +466,8 @@
 
     .more-sheet-link--pro {
         grid-column: 1 / -1;
-        background: linear-gradient(135deg, #111 0%, #333 100%);
-        color: #fff;
+        background: var(--text-primary);
+        color: var(--surface);
         border-color: transparent;
     }
 
@@ -569,8 +569,8 @@
     }
 
     .option-card:has(input:checked) {
-        border-color: var(--c-blue-accent, #38bdf8);
-        background: rgba(56, 189, 248, 0.08);
+        border-color: var(--c-blue-accent, var(--accent));
+        background: var(--accent-soft);
     }
 
     input[type="text"],
@@ -643,7 +643,7 @@
     }
 
     .progress-bar-segment.active {
-        background: var(--c-blue-accent, #38bdf8);
+        background: var(--c-blue-accent, var(--accent));
     }
 
     /* ── Analyzer wizard ── */
