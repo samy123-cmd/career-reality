@@ -218,8 +218,15 @@ def _key_takeaways(article):
         if len(s.split()) < 6:
             return ""
         if not re.search(r"[.!?]$", s):
-            s = s[:max_len] + ("." if len(s) >= max_len else "")
-        return s[:max_len] if len(s) > max_len else s
+            if len(s) >= max_len:
+                # Prefer word-boundary cut so UI does not truncate mid-word
+                cut = s[:max_len].rsplit(" ", 1)[0].rstrip(",;:")
+                s = (cut or s[:max_len]) + "."
+            # else leave as-is (short fragment without terminal punctuation)
+        if len(s) > max_len:
+            cut = s[:max_len].rsplit(" ", 1)[0].rstrip(",;:")
+            return (cut or s[:max_len]) + ("…" if len(s) > max_len else "")
+        return s
 
     # First takeaway: from the verdict (the article's core conclusion)
     s = _first_clean_sentence(article.verdict)

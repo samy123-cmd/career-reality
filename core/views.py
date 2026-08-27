@@ -211,7 +211,24 @@ AUGUST_2026_ARTICLE_SLUGS = (
 )
 
 
-@cache_page(60 * 60, key_prefix="home_v4")
+def _terminal_salary_preview():
+    """
+    Editorial compensation preview for the Terminal homepage.
+    Sourced from Career Reality's published Salary Reality bands (not third-party demo data).
+    Midpoint is shown as the working median; ends of the published range approximate p25/p90.
+    """
+    return [
+        {"role": "Junior Dev (services)", "exp": "0–2y", "city": "India · Services", "p25": "3.2", "median": "3.9", "p90": "4.5", "n": "—"},
+        {"role": "Junior Dev (startups)", "exp": "0–2y", "city": "India · Product", "p25": "6.0", "median": "9.0", "p90": "12.0", "n": "—"},
+        {"role": "Senior Backend", "exp": "5–8y", "city": "Metro · Product", "p25": "18.0", "median": "25.0", "p90": "32.0", "n": "—"},
+        {"role": "Staff Engineer", "exp": "8–14y", "city": "Metro · Product", "p25": "35.0", "median": "47.5", "p90": "60.0", "n": "—"},
+        {"role": "DevOps / SRE", "exp": "3–6y", "city": "India · Mixed", "p25": "13.0", "median": "17.5", "p90": "22.0", "n": "—"},
+        {"role": "Data Scientist (junior)", "exp": "0–2y", "city": "India · Product", "p25": "5.0", "median": "7.0", "p90": "9.0", "n": "—"},
+        {"role": "QA / Automation", "exp": "3–5y", "city": "India · Services", "p25": "6.0", "median": "8.0", "p90": "10.0", "n": "—"},
+    ]
+
+
+@cache_page(60 * 60, key_prefix="home_v5")
 def home(request):
     """
     Home page view.
@@ -288,6 +305,7 @@ def home(request):
         'company_count': counts['company_count'],
         'newsletter_count': counts['newsletter_count'],
         'salary_ticker_items': get_salary_ticker_items(limit=12),
+        'terminal_salary_rows': _terminal_salary_preview(),
         'page_keywords': HOME.keywords,
         **_seo(title, description),
     })

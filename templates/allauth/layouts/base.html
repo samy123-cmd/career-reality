@@ -1,0 +1,33 @@
+{% load i18n static %}
+<!DOCTYPE html>
+{% get_current_language as CURRENT_LANG %}
+<html lang="{% if CURRENT_LANG == 'hi' %}hi-IN{% else %}en-IN{% endif %}" class="theme-light" data-theme="light">
+<head>
+    <title>{% block head_title %}Account{% endblock %} — Career Reality</title>
+    <meta name="robots" content="noindex, nofollow">
+    {% include "partials/meta.html" %}
+    <script defer src="{% static 'js/theme.js' %}?v=2"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    {% include "partials/header.html" %}
+    {% if messages %}
+    <div class="cr-toast-stack" role="alert" aria-live="polite">
+        {% for message in messages %}
+        <div class="cr-toast cr-toast--{{ message.tags }}">
+            {{ message }}
+            <button class="cr-toast-close" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <main id="main">
+        {% block body %}
+            {% block content %}{% endblock content %}
+        {% endblock body %}
+    </main>
+    {% include "partials/footer.html" %}
+    <script defer src="{% static 'js/main.js' %}?v=2"></script>
+    {% block extra_body %}{% endblock %}
+</body>
+</html>

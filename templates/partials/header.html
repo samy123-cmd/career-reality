@@ -1,197 +1,100 @@
 <header class="site-header">
     <div class="container-wide nav-flex">
-        <!-- Brand -->
-        <a href="/" class="site-brand">
+        <a href="{% url 'home' %}" class="site-brand">
             <span class="brand-mark">CR</span>
             <span class="brand-wordmark">Career<span class="brand-accent">Reality</span></span>
         </a>
 
-        <!-- Primary Navigation -->
-        <nav class="site-nav" role="navigation" aria-label="Main">
-            <!-- Explore Mega-Dropdown -->
-            <div class="nav-dropdown">
-                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
-                    Explore
-                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </button>
-                <div class="nav-dropdown-content nav-mega" style="display:none;">
-                    <div class="mega-col">
-                        <div class="dropdown-header">Intelligence</div>
-                        <a href="{% url 'company_directory' %}">
-                            <span class="mega-icon">🏢</span>
-                            <span class="mega-label">
-                                <strong>Companies</strong>
-                                <small>Ratings, salaries & reviews for 35+ cos</small>
-                            </span>
-                        </a>
-                        <a href="{% url 'ai_news_hub' %}">
-                            <span class="mega-icon">⚡</span>
-                            <span class="mega-label">
-                                <strong>AI Pulse</strong>
-                                <small>AI news that actually affects your career</small>
-                            </span>
-                        </a>
-                        <a href="{% url 'career_reality_index' %}">
-                            <span class="mega-icon">📊</span>
-                            <span class="mega-label">
-                                <strong>Career Index</strong>
-                                <small>Monthly pressure tracker for Indian tech</small>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="mega-col">
-                        <div class="dropdown-header">Tools</div>
-                        <a href="{% url 'salary_calculator' %}">
-                            <span class="mega-icon">🧮</span>
-                            <span class="mega-label">
-                                <strong>CTC Calculator</strong>
-                                <small>Convert CTC to real in-hand salary</small>
-                            </span>
-                        </a>
-                        <a href="{% url 'analyzer_home' %}">
-                            <span class="mega-icon">🎯</span>
-                            <span class="mega-label">
-                                <strong>Risk Analyzer</strong>
-                                <small>Should you resign? Data-backed answer</small>
-                            </span>
-                        </a>
-                        <a href="{% url 'layoff_radar' %}">
-                            <span class="mega-icon">🚨</span>
-                            <span class="mega-label">
-                                <strong>Layoff Radar</strong>
-                                <small>Track layoff signals by company</small>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="mega-col">
-                        <div class="dropdown-header">Data</div>
-                        <a href="{% url 'salary_reality' %}">
-                            <span class="mega-icon">💰</span>
-                            <span class="mega-label">
-                                <strong>Salary Reality</strong>
-                                <small>What Indian tech actually pays</small>
-                            </span>
-                        </a>
-                        <a href="{% url 'submit_salary' %}" class="mega-highlight">
-                            <span class="mega-icon">+</span>
-                            <span class="mega-label">
-                                <strong>Drop a Salary</strong>
-                                <small>Anonymous. Takes 30 seconds.</small>
-                            </span>
-                        </a>
-                        <a href="{% url 'escape_plan' %}">
-                            <span class="mega-icon">🚀</span>
-                            <span class="mega-label">
-                                <strong>Escape Plan</strong>
-                                <small>Leave your service company</small>
-                            </span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <nav class="site-nav cr-primary-nav" role="navigation" aria-label="Main">
+            <a href="{% url 'home' %}" class="nav-link{% if request.resolver_match.url_name == 'home' %} is-active{% endif %}">Terminal</a>
+            <a href="{% url 'salary_reality' %}" class="nav-link{% if request.resolver_match.url_name == 'salary_reality' %} is-active{% endif %}">Salary explorer</a>
+            <a href="{% url 'salary_calculator' %}" class="nav-link{% if request.resolver_match.url_name == 'salary_calculator' %} is-active{% endif %}">CTC decoder</a>
+            <a href="{% url 'layoff_radar' %}" class="nav-link{% if request.resolver_match.url_name == 'layoff_radar' %} is-active{% endif %}">Layoff radar</a>
+            <a href="{% url 'topic_clusters' %}" class="nav-link{% if request.resolver_match.url_name == 'topic_clusters' or request.resolver_match.url_name == 'article_detail' or request.resolver_match.url_name == 'category_detail' %} is-active{% endif %}">Analysis</a>
 
-            <!-- Topics -->
             <div class="nav-dropdown">
-                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
-                    Topics
-                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false" type="button">
+                    More
+                    <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
                         <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </button>
                 <div class="nav-dropdown-content" style="display:none;">
-                    <div class="dropdown-header">Browse by Category</div>
-                    {% for category in categories %}
-                    <a href="{% url 'category_detail' category.slug %}">
-                        <span class="dropdown-icon">&rarr;</span>
-                        {{ category.name }}
-                    </a>
-                    {% empty %}
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Career Strategy</a>
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Software Engineering</a>
-                    <a href="{% url 'salary_reality' %}"><span class="dropdown-icon">&rarr;</span>Money Reality</a>
-                    {% endfor %}
+                    <div class="dropdown-header">Also on Career Reality</div>
+                    <a href="{% url 'company_directory' %}"><span class="dropdown-icon">&rarr;</span> Companies</a>
+                    <a href="{% url 'ai_news_hub' %}"><span class="dropdown-icon">&rarr;</span> AI Pulse</a>
+                    <a href="{% url 'analyzer_home' %}"><span class="dropdown-icon">&rarr;</span> Risk analyzer</a>
+                    <a href="{% url 'career_reality_index' %}"><span class="dropdown-icon">&rarr;</span> Career index</a>
+                    <a href="{% url 'escape_plan' %}"><span class="dropdown-icon">&rarr;</span> Escape plan</a>
+                    <a href="{% url 'submit_salary' %}"><span class="dropdown-icon">&rarr;</span> Drop a salary</a>
+                    <a href="{% url 'about' %}"><span class="dropdown-icon">&rarr;</span> About</a>
                 </div>
             </div>
 
-            <a href="{% url 'company_directory' %}" class="nav-link">Companies</a>
-            <a href="{% url 'about' %}" class="nav-link">About</a>
-
             <div class="nav-utilities">
-            <!-- Compact Search -->
-            <div class="nav-search-wrapper">
-                <button class="nav-search-toggle" aria-label="Search" type="button">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                </button>
-                <form action="{% url 'search' %}" method="get" class="nav-search-form" id="nav-search-form">
-                    <input type="text" name="q" placeholder="Search companies, salaries, articles…" autocomplete="off" id="global-search-input">
-                    <button type="submit" aria-label="Search">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span class="cr-nav-meta" aria-hidden="true">Data · {% now "M Y" %}</span>
+
+                <div class="nav-search-wrapper">
+                    <button class="nav-search-toggle" aria-label="Search" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </button>
-                    <div class="search-suggestions" id="search-suggestions"></div>
-                </form>
-            </div>
+                    <form action="{% url 'search' %}" method="get" class="nav-search-form" id="nav-search-form">
+                        <input type="text" name="q" placeholder="Search companies, salaries, articles…" autocomplete="off" id="global-search-input">
+                        <button type="submit" aria-label="Search">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </button>
+                        <div class="search-suggestions" id="search-suggestions"></div>
+                    </form>
+                </div>
 
-            <!-- Theme toggle -->
-            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false">
-                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="4"/>
-                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-                </svg>
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-            </button>
+                <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to night mode" title="Switch to night mode" aria-pressed="false">
+                    <span class="theme-toggle-label">Night</span>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
 
-            <!-- Pro CTA -->
-            {% if user.is_authenticated and user.profile.is_pro %}
-            <a href="{% url 'pro_dashboard' %}" class="nav-cta nav-cta--active">
-                <span class="nav-cta-icon">◆</span> Dashboard
-            </a>
-            {% else %}
-            <a href="{% url 'payments:pricing' %}" class="nav-cta">
-                Go Pro <span class="nav-cta-price">₹299</span>
-            </a>
-            {% endif %}
+                {% if user.is_authenticated %}
+                    {% if user.profile.is_pro %}
+                    <a href="{% url 'pro_dashboard' %}" class="nav-cta nav-cta--active">Dashboard</a>
+                    {% else %}
+                    <a href="{% url 'payments:pricing' %}" class="nav-cta">Go Pro</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'account_signup' %}" class="nav-cta">Create account</a>
+                {% endif %}
             </div>
         </nav>
 
-        <!-- Mobile Toggle -->
         <div class="mobile-actions">
-            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false">
-                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="4"/>
-                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-                </svg>
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to night mode" title="Switch to night mode" aria-pressed="false">
+                <span class="theme-toggle-label">Night</span>
             </button>
             <button class="nav-search-toggle nav-search-toggle--mobile" aria-label="Search" type="button">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </button>
-            <button class="mobile-menu-toggle" aria-label="Menu">
+            <button class="mobile-menu-toggle" aria-label="Menu" type="button">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
         </div>
 
-        <!-- Mobile Search Panel -->
         <div class="mobile-search-panel" id="mobile-search-panel">
             <form action="{% url 'search' %}" method="get">
                 <input type="text" name="q" placeholder="Search companies, salaries, articles…" autocomplete="off">
                 <button type="submit" aria-label="Search">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </button>
             </form>
         </div>
 
-        <!-- Mobile Menu Overlay -->
         <div class="mobile-menu-overlay"></div>
 
-        <!-- Mobile Slide-out -->
         <nav class="mobile-nav" aria-label="Mobile navigation">
             <div class="mobile-nav-header">
                 <span class="mobile-nav-title">Menu</span>
@@ -204,99 +107,34 @@
             </div>
             <div class="mobile-nav-inner">
                 <div class="mobile-nav-section">
-                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="true" aria-controls="nav-panel-intelligence">
-                        Intelligence
-                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </button>
-                    <div class="mobile-nav-accordion-panel is-open" id="nav-panel-intelligence">
-                        <a href="{% url 'company_directory' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🏢</span> Companies
-                        </a>
-                        <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">⚡</span> AI Pulse
-                        </a>
-                        <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">📊</span> Career Index
-                        </a>
-                    </div>
+                    <p class="mobile-nav-header" style="margin:0 0 8px;padding:0;border:0;">Primary</p>
+                    <a href="{% url 'home' %}" class="mobile-nav-link">Terminal</a>
+                    <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Salary explorer</a>
+                    <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">CTC decoder</a>
+                    <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">Layoff radar</a>
+                    <a href="{% url 'topic_clusters' %}" class="mobile-nav-link">Analysis</a>
                 </div>
-
                 <div class="mobile-nav-section">
-                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-tools">
-                        Tools
-                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </button>
-                    <div class="mobile-nav-accordion-panel" id="nav-panel-tools">
-                        <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🧮</span> CTC Calculator
-                        </a>
-                        <a href="{% url 'analyzer_home' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🎯</span> Risk Analyzer
-                        </a>
-                        <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🚨</span> Layoff Radar
-                        </a>
-                    </div>
+                    <p class="mobile-nav-header" style="margin:12px 0 8px;padding:0;border:0;">More</p>
+                    <a href="{% url 'company_directory' %}" class="mobile-nav-link">Companies</a>
+                    <a href="{% url 'ai_news_hub' %}" class="mobile-nav-link">AI Pulse</a>
+                    <a href="{% url 'analyzer_home' %}" class="mobile-nav-link">Risk analyzer</a>
+                    <a href="{% url 'career_reality_index' %}" class="mobile-nav-link">Career index</a>
+                    <a href="{% url 'escape_plan' %}" class="mobile-nav-link">Escape plan</a>
+                    <a href="{% url 'submit_salary' %}" class="mobile-nav-link">Drop a salary</a>
+                    <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
+                    <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
                 </div>
-
-                <div class="mobile-nav-section">
-                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-data">
-                        Data
-                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </button>
-                    <div class="mobile-nav-accordion-panel" id="nav-panel-data">
-                        <a href="{% url 'salary_reality' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">💰</span> Salary Reality
-                        </a>
-                        <a href="{% url 'submit_salary' %}" class="mobile-nav-link mobile-nav-link--highlight">
-                            <span class="mnl-icon">+</span> Drop a Salary
-                        </a>
-                        <a href="{% url 'escape_plan' %}" class="mobile-nav-link">
-                            <span class="mnl-icon">🚀</span> Escape Plan
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mobile-nav-section">
-                    <button type="button" class="mobile-nav-accordion-trigger" aria-expanded="false" aria-controls="nav-panel-browse">
-                        Browse
-                        <svg class="accordion-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </button>
-                    <div class="mobile-nav-accordion-panel" id="nav-panel-browse">
-                        {% for category in categories %}
-                        <a href="{% url 'category_detail' category.slug %}" class="mobile-nav-link">
-                            {{ category.name }}
-                        </a>
-                        {% empty %}
-                        <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Career Strategy</a>
-                        {% endfor %}
-                        <a href="{% url 'about' %}" class="mobile-nav-link">About</a>
-                        <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
-                    </div>
-                </div>
-
-                <!-- Mobile Pro CTA -->
                 <div class="mobile-nav-cta">
                     {% if user.is_authenticated and user.profile.is_pro %}
-                    <a href="{% url 'pro_dashboard' %}" class="mobile-pro-btn mobile-pro-btn--active">
-                        ◆ Pro Dashboard
-                    </a>
+                    <a href="{% url 'pro_dashboard' %}" class="mobile-pro-btn mobile-pro-btn--active">Pro Dashboard</a>
+                    {% elif user.is_authenticated %}
+                    <a href="{% url 'payments:pricing' %}" class="mobile-pro-btn">Go Pro — ₹299/mo</a>
                     {% else %}
-                    <a href="{% url 'payments:pricing' %}" class="mobile-pro-btn">
-                        Go Pro — ₹299/mo
-                    </a>
+                    <a href="{% url 'account_signup' %}" class="mobile-pro-btn">Create account</a>
                     {% endif %}
                 </div>
             </div>
         </nav>
     </div>
 </header>
-
