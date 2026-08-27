@@ -241,6 +241,7 @@ CareerReality mobile is **relatively strong**. Primary gap is **desktop visual l
 5. **Scope creep into fake “career coach” features** — out of product; reject.
 6. **Payment buttons** — must remain honestly disabled without keys.
 7. **Performance** — avoid shipping large unused font files; subset serif.
+8. **Repo hygiene (from full codebase explore):** multiple root seed/migrate scripts appear to embed Supabase/Postgres connection strings — treat as a **security debt** outside UI migration scope; rotate credentials and purge from history separately. Do not expand that pattern during UX work.
 
 ---
 
