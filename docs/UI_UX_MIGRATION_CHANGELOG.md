@@ -70,3 +70,19 @@
 **Issues discovered:** `@cache_page` briefly mis-attached during edit — fixed before commit  
 **Issues resolved:** Unstyled allauth chrome; missing terminal home composition  
 **Remaining issues:** CTC live ledger, layoff stability table, salary explorer restyle, secondary surfaces, full visual QA vs reference, final parity %
+
+
+---
+
+## Entry — 2026-08-27 (P1 CTC)
+
+**Date:** 2026-08-27  
+**Phase:** 6 (Assessment / CTC)  
+**Objective:** Live slider + ledger UX for CTC decoder using existing tax math.
+
+**Files changed:** `templates/core/salary_calculator.html`, `static/css/cr-editorial.css`
+
+**Features implemented:** Live CTC/variable/basic sliders; auto-recalculate; results visible by default  
+**Backend changes:** None  
+**Tests performed:** Local route markers; computer-use visual QA  
+**Remaining issues:** Layoff table restyle, explorer restyle, Night toggle polish, final parity report  

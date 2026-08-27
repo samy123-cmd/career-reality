@@ -540,6 +540,44 @@
     document.addEventListener('DOMContentLoaded', function() {
         var btn = document.getElementById('decode-btn');
         if (btn) btn.addEventListener('click', calculateSalary);
+
+        var lpa = document.getElementById('ctc-lpa-range');
+        var ctcHidden = document.getElementById('ctc-input');
+        var lpaDisplay = document.getElementById('ctc-lpa-display');
+        var variable = document.getElementById('variable-input');
+        var variableDisplay = document.getElementById('variable-display');
+        var basicShare = document.getElementById('basic-share-input');
+        var basicDisplay = document.getElementById('basic-share-display');
+        var rent = document.getElementById('rent-input');
+        var city = document.getElementById('city-input');
+
+        function syncFromSliders() {
+            if (lpa && ctcHidden && lpaDisplay) {
+                var lpaVal = parseFloat(lpa.value) || 0;
+                lpaDisplay.textContent = lpaVal.toFixed(1);
+                ctcHidden.value = Math.round(lpaVal * 100000);
+                lpa.setAttribute('aria-valuetext', lpaVal.toFixed(1) + ' LPA');
+            }
+            if (variable && variableDisplay) {
+                variableDisplay.textContent = variable.value;
+            }
+            if (basicShare && basicDisplay) {
+                basicDisplay.textContent = basicShare.value;
+            }
+        }
+
+        function liveDecode() {
+            syncFromSliders();
+            calculateSalary();
+        }
+
+        [lpa, variable, basicShare, rent, city].forEach(function (el) {
+            if (!el) return;
+            el.addEventListener('input', liveDecode);
+            el.addEventListener('change', liveDecode);
+        });
+
+        liveDecode();
     });
 </script>
 
