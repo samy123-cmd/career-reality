@@ -21,12 +21,26 @@
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-:root,
-[data-theme="light"] {
+:root {
+    /* First-paint defaults (light editorial). Theme classes override below. */
     --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
     --font-sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 4px;
+    --radius-xl: 6px;
+    --radius-full: 9999px;
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.08);
+    --w-wide: 1180px;
+    --w-terminal: 1180px;
+}
 
+html.theme-light,
+[data-theme="light"] {
     --cr-page: #f5f5f0;
     --cr-surface: #fffcf7;
     --cr-surface-2: #efeee8;
@@ -61,24 +75,10 @@
     --c-divider: var(--cr-border);
     --c-bg-footer: var(--cr-surface-2);
     --c-blue-accent: var(--cr-accent);
-
-    --radius-sm: 2px;
-    --radius-md: 4px;
-    --radius-lg: 4px;
-    --radius-xl: 6px;
-    --radius-full: 9999px;
-
-    --shadow-sm: none;
-    --shadow-md: none;
-    --shadow-lg: none;
-    --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.08);
-
-    --w-wide: 1180px;
-    --w-terminal: 1180px;
 }
 
-[data-theme="dark"],
-html.theme-dark {
+html.theme-dark,
+[data-theme="dark"] {
     --cr-page: #0b0b0c;
     --cr-surface: #141416;
     --cr-surface-2: #1a1a1c;
