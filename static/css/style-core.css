@@ -2080,6 +2080,8 @@ blockquote.pullquote {
     padding-left: 20px;
     font-size: 15px;
     line-height: 1.7;
+    overflow-wrap: anywhere;
+    word-break: normal;
 }
 .art-callout-heading {
     font-size: 16px;

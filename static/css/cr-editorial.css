@@ -714,3 +714,34 @@ textarea:focus-visible {
         animation: none !important;
     }
 }
+
+/* ---- CTC instrument sliders ---- */
+.cr-ctc-sliders {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.cr-ctc-slider-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.45rem;
+}
+
+.cr-ctc-slider-val {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--cr-text);
+    font-size: 0.95rem;
+}
+
+.cr-ctc-slider input[type="range"] {
+    width: 100%;
+    accent-color: var(--cr-accent);
+    height: 1.5rem;
+}
+
+.cr-ctc-instrument .az-calc-btn {
+    margin-top: 1.25rem;
+}
