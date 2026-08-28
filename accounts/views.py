@@ -17,21 +17,48 @@ def onboarding(request):
     return render(request, "accounts/onboarding.html")
 
 
+@login_required
+def salary_ledger(request):
+    """
+    Private compensation ledger for the authenticated member.
+    Shows SalarySubmission rows owned by the user (submitted while logged in).
+    """
+    entries = (
+        SalarySubmission.objects.filter(submitted_by=request.user)
+        .select_related("company")
+        .order_by("-created_at")
+    )
+    return render(
+        request,
+        "accounts/salary_ledger.html",
+        {
+            "entries": entries,
+            "profile": request.user.profile,
+            "og_title": "Private salary ledger — Career Reality",
+            "og_description": "Your private compensation records on Career Reality.",
+            "meta_robots": "noindex, nofollow",
+        },
+    )
+
+
 @pro_required
 def pro_dashboard(request):
     """Pro subscriber dashboard — salary intelligence + tools."""
     profile = request.user.profile
 
-    recent_salaries = SalarySubmission.objects.order_by("-is_verified", "-created_at")[:20]
+    recent_salaries = SalarySubmission.objects.filter(is_public=True).order_by(
+        "-is_verified", "-created_at"
+    )[:20]
 
     role_benchmarks = []
     top_roles = (
-        SalarySubmission.objects.values("role")
+        SalarySubmission.objects.filter(is_public=True)
+        .values("role")
         .order_by("role")
         .distinct()[:10]
     )
     for r in top_roles:
-        role_subs = SalarySubmission.objects.filter(role=r["role"])
+        role_subs = SalarySubmission.objects.filter(is_public=True, role=r["role"])
         if role_subs.exists():
             ctcs = sorted([s.ctc for s in role_subs])
             median = ctcs[len(ctcs) // 2]
@@ -57,6 +84,8 @@ def pro_dashboard(request):
             "latest_report": latest_report,
         })
 
+    ledger_count = SalarySubmission.objects.filter(submitted_by=request.user).count()
+
     return render(
         request,
         "accounts/pro_dashboard.html",
@@ -65,6 +94,7 @@ def pro_dashboard(request):
             "recent_salaries": recent_salaries,
             "role_benchmarks": role_benchmarks,
             "watchlist_entries": watchlist_entries,
+            "ledger_count": ledger_count,
             "subscription_expires_at": profile.subscription_expires_at,
             "days_until_expiry": profile.days_until_expiry,
             "og_title": "Pro Dashboard — Career Reality India",

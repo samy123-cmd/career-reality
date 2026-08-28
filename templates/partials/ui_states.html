@@ -1,0 +1,44 @@
+{# Shared UI states — include and use classes; keep markup light. #}
+{% comment %}
+Usage:
+  {% include "partials/ui_states.html" with state="empty" title="..." body="..." cta_url="..." cta_label="..." %}
+  {% include "partials/ui_states.html" with state="error" title="..." body="..." %}
+  {% include "partials/ui_states.html" with state="loading" %}
+  {% include "partials/ui_states.html" with state="skeleton" rows=5 %}
+{% endcomment %}
+
+{% if state == "empty" %}
+<div class="cr-state cr-state--empty" role="status">
+    <p class="cr-state-title">{{ title|default:"Nothing here yet" }}</p>
+    {% if body %}<p class="cr-state-body">{{ body }}</p>{% endif %}
+    {% if cta_url and cta_label %}
+    <a class="cr-state-cta" href="{{ cta_url }}">{{ cta_label }}</a>
+    {% endif %}
+</div>
+{% elif state == "error" %}
+<div class="cr-state cr-state--error" role="alert">
+    <p class="cr-state-title">{{ title|default:"Something went wrong" }}</p>
+    {% if body %}<p class="cr-state-body">{{ body }}</p>{% endif %}
+    {% if cta_url and cta_label %}
+    <a class="cr-state-cta" href="{{ cta_url }}">{{ cta_label }}</a>
+    {% endif %}
+</div>
+{% elif state == "loading" %}
+<div class="cr-state cr-state--loading" role="status" aria-live="polite">
+    <span class="cr-state-spinner" aria-hidden="true"></span>
+    <p class="cr-state-title">{{ title|default:"Loading…" }}</p>
+</div>
+{% elif state == "skeleton" %}
+<div class="cr-skeleton" aria-hidden="true">
+    {% with rowcount=rows|default:4 %}
+    {% for i in "12345678"|make_list %}
+        {% if forloop.counter <= rowcount %}
+        <div class="cr-skeleton-row">
+            <span class="cr-skeleton-bar cr-skeleton-bar--lg"></span>
+            <span class="cr-skeleton-bar cr-skeleton-bar--sm"></span>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% endwith %}
+</div>
+{% endif %}

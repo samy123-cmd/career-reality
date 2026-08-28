@@ -256,6 +256,8 @@ def submit_salary(request):
                 company=company_obj,
                 company_name=raw_name,
                 source=(d.get("source") or source or "")[:40],
+                submitted_by=request.user if request.user.is_authenticated else None,
+                is_public=True,
             )
             apply_light_verification(
                 submission,
@@ -367,26 +369,81 @@ def salary_feed_api(request):
 @cache_page(60 * 15)
 def layoff_radar(request):
     """
-    Dashboard showing company stability status.
-    Aggregates reports to show 'Danger' vs 'Safe'.
+    Employer stability table + event timeline from crowdsourced reports.
+    Latest signal per employer drives risk/stability; timeline shows recent events.
     """
     from django.utils import timezone as tz
     from datetime import timedelta
+
     now = tz.now()
     yesterday = now - timedelta(hours=24)
 
     recent_reports = list(
         models.LayoffReport.objects.only(
-            'company_name', 'status', 'role_affected', 'location', 'details', 'created_at'
-        ).order_by('-created_at')[:50]
+            "company_name",
+            "status",
+            "role_affected",
+            "location",
+            "details",
+            "created_at",
+        ).order_by("-created_at")[:80]
     )
 
-    # Add a lightweight confidence score per report
+    signal_labels = {
+        "hiring": "Hiring",
+        "freeze": "Hiring freeze",
+        "rumor": "Layoff rumor",
+        "layoff": "Active layoffs",
+    }
+    risk_map = {
+        "hiring": ("stable", "Stable"),
+        "freeze": ("watch", "Watch"),
+        "rumor": ("elevated", "Elevated"),
+        "layoff": ("critical", "Critical"),
+    }
+    stability_map = {
+        "hiring": 82,
+        "freeze": 55,
+        "rumor": 38,
+        "layoff": 18,
+    }
+
+    # Latest report wins per employer (case-insensitive name)
+    latest_by_employer = {}
+    for report in recent_reports:
+        key = (report.company_name or "").strip().lower()
+        if not key or key in latest_by_employer:
+            continue
+        latest_by_employer[key] = report
+
+    employer_rows = []
+    for report in latest_by_employer.values():
+        risk_class, risk_label = risk_map.get(report.status, ("watch", "Watch"))
+        employer_rows.append(
+            {
+                "name": report.company_name,
+                "status": report.status,
+                "signal": signal_labels.get(report.status, report.get_status_display()),
+                "risk_class": risk_class,
+                "risk_label": risk_label,
+                "stability": stability_map.get(report.status, 50),
+                "role_affected": report.role_affected,
+                "location": report.location,
+                "updated_at": report.created_at,
+            }
+        )
+
+    # Risk-first ordering: critical → elevated → watch → stable
+    risk_order = {"critical": 0, "elevated": 1, "watch": 2, "stable": 3}
+    employer_rows.sort(
+        key=lambda row: (risk_order.get(row["risk_class"], 9), row["name"].lower())
+    )
+
     for report in recent_reports:
         score = 30
         if report.details:
             score += 20
-        if report.status in ['freeze', 'rumor', 'layoff']:
+        if report.status in ["freeze", "rumor", "layoff"]:
             score += 10
         age_days = (now - report.created_at).days
         if age_days <= 7:
@@ -395,40 +452,46 @@ def layoff_radar(request):
             score += 20
         report.confidence_score = min(score, 100)
 
-    # Dynamic stats
-    today_count  = sum(1 for r in recent_reports if r.created_at >= yesterday)
-    total_count  = models.LayoffReport.objects.count()
-    danger_total = models.LayoffReport.objects.filter(status__in=['freeze', 'rumor', 'layoff']).count()
-    danger_pct   = round(danger_total / total_count * 100) if total_count else 0
+    today_count = sum(1 for r in recent_reports if r.created_at >= yesterday)
+    total_count = models.LayoffReport.objects.count()
+    danger_total = models.LayoffReport.objects.filter(
+        status__in=["freeze", "rumor", "layoff"]
+    ).count()
+    danger_pct = round(danger_total / total_count * 100) if total_count else 0
 
     if danger_pct >= 60:
-        risk_band        = "HIGH"
-        risk_band_color  = "#d93025"
+        risk_band = "HIGH"
+        risk_band_color = "#d93025"
         market_volatility = danger_pct
     elif danger_pct >= 35:
-        risk_band        = "ELEVATED"
-        risk_band_color  = "#f59e0b"
+        risk_band = "ELEVATED"
+        risk_band_color = "#f59e0b"
         market_volatility = danger_pct
     else:
-        risk_band        = "MODERATE"
-        risk_band_color  = "#16a34a"
+        risk_band = "MODERATE"
+        risk_band_color = "#16a34a"
         market_volatility = danger_pct
 
     seo = LAYOFF_RADAR
-    return render(request, 'analyzer/layoff_radar.html', {
-        'reports': recent_reports,
-        'today_count': today_count,
-        'total_count': total_count,
-        'risk_band': risk_band,
-        'risk_band_color': risk_band_color,
-        'market_volatility': market_volatility,
-        'page_h1': seo.h1,
-        'page_keywords': seo.keywords,
-        'og_title': seo.title,
-        'og_description': seo.description,
-        'twitter_title': seo.title,
-        'twitter_description': seo.description,
-    })
+    return render(
+        request,
+        "analyzer/layoff_radar.html",
+        {
+            "reports": recent_reports[:40],
+            "employer_rows": employer_rows,
+            "today_count": today_count,
+            "total_count": total_count,
+            "risk_band": risk_band,
+            "risk_band_color": risk_band_color,
+            "market_volatility": market_volatility,
+            "page_h1": seo.h1,
+            "page_keywords": seo.keywords,
+            "og_title": seo.title,
+            "og_description": seo.description,
+            "twitter_title": seo.title,
+            "twitter_description": seo.description,
+        },
+    )
 
 def report_layoff(request):
     """

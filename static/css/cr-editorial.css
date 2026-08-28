@@ -778,3 +778,388 @@ textarea:focus-visible {
 .cr-ctc-instrument .az-calc-btn {
     margin-top: 1.25rem;
 }
+
+/* ---- Shared UI states ---- */
+.cr-state {
+    border: 1px solid var(--cr-border);
+    background: var(--cr-surface);
+    padding: 2rem 1.5rem;
+    text-align: left;
+    margin: 1rem 0;
+}
+.cr-state-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--cr-text);
+    margin: 0 0 0.5rem;
+}
+.cr-state-body {
+    margin: 0 0 1rem;
+    color: var(--cr-text-secondary);
+    font-size: 0.95rem;
+    max-width: 42ch;
+}
+.cr-state-cta {
+    display: inline-flex;
+    background: var(--cr-accent);
+    color: var(--cr-accent-ink) !important;
+    padding: 0.6rem 1rem;
+    border-radius: 2px;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+.cr-state--error { border-color: var(--cr-danger); }
+.cr-state--loading { display: flex; align-items: center; gap: 0.75rem; }
+.cr-state-spinner {
+    width: 1rem; height: 1rem;
+    border: 2px solid var(--cr-border-strong);
+    border-top-color: var(--cr-accent);
+    border-radius: 50%;
+    animation: cr-spin 0.7s linear infinite;
+}
+@keyframes cr-spin { to { transform: rotate(360deg); } }
+.cr-skeleton-row { display: grid; gap: 0.4rem; margin-bottom: 1rem; }
+.cr-skeleton-bar {
+    display: block; height: 0.7rem;
+    background: linear-gradient(90deg, var(--cr-surface-2), var(--cr-surface-3), var(--cr-surface-2));
+    background-size: 200% 100%;
+    animation: cr-shimmer 1.2s ease-in-out infinite;
+    border-radius: 2px;
+}
+.cr-skeleton-bar--lg { width: 70%; }
+.cr-skeleton-bar--sm { width: 40%; height: 0.5rem; }
+@keyframes cr-shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cr-state-spinner, .cr-skeleton-bar { animation: none; }
+}
+
+/* ---- Page surface overrides (legacy hardcodes → tokens) ---- */
+html.theme-light .az-calc-btn,
+html.theme-light .az-radar-btn,
+html.theme-light .cc-submit-btn,
+[data-theme="light"] .az-calc-btn,
+[data-theme="light"] .az-radar-btn {
+    background: var(--cr-accent) !important;
+    border-color: var(--cr-accent) !important;
+    color: #fff !important;
+    border-radius: 2px !important;
+}
+html.theme-light .az-stats-bar .stat-card,
+html.theme-light .cc-card,
+html.theme-light .radar-card,
+[data-theme="light"] .az-stats-bar .stat-card,
+[data-theme="light"] .cc-card,
+[data-theme="light"] .radar-card {
+    background: var(--cr-surface) !important;
+    border: 1px solid var(--cr-border) !important;
+    box-shadow: none !important;
+    border-radius: 4px !important;
+}
+html.theme-light .hp-btn--primary,
+[data-theme="light"] .hp-btn--primary {
+    background: var(--cr-accent) !important;
+    color: #fff !important;
+}
+
+/* Explorer / radar / analysis editorial shells */
+.cr-page-shell { padding: 2rem 0 4rem; }
+.cr-page-kicker {
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--cr-accent); font-weight: 700; margin: 0 0 0.5rem;
+}
+.cr-page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    color: var(--cr-text); margin: 0 0 0.75rem; line-height: 1.1;
+}
+.cr-page-lede {
+    max-width: 54ch; color: var(--cr-text-secondary);
+    font-size: 1.05rem; line-height: 1.55; margin: 0 0 1.75rem;
+}
+.cr-filter-bar {
+    display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;
+    margin-bottom: 1.25rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--cr-border);
+}
+.cr-filter-bar input[type="search"],
+.cr-filter-bar select {
+    border: 1px solid var(--cr-border-strong);
+    background: var(--cr-elevated);
+    color: var(--cr-text);
+    border-radius: 2px;
+    padding: 0.55rem 0.75rem;
+    font: inherit;
+    min-width: 160px;
+}
+.cr-filter-chip {
+    border: 1px solid var(--cr-border-strong);
+    background: transparent;
+    color: var(--cr-text-secondary);
+    padding: 0.4rem 0.75rem;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.cr-filter-chip.is-active {
+    border-color: var(--cr-accent);
+    color: var(--cr-accent);
+}
+.cr-stability-table {
+    width: 100%; border-collapse: collapse; font-size: 0.9rem;
+}
+.cr-stability-table th {
+    text-align: left; font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--cr-text-muted);
+    padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--cr-border-strong);
+}
+.cr-stability-table td {
+    padding: 0.95rem 0.5rem; border-bottom: 1px solid var(--cr-border);
+    color: var(--cr-text); vertical-align: top;
+}
+.cr-risk-badge {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.2rem 0.45rem; border-radius: 2px;
+}
+.cr-risk-badge--high,
+.cr-risk-badge--critical { background: rgba(180,35,24,.12); color: var(--cr-danger); }
+.cr-risk-badge--elevated,
+.cr-risk-badge--watch { background: rgba(181,71,8,.12); color: var(--cr-warning); }
+.cr-risk-badge--moderate { background: var(--cr-surface-2); color: var(--cr-text-muted); }
+.cr-risk-badge--low,
+.cr-risk-badge--stable { background: rgba(27,127,78,.12); color: var(--cr-success); }
+.cr-skeleton { margin: 1rem 0 2rem; }
+.cr-stability-meter {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-variant-numeric: tabular-nums;
+}
+.cr-stability-meter-bar {
+    width: 72px; height: 3px; background: var(--cr-surface-3);
+}
+.cr-stability-meter-fill { height: 100%; background: var(--cr-accent); }
+.cr-timeline { margin-top: 2.5rem; }
+.cr-timeline-item {
+    display: grid; grid-template-columns: 110px 1fr; gap: 1rem;
+    padding: 0.9rem 0; border-bottom: 1px solid var(--cr-border);
+}
+.cr-timeline-date { font-size: 0.75rem; color: var(--cr-text-muted); }
+.cr-timeline-body strong { display: block; color: var(--cr-text); margin-bottom: 0.2rem; }
+.cr-timeline-body span { color: var(--cr-text-secondary); font-size: 0.9rem; }
+.cr-analysis-list { margin-top: 1rem; }
+.cr-analysis-row {
+    display: grid; grid-template-columns: minmax(120px, 160px) 1fr; gap: 1rem;
+    padding: 1.15rem 0; border-bottom: 1px solid var(--cr-border);
+    text-decoration: none; color: inherit;
+}
+.cr-analysis-row:hover h2 { color: var(--cr-accent); }
+.cr-analysis-row h2 {
+    font-family: var(--font-display); font-size: 1.2rem;
+    margin: 0 0 0.35rem; color: var(--cr-text);
+}
+.cr-analysis-meta { font-size: 0.72rem; color: var(--cr-text-muted); }
+.cr-analysis-meta .tag {
+    display: block; color: var(--cr-accent); font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35rem;
+}
+.cr-ledger-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.cr-ledger-table th, .cr-ledger-table td {
+    padding: 0.85rem 0.5rem; border-bottom: 1px solid var(--cr-border);
+    text-align: left;
+}
+.cr-ledger-table th {
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cr-text-muted);
+}
+.cr-ledger-table td { color: var(--cr-text); }
+.cr-privacy-note {
+    font-size: 0.85rem; color: var(--cr-text-muted);
+    border-top: 1px solid var(--cr-border); padding-top: 1rem; margin-top: 1.5rem;
+}
+@media (max-width: 768px) {
+    .cr-stability-table { display: block; overflow-x: auto; }
+    .cr-analysis-row, .cr-timeline-item { grid-template-columns: 1fr; gap: 0.25rem; }
+}
+
+/* ---- Salary explorer ---- */
+.cr-salary-explorer .cr-band-legend {
+    font-size: 0.8rem;
+    color: var(--cr-text-muted);
+    margin: 0 0 1rem;
+}
+.cr-salary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+.cr-salary-table th {
+    text-align: left;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cr-text-muted);
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--cr-border-strong);
+}
+.cr-salary-table td {
+    padding: 0.95rem 0.5rem;
+    border-bottom: 1px solid var(--cr-border);
+    color: var(--cr-text);
+    vertical-align: middle;
+}
+.cr-salary-table .meta-info {
+    font-size: 0.78rem;
+    color: var(--cr-text-muted);
+    margin-top: 0.15rem;
+}
+.cr-band-nums {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.cr-band-track {
+    position: relative;
+    width: min(160px, 28vw);
+    height: 6px;
+    background: var(--cr-surface-3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.cr-band-fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: var(--cr-accent);
+    border-radius: 2px;
+    min-width: 4px;
+}
+.cr-salary-notes {
+    margin-top: 2rem;
+    max-width: 62ch;
+    color: var(--cr-text-secondary);
+    line-height: 1.55;
+}
+.cr-salary-notes h2 { color: var(--cr-text); }
+
+/* ---- Secondary surfaces: companies / AI / risk ---- */
+.dir-hero.cr-surface-hero,
+.ai-masthead.cr-surface-hero,
+.az-intro-header.cr-surface-hero {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--cr-text) !important;
+    padding: 2rem 0 1rem !important;
+}
+.dir-hero.cr-surface-hero h1,
+.ai-masthead.cr-surface-hero h1,
+.az-intro-header.cr-surface-hero h1 {
+    font-family: var(--font-display) !important;
+    color: var(--cr-text) !important;
+}
+.dir-hero.cr-surface-hero p,
+.ai-masthead.cr-surface-hero p,
+.az-intro-header.cr-surface-hero p {
+    color: var(--cr-text-secondary) !important;
+}
+.dir-stats .dir-stat,
+.ai-stats .ai-stat {
+    background: var(--cr-surface) !important;
+    border: 1px solid var(--cr-border) !important;
+    color: var(--cr-text-secondary) !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+}
+.dir-stats .dir-stat strong { color: var(--cr-text) !important; }
+.company-card,
+.ai-feature-card,
+.ai-news-card,
+.ai-rail-card,
+.ai-evo-card,
+.az-intro-card,
+.option-card {
+    background: var(--cr-surface) !important;
+    border: 1px solid var(--cr-border) !important;
+    box-shadow: none !important;
+    border-radius: 4px !important;
+    color: var(--cr-text) !important;
+}
+.company-card:hover,
+.ai-news-card:hover {
+    border-color: var(--cr-border-strong) !important;
+}
+.cc-name,
+.ai-feature-card h2,
+.ai-news-card h3,
+.az-section-title {
+    font-family: var(--font-display) !important;
+    color: var(--cr-text) !important;
+}
+.cc-sector,
+.cc-stats,
+.ai-news-meta,
+.ai-news-summary,
+.az-info-text {
+    color: var(--cr-text-secondary) !important;
+}
+.dir-controls input,
+.dir-controls select,
+.ai-tag-pill {
+    background: var(--cr-elevated) !important;
+    border: 1px solid var(--cr-border-strong) !important;
+    color: var(--cr-text) !important;
+    border-radius: 2px !important;
+}
+.ai-tag-pill.active {
+    border-color: var(--cr-accent) !important;
+    color: var(--cr-accent) !important;
+    background: var(--cr-accent-dim) !important;
+}
+.dir-search-btn,
+.btn-analyzer,
+.az-intro-cta .btn-analyzer {
+    background: var(--cr-accent) !important;
+    color: #fff !important;
+    border: 1px solid var(--cr-accent) !important;
+    border-radius: 2px !important;
+}
+.ai-page,
+.ai-shell {
+    background: transparent !important;
+    color: var(--cr-text) !important;
+}
+.az-intro-container {
+    background: transparent !important;
+    color: var(--cr-text) !important;
+}
+.az-methodology-strip {
+    background: var(--cr-surface-2) !important;
+    border: 1px solid var(--cr-border) !important;
+    color: var(--cr-text-secondary) !important;
+}
+
+/* Footer / shell light-theme leakage guards */
+html.theme-light .site-footer,
+[data-theme="light"] .site-footer {
+    background: var(--cr-surface-2) !important;
+    color: var(--cr-text-secondary) !important;
+    border-top: 1px solid var(--cr-border) !important;
+}
+html.theme-light body,
+[data-theme="light"] body {
+    background: var(--cr-page) !important;
+    color: var(--cr-text-secondary) !important;
+}
+html.theme-light .site-header,
+[data-theme="light"] .site-header {
+    background: rgba(255, 252, 247, 0.92) !important;
+    border-bottom: 1px solid var(--cr-border) !important;
+}
+
+@media (max-width: 768px) {
+    .cr-salary-table { display: block; overflow-x: auto; }
+    .cr-band-track { width: 96px; }
+}

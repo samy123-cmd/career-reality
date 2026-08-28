@@ -66,14 +66,14 @@ Indian tech professionals.{% endblock %}
 {% block content %}
 <section class="container-wide ai-page">
     <div class="ai-shell">
-        <div class="ai-masthead">
-            <div class="ai-kicker">AI Pulse Intelligence Desk</div>
-            <h1>AI Developments That Matter for Careers, Not Vanity Benchmarks</h1>
-            <p>High-signal model updates, translated into engineering skills, workflow implications, and hiring leverage for India-focused builders.</p>
+        <div class="ai-masthead cr-surface-hero">
+            <p class="cr-page-kicker">AI Pulse</p>
+            <h1 class="cr-page-title">AI developments that matter for careers</h1>
+            <p class="cr-page-lede">High-signal model updates, translated into engineering skills, workflow implications, and hiring leverage for India-focused builders.</p>
             <div class="ai-stats">
-                <span class="ai-stat">Reviewed by Editorial Lens</span>
-                <span class="ai-stat">Career Translation Included</span>
-                <span class="ai-stat">Technical Sections Standardized</span>
+                <span class="ai-stat">Editorial lens</span>
+                <span class="ai-stat">Career translation</span>
+                <span class="ai-stat">Technical sections standardized</span>
             </div>
         </div>
 
@@ -168,13 +168,8 @@ Indian tech professionals.{% endblock %}
         </div>
         {% endif %}
         {% else %}
-        <div style="border: 1px solid var(--c-divider); padding: 2rem; text-align: center;">
-            <p style="margin: 0 0 0.5rem; font-size: 1.1rem; font-weight: 600;">No AI updates yet{% if active_tag %} for "{{ active_tag.name }}"{% endif %}.</p>
-            <p style="margin: 0; color: var(--c-grey-mid);">Check back soon - we track developments from OpenAI, DeepMind, HuggingFace, and more.</p>
-            {% if active_tag %}
-            <a href="{% url 'ai_news_hub' %}" style="display: inline-block; margin-top: 1rem; text-decoration: underline;">View all AI updates</a>
-            {% endif %}
-        </div>
+        {% url 'ai_news_hub' as ai_hub_url %}
+        {% include "partials/ui_states.html" with state="empty" title="No AI updates yet" body="Check back soon — we track developments from OpenAI, DeepMind, Hugging Face, and more." cta_url=ai_hub_url cta_label="View all updates" %}
         {% endif %}
     </div>
 </section>

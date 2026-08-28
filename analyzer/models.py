@@ -61,6 +61,20 @@ class SalarySubmission(models.Model):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
+    # Optional owner link for authenticated "private ledger" (additive; null for legacy/anonymous)
+    submitted_by = models.ForeignKey(
+        'auth.User',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='salary_ledger_entries',
+        help_text="Authenticated member who submitted this row (private ledger).",
+    )
+    is_public = models.BooleanField(
+        default=True,
+        help_text="When False, only submitted_by can see this row in their ledger.",
+    )
+
     def save(self, *args, **kwargs):
         self.is_verified = self.verification_status == "verified"
         super().save(*args, **kwargs)

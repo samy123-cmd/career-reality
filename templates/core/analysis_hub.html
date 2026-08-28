@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis — Career Reality India{% endblock %}
+{% block meta_description %}Editorial analysis on Indian tech salaries, CTC reality, layoff risk, and career decisions — evidence-backed, not folklore.{% endblock %}
+
+{% block content %}
+<section class="container-wide cr-page-shell">
+    <p class="cr-page-kicker">Newsroom</p>
+    <h1 class="cr-page-title">Analysis</h1>
+    <p class="cr-page-lede">
+        Evidence-backed career writing for Indian tech. Browse recent pieces or jump by topic cluster.
+    </p>
+
+    {% if categories %}
+    <div class="cr-filter-bar" role="navigation" aria-label="Topics">
+        {% for category in categories %}
+        <a class="cr-filter-chip" href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
+        {% endfor %}
+        <a class="cr-filter-chip" href="{% url 'topic_clusters' %}">All clusters</a>
+    </div>
+    {% endif %}
+
+    {% if articles %}
+    <div class="cr-analysis-list">
+        {% for article in articles %}
+        <a class="cr-analysis-row" href="{% url 'article_detail' article.slug %}">
+            <div class="cr-analysis-meta">
+                <span class="tag">{{ article.category.name|default:"Analysis" }}</span>
+                {{ article.updated_at|date:"j M Y" }}
+                {% if article.reading_time %} · {{ article.reading_time }} min{% endif %}
+            </div>
+            <div>
+                <h2>{{ article.title }}</h2>
+                <p>{{ article.common_expectation|striptags|truncatewords:32 }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+        {% url 'topic_clusters' as clusters_url %}
+        {% include "partials/ui_states.html" with state="empty" title="No published analysis yet" body="Topic clusters and tools remain available while the newsroom fills." cta_url=clusters_url cta_label="Browse topic clusters" %}
+    {% endif %}
+</section>
+{% endblock %}

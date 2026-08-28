@@ -10,7 +10,7 @@
             <a href="{% url 'salary_reality' %}" class="nav-link{% if request.resolver_match.url_name == 'salary_reality' %} is-active{% endif %}">Salary explorer</a>
             <a href="{% url 'salary_calculator' %}" class="nav-link{% if request.resolver_match.url_name == 'salary_calculator' %} is-active{% endif %}">CTC decoder</a>
             <a href="{% url 'layoff_radar' %}" class="nav-link{% if request.resolver_match.url_name == 'layoff_radar' %} is-active{% endif %}">Layoff radar</a>
-            <a href="{% url 'topic_clusters' %}" class="nav-link{% if request.resolver_match.url_name == 'topic_clusters' or request.resolver_match.url_name == 'article_detail' or request.resolver_match.url_name == 'category_detail' %} is-active{% endif %}">Analysis</a>
+            <a href="{% url 'analysis_hub' %}" class="nav-link{% if request.resolver_match.url_name == 'analysis_hub' or request.resolver_match.url_name == 'topic_clusters' or request.resolver_match.url_name == 'article_detail' or request.resolver_match.url_name == 'category_detail' %} is-active{% endif %}">Analysis</a>
 
             <div class="nav-dropdown">
                 <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false" type="button">
@@ -59,6 +59,7 @@
                 </button>
 
                 {% if user.is_authenticated %}
+                    <a href="{% url 'salary_ledger' %}" class="nav-cta">My ledger</a>
                     {% if user.profile.is_pro %}
                     <a href="{% url 'pro_dashboard' %}" class="nav-cta nav-cta--active">Dashboard</a>
                     {% else %}
@@ -112,7 +113,7 @@
                     <a href="{% url 'salary_reality' %}" class="mobile-nav-link">Salary explorer</a>
                     <a href="{% url 'salary_calculator' %}" class="mobile-nav-link">CTC decoder</a>
                     <a href="{% url 'layoff_radar' %}" class="mobile-nav-link">Layoff radar</a>
-                    <a href="{% url 'topic_clusters' %}" class="mobile-nav-link">Analysis</a>
+                    <a href="{% url 'analysis_hub' %}" class="mobile-nav-link">Analysis</a>
                 </div>
                 <div class="mobile-nav-section">
                     <p class="mobile-nav-header" style="margin:12px 0 8px;padding:0;border:0;">More</p>
@@ -126,10 +127,13 @@
                     <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
                 </div>
                 <div class="mobile-nav-cta">
-                    {% if user.is_authenticated and user.profile.is_pro %}
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'salary_ledger' %}" class="mobile-pro-btn">My ledger</a>
+                    {% if user.profile.is_pro %}
                     <a href="{% url 'pro_dashboard' %}" class="mobile-pro-btn mobile-pro-btn--active">Pro Dashboard</a>
-                    {% elif user.is_authenticated %}
+                    {% else %}
                     <a href="{% url 'payments:pricing' %}" class="mobile-pro-btn">Go Pro — ₹299/mo</a>
+                    {% endif %}
                     {% else %}
                     <a href="{% url 'account_signup' %}" class="mobile-pro-btn">Create account</a>
                     {% endif %}

@@ -14,162 +14,142 @@
   "name": "Indian Tech Layoffs 2026",
   "description": "Crowdsourced data on hiring freezes and layoffs in Indian technology companies.",
   "url": "{{ canonical_url|default:request.build_absolute_uri }}",
-  "creator": {
-    "@type": "Organization",
-    "name": "Career Reality India",
-    "url": "{{ site_base_url }}"
-  },
-  "license": {
-    "@type": "CreativeWork",
-    "name": "Career Reality Terms of Use",
-    "url": "{{ site_base_url }}/terms/"
-  },
+  "creator": {"@type": "Organization", "name": "Career Reality India", "url": "{{ site_base_url }}"},
   "keywords": ["Layoffs", "Hiring Freeze", "Indian IT", "Tech Jobs"]
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How do I track IT layoffs in India in 2026?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Use a live layoff and hiring-freeze tracker that timestamps crowdsourced reports by company. Career Reality’s free IT Layoffs India 2026 tracker shows recent freeze and layoff signals so you can cross-check before switching or resigning."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How fresh is the layoff radar data?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Reports are time-stamped and shown newest-first. Treat recent clusters as higher priority than single old rumours, and always verify with other sources before making an irrevocable career move."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is this layoff tracker verified by employers?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. It is crowdsourced insider signal, not an official HR feed. Use it as early warning alongside notice-period risk and your own network — never as the sole reason to resign."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I report a hiring freeze anonymously?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Reports do not require login or personal information. Anonymous signals help other Indian tech workers assess company risk without exposing reporters."
-      }
-    }
-  ]
-}
-</script>
-<section class="container-medium az-radar-section">
 
-    <div class="az-radar-hero">
-        <h1 class="az-radar-title">{{ page_h1|default:"Layoff Radar" }}</h1>
-        <p class="hero-subtitle az-radar-subtitle">
-            Free IT layoffs India 2026 tracker — hiring freezes and layoff signals
-            crowdsourced from insiders. Check your company before you switch.
-        </p>
-        <a href="{% url 'report_layoff' %}" class="az-radar-btn">Report a Company</a>
-    </div>
+<section class="container-wide cr-page-shell az-radar-section">
+    <p class="cr-page-kicker">
+        {% if total_count %}{{ total_count }} events tracked{% else %}Crowdsourced signal{% endif %}
+        · updated {% now "j M Y" %}
+    </p>
+    <h1 class="cr-page-title">{{ page_h1|default:"Layoff radar" }}</h1>
+    <p class="cr-page-lede">
+        Employer stability from insider reports — hiring freezes, rumors, and active layoffs.
+        Treat clusters as early warning, not an official HR feed.
+    </p>
+    <p style="margin:0 0 1.5rem;">
+        <a href="{% url 'report_layoff' %}" class="cr-state-cta">Report a signal</a>
+    </p>
 
-    <!-- STATS BAR -->
-    <div class="az-stats-bar">
+    <div class="az-stats-bar" style="margin-bottom:1.5rem;">
         <div class="stat-card">
             <span class="stat-value">{{ market_volatility }}%</span>
-            <span class="stat-label">Market Volatility</span>
+            <span class="stat-label">Market volatility</span>
         </div>
         <div class="stat-card">
             <span class="stat-value">{{ today_count }}</span>
             <span class="stat-label">Reports (24h)</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value stat-value--risk-{{ risk_band|lower }}">{{ risk_band }}</span>
-            <span class="stat-label">Risk Level</span>
+            <span class="stat-value">{{ risk_band }}</span>
+            <span class="stat-label">Risk level</span>
         </div>
     </div>
 
-    <!-- SEARCH -->
-    <div class="az-search-box">
-        <input type="text" id="companySearch" placeholder="Search Company (e.g. Infosys)..."
-            class="az-search-input" aria-label="Search companies">
+    <div class="cr-filter-bar">
+        <input type="search" id="companySearch" placeholder="Search employer…" aria-label="Search employers">
+        <button type="button" class="cr-filter-chip is-active" data-status-filter="all">All</button>
+        <button type="button" class="cr-filter-chip" data-status-filter="layoff">Layoffs</button>
+        <button type="button" class="cr-filter-chip" data-status-filter="freeze">Freeze</button>
+        <button type="button" class="cr-filter-chip" data-status-filter="rumor">Rumors</button>
+        <button type="button" class="cr-filter-chip" data-status-filter="hiring">Hiring</button>
     </div>
 
-    <!-- RADAR FEED -->
-    <div class="radar-feed" id="radarList">
-
-        {% for report in reports %}
-        <div class="radar-card" data-company="{{ report.company_name|lower }}">
-            <div
-                class="radar-status-bar {% if report.status == 'hiring' %}status-safe{% elif report.status == 'freeze' %}status-warn{% else %}status-danger{% endif %}">
-            </div>
-
-            <div class="radar-content">
-                <div class="radar-card-head">
-                    <div>
-                        <h3 class="company-name">{{ report.company_name }}</h3>
-                        <div class="meta-info">
-                            {{ report.location }} &middot; {{ report.created_at|timesince }} ago
+    {% if employer_rows %}
+    <div class="terminal-table-wrap">
+        <table class="cr-stability-table" id="stabilityTable">
+            <thead>
+                <tr>
+                    <th>Employer</th>
+                    <th>Signal</th>
+                    <th>Risk</th>
+                    <th>Stability</th>
+                    <th>Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in employer_rows %}
+                <tr class="stability-row" data-company="{{ row.name|lower }}" data-status="{{ row.status }}">
+                    <td>
+                        <strong>{{ row.name }}</strong>
+                        {% if row.location %}<div class="meta-info">{{ row.location }}</div>{% endif %}
+                    </td>
+                    <td>
+                        {{ row.signal }}
+                        {% if row.role_affected %}<div class="meta-info">Affected: {{ row.role_affected }}</div>{% endif %}
+                    </td>
+                    <td>
+                        <span class="cr-risk-badge cr-risk-badge--{{ row.risk_class }}">{{ row.risk_label }}</span>
+                    </td>
+                    <td>
+                        <div class="cr-stability-meter">
+                            <span>{{ row.stability }}</span>
+                            <div class="cr-stability-meter-bar"><div class="cr-stability-meter-fill" style="width:{{ row.stability }}%"></div></div>
                         </div>
-                    </div>
-                    <div class="radar-card-right">
-                        <span
-                            class="status-badge {% if report.status == 'hiring' %}badge-safe{% elif report.status == 'freeze' %}badge-warn{% else %}badge-danger{% endif %}">
-                            {{ report.get_status_display }}
-                        </span>
-                        <span class="confidence-label">
-                            Confidence: {{ report.confidence_score }}%
-                        </span>
-                    </div>
-                </div>
+                    </td>
+                    <td>{{ row.updated_at|timesince }} ago</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        {% url 'report_layoff' as report_url %}
+        {% include "partials/ui_states.html" with state="empty" title="No layoff signals yet" body="Be the first anonymous source. Reports help others stress-test company risk." cta_url=report_url cta_label="Report a signal" %}
+    {% endif %}
 
-                {% if report.role_affected %}
-                <div class="role-tag">
-                    <strong>Affected:</strong> {{ report.role_affected }}
-                </div>
-                {% endif %}
-
-                {% if report.details %}
-                <p class="report-details">"{{ report.details }}"</p>
-                {% endif %}
+    {% if reports %}
+    <div class="cr-timeline">
+        <p class="cr-page-kicker">Event timeline</p>
+        {% for report in reports %}
+        <div class="cr-timeline-item">
+            <div class="cr-timeline-date">{{ report.created_at|date:"j M Y" }}</div>
+            <div class="cr-timeline-body">
+                <strong>{{ report.company_name }} — {{ report.get_status_display }}</strong>
+                <span>
+                    {% if report.details %}{{ report.details|truncatewords:28 }}{% else %}
+                    {{ report.role_affected|default:"Signal filed" }}{% if report.location %} · {{ report.location }}{% endif %}
+                    {% endif %}
+                </span>
             </div>
-        </div>
-        {% empty %}
-        <div class="radar-empty">
-            <p>No data yet. Be the first source.</p>
         </div>
         {% endfor %}
     </div>
+    {% endif %}
 
     <script>
-        function filterCompanies() {
+        (function () {
             var input = document.getElementById('companySearch');
-            var filter = input.value.toLowerCase();
-            var cards = document.getElementsByClassName('radar-card');
-            for (var i = 0; i < cards.length; i++) {
-                var companyName = cards[i].getAttribute('data-company');
-                cards[i].style.display = (companyName.indexOf(filter) > -1) ? '' : 'none';
+            var chips = document.querySelectorAll('[data-status-filter]');
+            var activeStatus = 'all';
+            function applyFilters() {
+                var q = (input && input.value || '').toLowerCase();
+                document.querySelectorAll('.stability-row').forEach(function (row) {
+                    var name = row.getAttribute('data-company') || '';
+                    var status = row.getAttribute('data-status') || '';
+                    var matchQ = !q || name.indexOf(q) > -1;
+                    var matchS = activeStatus === 'all' || status === activeStatus;
+                    row.style.display = (matchQ && matchS) ? '' : 'none';
+                });
             }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var searchInput = document.getElementById('companySearch');
-            if (searchInput) searchInput.addEventListener('input', filterCompanies);
-        });
+            if (input) input.addEventListener('input', applyFilters);
+            chips.forEach(function (chip) {
+                chip.addEventListener('click', function () {
+                    chips.forEach(function (c) { c.classList.remove('is-active'); });
+                    chip.classList.add('is-active');
+                    activeStatus = chip.getAttribute('data-status-filter') || 'all';
+                    applyFilters();
+                });
+            });
+        })();
     </script>
 
     {% include "partials/salary_submit_cta.html" with source="layoff_radar" %}
-
-    <div class="container-medium" style="margin-top: var(--space-lg);">
+    <div style="margin-top: var(--space-lg);">
         {% include "partials/seo_tool_hub.html" %}
         {% include "partials/seo_pillar_links.html" %}
     </div>
-
 </section>
 {% endblock %}
-

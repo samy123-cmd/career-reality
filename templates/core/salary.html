@@ -31,477 +31,311 @@
   "keywords": ["indian tech salary", "median salary india", "software engineer salary", "data engineer salary", "AI engineer salary"]
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Are these median or average salaries?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We track medians, not averages inflated by unicorn outliers and US-remote roles."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How often is salary data updated?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Core role bands are reviewed monthly, with ad-hoc updates when market shifts are material."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I compare in-hand pay from CTC?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Use the CTC to In-Hand Calculator to decode offer letters into real monthly take-home."
-      }
-    }
-  ]
-}
-</script>
 {% endblock %}
 
 {% block content %}
-
-<!-- HEADER -->
-<section class="container-medium sal-page-header">
-    <h1 class="sal-page-h1">{{ page_h1|default:"The Salary Reality Check" }}</h1>
-    <p class="article-list-summary sal-page-intro">
-        We track the <strong>median</strong> salaries, not the "top 1%" outliers.
-        Most "Average Salary" reports are inflated by unicorns and US-remote roles.
-        This is what the actual Indian market pays.
+<section class="container-wide cr-page-shell cr-salary-explorer">
+    <p class="cr-page-kicker">Salary intelligence · updated {% now "F Y" %}</p>
+    <h1 class="cr-page-title">{{ page_h1|default:"Salary explorer" }}</h1>
+    <p class="cr-page-lede">
+        Editorial compensation bands for Indian tech — typical offer spans, not LinkedIn lottery tickets.
+        Ranges are median-heavy reality checks. Aggregate P25/P50/P90 statistics appear only where verified samples exist.
     </p>
-    <p class="sal-meta">
-        Last Updated: {% now "F Y" %}
-    </p>
-</section>
 
-<section class="container-medium sal-context">
-    <span class="section-label">MARKET SUMMARY</span>
-    <div class="sal-summary-box">
-        <p>
-            Quick read for this month:
-        </p>
-        <ul>
-            <li>August cooling: late-July switch volume is settling; notice and relieving backlogs are clearing while lateral offer velocity slows.</li>
-            <li>GCC offers still pay a premium, but most captives enforce 3–4 office days — price commute into the raise.</li>
-            <li>Staff+ IC promotions remain slot-limited; Senior bands compress unless you show multi-team scope.</li>
-            <li>AI/GenAI premiums (15–35%) stay narrow; cybersecurity, ESG, and portfolio-first hiring are diversifying demand beyond pure software IC roles.</li>
-        </ul>
-        <p class="sal-summary-date">
-            Updated: {% now "F Y" %}
-        </p>
+    <div class="cr-filter-bar" id="salaryExplorerFilters">
+        <input type="search" id="salarySearch" placeholder="Search role…" aria-label="Search roles">
+        <button type="button" class="cr-filter-chip is-active" data-cat="all">All</button>
+        <button type="button" class="cr-filter-chip" data-cat="engineering">Engineering</button>
+        <button type="button" class="cr-filter-chip" data-cat="design">Design &amp; product</button>
+        <button type="button" class="cr-filter-chip" data-cat="marketing">Marketing &amp; sales</button>
+        <button type="button" class="cr-filter-chip" data-cat="data">Data &amp; AI</button>
+        <button type="button" class="cr-filter-chip" data-cat="management">Management</button>
+        <a class="cr-state-cta" href="{% url 'submit_salary' %}?source=salary_explorer">Contribute a drop</a>
     </div>
-</section>
 
-<!-- METHODOLOGY & CONTEXT -->
-<section class="container-reading sal-methodology-section">
+    <p class="cr-band-legend" id="salaryResultMeta">Showing editorial offer bands (typical span). Hype = influencer / bootcamp ceiling.</p>
 
-    <p>
-        Salary conversations in India are distorted by survivorship bias. LinkedIn posts celebrate
-        outliers -- the friend who joined a unicorn at 40 LPA, the batchmate who cracked FAANG. These
-        stories spread because they're exceptional. What doesn't spread are the thousands of offers
-        at 6 LPA for the same roles, in the same cities, with the same skill sets.
-    </p>
-
-    <p>
-        The data below reflects the <strong>80th percentile reality</strong> -- what 80% of companies
-        actually pay for these roles. This includes IT services giants (TCS, Infosys, Wipro),
-        mid-sized agencies, and the vast majority of startups that aren't funded by Sequoia or Tiger Global.
-    </p>
-
-    <p>
-        The "Hype" column shows what influencers, bootcamps, and edtech platforms promise. These numbers
-        are technically possible -- but only for a small fraction of candidates, usually those with
-        specific pedigrees (IIT/IIM), prior experience at top-tier companies, or rare technical specializations.
-    </p>
-
-    <h3 class="sal-subsection-title">Sources &amp; Methodology</h3>
-    <p class="sal-methodology">
-        Data is aggregated from job postings on LinkedIn, Naukri, and company career pages; verified
-        offer letters shared with Career Reality; industry salary surveys from AmbitionBox and Glassdoor;
-        and direct conversations with hiring managers across 50+ companies. We exclude remote-US roles,
-        contractor positions, and outlier packages from well-funded unicorns.
-    </p>
-    <ul class="sal-sources">
-        <li><a href="https://www.ambitionbox.com/salaries" target="_blank" rel="noopener noreferrer">AmbitionBox Salary Data</a> (checked {% now "F j, Y" %})</li>
-        <li><a href="https://www.glassdoor.co.in/Salaries/index.htm" target="_blank" rel="noopener noreferrer">Glassdoor India Salary Reports</a> (checked {% now "F j, Y" %})</li>
-        <li><a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer">LinkedIn Jobs India</a> (checked {% now "F j, Y" %})</li>
-        <li><a href="https://www.naukri.com/" target="_blank" rel="noopener noreferrer">Naukri Job Listings</a> (checked {% now "F j, Y" %})</li>
-    </ul>
-</section>
-
-<section class="container-reading sal-methodology-section">
-    <h3 class="sal-subsection-title">Coverage and Limits</h3>
-    <ul class="sal-coverage">
-        <li>India-only, full-time roles; US-remote and contractor roles are excluded.</li>
-        <li>Ranges are median-heavy and calibrated for typical offers, not unicorn outliers.</li>
-        <li>Data is refreshed monthly; volatile roles may shift faster than the table.</li>
-    </ul>
-    <p class="sal-coverage-note">
-        Have better data or corrections? Use the Salary Drop to improve the ranges.
-    </p>
-    <a href="{% url 'submit_salary' %}" class="sal-submit-btn">
-        Submit a Salary Data Point
-    </a>
-</section>
-
-<!-- SECTION 1: ENGINEERING -->
-<section class="container-medium sal-table-section">
-    <span class="section-label">01 // ENGINEERING</span>
-
-    <div class="table-scroll">
-        <table class="editorial-table">
+    <div class="terminal-table-wrap">
+        <table class="cr-salary-table" id="salaryExplorerTable">
             <thead>
                 <tr>
-                    <th class="sal-col-role">Role &amp; Context</th>
-                    <th class="sal-col-exp">Exp</th>
-                    <th class="sal-col-range">Real Range (LPA)</th>
-                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
+                    <th>Role</th>
+                    <th>Exp</th>
+                    <th>Editorial band (LPA)</th>
+                    <th>Span</th>
+                    <th>Hype</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <strong>Junior Dev (Service Co.)</strong><br>
-                        <span class="sal-role-context">TCS, Wipro, Infy, etc.</span>
-                    </td>
+                {# ENGINEERING #}
+                <tr class="salary-row" data-cat="engineering" data-role="junior dev service" data-low="3.2" data-high="4.5" data-hype="10">
+                    <td><strong>Junior Dev (Service Co.)</strong><div class="meta-info">TCS, Wipro, Infy, etc.</div></td>
                     <td>0-2y</td>
-                    <td>3.2 - 4.5</td>
+                    <td><span class="cr-band-nums">3.2 – 4.5</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:3.2;--hi:4.5;--max:90"></span></div></td>
                     <td><span class="sal-hype">10.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Junior Dev (Startups)</strong><br>
-                        <span class="sal-role-context">Series A/B funded</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="junior dev startups" data-low="6" data-high="12" data-hype="20">
+                    <td><strong>Junior Dev (Startups)</strong><div class="meta-info">Series A/B funded</div></td>
                     <td>0-2y</td>
-                    <td>6.0 - 12.0</td>
+                    <td><span class="cr-band-nums">6.0 – 12.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:6;--hi:12;--max:90"></span></div></td>
                     <td><span class="sal-hype">20.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Senior Backend Dev</strong><br>
-                        <span class="sal-role-context">Java/Spring/Node</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="senior backend" data-low="18" data-high="32" data-hype="60">
+                    <td><strong>Senior Backend Dev</strong><div class="meta-info">Java/Spring/Node</div></td>
                     <td>5-8y</td>
-                    <td>18.0 - 32.0</td>
+                    <td><span class="cr-band-nums">18.0 – 32.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:18;--hi:32;--max:90"></span></div></td>
                     <td><span class="sal-hype">60.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Staff Engineer</strong><br>
-                        <span class="sal-role-context">Multi-team IC scope</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="staff engineer" data-low="35" data-high="60" data-hype="90">
+                    <td><strong>Staff Engineer</strong><div class="meta-info">Multi-team IC scope</div></td>
                     <td>8-14y</td>
-                    <td>35.0 - 60.0</td>
+                    <td><span class="cr-band-nums">35.0 – 60.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:35;--hi:60;--max:90"></span></div></td>
                     <td><span class="sal-hype">90.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>QA / Automation Engineer</strong><br>
-                        <span class="sal-role-context">Selenium/Python</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="qa automation" data-low="6" data-high="10" data-hype="20">
+                    <td><strong>QA / Automation Engineer</strong><div class="meta-info">Selenium/Python</div></td>
                     <td>3-5y</td>
-                    <td>6.0 - 10.0</td>
+                    <td><span class="cr-band-nums">6.0 – 10.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:6;--hi:10;--max:90"></span></div></td>
                     <td><span class="sal-hype">20.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Data Scientist (Junior)</strong><br>
-                        <span class="sal-role-context">Mostly SQL/Cleaning</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="data scientist junior" data-low="5" data-high="9" data-hype="18">
+                    <td><strong>Data Scientist (Junior)</strong><div class="meta-info">Mostly SQL/Cleaning</div></td>
                     <td>0-2y</td>
-                    <td>5.0 - 9.0</td>
+                    <td><span class="cr-band-nums">5.0 – 9.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:5;--hi:9;--max:90"></span></div></td>
                     <td><span class="sal-hype">18.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>DevOps / SRE</strong><br>
-                        <span class="sal-role-context">AWS/Terraform/CI-CD</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="devops sre" data-low="13" data-high="22" data-hype="40">
+                    <td><strong>DevOps / SRE</strong><div class="meta-info">AWS/Terraform/CI-CD</div></td>
                     <td>3-6y</td>
-                    <td>13.0 - 22.0</td>
+                    <td><span class="cr-band-nums">13.0 – 22.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:13;--hi:22;--max:90"></span></div></td>
                     <td><span class="sal-hype">40.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Mobile Dev (Android/iOS)</strong><br>
-                        <span class="sal-role-context">Native or Flutter</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="mobile android ios" data-low="8.5" data-high="16" data-hype="30">
+                    <td><strong>Mobile Dev (Android/iOS)</strong><div class="meta-info">Native or Flutter</div></td>
                     <td>2-4y</td>
-                    <td>8.5 - 16.0</td>
+                    <td><span class="cr-band-nums">8.5 – 16.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:8.5;--hi:16;--max:90"></span></div></td>
                     <td><span class="sal-hype">30.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Frontend Specialist</strong><br>
-                        <span class="sal-role-context">React/Next.js/Perf</span>
-                    </td>
+                <tr class="salary-row" data-cat="engineering" data-role="frontend specialist" data-low="7.5" data-high="15" data-hype="25">
+                    <td><strong>Frontend Specialist</strong><div class="meta-info">React/Next.js/Perf</div></td>
                     <td>2-5y</td>
-                    <td>7.5 - 15.0</td>
+                    <td><span class="cr-band-nums">7.5 – 15.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:7.5;--hi:15;--max:90"></span></div></td>
                     <td><span class="sal-hype">25.0</span></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
 
-<!-- SECTION 2: DESIGN & PRODUCT -->
-<section class="container-medium sal-table-section">
-    <span class="section-label">02 // DESIGN &amp; PRODUCT</span>
-
-    <div class="table-scroll">
-        <table class="editorial-table">
-            <thead>
-                <tr>
-                    <th class="sal-col-role">Role &amp; Context</th>
-                    <th class="sal-col-exp">Exp</th>
-                    <th class="sal-col-range">Real Range (LPA)</th>
-                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <strong>UX Designer (Agency)</strong><br>
-                        <span class="sal-role-context">High volume, low strategy</span>
-                    </td>
+                {# DESIGN #}
+                <tr class="salary-row" data-cat="design" data-role="ux designer agency" data-low="3.6" data-high="6" data-hype="15">
+                    <td><strong>UX Designer (Agency)</strong><div class="meta-info">High volume, low strategy</div></td>
                     <td>1-3y</td>
-                    <td>3.6 - 6.0</td>
+                    <td><span class="cr-band-nums">3.6 – 6.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:3.6;--hi:6;--max:90"></span></div></td>
                     <td><span class="sal-hype">15.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Product Designer (Tech)</strong><br>
-                        <span class="sal-role-context">Product-led companies</span>
-                    </td>
+                <tr class="salary-row" data-cat="design" data-role="product designer" data-low="9" data-high="16" data-hype="30">
+                    <td><strong>Product Designer (Tech)</strong><div class="meta-info">Product-led companies</div></td>
                     <td>2-4y</td>
-                    <td>9.0 - 16.0</td>
+                    <td><span class="cr-band-nums">9.0 – 16.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:9;--hi:16;--max:90"></span></div></td>
                     <td><span class="sal-hype">30.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Graphic Designer</strong><br>
-                        <span class="sal-role-context">Social Media/Marketing</span>
-                    </td>
+                <tr class="salary-row" data-cat="design" data-role="graphic designer" data-low="2.4" data-high="4.5" data-hype="10">
+                    <td><strong>Graphic Designer</strong><div class="meta-info">Social Media/Marketing</div></td>
                     <td>1-3y</td>
-                    <td>2.4 - 4.5</td>
+                    <td><span class="cr-band-nums">2.4 – 4.5</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:2.4;--hi:4.5;--max:90"></span></div></td>
                     <td><span class="sal-hype">10.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Product Manager</strong><br>
-                        <span class="sal-role-context">Generalist / Feature Owner</span>
-                    </td>
+                <tr class="salary-row" data-cat="design" data-role="product manager" data-low="15" data-high="25" data-hype="50">
+                    <td><strong>Product Manager</strong><div class="meta-info">Generalist / Feature Owner</div></td>
                     <td>3-5y</td>
-                    <td>15.0 - 25.0</td>
+                    <td><span class="cr-band-nums">15.0 – 25.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:15;--hi:25;--max:90"></span></div></td>
                     <td><span class="sal-hype">50.0</span></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
 
-<!-- SECTION 3: BUSINESS & MARKETING -->
-<section class="container-medium sal-table-section">
-    <span class="section-label">03 // MARKETING &amp; SALES</span>
-
-    <div class="table-scroll">
-        <table class="editorial-table">
-            <thead>
-                <tr>
-                    <th class="sal-col-role">Role &amp; Context</th>
-                    <th class="sal-col-exp">Exp</th>
-                    <th class="sal-col-range">Real Range (LPA)</th>
-                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <strong>Digital Marketer</strong><br>
-                        <span class="sal-role-context">PPC/SEO Execution</span>
-                    </td>
+                {# MARKETING #}
+                <tr class="salary-row" data-cat="marketing" data-role="digital marketer" data-low="3" data-high="5.5" data-hype="12">
+                    <td><strong>Digital Marketer</strong><div class="meta-info">PPC/SEO Execution</div></td>
                     <td>1-3y</td>
-                    <td>3.0 - 5.5</td>
+                    <td><span class="cr-band-nums">3.0 – 5.5</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:3;--hi:5.5;--max:90"></span></div></td>
                     <td><span class="sal-hype">12.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Content Writer</strong><br>
-                        <span class="sal-role-context">Blogs/Social Copy</span>
-                    </td>
+                <tr class="salary-row" data-cat="marketing" data-role="content writer" data-low="2.4" data-high="4.8" data-hype="10">
+                    <td><strong>Content Writer</strong><div class="meta-info">Blogs/Social Copy</div></td>
                     <td>1-3y</td>
-                    <td>2.4 - 4.8</td>
+                    <td><span class="cr-band-nums">2.4 – 4.8</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:2.4;--hi:4.8;--max:90"></span></div></td>
                     <td><span class="sal-hype">10.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>B2B Sales (SaaS)</strong><br>
-                        <span class="sal-role-context">Base Salary (Excl. Comm)</span>
-                    </td>
+                <tr class="salary-row" data-cat="marketing" data-role="b2b sales saas" data-low="6" data-high="10" data-hype="25">
+                    <td><strong>B2B Sales (SaaS)</strong><div class="meta-info">Base salary (excl. commission)</div></td>
                     <td>2-4y</td>
-                    <td>6.0 - 10.0</td>
+                    <td><span class="cr-band-nums">6.0 – 10.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:6;--hi:10;--max:90"></span></div></td>
                     <td><span class="sal-hype">25.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>HR Recruiter</strong><br>
-                        <span class="sal-role-context">Agency or Corporate</span>
-                    </td>
+                <tr class="salary-row" data-cat="marketing" data-role="hr recruiter" data-low="3.5" data-high="6" data-hype="12">
+                    <td><strong>HR Recruiter</strong><div class="meta-info">Agency or Corporate</div></td>
                     <td>2-4y</td>
-                    <td>3.5 - 6.0</td>
+                    <td><span class="cr-band-nums">3.5 – 6.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:3.5;--hi:6;--max:90"></span></div></td>
                     <td><span class="sal-hype">12.0</span></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
 
-<!-- SECTION 4: DATA & AI -->
-<section class="container-medium sal-table-section">
-    <span class="section-label">04 // DATA &amp; AI</span>
-
-    <div class="table-scroll">
-        <table class="editorial-table">
-            <thead>
-                <tr>
-                    <th class="sal-col-role">Role &amp; Context</th>
-                    <th class="sal-col-exp">Exp</th>
-                    <th class="sal-col-range">Real Range (LPA)</th>
-                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <strong>Data Analyst</strong><br>
-                        <span class="sal-role-context">Excel/SQL/Tableau</span>
-                    </td>
+                {# DATA #}
+                <tr class="salary-row" data-cat="data" data-role="data analyst" data-low="4.5" data-high="7.5" data-hype="15">
+                    <td><strong>Data Analyst</strong><div class="meta-info">Excel/SQL/Tableau</div></td>
                     <td>1-3y</td>
-                    <td>4.5 - 7.5</td>
+                    <td><span class="cr-band-nums">4.5 – 7.5</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:4.5;--hi:7.5;--max:90"></span></div></td>
                     <td><span class="sal-hype">15.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Data Engineer</strong><br>
-                        <span class="sal-role-context">Pipelines/Spark/Cloud</span>
-                    </td>
+                <tr class="salary-row" data-cat="data" data-role="data engineer" data-low="14" data-high="24" data-hype="35">
+                    <td><strong>Data Engineer</strong><div class="meta-info">Pipelines/Spark/Cloud</div></td>
                     <td>3-5y</td>
-                    <td>14.0 - 24.0</td>
+                    <td><span class="cr-band-nums">14.0 – 24.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:14;--hi:24;--max:90"></span></div></td>
                     <td><span class="sal-hype">35.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>ML Engineer</strong><br>
-                        <span class="sal-role-context">Actual deployment, not
-                            notebooks</span>
-                    </td>
+                <tr class="salary-row" data-cat="data" data-role="ml engineer" data-low="12" data-high="20" data-hype="45">
+                    <td><strong>ML Engineer</strong><div class="meta-info">Actual deployment, not notebooks</div></td>
                     <td>2-5y</td>
-                    <td>12.0 - 20.0</td>
+                    <td><span class="cr-band-nums">12.0 – 20.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:12;--hi:20;--max:90"></span></div></td>
                     <td><span class="sal-hype">45.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>AI/GenAI Dev</strong><br>
-                        <span class="sal-role-context">RAG/LLM/Agent Integration</span>
-                    </td>
+                <tr class="salary-row" data-cat="data" data-role="ai genai" data-low="10" data-high="18" data-hype="35">
+                    <td><strong>AI/GenAI Dev</strong><div class="meta-info">RAG/LLM/Agent Integration</div></td>
                     <td>1-3y</td>
-                    <td>10.0 - 18.0</td>
+                    <td><span class="cr-band-nums">10.0 – 18.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:10;--hi:18;--max:90"></span></div></td>
                     <td><span class="sal-hype">35.0</span></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
 
-<!-- SECTION 5: MANAGEMENT & STRATEGY -->
-<section class="container-medium sal-table-section">
-    <span class="section-label">05 // MANAGEMENT &amp; STRATEGY</span>
-
-    <div class="table-scroll">
-        <table class="editorial-table">
-            <thead>
-                <tr>
-                    <th class="sal-col-role">Role &amp; Context</th>
-                    <th class="sal-col-exp">Exp</th>
-                    <th class="sal-col-range">Real Range (LPA)</th>
-                    <th class="sal-col-hype">The &ldquo;Hype&rdquo;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <strong>Engineering Manager</strong><br>
-                        <span class="sal-role-context">People + Tech</span>
-                    </td>
+                {# MANAGEMENT #}
+                <tr class="salary-row" data-cat="management" data-role="engineering manager" data-low="28" data-high="45" data-hype="80">
+                    <td><strong>Engineering Manager</strong><div class="meta-info">People + Tech</div></td>
                     <td>10-14y</td>
-                    <td>28.0 - 45.0</td>
+                    <td><span class="cr-band-nums">28.0 – 45.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:28;--hi:45;--max:90"></span></div></td>
                     <td><span class="sal-hype">80.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Project Manager</strong><br>
-                        <span class="sal-role-context">Service Co. / IT Ops</span>
-                    </td>
+                <tr class="salary-row" data-cat="management" data-role="project manager" data-low="14" data-high="22" data-hype="35">
+                    <td><strong>Project Manager</strong><div class="meta-info">Service Co. / IT Ops</div></td>
                     <td>8-12y</td>
-                    <td>14.0 - 22.0</td>
+                    <td><span class="cr-band-nums">14.0 – 22.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:14;--hi:22;--max:90"></span></div></td>
                     <td><span class="sal-hype">35.0</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Founder's Office / CoS</strong><br>
-                        <span class="sal-role-context">Generalist / Strategy</span>
-                    </td>
+                <tr class="salary-row" data-cat="management" data-role="founders office cos" data-low="12" data-high="20" data-hype="50">
+                    <td><strong>Founder's Office / CoS</strong><div class="meta-info">Generalist / Strategy</div></td>
                     <td>2-5y</td>
-                    <td>12.0 - 20.0</td>
+                    <td><span class="cr-band-nums">12.0 – 20.0</span></td>
+                    <td><div class="cr-band-track" aria-hidden="true"><span class="cr-band-fill" style="--lo:12;--hi:20;--max:90"></span></div></td>
                     <td><span class="sal-hype">50.0</span></td>
                 </tr>
             </tbody>
         </table>
     </div>
+
+    <div id="salaryEmptyState" hidden>
+        {% include "partials/ui_states.html" with state="empty" title="No roles match" body="Try another search or clear the category filter." %}
+    </div>
+
+    <div class="cr-salary-notes">
+        <h2 class="sal-subsection-title">How to read this</h2>
+        <p>
+            <strong>Editorial band</strong> is the typical offer span for most Indian employers in that cluster —
+            services majors, mid-market product, and non-unicorn startups. It is <em>not</em> a statistical P25–P90
+            unless a verified sample set is published separately.
+        </p>
+        <p>
+            <strong>Hype</strong> is the ceiling influencers and bootcamps advertise. Plan on the band; treat the hype as lottery.
+        </p>
+        <p class="sal-summary-date">Market note ({% now "F Y" %}): GCC premiums persist with RTO; Staff+ slots stay scarce; AI premiums remain narrow.</p>
+        <a href="{% url 'submit_salary' %}" class="cr-state-cta">Submit a salary data point</a>
+    </div>
+
+    <section class="sal-methodology-section" style="margin-top:2.5rem;">
+        <h2 class="sal-subsection-title">Sources &amp; methodology</h2>
+        <p class="sal-methodology">
+            Aggregated from job postings, verified offer letters shared with Career Reality, AmbitionBox/Glassdoor surveys,
+            and hiring-manager conversations. Excludes remote-US roles, contractors, and unicorn outliers.
+        </p>
+        <ul class="sal-sources">
+            <li><a href="https://www.ambitionbox.com/salaries" target="_blank" rel="noopener noreferrer">AmbitionBox Salary Data</a></li>
+            <li><a href="https://www.glassdoor.co.in/Salaries/index.htm" target="_blank" rel="noopener noreferrer">Glassdoor India</a></li>
+            <li><a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer">LinkedIn Jobs India</a></li>
+            <li><a href="https://www.naukri.com/" target="_blank" rel="noopener noreferrer">Naukri Job Listings</a></li>
+        </ul>
+    </section>
 </section>
 
-<!-- EXPLANATION -->
-<section class="container-reading sal-explainer">
-    <h3>How to read this</h3>
-    <p>
-        The <strong>"Hype"</strong> number is what influencers, bootcamps, and viral LinkedIn posts tell you to expect.
-        <br><br>
-        The <strong>"Real Range"</strong> is what 80% of companies actually offer. This includes Service-based giants
-        (TCS, Infosys) and mid-sized agencies, which make up 90% of the hiring volume in India.
-        <br><br>
-        <strong>Verdict:</strong> Plan your life based on the reality, not the lottery.
-    </p>
-</section>
+<script>
+(function () {
+    var input = document.getElementById('salarySearch');
+    var chips = document.querySelectorAll('#salaryExplorerFilters [data-cat]');
+    var rows = document.querySelectorAll('#salaryExplorerTable .salary-row');
+    var empty = document.getElementById('salaryEmptyState');
+    var meta = document.getElementById('salaryResultMeta');
+    var activeCat = 'all';
 
-<section class="container-reading sal-methodology-section">
-    <h3 class="sal-subsection-title">What Changed In This Update</h3>
-    <ul class="sal-changelog">
-        <li><strong>{% now "F j, Y" %}:</strong> Refreshed market notes, validated role bands, and rechecked methodology sources.</li>
-        <li><strong>3 August 2026:</strong> August refresh — post-switch-wave cooling noted; cybersecurity/ESG/portfolio-first demand called out in market summary; Career Index August baseline published.</li>
-        <li><strong>29 July 2026:</strong> Late-July refresh — Staff band added to engineering table context; GCC RTO and clawback notes in market summary; backend/platform top-end nudged.</li>
-        <li><strong>July 2026:</strong> Post-appraisal band validation; product fresher median nudged to 8–13 LPA; GCC summer hiring slowdown noted in methodology.</li>
-        <li><strong>March 2026:</strong> AI/GenAI and ML Engineer ranges revised upward; senior backend top-end nudged to 30 LPA reflecting appraisal-cycle offers. Mobile dev range adjusted.</li>
-        <li><strong>February 2026:</strong> Rechecked all five tables against AmbitionBox Q4 salary surveys and Naukri demand indices.</li>
-        <li><strong>January 2026:</strong> Expanded management and strategy salary coverage.</li>
-        <li><strong>December 2025:</strong> Added explicit hype-vs-reality comparisons by role cluster.</li>
-    </ul>
-    <p class="sal-changelog-note">
-        Update cadence: monthly scheduled review, plus ad-hoc corrections when major salary shifts occur.
-    </p>
-</section>
+    function positionBands() {
+        rows.forEach(function (row) {
+            var fill = row.querySelector('.cr-band-fill');
+            if (!fill) return;
+            var lo = parseFloat(row.getAttribute('data-low') || '0');
+            var hi = parseFloat(row.getAttribute('data-high') || '0');
+            var max = parseFloat(getComputedStyle(fill).getPropertyValue('--max')) || 90;
+            var left = Math.max(0, (lo / max) * 100);
+            var width = Math.max(2, ((hi - lo) / max) * 100);
+            fill.style.left = left + '%';
+            fill.style.width = width + '%';
+        });
+    }
+
+    function apply() {
+        var q = (input && input.value || '').toLowerCase().trim();
+        var visible = 0;
+        rows.forEach(function (row) {
+            var cat = row.getAttribute('data-cat') || '';
+            var role = row.getAttribute('data-role') || '';
+            var matchCat = activeCat === 'all' || cat === activeCat;
+            var matchQ = !q || role.indexOf(q) > -1 || (row.textContent || '').toLowerCase().indexOf(q) > -1;
+            var show = matchCat && matchQ;
+            row.style.display = show ? '' : 'none';
+            if (show) visible += 1;
+        });
+        if (empty) empty.hidden = visible > 0;
+        if (meta) meta.textContent = visible + ' role band' + (visible === 1 ? '' : 's') + ' · editorial offer spans (not fabricated percentiles)';
+    }
+
+    if (input) input.addEventListener('input', apply);
+    chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+            chips.forEach(function (c) { c.classList.remove('is-active'); });
+            chip.classList.add('is-active');
+            activeCat = chip.getAttribute('data-cat') || 'all';
+            apply();
+        });
+    });
+    positionBands();
+    apply();
+})();
+</script>
 
 <div class="container-medium" style="margin-bottom: var(--space-xl);">
     {% include "partials/seo_tool_hub.html" %}
     {% include "partials/seo_pillar_links.html" %}
 </div>
-
 {% endblock %}
-
-

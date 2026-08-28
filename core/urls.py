@@ -18,6 +18,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('terms/', views.terms, name='terms'),
     path('topic-clusters/', views.topic_clusters, name='topic_clusters'),
+    path('analysis/', views.analysis_hub, name='analysis_hub'),
     path('career-reality-index/', views.career_reality_index, name='career_reality_index'),
     path('revenue-model/', views.revenue_model, name='revenue_model'),
     path('sponsorship-policy/', views.sponsorship_policy, name='sponsorship_policy'),

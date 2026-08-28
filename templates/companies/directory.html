@@ -19,12 +19,13 @@
 {% endblock %}
 
 {% block content %}
-<section class="dir-hero">
+<section class="dir-hero cr-surface-hero">
     <div class="container-wide">
         <div class="dir-hero-inner">
             <div>
-                <h1>Company Intelligence</h1>
-                <p>Honest salary data, anonymous reviews, and layoff alerts for companies with community-contributed data.</p>
+                <p class="cr-page-kicker">Company intelligence</p>
+                <h1 class="cr-page-title">Companies</h1>
+                <p class="cr-page-lede">Honest salary data, anonymous reviews, and layoff alerts from community contributions.</p>
                 <div class="dir-stats">
                     <div class="dir-stat"><strong>{{ total_companies }}</strong><span>Companies</span></div>
                     <div class="dir-stat"><strong>{{ total_salaries }}</strong><span>Salary Points</span></div>
@@ -32,9 +33,9 @@
                 </div>
             </div>
             <div class="dir-hero-cta">
-                <a href="{% url 'submit_salary' %}" class="dir-cta-btn">+ Contribute Salary Data</a>
-                <a href="{% url 'write_review' %}" class="dir-cta-btn dir-cta-btn--secondary">✍️ Write a Review</a>
-                <p class="dir-cta-note">Anonymous &middot; 2 min &middot; Helps everyone</p>
+                <a href="{% url 'submit_salary' %}" class="cr-state-cta">Contribute salary data</a>
+                <a href="{% url 'write_review' %}" class="cr-filter-chip">Write a review</a>
+                <p class="dir-cta-note">Anonymous · 2 min · Helps everyone</p>
             </div>
         </div>
     </div>
@@ -133,13 +134,8 @@
     {% endif %}
 
     {% else %}
-    <div class="dir-empty">
-        <p class="dir-empty-msg">No companies with salary or review data yet{% if search_query %} matching "{{ search_query }}"{% endif %}.</p>
-        {% if pending_companies_count %}
-        <p>{{ pending_companies_count }} companies are listed internally but hidden until someone contributes salary or review data.</p>
-        {% endif %}
-        <p>Be the first: <a href="{% url 'submit_salary' %}" class="dir-empty-link">Submit salary data</a> or <a href="{% url 'write_review' %}" class="dir-empty-link">write a review</a>.</p>
-    </div>
+    {% url 'submit_salary' as drop_url %}
+    {% include "partials/ui_states.html" with state="empty" title="No companies match yet" body="Contribute a salary or review to surface the first company intelligence cards." cta_url=drop_url cta_label="Submit salary data" %}
     {% endif %}
 </div>
 {% endblock %}

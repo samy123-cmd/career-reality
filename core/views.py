@@ -411,6 +411,35 @@ def topic_clusters(request):
     })
 
 
+@cache_page(60 * 10, key_prefix="analysis_hub_v1")
+def analysis_hub(request):
+    """First-class Analysis newsroom hub using existing Article/Category content."""
+    from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS, indexable_categories_queryset
+    from content.models import Article
+
+    articles = (
+        Article.objects.filter(status="published")
+        .exclude(slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS)
+        .select_related("author", "category")
+        .order_by("-published_at")[:40]
+    )
+    categories = indexable_categories_queryset()
+    title = "Analysis — Career Reality India"
+    description = (
+        "Editorial analysis on Indian tech salaries, CTC reality, layoff risk, "
+        "and career decisions — evidence-backed, not folklore."
+    )
+    return render(
+        request,
+        "core/analysis_hub.html",
+        {
+            "articles": articles,
+            "categories": categories,
+            **_seo(title, description),
+        },
+    )
+
+
 @cache_page(60 * 15)
 def career_reality_index(request):
     title = "Career Reality Index (India) - Monthly Career Pressure Tracker"
