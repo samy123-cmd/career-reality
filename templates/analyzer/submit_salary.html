@@ -10,56 +10,57 @@
 {% block page_css %}{% include "partials/css_tools.html" %}{% endblock %}
 
 {% block content %}
-<section class="container-medium" style="margin-top: var(--space-lg); margin-bottom: var(--space-xl);">
+<section class="container-medium cr-page-shell cr-more-leaf">
 
     <div class="az-form-hero">
-        <h1 class="az-form-title">The Salary Drop</h1>
-        <p class="az-form-subtitle">
-            Glassdoor is censored. LinkedIn is fake.
-            <br>Drop your real numbers anonymously. Earn <strong>3 unlock credits</strong> per submission.
+        <p class="cr-page-kicker">Community contribution</p>
+        <h1 class="az-form-title cr-page-title">The Salary Drop</h1>
+        <p class="az-form-subtitle cr-page-lede">
+            Drop real numbers. If you are signed in, the entry also appears in your private ledger.
+            Earn <strong>3 unlock credits</strong> per submission.
         </p>
     </div>
 
-    <div class="az-form-card">
-        <form method="POST" action="{% url 'submit_salary' %}{% if source %}?source={{ source }}{% endif %}">
+    <div class="az-form-card cr-surface-panel">
+        <form method="POST" action="{% url 'submit_salary' %}{% if source %}?source={{ source }}{% endif %}" novalidate>
             {% csrf_token %}
             <input type="hidden" name="source" value="{{ source|default:form.source.value|default:'' }}">
 
             <div class="az-field">
-                <label class="az-label">Role / Job Title</label>
-                <input type="text" name="role" placeholder="e.g. Senior Backend Engineer" required
-                    class="az-input" value="{{ form.role.value|default:'' }}">
+                <label class="az-label" for="id_role">Role / Job Title</label>
+                <input type="text" name="role" id="id_role" placeholder="e.g. Senior Backend Engineer" required
+                    class="az-input" value="{{ form.role.value|default:'' }}" autocomplete="organization-title">
             </div>
 
             <div class="az-field">
-                <label class="az-label">Company Name (optional)</label>
-                <input type="text" name="company_name" placeholder="e.g. Infosys, Swiggy"
-                    class="az-input az-input--light" value="{{ form.company_name.value|default:'' }}">
+                <label class="az-label" for="id_company_name">Company Name (optional)</label>
+                <input type="text" name="company_name" id="id_company_name" placeholder="e.g. Infosys, Swiggy"
+                    class="az-input az-input--light" value="{{ form.company_name.value|default:'' }}" autocomplete="organization">
             </div>
 
             <div class="az-field">
-                <label class="az-label">Tech Stack (Optional)</label>
-                <input type="text" name="tech_stack" placeholder="e.g. Java, Spring Boot, AWS"
+                <label class="az-label" for="id_tech_stack">Tech Stack (optional)</label>
+                <input type="text" name="tech_stack" id="id_tech_stack" placeholder="e.g. Java, Spring Boot, AWS"
                     class="az-input az-input--light" value="{{ form.tech_stack.value|default:'' }}">
             </div>
 
             <div class="az-grid-2">
                 <div>
-                    <label class="az-label">Experience (Years)</label>
-                    <input type="number" step="0.1" name="experience_years" placeholder="e.g. 3.5" required
-                        class="az-input" value="{{ form.experience_years.value|default:'' }}">
+                    <label class="az-label" for="id_experience_years">Experience (Years)</label>
+                    <input type="number" step="0.1" name="experience_years" id="id_experience_years" placeholder="e.g. 3.5" required
+                        class="az-input" value="{{ form.experience_years.value|default:'' }}" inputmode="decimal">
                 </div>
                 <div>
-                    <label class="az-label">Annual CTC (Rs)</label>
-                    <input type="number" name="ctc" placeholder="e.g. 1200000" required
-                        class="az-input" value="{{ form.ctc.value|default:'' }}">
+                    <label class="az-label" for="id_ctc">Annual CTC (Rs)</label>
+                    <input type="number" name="ctc" id="id_ctc" placeholder="e.g. 1200000" required
+                        class="az-input" value="{{ form.ctc.value|default:'' }}" inputmode="numeric">
                 </div>
             </div>
 
             <div class="az-grid-2">
                 <div>
-                    <label class="az-label">Company Type</label>
-                    <select name="company_type" required class="az-select az-input--light">
+                    <label class="az-label" for="id_company_type">Company Type</label>
+                    <select name="company_type" id="id_company_type" required class="az-select az-input--light">
                         <option value="service">Service Based (TCS/Wipro/etc)</option>
                         <option value="product">Product Based</option>
                         <option value="startup">Startup</option>
@@ -67,48 +68,52 @@
                     </select>
                 </div>
                 <div>
-                    <label class="az-label">City</label>
-                    <input type="text" name="city" placeholder="e.g. Bangalore" required
-                        class="az-input az-input--light" value="{{ form.city.value|default:'' }}">
+                    <label class="az-label" for="id_city">City</label>
+                    <input type="text" name="city" id="id_city" placeholder="e.g. Bangalore" required
+                        class="az-input az-input--light" value="{{ form.city.value|default:'' }}" autocomplete="address-level2">
                 </div>
             </div>
 
             <div class="az-field" style="margin-top: 1rem;">
-                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 14px; cursor: pointer;">
-                    <input type="checkbox" name="confirm_payslip" value="1" style="margin-top: 3px;">
+                <label class="az-check-label" for="id_confirm_payslip">
+                    <input type="checkbox" name="confirm_payslip" id="id_confirm_payslip" value="1">
                     <span>I confirm this matches my offer letter or payslip (helps light verification)</span>
                 </label>
             </div>
 
             {% if form.errors %}
-            <div class="az-form-errors" style="color: #d93025; margin-bottom: 1rem;">
+            <div class="az-form-errors" role="alert">
                 {% for field, errors in form.errors.items %}
                     {% for error in errors %}<p>{{ error }}</p>{% endfor %}
                 {% endfor %}
             </div>
             {% endif %}
 
-            <button type="submit" class="az-submit-btn">Submit Anonymously — Earn 3 Credits</button>
-            <p class="az-form-note">No names. No emails. Pure data.</p>
+            <button type="submit" class="az-submit-btn">Submit anonymously — earn 3 credits</button>
+            <p class="az-form-note">
+                Public bands stay anonymous. Signed-in drops also appear in your private ledger.
+                Historical anonymous drops made while logged out cannot be claimed later.
+            </p>
         </form>
     </div>
 
 <div style="max-width: 700px; margin: 2rem auto 0;">
     <div class="key-takeaway" style="margin-bottom: var(--space-md);">
-        <h4>How Your Data Is Used</h4>
+        <h2 style="font-size:1.1rem;">How your data is used</h2>
         <p>
-            We aggregate submissions to improve salary ranges and reality checks. No personal identifiers are stored.
+            We aggregate submissions to improve salary ranges and reality checks. No personal identifiers are shown publicly.
             Each submission unlocks 3 full salary records for you.
         </p>
     </div>
 
     <details class="collapsible" open>
-        <summary>Privacy and Safety</summary>
+        <summary>Privacy and safety</summary>
         <div class="content">
             <ul style="padding-left: 20px; margin: 0;">
-                <li>No names, emails, or employer IDs are stored.</li>
-                <li>We publish aggregated ranges only, not individual entries.</li>
+                <li>Public views never show your name or email.</li>
+                <li>We publish aggregated ranges only, not identifiable individual entries.</li>
                 <li>Suspicious or low-quality submissions are filtered.</li>
+                <li>Signed-in drops can appear in your private ledger; logged-out drops cannot be claimed later.</li>
             </ul>
         </div>
     </details>
@@ -117,5 +122,6 @@
         Last updated: {% now "F Y" %}
     </p>
 </div>
+
 </section>
 {% endblock %}

@@ -81,77 +81,8 @@
 
 {% block content %}
 
-<!-- ═══════════════ HERO ═══════════════ -->
-<section class="hp-hero">
-    <div class="hp-hero-inner container-wide">
-        <div class="hp-hero-content">
-            <div class="hp-hero-badge">India's Most Honest Career Platform</div>
-            <h1 class="hp-hero-title">
-                Stop guessing.<br>
-                <span class="hp-hero-accent">Know the reality.</span>
-            </h1>
-            <p class="hp-hero-sub">
-                Free CTC to in-hand calculator, software engineer salary India 2026 data,
-                IT layoff tracker, and evidence-backed career risk analysis — not LinkedIn folklore.
-            </p>
-            <div class="hp-hero-actions">
-                <a href="{% url 'salary_calculator' %}" class="hp-btn hp-btn--primary">
-                    <span>🧮</span> CTC Calculator
-                </a>
-                <a href="{% url 'analyzer_home' %}" class="hp-btn hp-btn--ghost">
-                    <span>🎯</span> Analyze Risk
-                </a>
-            </div>
-            <div class="hp-hero-proof">
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ assessment_count }}</span>
-                    <span class="hp-hero-stat-label">risk assessments run</span>
-                </div>
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ salary_count }}</span>
-                    <span class="hp-hero-stat-label">salary data points</span>
-                </div>
-                <div class="hp-hero-stat">
-                    <span class="hp-hero-stat-num">{{ layoff_count }}</span>
-                    <span class="hp-hero-stat-label">layoff reports tracked</span>
-                </div>
-            </div>
-        </div>
-        <div class="hp-hero-visual">
-            <div class="hp-index-card">
-                <div class="hp-index-header">
-                    <span class="hp-index-dot"></span>
-                    Career Reality Index
-                    <span class="hp-index-live">LIVE</span>
-                </div>
-                <div class="hp-index-month">{{ latest_index_row.month }}</div>
-                <div class="hp-index-score">{{ latest_index_row.overall }}<small>/100</small></div>
-                <div class="hp-index-band hp-index-band--{{ latest_band|slugify }}">{{ latest_band }}</div>
-                <div class="hp-index-meters">
-                    <div class="hp-meter">
-                        <div class="hp-meter-label">Salary Pressure</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
-                        <div class="hp-meter-val">{{ latest_index_row.salary_pressure }}</div>
-                    </div>
-                    <div class="hp-meter">
-                        <div class="hp-meter-label">Switch Difficulty</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
-                        <div class="hp-meter-val">{{ latest_index_row.switch_difficulty }}</div>
-                    </div>
-                    <div class="hp-meter">
-                        <div class="hp-meter-label">Layoff Risk</div>
-                        <div class="hp-meter-bar"><div class="hp-meter-fill hp-meter-fill--warn" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
-                        <div class="hp-meter-val">{{ latest_index_row.layoff_risk }}</div>
-                    </div>
-                </div>
-                <a href="{% url 'career_reality_index' %}" class="hp-index-link">View full methodology →</a>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- ═══════════════ LIVE SALARY TICKER ═══════════════ -->
-<div class="hp-ticker" id="salary-ticker-container">
+<div class="hp-ticker terminal-ticker" id="salary-ticker-container">
     <div class="hp-ticker-label">Live</div>
     <div class="hp-ticker-track" id="salary-ticker-content">
         {% if salary_ticker_items %}
@@ -171,6 +102,117 @@
         {% endif %}
     </div>
 </div>
+
+<section class="terminal-page container-wide">
+    <div class="terminal-grid">
+        <aside class="terminal-index" aria-label="Career Reality Index">
+            <div class="terminal-index-card">
+                <div class="terminal-index-label"><span class="dot" aria-hidden="true"></span> Career Reality Index · {{ latest_index_row.month }}</div>
+                <div class="terminal-index-score">{{ latest_index_row.overall }}<small>/100</small></div>
+                <div class="terminal-index-band">{{ latest_band }}</div>
+                <p class="terminal-index-copy">
+                    Composite of {{ salary_count }} compensation submissions, {{ layoff_count }} tracked layoff reports,
+                    and hiring-velocity signals across Indian metros.
+                </p>
+                <div class="terminal-meter">
+                    <span class="terminal-meter-label">Salary pressure</span>
+                    <span class="terminal-meter-val">{{ latest_index_row.salary_pressure }}</span>
+                    <div class="terminal-meter-bar"><div class="terminal-meter-fill" style="width:{{ latest_index_row.salary_pressure }}%"></div></div>
+                </div>
+                <div class="terminal-meter">
+                    <span class="terminal-meter-label">Switch difficulty</span>
+                    <span class="terminal-meter-val">{{ latest_index_row.switch_difficulty }}</span>
+                    <div class="terminal-meter-bar"><div class="terminal-meter-fill" style="width:{{ latest_index_row.switch_difficulty }}%"></div></div>
+                </div>
+                <div class="terminal-meter">
+                    <span class="terminal-meter-label">Layoff risk</span>
+                    <span class="terminal-meter-val">{{ latest_index_row.layoff_risk }}</span>
+                    <div class="terminal-meter-bar"><div class="terminal-meter-fill" style="width:{{ latest_index_row.layoff_risk }}%"></div></div>
+                </div>
+                <div class="terminal-instruments">
+                    <h3>Instruments</h3>
+                    <a class="terminal-instrument" href="{% url 'salary_reality' %}">Salary explorer <span>{{ salary_count }} points</span></a>
+                    <a class="terminal-instrument" href="{% url 'salary_calculator' %}">CTC decoder <span>In-hand</span></a>
+                    <a class="terminal-instrument" href="{% url 'layoff_radar' %}">Layoff radar <span>{{ layoff_count }} tracked</span></a>
+                    <a class="terminal-instrument" href="{% url 'analyzer_home' %}">Risk analyzer <span>{{ assessment_count }} runs</span></a>
+                </div>
+            </div>
+        </aside>
+
+        <div class="terminal-main">
+            <div class="terminal-hero">
+                <h1>Stop guessing what the market pays.</h1>
+                <p>
+                    Every band below carries its source context. Nothing here is sponsored or inferred from job-listing folklore —
+                    it is compiled from published compensation datasets and offer letters submitted by people doing the work.
+                </p>
+            </div>
+
+            <div class="terminal-table-wrap">
+                <table class="terminal-table">
+                    <caption class="visually-hidden">Editorial salary bands for common Indian tech roles (₹ LPA)</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Role</th>
+                            <th scope="col">Experience</th>
+                            <th scope="col">City · tier</th>
+                            <th scope="col">Band low</th>
+                            <th scope="col">Mid</th>
+                            <th scope="col">Band high</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in terminal_salary_rows %}
+                        <tr>
+                            <td class="role">{{ row.role }}</td>
+                            <td>{{ row.exp }}</td>
+                            <td>{{ row.city }}</td>
+                            <td>{{ row.band_low }}</td>
+                            <td>{{ row.mid }}</td>
+                            <td>{{ row.band_high }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="terminal-table-foot">
+                    <span>₹ lakh per annum · total compensation · editorial offer bands (not verified percentiles)</span>
+                    <a href="{% url 'salary_reality' %}">Open the explorer →</a>
+                </div>
+            </div>
+
+            <div class="terminal-cta-band">
+                <h2>Fix the opacity you complain about.</h2>
+                <p>Create a free account, drop anonymous salary data, and choose what becomes part of the public benchmark.</p>
+                {% if user.is_authenticated %}
+                <a class="btn" href="{% url 'submit_salary' %}">Drop a salary</a>
+                {% else %}
+                <a class="btn" href="{% url 'account_signup' %}">Create account</a>
+                {% endif %}
+            </div>
+
+            {% if articles %}
+            <div class="terminal-analysis">
+                <div class="terminal-analysis-label">Recent analysis</div>
+                {% for article in articles|slice:":4" %}
+                <a class="terminal-analysis-item" href="{% url 'article_detail' article.slug %}">
+                    <div class="terminal-analysis-meta">
+                        <span class="tag">{{ article.category.name|default:"Analysis" }}</span>
+                        {{ article.updated_at|date:"j M Y" }}
+                    </div>
+                    <div>
+                        <h3>{{ article.title }}</h3>
+                        <p>{{ article.common_expectation|striptags|truncatewords:28 }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+                <p style="margin-top:1.25rem;">
+                    <a href="{% url 'topic_clusters' %}" style="color:var(--cr-accent);font-weight:700;text-decoration:none;">All analysis →</a>
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
 <!-- ═══════════════ TOOLS ═══════════════ -->
 <section class="hp-section container-wide">
@@ -207,7 +249,7 @@
                 <span class="hp-tool-index" aria-hidden="true">03</span>
                 <span class="hp-tool-mark hp-tool-mark--company" aria-hidden="true"></span>
                 <span class="hp-tool-copy">
-                    <span class="hp-tool-name">Company Intelligence <span class="hp-tool-badge">New</span></span>
+                    <span class="hp-tool-name">Company Intelligence</span>
                     <span class="hp-tool-desc">Reviews, salary signals, and culture notes across {{ company_count }} Indian employers.</span>
                 </span>
                 <span class="hp-tool-go" aria-hidden="true">
@@ -414,7 +456,8 @@
             {% csrf_token %}
             <input type="hidden" name="source" value="home_footer_cta">
             <div class="hp-newsletter-field">
-                <input type="email" name="email" placeholder="your@email.com" required
+                <label class="visually-hidden" for="home-newsletter-email">Email address</label>
+                <input type="email" name="email" id="home-newsletter-email" placeholder="your@email.com" required
                     class="hp-newsletter-input" autocomplete="email">
                 <button type="submit" class="hp-newsletter-btn">Get the Intel →</button>
             </div>

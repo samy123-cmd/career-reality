@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Private salary ledger — Career Reality{% endblock %}
+{% block meta_description %}Your private compensation records. Visible only to you until you choose to contribute publicly.{% endblock %}
+
+{% block content %}
+<section class="container-wide cr-page-shell">
+    <p class="cr-page-kicker">Member account</p>
+    <h1 class="cr-page-title">Private salary ledger</h1>
+    <p class="cr-page-lede">
+        Entries you submit while signed in appear here. Public benchmark contributions stay anonymous to others —
+        this ledger is only for you.
+    </p>
+
+    <div class="cr-filter-bar">
+        <a class="cr-state-cta" href="{% url 'submit_salary' %}?source=ledger">Add a salary entry</a>
+        {% if user.profile.is_pro %}
+        <a class="cr-filter-chip" href="{% url 'pro_dashboard' %}">Pro dashboard</a>
+        {% endif %}
+    </div>
+
+    {% if entries %}
+    <div class="terminal-table-wrap">
+        <table class="cr-ledger-table">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Company</th>
+                    <th>Exp</th>
+                    <th>City</th>
+                    <th>CTC (₹)</th>
+                    <th>Added</th>
+                    <th>Visibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in entries %}
+                <tr>
+                    <td>{{ e.role }}</td>
+                    <td>{% if e.company_name %}{{ e.company_name }}{% elif e.company %}{{ e.company.name }}{% else %}—{% endif %}</td>
+                    <td>{{ e.experience_years }}y</td>
+                    <td>{{ e.city }}</td>
+                    <td>{{ e.ctc }}</td>
+                    <td>{{ e.created_at|date:"j M Y" }}</td>
+                    <td>{% if e.is_public %}Public band{% else %}Private{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        {% url 'submit_salary' as drop_url %}
+        {% include "partials/ui_states.html" with state="empty" title="No ledger entries yet" body="Drop a salary while signed in to keep a private record and help public bands when you contribute." cta_url=drop_url cta_label="Drop a salary" %}
+    {% endif %}
+
+    <p class="cr-privacy-note">
+        Privacy: ledger rows are tied to your account. Public explorer views never show your name.
+        Historical anonymous drops made while logged out cannot be claimed — that capability is not available.
+    </p>
+</section>
+{% endblock %}

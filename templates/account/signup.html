@@ -1,0 +1,51 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n allauth %}
+{% block head_title %}{% trans "Create account" %}{% endblock %}
+{% block content %}
+<section class="cr-auth-page">
+    <div class="cr-auth-card">
+        <p class="cr-auth-eyebrow">Member account</p>
+        <h1>Keep your own compensation record.</h1>
+        <p class="cr-auth-lede">
+            A free account lets you store offers and salary drops privately, unlock Pro tools when you need them, and support transparent Indian tech pay data.
+        </p>
+        <ul class="cr-auth-benefits">
+            <li>
+                <strong>Private by default</strong>
+                Your submissions stay yours until you choose what becomes public.
+            </li>
+            <li>
+                <strong>Real bands</strong>
+                Public entries improve salary explorer benchmarks for everyone.
+            </li>
+            <li>
+                <strong>Pro when you need it</strong>
+                Upgrade for full salary database access and layoff alerts.
+            </li>
+        </ul>
+        {% if not SOCIALACCOUNT_ONLY %}
+        {% url 'account_signup' as action_url %}
+        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
+            {% slot body %}
+                {% csrf_token %}
+                {% element fields form=form unlabeled=False %}
+                {% endelement %}
+                {{ redirect_field }}
+            {% endslot %}
+            {% slot actions %}
+                {% element button tags="prominent,signup" type="submit" %}
+                    {% trans "Create account" %}
+                {% endelement %}
+            {% endslot %}
+        {% endelement %}
+        {% endif %}
+        {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        {% endif %}
+        <div class="cr-auth-alt">
+            {% url 'account_login' as login_url %}
+            {% blocktranslate %}Already have an account? <a href="{{ login_url }}">Sign in</a>.{% endblocktranslate %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -11,7 +11,8 @@
         } catch (e) {
             // localStorage unavailable
         }
-        return 'dark';
+        // Default matches Real Career Compass reference: light editorial + Night toggle
+        return 'light';
     }
 
     function applyTheme(theme) {
@@ -22,24 +23,28 @@
 
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) {
-            meta.setAttribute('content', isLight ? '#fafafa' : '#06060b');
+            meta.setAttribute('content', isLight ? '#f5f5f0' : '#0b0b0c');
         }
 
         document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-            var label = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+            var label = isLight ? 'Switch to night mode' : 'Switch to light mode';
             btn.setAttribute('aria-label', label);
             btn.setAttribute('title', label);
-            btn.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+            btn.setAttribute('aria-pressed', isLight ? 'false' : 'true');
+            var text = btn.querySelector('.theme-toggle-label');
+            if (text) {
+                text.textContent = isLight ? 'Night' : 'Day';
+            }
         });
 
         document.querySelectorAll('.mobile-theme-label').forEach(function (el) {
-            el.textContent = isLight ? 'Dark mode' : 'Light mode';
+            el.textContent = isLight ? 'Night mode' : 'Light mode';
         });
     }
 
     function setTheme(theme) {
         if (theme !== 'light' && theme !== 'dark') {
-            theme = 'dark';
+            theme = 'light';
         }
         try {
             localStorage.setItem(STORAGE_KEY, theme);

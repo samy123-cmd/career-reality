@@ -211,7 +211,24 @@ AUGUST_2026_ARTICLE_SLUGS = (
 )
 
 
-@cache_page(60 * 60, key_prefix="home_v4")
+def _terminal_salary_preview():
+    """
+    Editorial compensation preview for the Terminal homepage.
+    Sourced from Career Reality's published Salary Reality bands (not third-party demo data).
+    Columns are labeled as editorial band ends + midpoint — not statistical percentiles.
+    """
+    return [
+        {"role": "Junior Dev (services)", "exp": "0–2y", "city": "India · Services", "band_low": "3.2", "mid": "3.9", "band_high": "4.5"},
+        {"role": "Junior Dev (startups)", "exp": "0–2y", "city": "India · Product", "band_low": "6.0", "mid": "9.0", "band_high": "12.0"},
+        {"role": "Senior Backend", "exp": "5–8y", "city": "Metro · Product", "band_low": "18.0", "mid": "25.0", "band_high": "32.0"},
+        {"role": "Staff Engineer", "exp": "8–14y", "city": "Metro · Product", "band_low": "35.0", "mid": "47.5", "band_high": "60.0"},
+        {"role": "DevOps / SRE", "exp": "3–6y", "city": "India · Mixed", "band_low": "13.0", "mid": "17.5", "band_high": "22.0"},
+        {"role": "Data Scientist (junior)", "exp": "0–2y", "city": "India · Product", "band_low": "5.0", "mid": "7.0", "band_high": "9.0"},
+        {"role": "QA / Automation", "exp": "3–5y", "city": "India · Services", "band_low": "6.0", "mid": "8.0", "band_high": "10.0"},
+    ]
+
+
+@cache_page(60 * 60, key_prefix="home_v6")
 def home(request):
     """
     Home page view.
@@ -288,6 +305,7 @@ def home(request):
         'company_count': counts['company_count'],
         'newsletter_count': counts['newsletter_count'],
         'salary_ticker_items': get_salary_ticker_items(limit=12),
+        'terminal_salary_rows': _terminal_salary_preview(),
         'page_keywords': HOME.keywords,
         **_seo(title, description),
     })
@@ -391,6 +409,35 @@ def topic_clusters(request):
         "clusters": _topic_clusters(),
         **_seo(title, description),
     })
+
+
+@cache_page(60 * 10, key_prefix="analysis_hub_v1")
+def analysis_hub(request):
+    """First-class Analysis newsroom hub using existing Article/Category content."""
+    from content.seo_redirects import ARTICLE_SITEMAP_EXCLUDE_SLUGS, indexable_categories_queryset
+    from content.models import Article
+
+    articles = (
+        Article.objects.filter(status="published")
+        .exclude(slug__in=ARTICLE_SITEMAP_EXCLUDE_SLUGS)
+        .select_related("author", "category")
+        .order_by("-published_at")[:40]
+    )
+    categories = indexable_categories_queryset()
+    title = "Analysis — Career Reality India"
+    description = (
+        "Editorial analysis on Indian tech salaries, CTC reality, layoff risk, "
+        "and career decisions — evidence-backed, not folklore."
+    )
+    return render(
+        request,
+        "core/analysis_hub.html",
+        {
+            "articles": articles,
+            "categories": categories,
+            **_seo(title, description),
+        },
+    )
 
 
 @cache_page(60 * 15)

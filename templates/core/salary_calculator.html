@@ -76,58 +76,58 @@
     </div>
 
     <!-- Calculator Form -->
-    <div class="az-calc-card">
+    <div class="az-calc-card cr-ctc-instrument">
+        <p class="cr-auth-eyebrow" style="margin-bottom:0.5rem;">Instrument 01</p>
+        <p class="az-calc-hint" style="margin-top:0;margin-bottom:1.25rem;">
+            A package is not a salary. Adjust the three numbers recruiters gloss over and see what lands in your account each month.
+        </p>
 
-        <div class="az-calc-grid">
-            <!-- CTC -->
-            <div>
-                <label class="az-calc-label">
-                    Annual CTC (Rs)
-                </label>
-                <input type="number" id="ctc-input" placeholder="e.g. 1200000"
-                    class="az-calc-input" aria-describedby="ctc-input-error">
+        <div class="cr-ctc-sliders">
+            <div class="cr-ctc-slider">
+                <div class="cr-ctc-slider-head">
+                    <label class="az-calc-label" for="ctc-lpa-range">Total CTC</label>
+                    <span class="cr-ctc-slider-val"><span id="ctc-lpa-display">12.0</span> LPA</span>
+                </div>
+                <input type="range" id="ctc-lpa-range" min="3" max="80" step="0.5" value="12" aria-valuetext="12 LPA">
+                <input type="hidden" id="ctc-input" value="1200000">
                 <p id="ctc-input-error" class="az-calc-field-error" style="display:none;"></p>
             </div>
-
-            <!-- Variable Pay -->
-            <div>
-                <label class="az-calc-label">
-                    Variable Pay / Bonus (%)
-                </label>
-                <input type="number" id="variable-input" value="10"
-                    class="az-calc-input">
-                <p class="az-calc-hint">Money you *might* get annually,
-                    not monthly.</p>
+            <div class="cr-ctc-slider">
+                <div class="cr-ctc-slider-head">
+                    <label class="az-calc-label" for="variable-input">Variable component</label>
+                    <span class="cr-ctc-slider-val"><span id="variable-display">10</span> %</span>
+                </div>
+                <input type="range" id="variable-input" min="0" max="40" step="1" value="10">
+            </div>
+            <div class="cr-ctc-slider">
+                <div class="cr-ctc-slider-head">
+                    <label class="az-calc-label" for="basic-share-input">Basic as share of fixed</label>
+                    <span class="cr-ctc-slider-val"><span id="basic-share-display">40</span> %</span>
+                </div>
+                <input type="range" id="basic-share-input" min="30" max="60" step="1" value="40">
             </div>
         </div>
 
-        <div class="az-calc-divider">
-            <p class="az-calc-heading">For Old Regime Optimization (HRA):</p>
-            <div class="az-calc-grid">
-                <!-- Rent -->
-                <div>
-                    <label class="az-calc-label">
-                        Monthly Rent Paid (Rs)
-                    </label>
-                    <input type="number" id="rent-input" value="0"
-                        class="az-calc-input az-calc-input--light">
-                </div>
-
-                <!-- City Type -->
-                <div>
-                    <label class="az-calc-label">
-                        City Type
-                    </label>
-                    <select id="city-input"
-                        class="az-calc-input az-calc-input--light">
-                        <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
-                        <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
-                    </select>
+        <details class="collapsible" style="margin-top:1rem;">
+            <summary>Old-regime HRA inputs (optional)</summary>
+            <div class="content">
+                <div class="az-calc-grid">
+                    <div>
+                        <label class="az-calc-label" for="rent-input">Monthly Rent Paid (Rs)</label>
+                        <input type="number" id="rent-input" value="0" class="az-calc-input az-calc-input--light">
+                    </div>
+                    <div>
+                        <label class="az-calc-label" for="city-input">City Type</label>
+                        <select id="city-input" class="az-calc-input az-calc-input--light">
+                            <option value="metro">Metro (Delhi, Mumbai, Kol, Chn)</option>
+                            <option value="non-metro" selected>Non-Metro (Blr, Hyd, Pune)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+        </details>
 
-        <button id="decode-btn" class="az-calc-btn">
+        <button id="decode-btn" class="az-calc-btn" type="button">
             Decode My Salary
         </button>
     </div>
@@ -153,7 +153,7 @@
     </noscript>
 
     <!-- Results Section -->
-    <div id="results" style="display: none;" class="az-calc-results">
+    <div id="results" class="az-calc-results">
 
         <div class="az-calc-result-hero">
             <h2 class="az-calc-result-label">The Real Monthly In-Hand</h2>
@@ -381,16 +381,9 @@
         const fixedCTC = ctc - variablePay;
 
         // "Ghost" Components in Fixed Pay
-        // Typically Basic is 40-50% of Fixed CTC. We assume 40% for a more conservative structure.
-        // But Employer PF and Gratuity are calculated ON Basic.
-        // Equation: FixedCTC = Gross + EmployerPF + Gratuity
-        // Gross = Basic + HRA + Special
-        // EmployerPF = 12% of Basic
-        // Gratuity = 4.81% of Basic
-        // Let's approximate: Basic is usually designed to be 50% of Gross. 
-        // Reverse engineering exact components is complex, let's take a standard structure assumption:
-        // Assume Basic = 40% of CTC (safe bet for standard structures to keep allowances high)
-        const basic = fixedCTC * 0.40;
+        // Typically Basic is 40-50% of Fixed CTC. Slider lets the user set the share.
+        const basicShare = (parseFloat(document.getElementById('basic-share-input').value) || 40) / 100;
+        const basic = fixedCTC * basicShare;
 
         const employerPF = Math.min(basic, 15000 * 12) * 0.12;
         // Note: Many companies cap PF on 15k basic monthly. 
@@ -547,6 +540,44 @@
     document.addEventListener('DOMContentLoaded', function() {
         var btn = document.getElementById('decode-btn');
         if (btn) btn.addEventListener('click', calculateSalary);
+
+        var lpa = document.getElementById('ctc-lpa-range');
+        var ctcHidden = document.getElementById('ctc-input');
+        var lpaDisplay = document.getElementById('ctc-lpa-display');
+        var variable = document.getElementById('variable-input');
+        var variableDisplay = document.getElementById('variable-display');
+        var basicShare = document.getElementById('basic-share-input');
+        var basicDisplay = document.getElementById('basic-share-display');
+        var rent = document.getElementById('rent-input');
+        var city = document.getElementById('city-input');
+
+        function syncFromSliders() {
+            if (lpa && ctcHidden && lpaDisplay) {
+                var lpaVal = parseFloat(lpa.value) || 0;
+                lpaDisplay.textContent = lpaVal.toFixed(1);
+                ctcHidden.value = Math.round(lpaVal * 100000);
+                lpa.setAttribute('aria-valuetext', lpaVal.toFixed(1) + ' LPA');
+            }
+            if (variable && variableDisplay) {
+                variableDisplay.textContent = variable.value;
+            }
+            if (basicShare && basicDisplay) {
+                basicDisplay.textContent = basicShare.value;
+            }
+        }
+
+        function liveDecode() {
+            syncFromSliders();
+            calculateSalary();
+        }
+
+        [lpa, variable, basicShare, rent, city].forEach(function (el) {
+            if (!el) return;
+            el.addEventListener('input', liveDecode);
+            el.addEventListener('change', liveDecode);
+        });
+
+        liveDecode();
     });
 </script>
 

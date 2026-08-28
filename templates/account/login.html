@@ -1,0 +1,39 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n allauth account %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block content %}
+<section class="cr-auth-page">
+    <div class="cr-auth-card">
+        <p class="cr-auth-eyebrow">Member account</p>
+        <h1>{% trans "Sign in" %}</h1>
+        <p class="cr-auth-lede">
+            Access your Career Reality account to manage Pro features and keep submissions linked to you.
+        </p>
+        {% if not SOCIALACCOUNT_ONLY %}
+        {% url 'account_login' as login_url %}
+        {% element form form=form method="post" action=login_url tags="entrance,login" %}
+            {% slot body %}
+                {% csrf_token %}
+                {% element fields form=form unlabeled=False %}
+                {% endelement %}
+                {{ redirect_field }}
+            {% endslot %}
+            {% slot actions %}
+                {% element button type="submit" tags="prominent,login" %}
+                    {% trans "Sign In" %}
+                {% endelement %}
+            {% endslot %}
+        {% endelement %}
+        {% endif %}
+        {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        {% endif %}
+        <div class="cr-auth-alt">
+            {% url 'account_signup' as signup_url %}
+            {% blocktranslate %}No account yet? <a href="{{ signup_url }}">Create one</a>.{% endblocktranslate %}
+            <br>
+            <a href="{% url 'account_reset_password' %}">{% trans "Forgot password?" %}</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -87,10 +87,11 @@ class CoreViewsTests(TestCase):
         )
 
     def test_career_reality_index_has_expected_latest_band(self):
+        """Editorial fallback for the current month (August 2026 baseline → overall 61)."""
         response = self.client.get(reverse("career_reality_index"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["latest_row"]["overall"], 63)
+        self.assertEqual(response.context["latest_row"]["overall"], 61)
         self.assertEqual(response.context["latest_band"], "Elevated Pressure")
 
     def test_newsletter_signup_creates_subscriber_and_redirects(self):
@@ -143,29 +144,46 @@ class CoreViewsTests(TestCase):
         self.assertContains(response, 'name="source" value="ctc_decoder"')
         self.assertContains(response, 'type="email"')
 
-    def test_hero_social_proof_assessment_count_present(self):
-        """Homepage hero must show dynamic risk-assessment social proof number."""
+    def test_terminal_home_shows_index_and_instrument_counts(self):
+        """Terminal homepage surfaces Career Reality Index plus live instrument counts."""
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "risk assessments run")
+        self.assertContains(response, "Career Reality Index")
+        self.assertContains(response, "terminal-page")
         self.assertIn("assessment_count", response.context)
-
-    def test_hero_social_proof_salary_data_points_present(self):
-        """Homepage hero must show dynamic salary data-points social proof number."""
-        response = self.client.get(reverse("home"))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "salary data points")
         self.assertIn("salary_count", response.context)
+        self.assertIn("layoff_count", response.context)
+        self.assertContains(response, "Risk analyzer")
+        content = response.content.decode("utf-8").lower()
+        self.assertIn("salary explorer", content)
+        self.assertIn("layoff radar", content)
+        self.assertIn("tracked", content)
 
-    def test_hero_social_proof_layoff_reports_present(self):
-        """Homepage hero must show dynamic layoff-reports social proof number."""
+    def test_terminal_home_salary_preview_uses_editorial_bands(self):
+        """Homepage salary table uses honest editorial band labels, not fabricated percentiles."""
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "layoff reports tracked")
-        self.assertIn("layoff_count", response.context)
+        self.assertContains(response, "Band low")
+        self.assertContains(response, "Band high")
+        self.assertContains(response, "editorial offer bands")
+        self.assertNotContains(response, ">p25</")
+        self.assertNotContains(response, ">p90</")
+        self.assertIn("terminal_salary_rows", response.context)
+        first = response.context["terminal_salary_rows"][0]
+        self.assertIn("band_low", first)
+        self.assertIn("mid", first)
+        self.assertIn("band_high", first)
+
+    def test_terminal_home_shows_layoff_and_salary_counts_in_copy(self):
+        """Index sidebar copy references compensation submissions and layoff reports."""
+        response = self.client.get(reverse("home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "compensation submissions")
+        self.assertContains(response, "tracked layoff reports")
+        self.assertContains(response, "Salary explorer")
 
     def test_homepage_newsletter_section_present(self):
         """Homepage must contain the inline newsletter capture section."""
@@ -182,6 +200,7 @@ class CoreViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "/newsletter/signup/")
         self.assertContains(response, 'type="email"')
+        self.assertContains(response, 'for="home-newsletter-email"')
 
     def test_homepage_newsletter_copy_present(self):
         """Homepage newsletter section must include the headline and trust lines."""
@@ -209,10 +228,10 @@ class CareerRealityIndexTests(TestCase):
         self.assertIn("latest_band", response.context)
 
     def test_index_fallback_when_no_snapshots(self):
-        """Without any DB snapshots, falls back to editorial July 2026 baseline."""
+        """Without any DB snapshots, falls back to the current-month editorial baseline (Aug 2026 → 61)."""
         self.assertEqual(CareerRealityIndexSnapshot.objects.count(), 0)
         response = self.client.get(reverse("career_reality_index"))
-        self.assertEqual(response.context["latest_row"]["overall"], 63)
+        self.assertEqual(response.context["latest_row"]["overall"], 61)
 
     def test_index_reads_from_db_snapshots(self):
         """When snapshots exist, the view reports from the DB."""

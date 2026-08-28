@@ -5,10 +5,18 @@
 (function () {
     try {
         var t = localStorage.getItem('cr-theme');
-        if (t === 'light') {
+        // Default: light editorial (reference-aligned). Honor stored preference.
+        if (t === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('theme-dark');
+            document.documentElement.classList.remove('theme-light');
+        } else {
             document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.classList.remove('theme-dark');
             document.documentElement.classList.add('theme-light');
+            document.documentElement.classList.remove('theme-dark');
+            if (t !== 'light') {
+                try { localStorage.setItem('cr-theme', 'light'); } catch (e2) {}
+            }
         }
     } catch (e) { /* no-op */ }
 })();
@@ -24,7 +32,7 @@
 <!-- Hindi hreflang removed: no Hindi translations exist in the database.
      Having identical /hi/ duplicates was flagged as low-value duplicate content. -->
 <meta property="og:locale" content="en_IN">
-<meta name="theme-color" content="#06060b">
+<meta name="theme-color" content="#f5f5f0">
 <meta name="author" content="Career Reality Editorial Desk">
 {% if page_keywords %}
 <meta name="keywords" content="{{ page_keywords|join:', ' }}">
@@ -80,26 +88,29 @@
 <!-- Critical CSS - Inlined for instant FCP & Stability -->
 <style>
     :root {
-        color-scheme: dark;
-        --cr-page: #06060b;
-        --cr-surface: #0e0e16;
-        --cr-text: #fafafa;
-        --cr-text-secondary: #c8c8d0;
-        --cr-text-muted: #9e9ea8;
-        --cr-border: rgba(255, 255, 255, 0.08);
-        --c-page: #06060b;
-        --c-surface: #0e0e16;
-        --c-ink: #fafafa;
-        --c-ink-inverse: #f4f4f5;
-        --c-white: #0e0e16;
-        --c-black: #fafafa;
-        --c-grey-dark: #e4e4e7;
-        --c-grey-mid: #c8c8d0;
-        --c-grey-light: #9e9ea8;
-        --c-divider: rgba(255, 255, 255, 0.08);
-        --c-bg-footer: #0e0e16;
-        --c-blue-accent: #38bdf8;
-        --w-wide: 1100px;
+        color-scheme: light;
+        --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+        --font-sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+        --cr-page: #f5f5f0;
+        --cr-surface: #fffcf7;
+        --cr-text: #141414;
+        --cr-text-secondary: #5c5c56;
+        --cr-text-muted: #8a8a82;
+        --cr-border: rgba(20, 20, 20, 0.12);
+        --cr-accent: #c45c3e;
+        --c-page: #f5f5f0;
+        --c-surface: #fffcf7;
+        --c-ink: #141414;
+        --c-ink-inverse: #f5f5f0;
+        --c-white: #ffffff;
+        --c-black: #141414;
+        --c-grey-dark: #3f3f3a;
+        --c-grey-mid: #5c5c56;
+        --c-grey-light: #8a8a82;
+        --c-divider: rgba(20, 20, 20, 0.12);
+        --c-bg-footer: #efeee8;
+        --c-blue-accent: #c45c3e;
+        --w-wide: 1180px;
         --w-medium: 840px;
         --w-narrow: 640px;
         --space-sm: 16px;
@@ -119,7 +130,7 @@
     body {
         background-color: var(--cr-page);
         color: var(--cr-text-secondary);
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
         font-size: 17px;
         line-height: 1.65;
         margin: 0;
@@ -128,29 +139,29 @@
         overflow-x: hidden;
     }
 
-    [data-theme="light"] {
-        color-scheme: light;
-        --cr-page: #fafafa;
-        --cr-surface: #ffffff;
-        --cr-text: #09090b;
-        --cr-text-secondary: #52525b;
-        --cr-border: rgba(0, 0, 0, 0.08);
-        --c-page: #fafafa;
-        --c-white: #ffffff;
-        --c-black: #09090b;
-        --c-grey-mid: #52525b;
-        --c-grey-light: #71717a;
-        --c-divider: rgba(0, 0, 0, 0.1);
-        --c-bg-footer: #f4f4f5;
-        --c-blue-accent: #0284c7;
+    [data-theme="dark"] {
+        color-scheme: dark;
+        --cr-page: #0b0b0c;
+        --cr-surface: #141416;
+        --cr-text: #f2f2f0;
+        --cr-text-secondary: #a3a39a;
+        --cr-border: rgba(255, 255, 255, 0.12);
+        --c-page: #0b0b0c;
+        --c-white: #141416;
+        --c-black: #f2f2f0;
+        --c-grey-mid: #a3a39a;
+        --c-grey-light: #6e6e68;
+        --c-divider: rgba(255, 255, 255, 0.12);
+        --c-bg-footer: #141416;
+        --c-blue-accent: #d4694a;
     }
 
     [data-theme="light"] .site-header {
-        background: rgba(255, 255, 255, 0.92);
+        background: rgba(245, 245, 240, 0.92);
     }
 
-    [data-theme="light"] .mobile-menu-toggle span {
-        background-color: #09090b;
+    .mobile-menu-toggle span {
+        background-color: var(--cr-text);
     }
 
     /* Layout Containers */
@@ -350,11 +361,14 @@
 <link rel="preload" href="{% static 'css/style-core.css' %}?v=14" as="style">
 <link rel="stylesheet" href="{% static 'css/style-core.css' %}?v=14">
 <link rel="stylesheet" href="{% static 'css/design-system.css' %}?v=3">
-<link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'css/theme-premium-dark.css' %}?v=5">
 <link rel="stylesheet" href="{% static 'css/theme-light.css' %}?v=2">
 <link rel="stylesheet" href="{% static 'css/theme-dark-contrast.css' %}?v=4">
 <link rel="stylesheet" href="{% static 'css/components/tool-hub.css' %}?v=3">
 <link rel="stylesheet" href="{% static 'css/mobile.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'css/cr-editorial.css' %}?v=4">
+<link rel="preload" href="{% static 'fonts/SourceSerif4-Latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{% static 'fonts/SourceSans3-Latin.woff2' %}" as="font" type="font/woff2" crossorigin>
 
 <!-- JSON-LD Organization & WebSite Schema -->
 <script type="application/ld+json">
