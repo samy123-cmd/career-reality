@@ -150,14 +150,15 @@
 
             <div class="terminal-table-wrap">
                 <table class="terminal-table">
+                    <caption class="visually-hidden">Editorial salary bands for common Indian tech roles (₹ LPA)</caption>
                     <thead>
                         <tr>
-                            <th>Role</th>
-                            <th>Experience</th>
-                            <th>City · tier</th>
-                            <th>p25</th>
-                            <th>Median</th>
-                            <th>p90</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Experience</th>
+                            <th scope="col">City · tier</th>
+                            <th scope="col">Band low</th>
+                            <th scope="col">Mid</th>
+                            <th scope="col">Band high</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,15 +167,15 @@
                             <td class="role">{{ row.role }}</td>
                             <td>{{ row.exp }}</td>
                             <td>{{ row.city }}</td>
-                            <td>{{ row.p25 }}</td>
-                            <td>{{ row.median }}</td>
-                            <td>{{ row.p90 }}</td>
+                            <td>{{ row.band_low }}</td>
+                            <td>{{ row.mid }}</td>
+                            <td>{{ row.band_high }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 <div class="terminal-table-foot">
-                    <span>₹ lakh per annum · total compensation · editorial ranges</span>
+                    <span>₹ lakh per annum · total compensation · editorial offer bands (not verified percentiles)</span>
                     <a href="{% url 'salary_reality' %}">Open the explorer →</a>
                 </div>
             </div>
@@ -455,7 +456,8 @@
             {% csrf_token %}
             <input type="hidden" name="source" value="home_footer_cta">
             <div class="hp-newsletter-field">
-                <input type="email" name="email" placeholder="your@email.com" required
+                <label class="visually-hidden" for="home-newsletter-email">Email address</label>
+                <input type="email" name="email" id="home-newsletter-email" placeholder="your@email.com" required
                     class="hp-newsletter-input" autocomplete="email">
                 <button type="submit" class="hp-newsletter-btn">Get the Intel →</button>
             </div>

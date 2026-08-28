@@ -42,17 +42,20 @@
 </section>
 
 <div class="container-wide dir-content">
-    <form method="get" class="dir-controls">
+    <form method="get" class="dir-controls" role="search" aria-label="Filter companies">
         <div class="dir-search-wrap">
-            <span class="dir-search-icon">&#128269;</span>
-            <input type="text" name="q" value="{{ search_query }}" placeholder="Search companies…" autocomplete="off">
+            <label class="visually-hidden" for="dir-search-q">Search companies</label>
+            <span class="dir-search-icon" aria-hidden="true">&#128269;</span>
+            <input type="text" id="dir-search-q" name="q" value="{{ search_query }}" placeholder="Search companies…" autocomplete="off">
         </div>
+        <label class="visually-hidden" for="dir-sector-select">Sector</label>
         <select name="sector" id="dir-sector-select">
             <option value="">All Sectors</option>
             {% for val, label in sector_choices %}
             <option value="{{ val }}" {% if current_sector == val %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
         </select>
+        <label class="visually-hidden" for="dir-sort-select">Sort</label>
         <select name="sort" id="dir-sort-select">
             <option value="-salary_count" {% if current_sort == '-salary_count' %}selected{% endif %}>Most Salary Data</option>
             <option value="-review_count" {% if current_sort == '-review_count' %}selected{% endif %}>Most Reviews</option>

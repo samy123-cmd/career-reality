@@ -1,50 +1,42 @@
 # CareerReality UI/UX — Final Parity Report
 
-Concise status after implementation + local QA. Not a re-audit.
+Concise status after final hardening + local QA. Not a re-audit.
 
 ## IMPLEMENTATION STATUS
 
 ```
-Overall:        COMPLETE for in-scope frontend (local)
-Functional:     PRESERVED (Django logic/APIs/auth/data)
-UI:             Editorial system applied across major routes
-UX:             Terminal / Explorer / Layoff / Ledger / Analysis hub shipped
-Responsive:     Shell + tables filter bars verified at route smoke level
-Accessibility:  Shared states + semantic headings; focused pass done lightly
-QA:             Local check OK; analyzer+accounts tests OK; core hero copy tests lag terminal redesign
+Overall:        COMPLETE (local, pre-deployment)
+Functional:     PRESERVED
+UI:             Editorial system across primary + More leaves
+UX:             Terminal / Explorer / Layoff / Ledger / Analysis + More polish
+Responsive:     More-leaf + major routes checked 1280 / ~390
+Accessibility:  Focus states, labels, More menu ARIA, form for/id
+QA:             core/analyzer/accounts/companies/payments/content tests OK
 ```
 
-## COMPLETED
+## COMPLETED (this hardening pass)
 
-- Legacy dark CSS leakage: scoped `theme-premium-dark.css` (fixed invalid `html.theme-dark @media` / bare selectors)
-- Light default + Night (`cr-theme` / `theme.js`) retained; editorial tokens load last
-- Auth templates validated locally (login/signup render branded; ledger requires login)
-- Application shell / flat nav consistent (incl. Analysis hub + My ledger)
-- Salary Explorer: search, category filters, editorial band spans + hype (no fabricated percentiles)
-- Layoff Radar: employer stability table, risk badges, meters, timeline, filters
-- Private salary ledger: `/pro/ledger/` + `SalarySubmission.submitted_by` / `is_public` migration
-- Analysis hub: `/analysis/` organizes existing articles/categories
-- Shared `EmptyState` / `Skeleton` / `LoadingState` / `ErrorState` via `templates/partials/ui_states.html`
-- Secondary visual pass: Companies, AI Pulse, Risk Wizard heroes/cards tokenized
-- Article takeaway word-boundary truncation left in place (prior fix)
+- More-menu leaf a11y/responsive polish (Companies, AI Pulse, Risk, Index, Escape, Salary Drop, About, Contact, Pricing)
+- More dropdown: `aria-controls`, menuitem roles, Contact link on desktop
+- Terminal homepage salary table: honest Band low / Mid / Band high (not fabricated p25/p90)
+- `core.tests` updated for Terminal home + August 2026 index baseline (61)
+- Ledger / salary-drop copy clarifies historical anonymous claim is NOT supported
+- Payments remain disabled / “coming soon” without Razorpay keys
 
-## REMAINING
+## REMAINING (non-blocking)
 
-- Deeper a11y/responsive pixel polish across every More-menu leaf page
-- Update stale `core.tests` homepage social-proof assertions (terminal home no longer uses old copy)
-- Optional: claim/migrate pre-auth anonymous salary drops into ledger (backend not present)
+- Unrelated `search.tests` AI-news suggest failures (pre-existing; not touched this pass)
+- Optional deeper a11y automation beyond focused manual pass
 
 ## BLOCKED BY EXTERNAL CONFIGURATION
 
-- Razorpay payments: requires `RAZORPAY_*` env; UI correctly disables / “coming soon”
-- Google OAuth: only if socialaccount apps configured in deployment env
-- Production aggregate P25/P50/P75/P90: explorer uses labeled editorial bands until verified sample aggregates exist
+1. Razorpay `RAZORPAY_*` for live payments
+2. Verified aggregates before true percentile labeling
+3. OAuth app credentials where Google login must succeed end-to-end
 
-## KNOWN LIMITATIONS
+## OPTIONAL FUTURE FEATURE
 
-- Dual CSS stacks still large (~10k LOC legacy); obsolete rules scoped/overridden, not fully deleted
-- Historical anonymous salary drops cannot be auto-claimed into private ledger
-- Percentile UX: editorial bands only on Salary Explorer (honest labeling); Pro dashboard still computes p25/p75 from real public submissions when samples exist
+- Historical anonymous salary claim into member ledger — no backend ownership model; intentionally not implemented
 
 ## DEPLOYMENT
 

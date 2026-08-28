@@ -13,21 +13,22 @@
             <a href="{% url 'analysis_hub' %}" class="nav-link{% if request.resolver_match.url_name == 'analysis_hub' or request.resolver_match.url_name == 'topic_clusters' or request.resolver_match.url_name == 'article_detail' or request.resolver_match.url_name == 'category_detail' %} is-active{% endif %}">Analysis</a>
 
             <div class="nav-dropdown">
-                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false" type="button">
+                <button class="nav-dropdown-trigger" id="more-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="more-menu-panel" type="button">
                     More
                     <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
                         <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </button>
-                <div class="nav-dropdown-content" style="display:none;">
-                    <div class="dropdown-header">Also on Career Reality</div>
-                    <a href="{% url 'company_directory' %}"><span class="dropdown-icon">&rarr;</span> Companies</a>
-                    <a href="{% url 'ai_news_hub' %}"><span class="dropdown-icon">&rarr;</span> AI Pulse</a>
-                    <a href="{% url 'analyzer_home' %}"><span class="dropdown-icon">&rarr;</span> Risk analyzer</a>
-                    <a href="{% url 'career_reality_index' %}"><span class="dropdown-icon">&rarr;</span> Career index</a>
-                    <a href="{% url 'escape_plan' %}"><span class="dropdown-icon">&rarr;</span> Escape plan</a>
-                    <a href="{% url 'submit_salary' %}"><span class="dropdown-icon">&rarr;</span> Drop a salary</a>
-                    <a href="{% url 'about' %}"><span class="dropdown-icon">&rarr;</span> About</a>
+                <div class="nav-dropdown-content" id="more-menu-panel" role="menu" aria-labelledby="more-menu-trigger" style="display:none;">
+                    <div class="dropdown-header" id="more-menu-label">Also on Career Reality</div>
+                    <a role="menuitem" href="{% url 'company_directory' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> Companies</a>
+                    <a role="menuitem" href="{% url 'ai_news_hub' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> AI Pulse</a>
+                    <a role="menuitem" href="{% url 'analyzer_home' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> Risk analyzer</a>
+                    <a role="menuitem" href="{% url 'career_reality_index' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> Career index</a>
+                    <a role="menuitem" href="{% url 'escape_plan' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> Escape plan</a>
+                    <a role="menuitem" href="{% url 'submit_salary' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> Drop a salary</a>
+                    <a role="menuitem" href="{% url 'about' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> About</a>
+                    <a role="menuitem" href="{% url 'contact' %}"><span class="dropdown-icon" aria-hidden="true">&rarr;</span> Contact</a>
                 </div>
             </div>
 
